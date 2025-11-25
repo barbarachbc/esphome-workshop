@@ -172,7 +172,28 @@ tags: ["weather", "monitoring"]
 
 ---
 
-## 🎨 Styling
+## 🎨 Styling & Components
+
+### Reusable Card Components
+
+The project includes three reusable card components for consistent display across listing pages:
+
+1. **`DeviceCard.astro`** - Displays device information
+   - Props: `device` object with slug and data
+   - Shows: title, category, manufacturer, description, connection types
+   - Used in: `/devices` listing page
+
+2. **`ComponentCard.astro`** - Displays component information
+   - Props: `component` object with slug and data
+   - Shows: title, category, esphomeComponent name, description, hardware badge
+   - Used in: `/components` listing page
+
+3. **`ExampleCard.astro`** - Displays example projects
+   - Props: `example` object with slug and data
+   - Shows: title, difficulty badge, description, device/component counts
+   - Used in: `/examples` listing page
+
+### Design System
 
 - CSS is in `Layout.astro` using CSS custom properties
 - Design system variables:

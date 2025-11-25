@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import DeviceCard from '../../components/DeviceCard.astro';
 
 const devices = await getCollection('devices');
 const categories = [...new Set(devices.map(d => d.data.category))];
@@ -24,16 +25,9 @@ const categories = [...new Set(devices.map(d => d.data.category))];
 
   <div class="device-grid" id="deviceGrid">
     {devices.map(device => (
-      <a href={`/devices/${device.slug}`} class="device-card" data-category={device.data.category}>
-        <h3>{device.data.title}</h3>
-        <div class="badge">{device.data.category}</div>
-        <p>{device.data.description}</p>
-        <div class="connections">
-          {device.data.connectionTypes.map(conn => (
-            <span class="tag">{conn}</span>
-          ))}
-        </div>
-      </a>
+      <div data-category={device.data.category}>
+        <DeviceCard device={device} />
+      </div>
     ))}
   </div>
 
@@ -64,57 +58,7 @@ const categories = [...new Set(devices.map(d => d.data.category))];
       gap: 1.5rem;
     }
 
-    .device-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-      text-decoration: none;
-      color: var(--text);
-      transition: all 0.2s;
-      display: block;
-    }
-
-    .device-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      border-color: var(--accent);
-    }
-
-    .device-card h3 {
-      margin: 0 0 0.5rem 0;
-      color: var(--accent);
-    }
-
-    .badge {
-      display: inline-block;
-      background: var(--accent);
-      color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: 1rem;
-      font-size: 0.875rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .device-card p {
-      color: var(--gray);
-      margin-bottom: 1rem;
-    }
-
-    .connections {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .tag {
-      display: inline-block;
-      background: var(--light-gray);
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
-      font-size: 0.875rem;
-      color: var(--text);
-    }
+    /* Card styles moved to DeviceCard.astro component */
   </style>
 
   <script>
@@ -123,7 +67,7 @@ const categories = [...new Set(devices.map(d => d.data.category))];
     
     filter?.addEventListener('change', () => {
       const value = filter.value;
-      const cards = grid?.querySelectorAll('.device-card');
+      const cards = grid?.querySelectorAll('[data-category]');
       
       cards?.forEach(card => {
         const category = card.getAttribute('data-category');

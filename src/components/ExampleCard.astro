@@ -1,0 +1,114 @@
+---
+interface Props {
+  example: {
+    slug: string;
+    data: {
+      title: string;
+      description: string;
+      difficulty: string;
+      devices: string[];
+      components: string[];
+      image?: string;
+    };
+  };
+}
+
+const { example } = Astro.props;
+
+const difficultyColors = {
+  beginner: { bg: '#dbeafe', color: '#1e40af' },
+  intermediate: { bg: '#fef3c7', color: '#92400e' },
+  advanced: { bg: '#fee2e2', color: '#991b1b' }
+};
+
+const difficultyStyle = difficultyColors[example.data.difficulty as keyof typeof difficultyColors] || difficultyColors.beginner;
+---
+
+<a href={`/examples/${example.slug}`} class="card">
+  {example.data.image && (
+    <img src={example.data.image} alt={example.data.title} class="card-image" />
+  )}
+  <div class="card-content">
+    <span class="card-difficulty" style={`background: ${difficultyStyle.bg}; color: ${difficultyStyle.color};`}>
+      {example.data.difficulty}
+    </span>
+    <h3>{example.data.title}</h3>
+    <p>{example.data.description}</p>
+    <div class="card-tags">
+      <div class="tag-group">
+        <strong>Devices:</strong> {example.data.devices.length}
+      </div>
+      <div class="tag-group">
+        <strong>Components:</strong> {example.data.components.length}
+      </div>
+    </div>
+  </div>
+</a>
+
+<style>
+  .card {
+    display: block;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    border-color: #8b5cf6;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
+
+  .card-difficulty {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    text-transform: capitalize;
+  }
+
+  .card-content h3 {
+    margin: 0.5rem 0;
+    font-size: 1.25rem;
+    color: #111827;
+  }
+
+  .card-content p {
+    margin: 0.75rem 0;
+    color: #4b5563;
+    line-height: 1.5;
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .tag-group {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+
+  .tag-group strong {
+    color: #111827;
+  }
+</style>

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import ComponentCard from '../../components/ComponentCard.astro';
 
 const components = await getCollection('components');
 const categories = [...new Set(components.map(c => c.data.category))];
@@ -24,15 +25,9 @@ const categories = [...new Set(components.map(c => c.data.category))];
 
   <div class="component-grid" id="componentGrid">
     {components.map(component => (
-      <a href={`/components/${component.slug}`} class="component-card" data-category={component.data.category}>
-        <h3>{component.data.title}</h3>
-        <div class="badge">{component.data.category}</div>
-        <code class="component-name">{component.data.esphomeComponent}</code>
-        <p>{component.data.description}</p>
-        {component.data.requiresHardware && (
-          <span class="hardware-badge">Requires Hardware</span>
-        )}
-      </a>
+      <div data-category={component.data.category}>
+        <ComponentCard component={component} />
+      </div>
     ))}
   </div>
 
@@ -63,62 +58,7 @@ const categories = [...new Set(components.map(c => c.data.category))];
       gap: 1.5rem;
     }
 
-    .component-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-      text-decoration: none;
-      color: var(--text);
-      transition: all 0.2s;
-      display: block;
-    }
-
-    .component-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      border-color: var(--accent);
-    }
-
-    .component-card h3 {
-      margin: 0 0 0.5rem 0;
-      color: var(--accent);
-    }
-
-    .badge {
-      display: inline-block;
-      background: var(--accent);
-      color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: 1rem;
-      font-size: 0.875rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .component-name {
-      display: block;
-      background: var(--light-gray);
-      padding: 0.5rem;
-      border-radius: 0.25rem;
-      font-size: 0.875rem;
-      margin-bottom: 0.75rem;
-      color: #c7254e;
-    }
-
-    .component-card p {
-      color: var(--gray);
-      margin-bottom: 1rem;
-    }
-
-    .hardware-badge {
-      display: inline-block;
-      background: #f59e0b;
-      color: white;
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
+    /* Card styles moved to ComponentCard.astro component */
   </style>
 
   <script>
@@ -127,7 +67,7 @@ const categories = [...new Set(components.map(c => c.data.category))];
     
     filter?.addEventListener('change', () => {
       const value = filter.value;
-      const cards = grid?.querySelectorAll('.component-card');
+      const cards = grid?.querySelectorAll('[data-category]');
       
       cards?.forEach(card => {
         const category = card.getAttribute('data-category');

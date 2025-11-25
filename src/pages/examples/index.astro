@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import ExampleCard from '../../components/ExampleCard.astro';
 
 const examples = await getCollection('examples');
 const difficulties = [...new Set(examples.map(e => e.data.difficulty))];
@@ -24,15 +25,9 @@ const difficulties = [...new Set(examples.map(e => e.data.difficulty))];
 
   <div class="example-grid" id="exampleGrid">
     {examples.map(example => (
-      <a href={`/examples/${example.slug}`} class="example-card" data-difficulty={example.data.difficulty}>
-        <h3>{example.data.title}</h3>
-        <div class="badge badge-{example.data.difficulty}">{example.data.difficulty}</div>
-        <p>{example.data.description}</p>
-        <div class="counts">
-          <span>📟 {example.data.devices.length} devices</span>
-          <span>🔧 {example.data.components.length} components</span>
-        </div>
-      </a>
+      <div data-difficulty={example.data.difficulty}>
+        <ExampleCard example={example} />
+      </div>
     ))}
   </div>
 
@@ -63,61 +58,7 @@ const difficulties = [...new Set(examples.map(e => e.data.difficulty))];
       gap: 1.5rem;
     }
 
-    .example-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-      text-decoration: none;
-      color: var(--text);
-      transition: all 0.2s;
-      display: block;
-    }
-
-    .example-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      border-color: var(--accent);
-    }
-
-    .example-card h3 {
-      margin: 0 0 0.5rem 0;
-      color: var(--accent);
-    }
-
-    .badge {
-      display: inline-block;
-      color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: 1rem;
-      font-size: 0.875rem;
-      margin-bottom: 0.75rem;
-      text-transform: capitalize;
-    }
-
-    .badge-beginner {
-      background: #10b981;
-    }
-
-    .badge-intermediate {
-      background: #f59e0b;
-    }
-
-    .badge-advanced {
-      background: #ef4444;
-    }
-
-    .example-card p {
-      color: var(--gray);
-      margin-bottom: 1rem;
-    }
-
-    .counts {
-      display: flex;
-      gap: 1rem;
-      font-size: 0.875rem;
-      color: var(--gray);
-    }
+    /* Card styles moved to ExampleCard.astro component */
   </style>
 
   <script>
@@ -126,7 +67,7 @@ const difficulties = [...new Set(examples.map(e => e.data.difficulty))];
     
     filter?.addEventListener('change', () => {
       const value = filter.value;
-      const cards = grid?.querySelectorAll('.example-card');
+      const cards = grid?.querySelectorAll('[data-difficulty]');
       
       cards?.forEach(card => {
         const difficulty = card.getAttribute('data-difficulty');

@@ -1,0 +1,102 @@
+---
+interface Props {
+  component: {
+    slug: string;
+    data: {
+      title: string;
+      description: string;
+      category: string;
+      esphomeComponent: string;
+      requiresHardware?: boolean;
+    };
+  };
+}
+
+const { component } = Astro.props;
+---
+
+<a href={`/components/${component.slug}`} class="card">
+  <div class="card-content">
+    <span class="card-category">{component.data.category}</span>
+    <h3>{component.data.title}</h3>
+    <code class="component-name">{component.data.esphomeComponent}</code>
+    <p>{component.data.description}</p>
+    {component.data.requiresHardware && (
+      <span class="hardware-badge">Requires Hardware</span>
+    )}
+  </div>
+</a>
+
+<style>
+  .card {
+    display: block;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    border-color: #10b981;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
+
+  .card-category {
+    display: inline-block;
+    background: #d1fae5;
+    color: #065f46;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-content h3 {
+    margin: 0.5rem 0;
+    font-size: 1.25rem;
+    color: #111827;
+  }
+
+  .component-name {
+    display: block;
+    background: #f3f4f6;
+    color: #1f2937;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    margin: 0.5rem 0;
+    font-family: 'Courier New', monospace;
+  }
+
+  .card-meta {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0.25rem 0;
+  }
+
+  .card-content p:last-child {
+    margin: 0.75rem 0 0 0;
+    color: #4b5563;
+    line-height: 1.5;
+  }
+
+  .hardware-badge {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+  }
+</style>
