@@ -1,0 +1,207 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const examples = await getCollection('examples');
+  return examples.map(example => ({
+    params: { slug: example.slug },
+    props: { example },
+  }));
+}
+
+const { example } = Astro.props;
+const { Content } = await example.render();
+
+// Get related devices and components
+const allDevices = await getCollection('devices');
+const allComponents = await getCollection('components');
+
+const devices = allDevices.filter(d => example.data.devices.includes(d.slug));
+const components = allComponents.filter(c => example.data.components.includes(c.slug));
+---
+
+<Layout title={`${example.data.title} - Examples`}>
+  <article>
+    <div class="header">
+      <h1>{example.data.title}</h1>
+      <div class="meta">
+        <span class="badge badge-{example.data.difficulty}">{example.data.difficulty}</span>
+      </div>
+    </div>
+
+    <div class="description">
+      <p><strong>{example.data.description}</strong></p>
+    </div>
+
+    <div class="requirements">
+      <div class="requirement-section">
+        <h2>Required Devices</h2>
+        <div class="card-grid">
+          {devices.map(device => (
+            <a href={`/devices/${device.slug}`} class="info-card">
+              <h4>{device.data.title}</h4>
+              <p>{device.data.description}</p>
+              <span class="mini-badge">{device.data.category}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="requirement-section">
+        <h2>Required Components</h2>
+        <div class="card-grid">
+          {components.map(component => (
+            <a href={`/components/${component.slug}`} class="info-card">
+              <h4>{component.data.title}</h4>
+              <code class="component-code">{component.data.esphomeComponent}</code>
+              <p>{component.data.description}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <Content />
+    </div>
+
+    <a href="/examples" class="back-link">← Back to all examples</a>
+  </article>
+
+  <style>
+    article {
+      max-width: 900px;
+    }
+
+    .header {
+      margin-bottom: 2rem;
+    }
+
+    .header h1 {
+      margin-bottom: 1rem;
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .badge {
+      display: inline-block;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .badge-beginner {
+      background: #10b981;
+    }
+
+    .badge-intermediate {
+      background: #f59e0b;
+    }
+
+    .badge-advanced {
+      background: #ef4444;
+    }
+
+    .description {
+      background: var(--light-gray);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .description p {
+      margin: 0;
+      font-size: 1.125rem;
+    }
+
+    .requirements {
+      margin: 2rem 0;
+    }
+
+    .requirement-section {
+      margin-bottom: 2rem;
+    }
+
+    .requirement-section h2 {
+      margin-bottom: 1rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .info-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s;
+      display: block;
+    }
+
+    .info-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-card h4 {
+      margin: 0 0 0.5rem 0;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .info-card p {
+      margin: 0.5rem 0;
+      color: var(--gray);
+      font-size: 0.875rem;
+    }
+
+    .mini-badge {
+      display: inline-block;
+      background: var(--light-gray);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      color: var(--text);
+    }
+
+    .component-code {
+      display: block;
+      background: var(--light-gray);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      margin-bottom: 0.5rem;
+      color: #c7254e;
+    }
+
+    .content {
+      margin: 2rem 0;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 2rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</Layout>

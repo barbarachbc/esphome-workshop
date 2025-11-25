@@ -1,0 +1,138 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const devices = await getCollection('devices');
+const categories = [...new Set(devices.map(d => d.data.category))];
+---
+
+<Layout title="Devices - ESPHome Documentation">
+  <h1>Devices</h1>
+  <p class="subtitle">Physical hardware components for ESPHome projects</p>
+
+  <div class="filters">
+    <label>
+      Filter by category:
+      <select id="categoryFilter">
+        <option value="">All Categories</option>
+        {categories.map(cat => (
+          <option value={cat}>{cat}</option>
+        ))}
+      </select>
+    </label>
+  </div>
+
+  <div class="device-grid" id="deviceGrid">
+    {devices.map(device => (
+      <a href={`/devices/${device.slug}`} class="device-card" data-category={device.data.category}>
+        <h3>{device.data.title}</h3>
+        <div class="badge">{device.data.category}</div>
+        <p>{device.data.description}</p>
+        <div class="connections">
+          {device.data.connectionTypes.map(conn => (
+            <span class="tag">{conn}</span>
+          ))}
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <style>
+    .subtitle {
+      color: var(--gray);
+      font-size: 1.125rem;
+      margin-bottom: 2rem;
+    }
+
+    .filters {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: var(--light-gray);
+      border-radius: 0.5rem;
+    }
+
+    .filters select {
+      padding: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 0.25rem;
+      font-size: 1rem;
+    }
+
+    .device-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .device-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s;
+      display: block;
+    }
+
+    .device-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border-color: var(--accent);
+    }
+
+    .device-card h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--accent);
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .device-card p {
+      color: var(--gray);
+      margin-bottom: 1rem;
+    }
+
+    .connections {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--light-gray);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+      color: var(--text);
+    }
+  </style>
+
+  <script>
+    const filter = document.getElementById('categoryFilter') as HTMLSelectElement;
+    const grid = document.getElementById('deviceGrid');
+    
+    filter?.addEventListener('change', () => {
+      const value = filter.value;
+      const cards = grid?.querySelectorAll('.device-card');
+      
+      cards?.forEach(card => {
+        const category = card.getAttribute('data-category');
+        if (!value || category === value) {
+          (card as HTMLElement).style.display = 'block';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  </script>
+</Layout>

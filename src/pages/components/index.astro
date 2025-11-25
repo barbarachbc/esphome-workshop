@@ -1,0 +1,142 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const components = await getCollection('components');
+const categories = [...new Set(components.map(c => c.data.category))];
+---
+
+<Layout title="Components - ESPHome Documentation">
+  <h1>Components</h1>
+  <p class="subtitle">ESPHome software components and platforms</p>
+
+  <div class="filters">
+    <label>
+      Filter by category:
+      <select id="categoryFilter">
+        <option value="">All Categories</option>
+        {categories.map(cat => (
+          <option value={cat}>{cat}</option>
+        ))}
+      </select>
+    </label>
+  </div>
+
+  <div class="component-grid" id="componentGrid">
+    {components.map(component => (
+      <a href={`/components/${component.slug}`} class="component-card" data-category={component.data.category}>
+        <h3>{component.data.title}</h3>
+        <div class="badge">{component.data.category}</div>
+        <code class="component-name">{component.data.esphomeComponent}</code>
+        <p>{component.data.description}</p>
+        {component.data.requiresHardware && (
+          <span class="hardware-badge">Requires Hardware</span>
+        )}
+      </a>
+    ))}
+  </div>
+
+  <style>
+    .subtitle {
+      color: var(--gray);
+      font-size: 1.125rem;
+      margin-bottom: 2rem;
+    }
+
+    .filters {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: var(--light-gray);
+      border-radius: 0.5rem;
+    }
+
+    .filters select {
+      padding: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 0.25rem;
+      font-size: 1rem;
+    }
+
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .component-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s;
+      display: block;
+    }
+
+    .component-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border-color: var(--accent);
+    }
+
+    .component-card h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--accent);
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .component-name {
+      display: block;
+      background: var(--light-gray);
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      color: #c7254e;
+    }
+
+    .component-card p {
+      color: var(--gray);
+      margin-bottom: 1rem;
+    }
+
+    .hardware-badge {
+      display: inline-block;
+      background: #f59e0b;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+  </style>
+
+  <script>
+    const filter = document.getElementById('categoryFilter') as HTMLSelectElement;
+    const grid = document.getElementById('componentGrid');
+    
+    filter?.addEventListener('change', () => {
+      const value = filter.value;
+      const cards = grid?.querySelectorAll('.component-card');
+      
+      cards?.forEach(card => {
+        const category = card.getAttribute('data-category');
+        if (!value || category === value) {
+          (card as HTMLElement).style.display = 'block';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  </script>
+</Layout>

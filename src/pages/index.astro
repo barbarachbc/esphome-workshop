@@ -1,16 +1,87 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="ESPHome Documentation">
+  <div class="hero">
+    <h1>ESPHome Device Documentation</h1>
+    <p class="hero-description">
+      Learn how to connect and configure hardware devices with ESPHome. Browse devices, 
+      components, and complete example projects.
+    </p>
+  </div>
+
+  <div class="quick-links">
+    <a href="/devices" class="card">
+      <h2>📟 Devices</h2>
+      <p>Browse physical hardware - boards, sensors, displays, and more.</p>
+    </a>
+    <a href="/components" class="card">
+      <h2>🔧 Components</h2>
+      <p>Explore ESPHome software components and platforms.</p>
+    </a>
+    <a href="/examples" class="card">
+      <h2>💡 Examples</h2>
+      <p>Complete projects with wiring and configuration.</p>
+    </a>
+  </div>
+
+  <style>
+    .hero {
+      text-align: center;
+      padding: 3rem 0;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      color: white;
+      border-radius: 0.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .hero h1 {
+      margin: 0 0 1rem 0;
+      font-size: 2.5rem;
+      color: white;
+    }
+
+    .hero-description {
+      font-size: 1.125rem;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: 0.95;
+    }
+
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 2rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border-color: var(--accent);
+    }
+
+    .card h2 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.5rem;
+      color: var(--accent);
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--gray);
+    }
+  </style>
+</Layout>
