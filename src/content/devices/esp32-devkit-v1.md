@@ -6,7 +6,8 @@ manufacturer: "unknown"
 model: "esp32-devkit-v1"
 variants: ["HW-463", "HW-394"]
 #connectionTypes only for those that have examples in component
-connectionTypes: ["gpio", "i2c", "spi", "uart", "pwm", "analog"]
+#connectionTypes: ["gpio", "i2c", "spi", "uart", "pwm", "analog"]
+connectionTypes: ["gpio"]
 tags: ["wifi", "bluetooth", "esp32"]
 productionStatus: "NRND"
 status: "unused"
@@ -20,6 +21,7 @@ references:
 purchaseLinks:
   - vendor: AliExpress
     url: https://www.aliexpress.com/item/1005006422498371.html
+#image: "/images/devices/"
 ---
 
 ## Overview
