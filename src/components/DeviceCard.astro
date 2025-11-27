@@ -54,22 +54,12 @@ const connectionTypeMap: Record<string, string> = {
   )}
   <div class="card-content">
     <div class="card-header">
-      <div class="badges-left">
-        <span class="card-category">{device.data.category}</span>
-        {device.data.productionStatus && device.data.productionStatus !== 'unknown' && (
-          <span class={`production-badge ${device.data.productionStatus.toLowerCase()}`}>
-            {productionStatusLabels[device.data.productionStatus]}
-          </span>
-        )}
-      </div>
+      <span class="card-category">{device.data.category}</span>
       <span class={`status-badge ${effectiveStatus}`}>
         {statusLabels[effectiveStatus]}
       </span>
     </div>
     <h3>{device.data.title}</h3>
-    {device.data.manufacturer && (
-      <p class="card-meta">by {device.data.manufacturer}</p>
-    )}
     <p>{device.data.description}</p>
     {device.data.connectionTypes.length > 0 && (
       <div class="connections">
@@ -121,12 +111,6 @@ const connectionTypeMap: Record<string, string> = {
     margin-bottom: 0.5rem;
   }
 
-  .badges-left {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
   .card-category {
     display: inline-block;
     background: #dbeafe;
@@ -137,7 +121,7 @@ const connectionTypeMap: Record<string, string> = {
     font-weight: 500;
   }
 
-  .production-badge {
+  .status-badge {
     display: inline-block;
     padding: 0.25rem 0.75rem;
     border-radius: 4px;
@@ -145,19 +129,24 @@ const connectionTypeMap: Record<string, string> = {
     font-weight: 500;
   }
 
-  .production-badge.active {
-    background: #d1fae5;
-    color: #065f46;
+  .status-badge.unused {
+    background: #fee2e2;
+    color: #991b1b;
   }
 
-  .production-badge.nrnd {
+  .status-badge.testing {
     background: #fef3c7;
     color: #92400e;
   }
 
-  .production-badge.discontinued {
-    background: #fee2e2;
-    color: #991b1b;
+  .status-badge.deployed {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  .status-badge.retired {
+    background: #f3f4f6;
+    color: #6b7280;
   }
 
   .card-content h3 {
@@ -166,14 +155,8 @@ const connectionTypeMap: Record<string, string> = {
     color: #111827;
   }
 
-  .card-meta {
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin: 0.25rem 0;
-  }
-
-  .card-content p:last-child {
-    margin: 0.75rem 0 0 0;
+  .card-content p {
+    margin: 0.75rem 0;
     color: #4b5563;
     line-height: 1.5;
   }

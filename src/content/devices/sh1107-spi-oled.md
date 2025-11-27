@@ -6,7 +6,7 @@ manufacturer: "Pimoroni"
 model: "PIM473"
 connectionTypes: ["spi"]
 components: ["spi", "display", "ssd1306_spi"]
-tags: ["display", "oled", "monochrome"]
+tags: ["display", "oled", "monochrome", "sh1107"]
 productionStatus: "active"
 purchaseLinks:
   - vendor: "Pimoroni"
@@ -83,3 +83,4 @@ substitutions:
 ```
 
 TODO: example with beautiful display pages that are cycling every 5 seconds
+TODO: use those examples for font
