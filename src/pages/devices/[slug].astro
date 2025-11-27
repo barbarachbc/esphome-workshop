@@ -12,26 +12,103 @@ export async function getStaticPaths() {
 
 const { device } = Astro.props;
 const { Content } = await device.render();
+
+// Get projects using this device
+const allProjects = await getCollection('projects');
+const projectsUsingDevice = allProjects.filter(project => {
+  const hasDevices = project.data.devices && Array.isArray(project.data.devices);
+  if (!hasDevices) return false;
+  
+  // Case-insensitive comparison
+  const deviceSlugLower = device.slug.toLowerCase();
+  return project.data.devices.some(d => d.toLowerCase() === deviceSlugLower);
+});
+
+const statusLabels = {
+  unused: '📦 Unused',
+  testing: '🧪 Testing',
+  deployed: '✅ Deployed',
+  retired: '⏸️ Retired',
+};
+
+const projectStatusLabels = {
+  idea: '💭 Idea',
+  'in-progress': '🛠️ In Progress',
+  completed: '✅ Completed',
+  abandoned: '⏸️ Abandoned',
+};
+
+// Automatically determine device status based on project usage
+let displayStatus = device.data.status;
+if (projectsUsingDevice.length > 0) {
+  // Only override if device is currently marked as 'unused'
+  // This allows manual 'testing', 'deployed', or 'retired' status to be preserved
+  if (device.data.status === 'unused') {
+    // Check project statuses to determine device status
+    const hasDeployedProject = projectsUsingDevice.some(p => p.data.status === 'completed');
+    const hasInProgressProject = projectsUsingDevice.some(p => p.data.status === 'in-progress');
+    
+    if (hasDeployedProject) {
+      displayStatus = 'deployed';
+    } else if (hasInProgressProject) {
+      displayStatus = 'testing';
+    }
+  }
+}
 ---
 
 <Layout title={`${device.data.title} - Devices`}>
   <article>
     <div class="header">
       <h1>{device.data.title}</h1>
-      <div class="meta">
-        <span class="badge">{device.data.category}</span>
-        {device.data.manufacturer && (
-          <span class="manufacturer">{device.data.manufacturer}</span>
-        )}
-        {device.data.model && (
-          <span class="model">Model: {device.data.model}</span>
-        )}
-      </div>
+      <span class={`status-badge ${displayStatus}`}>
+        {statusLabels[displayStatus]}
+      </span>
+    </div>
+
+    <div class="meta">
+      <span class="badge">{device.data.category}</span>
+      {device.data.manufacturer && (
+        <span class="manufacturer">{device.data.manufacturer}</span>
+      )}
+      {device.data.model && (
+        <span class="model">Model: {device.data.model}</span>
+      )}
+      {device.data.dateAcquired && (
+        <span class="date-acquired">📅 Acquired: {device.data.dateAcquired}</span>
+      )}
     </div>
 
     <div class="description">
       <p><strong>{device.data.description}</strong></p>
     </div>
+
+    {projectsUsingDevice.length > 0 && (
+      <details class="used-in-projects-collapsible" open>
+        <summary>
+          <h3>🚀 Used in Projects ({projectsUsingDevice.length})</h3>
+        </summary>
+        <div class="projects-list">
+          {projectsUsingDevice.map(project => (
+            <div class="project-item">
+              <a href={`/projects/${project.slug}`}>
+                {project.data.title}
+              </a>
+              <span class={`status-badge ${project.data.status}`}>
+                {projectStatusLabels[project.data.status]}
+              </span>
+            </div>
+          ))}
+        </div>
+      </details>
+    )}
+
+    {device.data.notes && (
+      <div class="notes-section">
+        <h3>📝 Notes</h3>
+        <p>{device.data.notes}</p>
+      </div>
+    )}
 
     {device.data.connectionTypes.length > 0 && (
       <div class="section">
@@ -72,11 +149,14 @@ const { Content } = await device.render();
     }
 
     .header {
-      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
     }
 
     .header h1 {
-      margin-bottom: 1rem;
+      margin: 0;
     }
 
     .meta {
@@ -84,6 +164,7 @@ const { Content } = await device.render();
       align-items: center;
       gap: 1rem;
       flex-wrap: wrap;
+      margin-bottom: 2rem;
     }
 
     .badge {
@@ -101,6 +182,11 @@ const { Content } = await device.render();
       font-size: 0.875rem;
     }
 
+    .date-acquired {
+      color: var(--gray);
+      font-size: 0.875rem;
+    }
+
     .description {
       background: var(--light-gray);
       padding: 1.5rem;
@@ -111,6 +197,24 @@ const { Content } = await device.render();
     .description p {
       margin: 0;
       font-size: 1.125rem;
+    }
+
+    .notes-section {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      margin: 2rem 0;
+    }
+
+    .notes-section h3 {
+      margin: 0 0 0.5rem 0;
+      color: #92400e;
+    }
+
+    .notes-section p {
+      margin: 0;
+      color: #78350f;
     }
 
     .section {
@@ -153,6 +257,104 @@ const { Content } = await device.render();
     }
 
     .purchase-links a:hover {
+      text-decoration: underline;
+    }
+
+    .used-in-projects-collapsible {
+      background: var(--light-gray);
+      border: 2px solid var(--accent);
+      border-radius: 0.5rem;
+      padding: 0;
+      margin: 2rem 0;
+    }
+
+    .used-in-projects-collapsible summary {
+      cursor: pointer;
+      padding: 1rem 1.5rem;
+      user-select: none;
+      list-style: none;
+      background: linear-gradient(135deg, var(--accent-light) 0%, #f0f9ff 100%);
+      border-radius: 0.5rem;
+    }
+
+    .used-in-projects-collapsible summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .used-in-projects-collapsible summary::before {
+      content: '▶';
+      display: inline-block;
+      margin-right: 0.5rem;
+      transition: transform 0.2s;
+    }
+
+    .used-in-projects-collapsible[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    .used-in-projects-collapsible summary h3 {
+      display: inline;
+      margin: 0;
+      color: var(--accent-dark);
+      font-size: 1.25rem;
+    }
+
+    .used-in-projects-collapsible summary:hover {
+      background: linear-gradient(135deg, #bfdbfe 0%, #dbeafe 100%);
+    }
+
+    .projects-list {
+      padding: 1rem 1.5rem;
+    }
+
+    .project-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      background: white;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+    }
+
+    .project-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .project-item a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
+    .project-item a:hover {
+      text-decoration: underline;
+    }
+
+    .used-in-projects ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .used-in-projects li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      background: var(--light-gray);
+      border-radius: 0.5rem;
+    }
+
+    .used-in-projects a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .used-in-projects a:hover {
       text-decoration: underline;
     }
 

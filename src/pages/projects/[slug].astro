@@ -19,20 +19,44 @@ const allComponents = await getCollection('components');
 
 const devices = allDevices.filter(d => project.data.devices.includes(d.slug));
 const components = allComponents.filter(c => project.data.components.includes(c.slug));
+
+const statusLabels = {
+  idea: '💭 Idea',
+  'in-progress': '🛠️ In Progress',
+  completed: '✅ Completed',
+  abandoned: '⏸️ Abandoned',
+};
 ---
 
 <Layout title={`${project.data.title} - Projects`}>
   <article>
     <div class="header">
       <h1>{project.data.title}</h1>
-      <div class="meta">
-        <span class="badge badge-{project.data.difficulty}">{project.data.difficulty}</span>
-      </div>
+      <span class={`status-badge ${project.data.status}`}>
+        {statusLabels[project.data.status]}
+      </span>
+    </div>
+
+    <div class="meta">
+      <span class="badge badge-{project.data.difficulty}">{project.data.difficulty}</span>
+      {project.data.dateStarted && (
+        <span class="date-info">Started: {project.data.dateStarted}</span>
+      )}
+      {project.data.dateCompleted && (
+        <span class="date-info">Completed: {project.data.dateCompleted}</span>
+      )}
     </div>
 
     <div class="description">
       <p><strong>{project.data.description}</strong></p>
     </div>
+
+    {project.data.motivation && (
+      <div class="motivation-callout">
+        <h3>💡 Why This Project?</h3>
+        <p>{project.data.motivation}</p>
+      </div>
+    )}
 
     <div class="requirements">
       <div class="requirement-section">
@@ -75,17 +99,22 @@ const components = allComponents.filter(c => project.data.components.includes(c.
     }
 
     .header {
-      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
     }
 
     .header h1 {
-      margin-bottom: 1rem;
+      margin: 0;
     }
 
     .meta {
       display: flex;
       align-items: center;
       gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
     }
 
     .badge {
@@ -110,6 +139,11 @@ const components = allComponents.filter(c => project.data.components.includes(c.
       background: #ef4444;
     }
 
+    .date-info {
+      color: var(--gray);
+      font-size: 0.875rem;
+    }
+
     .description {
       background: var(--light-gray);
       padding: 1.5rem;
@@ -120,6 +154,24 @@ const components = allComponents.filter(c => project.data.components.includes(c.
     .description p {
       margin: 0;
       font-size: 1.125rem;
+    }
+
+    .motivation-callout {
+      background: linear-gradient(135deg, #dbeafe 0%, #f0f9ff 100%);
+      border-left: 4px solid var(--accent);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      margin: 2rem 0;
+    }
+
+    .motivation-callout h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--accent-dark);
+    }
+
+    .motivation-callout p {
+      margin: 0;
+      color: var(--text);
     }
 
     .requirements {

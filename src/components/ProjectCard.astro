@@ -9,6 +9,7 @@ interface Props {
       devices: string[];
       components: string[];
       image?: string;
+      status: 'idea' | 'in-progress' | 'completed' | 'abandoned';
     };
   };
 }
@@ -22,6 +23,13 @@ const difficultyColors = {
 };
 
 const difficultyStyle = difficultyColors[project.data.difficulty as keyof typeof difficultyColors] || difficultyColors.beginner;
+
+const statusLabels = {
+  idea: '💭 Idea',
+  'in-progress': '🛠️ In Progress',
+  completed: '✅ Completed',
+  abandoned: '⏸️ Abandoned',
+};
 ---
 
 <a href={`/projects/${project.slug}`} class="card">
@@ -29,9 +37,14 @@ const difficultyStyle = difficultyColors[project.data.difficulty as keyof typeof
     <img src={project.data.image} alt={project.data.title} class="card-image" />
   )}
   <div class="card-content">
-    <span class="card-difficulty" style={`background: ${difficultyStyle.bg}; color: ${difficultyStyle.color};`}>
-      {project.data.difficulty}
-    </span>
+    <div class="card-header">
+      <span class="card-difficulty" style={`background: ${difficultyStyle.bg}; color: ${difficultyStyle.color};`}>
+        {project.data.difficulty}
+      </span>
+      <span class={`status-badge ${project.data.status}`}>
+        {statusLabels[project.data.status]}
+      </span>
+    </div>
     <h3>{project.data.title}</h3>
     <p>{project.data.description}</p>
     <div class="card-tags">
@@ -71,6 +84,13 @@ const difficultyStyle = difficultyColors[project.data.difficulty as keyof typeof
 
   .card-content {
     padding: 1.5rem;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
   }
 
   .card-difficulty {
