@@ -15,6 +15,10 @@ const devices = defineCollection({
       url: z.string(),
     })).optional(),
     tags: z.array(z.string()).optional(),
+    // Personal tracking fields
+    status: z.enum(['unused', 'testing', 'deployed', 'retired']),
+    notes: z.string().optional(),
+    dateAcquired: z.string().optional(),
   }),
 });
 
@@ -42,6 +46,23 @@ const projects = defineCollection({
     components: z.array(z.string()), // References to component slugs
     image: z.string().optional(),
     tags: z.array(z.string()).optional(),
+    // Project tracking fields
+    status: z.enum(['idea', 'in-progress', 'completed', 'abandoned']),
+    dateStarted: z.string().optional(),
+    dateCompleted: z.string().optional(),
+    motivation: z.string().optional(),
+  }),
+});
+
+const notes = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    category: z.enum(['setup', 'networking', 'development', 'home-assistant', 'troubleshooting', 'custom-components', 'other']),
+    difficulty: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
+    tags: z.array(z.string()).optional(),
+    lastUpdated: z.string().optional(),
   }),
 });
 
@@ -49,4 +70,5 @@ export const collections = {
   devices,
   components,
   projects,
+  notes,
 };

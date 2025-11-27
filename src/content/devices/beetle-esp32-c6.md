@@ -15,6 +15,7 @@ purchaseLinks:
     url: "https://www.dfrobot.com/product-2673.html"
   - vendor: "Amazon"
     url: "https://www.amazon.com/s?k=beetle+esp32-c6"
+status: "unused"
 ---
 
 # Beetle ESP32-C6

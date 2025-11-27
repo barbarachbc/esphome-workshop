@@ -5,6 +5,7 @@ difficulty: "beginner"
 devices: ["esp32-devkit-v1", "bme280"]
 components: ["i2c", "sensor"]
 tags: ["weather", "monitoring", "temperature", "humidity", "pressure"]
+status: "completed"
 ---
 
 ## Project Overview

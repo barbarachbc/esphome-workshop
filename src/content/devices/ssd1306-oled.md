@@ -11,6 +11,7 @@ purchaseLinks:
     url: "https://www.adafruit.com/product/326"
   - vendor: "SparkFun"
     url: "https://www.sparkfun.com/products/14532"
+status: "unused"
 ---
 
 ## Overview

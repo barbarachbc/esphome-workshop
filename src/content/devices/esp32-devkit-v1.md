@@ -6,6 +6,7 @@ manufacturer: "Espressif"
 model: "ESP32-WROOM-32"
 connectionTypes: ["gpio", "i2c", "spi", "uart", "pwm", "analog"]
 tags: ["wifi", "bluetooth", "microcontroller", "esp32"]
+status: "unused"
 ---
 
 ## Overview

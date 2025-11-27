@@ -1,10 +1,10 @@
-# ESPHome Documentation Site
+# My ESPHome Workshop
 
-> A comprehensive documentation website for ESPHome devices, components, and example projects built with Astro.
+> A personal documentation and tracking site for my 15+ year collection of dev boards, sensors, and components as I finally build useful smart home projects with ESPHome. Built with Astro.
 
 ## 🏗️ Project Architecture
 
-This project uses **Astro's Content Collections** to manage three interconnected types of documentation:
+This project uses **Astro's Content Collections** to manage four interconnected types of documentation:
 
 ### Content Collections
 
@@ -21,6 +21,9 @@ Physical hardware components used in ESPHome projects.
 - `image` - Path to device image (optional)
 - `purchaseLinks` - Array of vendor/URL objects (optional)
 - `tags` - Array of strings for categorization (optional)
+- **`status`** - **REQUIRED:** `unused`, `testing`, `deployed`, `retired`
+- `notes` - Personal notes, stories, salvage info (optional)
+- `dateAcquired` - When acquired, flexible format like "2015" or "early 2012" (optional)
 
 **Example file:** `src/content/devices/esp32-devkit-v1.md`
 
@@ -54,8 +57,27 @@ Complete projects combining devices and components.
 - `components` - Array of component slugs (e.g., `['i2c', 'sensor']`)
 - `image` - Path to wiring diagram/photo (optional)
 - `tags` - Array of strings (optional)
+- **`status`** - **REQUIRED:** `idea`, `in-progress`, `completed`, `abandoned`
+- `dateStarted` - When project started (optional)
+- `dateCompleted` - When project finished (optional)
+- `motivation` - Why this project matters (optional)
 
 **Example file:** `src/content/projects/temperature-monitor.md`
+
+---
+
+#### 4. **Notes** (`src/content/notes/`)
+Setup guides, networking tricks, and lessons learned - non-device-specific knowledge.
+
+**Schema:**
+- `title` - Note/guide title
+- `description` - What the note covers
+- `category` - `setup`, `networking`, `development`, `home-assistant`, `troubleshooting`, `custom-components`, `other`
+- `difficulty` - `beginner`, `intermediate`, `advanced` (optional)
+- `tags` - Array of strings (optional)
+- `lastUpdated` - When last updated (optional)
+
+**Example file:** `src/content/notes/mdns-docker-setup.md`
 
 ---
 
@@ -76,12 +98,14 @@ esphome-docs/
 │   │   ├── DeviceCard.astro
 │   │   ├── ComponentCard.astro
 │   │   ├── ProjectCard.astro
+│   │   ├── NoteCard.astro
 │   │   └── CodeBlock.astro
 │   ├── content/
 │   │   ├── config.ts         # Content collection schemas
 │   │   ├── devices/          # Device markdown files
 │   │   ├── components/       # Component markdown files
-│   │   └── projects/         # Project markdown files
+│   │   ├── projects/         # Project markdown files
+│   │   └── notes/            # Notes/guides markdown files
 │   ├── layouts/
 │   │   └── Layout.astro      # Base layout with header/nav
 │   └── pages/
@@ -92,19 +116,23 @@ esphome-docs/
 │       ├── components/
 │       │   ├── index.astro   # Components listing
 │       │   └── [slug].astro  # Individual component page
-│       └── projects/
-│           ├── index.astro   # Projects listing
-│           └── [slug].astro  # Individual project page
+│       ├── projects/
+│       │   ├── index.astro   # Projects listing
+│       │   └── [slug].astro  # Individual project page
+│       └── notes/
+│           ├── index.astro   # Notes listing
+│           └── [slug].astro  # Individual note page
 ```
 
 ---
 
 ## 🔗 Content Relationships
 
-The three collections are interconnected:
+The four collections are interconnected:
 
 - **Projects** reference both **Devices** and **Components** via slugs
 - **Components** can reference related **Devices**
+- **Notes** are standalone knowledge articles
 - Cross-linking is automatic through Astro's content collections
 
 **Example flow:**
@@ -112,6 +140,7 @@ The three collections are interconnected:
 2. It also lists components: `['i2c', 'sensor']`
 3. Detail pages automatically link to these related items
 4. Users can navigate from project → device → other projects using that device
+5. Device pages show status badges (unused, testing, deployed, retired)
 
 ---
 
@@ -130,6 +159,9 @@ manufacturer: "Bosch"
 model: "BME280"
 connectionTypes: ["i2c"]
 tags: ["temperature", "humidity", "pressure"]
+status: "unused"  # REQUIRED: unused, testing, deployed, or retired
+notes: "Bought in 2015, finally time to use it!"  # optional
+dateAcquired: "2015"  # optional
 ---
 ```
 3. Write markdown content describing the device, pinouts, specifications
@@ -162,6 +194,10 @@ difficulty: "beginner"
 devices: ["esp32-devkit-v1", "bme280"]
 components: ["i2c", "sensor"]
 tags: ["weather", "monitoring"]
+status: "completed"  # REQUIRED: idea, in-progress, completed, or abandoned
+dateStarted: "November 2025"  # optional
+dateCompleted: "November 2025"  # optional
+motivation: "Finally using that sensor from 2015!"  # optional
 ---
 ```
 3. Write markdown with:
@@ -170,17 +206,33 @@ tags: ["weather", "monitoring"]
    - Complete YAML configuration
    - Troubleshooting tips
 
+### Creating a New Note
+
+1. Create `src/content/notes/note-slug.md`
+2. Add frontmatter:
+```yaml
+---
+title: "Setting up mDNS in Docker"
+description: "How to configure Docker networking for ESPHome device discovery"
+category: "networking"
+difficulty: "intermediate"  # optional
+tags: ["docker", "mdns", "networking"]  # optional
+lastUpdated: "November 2025"  # optional
+---
+```
+3. Write markdown with setup instructions, troubleshooting, lessons learned
+
 ---
 
 ## 🎨 Styling & Components
 
 ### Reusable Card Components
 
-The project includes three reusable card components for consistent display across listing pages:
+The project includes four reusable card components for consistent display across listing pages:
 
 1. **`DeviceCard.astro`** - Displays device information
    - Props: `device` object with slug and data
-   - Shows: title, category, manufacturer, description, connection types
+   - Shows: title, category, manufacturer, description, connection types, **status badge**
    - Used in: `/devices` listing page
 
 2. **`ComponentCard.astro`** - Displays component information
@@ -190,8 +242,13 @@ The project includes three reusable card components for consistent display acros
 
 3. **`ProjectCard.astro`** - Displays projects
    - Props: `project` object with slug and data
-   - Shows: title, difficulty badge, description, device/component counts
+   - Shows: title, difficulty badge, description, device/component counts, **status badge**
    - Used in: `/projects` listing page
+
+4. **`NoteCard.astro`** - Displays notes/guides
+   - Props: `note` object with slug and data
+   - Shows: title, category badge, difficulty badge, description
+   - Used in: `/notes` listing page
 
 ### Design System
 
@@ -224,9 +281,10 @@ All commands are run from the root of the project, from a terminal:
 When asking AI to help with this project:
 
 ### Context to Provide
-- "This is an Astro site using content collections"
-- "Three collections: devices (hardware), components (ESPHome software), projects (complete projects)"
+- "This is a personal ESPHome workshop tracking site built with Astro"
+- "Four collections: devices (hardware with status tracking), components (ESPHome software), projects (with status tracking), notes (guides/lessons)"
 - "Collections are interconnected via slug references"
+- "Devices and projects have required status fields for tracking usage"
 
 ### Common Tasks
 
@@ -255,6 +313,9 @@ When asking AI to help with this project:
 ## 🎯 Key Features
 
 - ✅ Type-safe content with Zod schemas
+- ✅ Personal device inventory tracking (unused, testing, deployed, retired)
+- ✅ Project status tracking (idea, in-progress, completed, abandoned)
+- ✅ Notes collection for lessons learned and setup guides
 - ✅ Automatic routing via file-based pages
 - ✅ MDX support for rich content
 - ✅ Syntax highlighting for YAML/code
