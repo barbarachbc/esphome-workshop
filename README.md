@@ -233,7 +233,7 @@ The project includes four reusable card components for consistent display across
 1. **`DeviceCard.astro`** - Displays device information
    - Props: `device` object with slug and data
    - Shows: title, category, manufacturer, description, connection types, **status badge**
-   - Used in: `/devices` listing page
+   - Used in: `/devices` listing page and homepage stats card
 
 2. **`ComponentCard.astro`** - Displays component information
    - Props: `component` object with slug and data
@@ -243,12 +243,21 @@ The project includes four reusable card components for consistent display across
 3. **`ProjectCard.astro`** - Displays projects
    - Props: `project` object with slug and data
    - Shows: title, difficulty badge, description, device/component counts, **status badge**
-   - Used in: `/projects` listing page
+   - Used in: `/projects` listing page and homepage stats card
 
 4. **`NoteCard.astro`** - Displays notes/guides
    - Props: `note` object with slug and data
    - Shows: title, category badge, difficulty badge, description
    - Used in: `/notes` listing page
+
+### Homepage Features (Session 3)
+
+The homepage (`/`) includes:
+- **Personal hero section** with rotating taglines on each page load
+- **Devices & Projects cards** with integrated statistics showing counts and breakdowns
+- **Random Device Picker** with horizontal layout (title left, details right)
+- **Quick navigation** to Components and Notes sections
+- Clean, compact design emphasizing Devices and Projects
 
 ### Design System
 
@@ -316,6 +325,10 @@ When asking AI to help with this project:
 - ✅ Personal device inventory tracking (unused, testing, deployed, retired)
 - ✅ Project status tracking (idea, in-progress, completed, abandoned)
 - ✅ **Notes collection for lessons learned and setup guides** (Session 2 ✅)
+- ✅ **Personal homepage with integrated stats and random device picker** (Session 3 ✅)
+  - Stats embedded in Devices and Projects cards
+  - Random device suggestion with horizontal layout
+  - Random rotating hero description for personality
 - ✅ Automatic routing via file-based pages
 - ✅ MDX support for rich content
 - ✅ Syntax highlighting for YAML/code

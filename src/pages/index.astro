@@ -1,28 +1,123 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// Query all devices
+const allDevices = await getCollection('devices');
+const deviceStats = {
+  total: allDevices.length,
+  unused: allDevices.filter(d => d.data.status === 'unused').length,
+  testing: allDevices.filter(d => d.data.status === 'testing').length,
+  deployed: allDevices.filter(d => d.data.status === 'deployed').length,
+  retired: allDevices.filter(d => d.data.status === 'retired').length,
+};
+
+// Query all projects
+const allProjects = await getCollection('projects');
+const projectStats = {
+  total: allProjects.length,
+  ideas: allProjects.filter(p => p.data.status === 'idea').length,
+  inProgress: allProjects.filter(p => p.data.status === 'in-progress').length,
+  completed: allProjects.filter(p => p.data.status === 'completed').length,
+  abandoned: allProjects.filter(p => p.data.status === 'abandoned').length,
+};
+
+// Query all notes
+const allNotes = await getCollection('notes');
+const noteStats = {
+  total: allNotes.length,
+};
+
+// Get unused or testing devices for random picker
+const availableDevices = allDevices.filter(d => 
+  d.data.status === 'unused' || d.data.status === 'testing'
+);
+
+// Pick random one
+const randomDevice = availableDevices.length > 0 
+  ? availableDevices[Math.floor(Math.random() * availableDevices.length)]
+  : null;
+
+// Random hero descriptions (after the first one)
+const heroDescriptions = [
+  "This is my personal documentation as I turn all my junk into smart home devices.",
+  "As they say - one man's garbage is another man's treasure, just in this case I'm that same man! 😂 Maybe the world just wasn't ready for me all these years!",
+];
+
+const randomHeroDescription = heroDescriptions[Math.floor(Math.random() * heroDescriptions.length)];
 ---
 
-<Layout title="ESPHome Documentation">
+<Layout title="My ESPHome Workshop">
   <div class="hero">
-    <h1>ESPHome Device Documentation</h1>
+    <h1>My ESPHome Workshop</h1>
     <p class="hero-description">
-      Learn how to connect and configure hardware devices with ESPHome. Browse devices, 
-      components, and complete example projects.
+      After 15+ years collecting dev boards, sensors, and random gadgets, 
+      it's finally time to build something useful.
     </p>
+    <p class="hero-description">{randomHeroDescription}</p>
   </div>
 
-  <div class="quick-links">
-    <a href="/devices" class="card">
-      <h2>📟 Devices</h2>
+  <div class="top-row">
+    <a href="/devices" class="card stat-card">
+      <div class="card-header">
+        <h2>📟 Devices</h2>
+        <div class="stat-number">{deviceStats.total}</div>
+      </div>
       <p>Browse physical hardware - boards, sensors, displays, and more.</p>
+      <div class="stat-breakdown">
+        <span class="stat-item deployed">✅ {deviceStats.deployed} deployed</span>
+        <span class="stat-item testing">🧪 {deviceStats.testing} testing</span>
+        <span class="stat-item unused">📦 {deviceStats.unused} waiting</span>
+        {deviceStats.retired > 0 && (
+          <span class="stat-item retired">⏸️ {deviceStats.retired} retired</span>
+        )}
+      </div>
     </a>
+
+    <a href="/projects" class="card stat-card">
+      <div class="card-header">
+        <h2>💡 Projects</h2>
+        <div class="stat-number">{projectStats.total}</div>
+      </div>
+      <p>Complete projects with wiring and configuration.</p>
+      <div class="stat-breakdown">
+        <span class="stat-item completed">✅ {projectStats.completed} completed</span>
+        <span class="stat-item in-progress">🛠️ {projectStats.inProgress} in progress</span>
+        <span class="stat-item idea">💭 {projectStats.ideas} ideas</span>
+        {projectStats.abandoned > 0 && (
+          <span class="stat-item abandoned">⏸️ {projectStats.abandoned} abandoned</span>
+        )}
+      </div>
+    </a>
+  </div>
+
+  {randomDevice && (
+    <div class="next-device-section">
+      <h2>🎲 Random Device to Try Next</h2>
+      <div class="device-suggestion">
+        <div class="device-title">
+          <h3>{randomDevice.data.title}</h3>
+        </div>
+        <div class="device-details">
+          <p>{randomDevice.data.description}</p>
+          <div class="device-meta">
+            <span class="badge category">{randomDevice.data.category}</span>
+            {randomDevice.data.connectionTypes.map(type => (
+              <span class="badge connection">{type}</span>
+            ))}
+          </div>
+          <a href={`/devices/${randomDevice.slug}`} class="cta-button">
+            Let's Use This! →
+          </a>
+        </div>
+      </div>
+    </div>
+  )}
+
+  <div class="quick-links">
     <a href="/components" class="card">
       <h2>🔧 Components</h2>
       <p>Explore ESPHome software components and platforms.</p>
-    </a>
-    <a href="/projects" class="card">
-      <h2>💡 Projects</h2>
-      <p>Complete projects with wiring and configuration.</p>
     </a>
     <a href="/notes" class="card">
       <h2>📓 Notes</h2>
@@ -49,26 +144,31 @@ import Layout from '../layouts/Layout.astro';
     .hero-description {
       font-size: 1.125rem;
       max-width: 600px;
-      margin: 0 auto;
+      margin: 0 auto 1rem auto;
       opacity: 0.95;
     }
 
-    .quick-links {
+    .hero-description:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .top-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-bottom: 3rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
     }
 
     .card {
       background: white;
       border: 1px solid var(--border);
       border-radius: 0.5rem;
-      padding: 2rem;
+      padding: 1.25rem;
       text-decoration: none;
       color: var(--text);
       transition: all 0.2s;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      display: block;
     }
 
     .card:hover {
@@ -79,13 +179,141 @@ import Layout from '../layouts/Layout.astro';
 
     .card h2 {
       margin: 0 0 0.5rem 0;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       color: var(--accent);
     }
 
     .card p {
-      margin: 0;
+      margin: 0 0 1rem 0;
       color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .stat-card .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .stat-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .stat-item {
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+    }
+
+    .stat-item.deployed { background: #d1fae5; color: #065f46; }
+    .stat-item.testing { background: #fef3c7; color: #92400e; }
+    .stat-item.unused { background: #f3f4f6; color: #4b5563; }
+    .stat-item.retired { background: #fee2e2; color: #991b1b; }
+    .stat-item.completed { background: #d1fae5; color: #065f46; }
+    .stat-item.in-progress { background: #fed7aa; color: #9a3412; }
+    .stat-item.idea { background: #dbeafe; color: #1e40af; }
+    .stat-item.abandoned { background: #f3f4f6; color: #6b7280; }
+
+    .next-device-section {
+      margin-bottom: 2rem;
+      padding: 1.25rem;
+      background: linear-gradient(135deg, var(--accent-light) 0%, #f0f9ff 100%);
+      border-radius: 0.5rem;
+      border: 2px solid var(--accent);
+    }
+
+    .next-device-section h2 {
+      margin: 0 0 1rem 0;
+      color: var(--accent-dark);
+      font-size: 1.25rem;
+    }
+
+    .device-suggestion {
+      background: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .device-title h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 1.125rem;
+      white-space: nowrap;
+    }
+
+    .device-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .device-details p {
+      color: var(--gray);
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    .device-meta {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.125rem 0.5rem;
+      border-radius: 0.25rem;
+      background: var(--gray-light);
+      color: var(--text);
+    }
+
+    .badge.category {
+      background: var(--accent-light);
+      color: var(--accent-dark);
+    }
+
+    .badge.connection {
+      background: var(--gray-light);
+      color: var(--gray-dark);
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      width: fit-content;
+    }
+
+    .cta-button:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+    }
+
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 3rem;
     }
   </style>
 </Layout>
