@@ -2,18 +2,49 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-// Query all devices
+// Query all devices and projects
 const allDevices = await getCollection('devices');
+const allProjects = await getCollection('projects');
+
+// Compute display status for each device based on project usage
+const devicesWithComputedStatus = allDevices.map(device => {
+  const projectsUsingDevice = allProjects.filter(project => {
+    const hasDevices = project.data.devices && Array.isArray(project.data.devices);
+    if (!hasDevices) return false;
+    
+    const deviceSlugLower = device.slug.toLowerCase();
+    return project.data.devices.some(d => d.toLowerCase() === deviceSlugLower);
+  });
+
+  let displayStatus = device.data.status;
+  
+  // Only override if device is currently marked as 'unused'
+  if (projectsUsingDevice.length > 0 && device.data.status === 'unused') {
+    const hasDeployedProject = projectsUsingDevice.some(p => p.data.status === 'completed');
+    const hasInProgressProject = projectsUsingDevice.some(p => p.data.status === 'in-progress');
+    
+    if (hasDeployedProject) {
+      displayStatus = 'deployed';
+    } else if (hasInProgressProject) {
+      displayStatus = 'testing';
+    }
+  }
+
+  return {
+    ...device,
+    displayStatus
+  };
+});
+
+// Calculate stats based on computed status
 const deviceStats = {
-  total: allDevices.length,
-  unused: allDevices.filter(d => d.data.status === 'unused').length,
-  testing: allDevices.filter(d => d.data.status === 'testing').length,
-  deployed: allDevices.filter(d => d.data.status === 'deployed').length,
-  retired: allDevices.filter(d => d.data.status === 'retired').length,
+  total: devicesWithComputedStatus.length,
+  unused: devicesWithComputedStatus.filter(d => d.displayStatus === 'unused').length,
+  testing: devicesWithComputedStatus.filter(d => d.displayStatus === 'testing').length,
+  deployed: devicesWithComputedStatus.filter(d => d.displayStatus === 'deployed').length,
+  retired: devicesWithComputedStatus.filter(d => d.displayStatus === 'retired').length,
 };
 
-// Query all projects
-const allProjects = await getCollection('projects');
 const projectStats = {
   total: allProjects.length,
   ideas: allProjects.filter(p => p.data.status === 'idea').length,
@@ -28,9 +59,9 @@ const noteStats = {
   total: allNotes.length,
 };
 
-// Get unused or testing devices for random picker
-const availableDevices = allDevices.filter(d => 
-  d.data.status === 'unused' || d.data.status === 'testing'
+// Get unused or testing devices for random picker (using computed status)
+const availableDevices = devicesWithComputedStatus.filter(d => 
+  d.displayStatus === 'unused' || d.displayStatus === 'testing'
 );
 
 // Pick random one

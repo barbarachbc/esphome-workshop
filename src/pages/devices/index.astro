@@ -4,6 +4,38 @@ import Layout from '../../layouts/Layout.astro';
 import DeviceCard from '../../components/DeviceCard.astro';
 
 const devices = await getCollection('devices');
+const allProjects = await getCollection('projects');
+
+// Compute display status for each device based on project usage
+const devicesWithStatus = devices.map(device => {
+  const projectsUsingDevice = allProjects.filter(project => {
+    const hasDevices = project.data.devices && Array.isArray(project.data.devices);
+    if (!hasDevices) return false;
+    
+    const deviceSlugLower = device.slug.toLowerCase();
+    return project.data.devices.some(d => d.toLowerCase() === deviceSlugLower);
+  });
+
+  let displayStatus = device.data.status;
+  
+  // Only override if device is currently marked as 'unused'
+  if (projectsUsingDevice.length > 0 && device.data.status === 'unused') {
+    const hasDeployedProject = projectsUsingDevice.some(p => p.data.status === 'completed');
+    const hasInProgressProject = projectsUsingDevice.some(p => p.data.status === 'in-progress');
+    
+    if (hasDeployedProject) {
+      displayStatus = 'deployed';
+    } else if (hasInProgressProject) {
+      displayStatus = 'testing';
+    }
+  }
+
+  return {
+    ...device,
+    displayStatus
+  };
+});
+
 const categories = [...new Set(devices.map(d => d.data.category))];
 ---
 
@@ -24,7 +56,7 @@ const categories = [...new Set(devices.map(d => d.data.category))];
   </div>
 
   <div class="device-grid" id="deviceGrid">
-    {devices.map(device => (
+    {devicesWithStatus.map(device => (
       <div data-category={device.data.category}>
         <DeviceCard device={device} />
       </div>

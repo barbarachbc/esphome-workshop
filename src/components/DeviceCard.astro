@@ -11,10 +11,14 @@ interface Props {
       image?: string;
       status: 'unused' | 'testing' | 'deployed' | 'retired';
     };
+    displayStatus?: 'unused' | 'testing' | 'deployed' | 'retired';
   };
 }
 
 const { device } = Astro.props;
+
+// Use displayStatus if provided (for computed status), otherwise use data.status
+const effectiveStatus = device.displayStatus || device.data.status;
 
 const statusLabels = {
   unused: '📦 Unused',
@@ -31,8 +35,8 @@ const statusLabels = {
   <div class="card-content">
     <div class="card-header">
       <span class="card-category">{device.data.category}</span>
-      <span class={`status-badge ${device.data.status}`}>
-        {statusLabels[device.data.status]}
+      <span class={`status-badge ${effectiveStatus}`}>
+        {statusLabels[effectiveStatus]}
       </span>
     </div>
     <h3>{device.data.title}</h3>

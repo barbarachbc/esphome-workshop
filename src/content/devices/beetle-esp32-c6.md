@@ -18,7 +18,7 @@ purchaseLinks:
 status: "unused"
 ---
 
-# Beetle ESP32-C6
+## Overview
 
 The DFRobot Beetle ESP32-C6 is a compact development board based on the ESP32-C6 chip, featuring WiFi 6 and Bluetooth 5.3 connectivity in a small form factor.
 
