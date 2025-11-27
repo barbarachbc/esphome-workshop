@@ -10,6 +10,7 @@ interface Props {
       connectionTypes: string[];
       image?: string;
       status: 'unused' | 'testing' | 'deployed' | 'retired';
+      productionStatus?: 'active' | 'NRND' | 'discontinued' | 'unknown';
     };
     displayStatus?: 'unused' | 'testing' | 'deployed' | 'retired';
   };
@@ -26,6 +27,25 @@ const statusLabels = {
   deployed: '✅ Deployed',
   retired: '⏸️ Retired',
 };
+
+const productionStatusLabels = {
+  active: '✅ Active',
+  NRND: '⚠️ NRND',
+  discontinued: '❌ Discontinued',
+  unknown: '',
+};
+
+// Map connection types to component slugs
+const connectionTypeMap: Record<string, string> = {
+  'i2c': 'i2c',
+  'spi': 'spi',
+  'uart': 'uart',
+  'gpio': 'gpio',
+  'onewire': 'onewire',
+  'analog': 'analog',
+  'pwm': 'pwm',
+  'built-in': 'builtin',
+};
 ---
 
 <a href={`/devices/${device.slug}`} class="card">
@@ -34,7 +54,14 @@ const statusLabels = {
   )}
   <div class="card-content">
     <div class="card-header">
-      <span class="card-category">{device.data.category}</span>
+      <div class="badges-left">
+        <span class="card-category">{device.data.category}</span>
+        {device.data.productionStatus && device.data.productionStatus !== 'unknown' && (
+          <span class={`production-badge ${device.data.productionStatus.toLowerCase()}`}>
+            {productionStatusLabels[device.data.productionStatus]}
+          </span>
+        )}
+      </div>
       <span class={`status-badge ${effectiveStatus}`}>
         {statusLabels[effectiveStatus]}
       </span>
@@ -46,9 +73,14 @@ const statusLabels = {
     <p>{device.data.description}</p>
     {device.data.connectionTypes.length > 0 && (
       <div class="connections">
-        {device.data.connectionTypes.map(conn => (
-          <span class="tag">{conn}</span>
-        ))}
+        {device.data.connectionTypes.map(conn => {
+          const componentSlug = connectionTypeMap[conn.toLowerCase()];
+          return componentSlug ? (
+            <a href={`/components/${componentSlug}`} class="tag tag-link">{conn}</a>
+          ) : (
+            <span class="tag">{conn}</span>
+          );
+        })}
       </div>
     )}
   </div>
@@ -89,6 +121,12 @@ const statusLabels = {
     margin-bottom: 0.5rem;
   }
 
+  .badges-left {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
   .card-category {
     display: inline-block;
     background: #dbeafe;
@@ -97,7 +135,29 @@ const statusLabels = {
     border-radius: 4px;
     font-size: 0.875rem;
     font-weight: 500;
-    margin-bottom: 0.5rem;
+  }
+
+  .production-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .production-badge.active {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  .production-badge.nrnd {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  .production-badge.discontinued {
+    background: #fee2e2;
+    color: #991b1b;
   }
 
   .card-content h3 {
@@ -134,5 +194,17 @@ const statusLabels = {
     font-size: 0.75rem;
     font-weight: 500;
     text-transform: uppercase;
+  }
+
+  .tag-link {
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tag-link:hover {
+    background: var(--accent);
+    color: white;
+    transform: translateY(-1px);
   }
 </style>

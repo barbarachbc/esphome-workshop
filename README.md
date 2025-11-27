@@ -17,13 +17,16 @@ Physical hardware components used in ESPHome projects.
 - `category` - `board`, `sensor`, `display`, `actuator`, `peripheral`, `other`
 - `manufacturer` - Brand/maker (optional)
 - `model` - Model number (optional)
-- `connectionTypes` - Array: `i2c`, `spi`, `uart`, `gpio`, `onewire`, `analog`, `pwm`, `built-in`
+- `connectionTypes` - Array: `i2c`, `spi`, `uart`, `gpio`, `onewire`, `analog`, `pwm`, `built-in` (only connections used)
 - `image` - Path to device image (optional)
 - `purchaseLinks` - Array of vendor/URL objects (optional)
 - `tags` - Array of strings for categorization (optional)
 - **`status`** - **REQUIRED:** `unused`, `testing`, `deployed`, `retired`
 - `notes` - Personal notes, stories, salvage info (optional)
 - `dateAcquired` - When acquired, flexible format like "2015" or "early 2012" (optional)
+- **`variants`** - Array of variant names for different board versions (optional)
+- **`productionStatus`** - **REQUIRED:** `active`, `NRND` (not recommended for new designs), `discontinued`, `unknown` (default)
+- **`references`** - Array of reference objects with `title` and `url` for additional info (optional)
 
 **Example file:** `src/content/devices/esp32-devkit-v1.md`
 
@@ -157,11 +160,18 @@ description: "What it does"
 category: "sensor"
 manufacturer: "Bosch"
 model: "BME280"
-connectionTypes: ["i2c"]
+connectionTypes: ["i2c"]  # Only connections you actually used
 tags: ["temperature", "humidity", "pressure"]
 status: "unused"  # REQUIRED: unused, testing, deployed, or retired
+productionStatus: "active"  # REQUIRED: active, NRND, discontinued, or unknown (default)
 notes: "Bought in 2015, finally time to use it!"  # optional
 dateAcquired: "2015"  # optional
+variants: ["BME280 3.3V", "BME280 5V"]  # optional
+references:  # optional
+  - title: "Datasheet"
+    url: "https://example.com/datasheet.pdf"
+  - title: "Tutorial"
+    url: "https://example.com/tutorial"
 ---
 ```
 3. Write markdown content describing the device, pinouts, specifications
@@ -323,6 +333,10 @@ When asking AI to help with this project:
 
 - ✅ Type-safe content with Zod schemas
 - ✅ Personal device inventory tracking (unused, testing, deployed, retired)
+- ✅ Production status tracking (active, NRND, discontinued, unknown)
+- ✅ Device variants support for different board versions
+- ✅ Clickable connection type tags linking to component pages
+- ✅ Reference links for datasheets and additional resources
 - ✅ Project status tracking (idea, in-progress, completed, abandoned)
 - ✅ **Notes collection for lessons learned and setup guides** (Session 2 ✅)
 - ✅ **Personal homepage with integrated stats and random device picker** (Session 3 ✅)

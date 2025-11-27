@@ -19,6 +19,13 @@ const devices = defineCollection({
     status: z.enum(['unused', 'testing', 'deployed', 'retired']),
     notes: z.string().optional(),
     dateAcquired: z.string().optional(),
+    // New fields
+    variants: z.array(z.string()).optional(),
+    productionStatus: z.enum(['active', 'NRND', 'discontinued', 'unknown']).default('unknown'),
+    references: z.array(z.object({
+      title: z.string(),
+      url: z.string(),
+    })).optional(),
   }),
 });
 

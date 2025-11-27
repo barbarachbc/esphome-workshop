@@ -38,6 +38,25 @@ const projectStatusLabels = {
   abandoned: '⏸️ Abandoned',
 };
 
+const productionStatusLabels = {
+  active: '✅ Active',
+  NRND: '⚠️ Not Recommended for New Designs',
+  discontinued: '❌ Discontinued',
+  unknown: '❓ Unknown',
+};
+
+// Map connection types to component slugs
+const connectionTypeMap: Record<string, string> = {
+  'i2c': 'i2c',
+  'spi': 'spi',
+  'uart': 'uart',
+  'gpio': 'gpio',
+  'onewire': 'onewire',
+  'analog': 'analog',
+  'pwm': 'pwm',
+  'built-in': 'builtin',
+};
+
 // Automatically determine device status based on project usage
 let displayStatus = device.data.status;
 if (projectsUsingDevice.length > 0) {
@@ -61,9 +80,16 @@ if (projectsUsingDevice.length > 0) {
   <article>
     <div class="header">
       <h1>{device.data.title}</h1>
-      <span class={`status-badge ${displayStatus}`}>
-        {statusLabels[displayStatus]}
-      </span>
+      <div class="header-badges">
+        {device.data.productionStatus && device.data.productionStatus !== 'unknown' && (
+          <span class={`production-status-badge ${device.data.productionStatus.toLowerCase()}`}>
+            {productionStatusLabels[device.data.productionStatus]}
+          </span>
+        )}
+        <span class={`status-badge ${displayStatus}`}>
+          {statusLabels[displayStatus]}
+        </span>
+      </div>
     </div>
 
     <div class="meta">
@@ -73,6 +99,11 @@ if (projectsUsingDevice.length > 0) {
       )}
       {device.data.model && (
         <span class="model">Model: {device.data.model}</span>
+      )}
+      {device.data.variants && device.data.variants.length > 0 && (
+        device.data.variants.map(variant => (
+          <span class="variant-pill">{variant}</span>
+        ))
       )}
       {device.data.dateAcquired && (
         <span class="date-acquired">📅 Acquired: {device.data.dateAcquired}</span>
@@ -114,9 +145,14 @@ if (projectsUsingDevice.length > 0) {
       <div class="section">
         <h2>Connection Types</h2>
         <div class="connections">
-          {device.data.connectionTypes.map(conn => (
-            <span class="tag">{conn}</span>
-          ))}
+          {device.data.connectionTypes.map(conn => {
+            const componentSlug = connectionTypeMap[conn.toLowerCase()];
+            return componentSlug ? (
+              <a href={`/components/${componentSlug}`} class="tag tag-link">{conn}</a>
+            ) : (
+              <span class="tag">{conn}</span>
+            );
+          })}
         </div>
       </div>
     )}
@@ -124,6 +160,21 @@ if (projectsUsingDevice.length > 0) {
     <div class="content">
       <Content />
     </div>
+
+    {device.data.references && device.data.references.length > 0 && (
+      <div class="section">
+        <h2>References</h2>
+        <ul class="reference-links">
+          {device.data.references.map(ref => (
+            <li>
+              <a href={ref.url} target="_blank" rel="noopener noreferrer">
+                {ref.title} →
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
 
     {device.data.purchaseLinks && device.data.purchaseLinks.length > 0 && (
       <div class="section">
@@ -153,10 +204,42 @@ if (projectsUsingDevice.length > 0) {
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .header h1 {
       margin: 0;
+    }
+
+    .header-badges {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .production-status-badge {
+      display: inline-block;
+      font-size: 0.875rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+    }
+
+    .production-status-badge.active {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .production-status-badge.nrnd {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .production-status-badge.discontinued {
+      background: #fee2e2;
+      color: #991b1b;
     }
 
     .meta {
@@ -180,6 +263,16 @@ if (projectsUsingDevice.length > 0) {
     .manufacturer, .model {
       color: var(--gray);
       font-size: 0.875rem;
+    }
+
+    .variant-pill {
+      display: inline-block;
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
     }
 
     .date-acquired {
@@ -235,10 +328,41 @@ if (projectsUsingDevice.length > 0) {
       font-size: 1rem;
       color: var(--text);
       font-weight: 500;
+      text-decoration: none;
+    }
+
+    .tag-link {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tag-link:hover {
+      background: var(--accent);
+      color: white;
+      transform: translateY(-2px);
     }
 
     .content {
       margin: 2rem 0;
+    }
+
+    .reference-links {
+      list-style: none;
+      padding: 0;
+    }
+
+    .reference-links li {
+      margin-bottom: 0.5rem;
+    }
+
+    .reference-links a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .reference-links a:hover {
+      text-decoration: underline;
     }
 
     .purchase-links {
