@@ -87,10 +87,9 @@ The Beetle ESP32-C6 provides access to various GPIO pins. Refer to the board's p
 
 ### Common Pin Mappings
 
-- **I2C**: GPIO6 (SDA), GPIO7 (SCL)
-- **SPI**: GPIO12 (MOSI), GPIO13 (MISO), GPIO11 (CLK)
-- **UART**: GPIO16 (TX), GPIO17 (RX)
-- **ADC**: GPIO0-GPIO4 support analog input
+- **I2C**: GPI19 (SDA), GPI20 (SCL)
+- **SPI**: GPIO22 (MOSI), GPIO21 (MISO), GPIO23 (SCK)
+
 
 ## Power Considerations
 
