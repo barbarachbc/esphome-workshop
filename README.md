@@ -43,7 +43,7 @@ ESPHome software components and platforms.
 
 ---
 
-#### 3. **Examples** (`src/content/examples/`)
+#### 3. **Projects** (`src/content/projects/`)
 Complete projects combining devices and components.
 
 **Schema:**
@@ -55,7 +55,7 @@ Complete projects combining devices and components.
 - `image` - Path to wiring diagram/photo (optional)
 - `tags` - Array of strings (optional)
 
-**Example file:** `src/content/examples/temperature-monitor.md`
+**Example file:** `src/content/projects/temperature-monitor.md`
 
 ---
 
@@ -69,19 +69,19 @@ esphome-docs/
 ├── public/                   # Static assets (images, icons)
 │   └── images/
 │       ├── devices/          # Device photos
-│       ├── examples/         # Wiring diagrams
+│       ├── projects/         # Wiring diagrams
 │       └── components/       # Component illustrations
 ├── src/
 │   ├── components/           # Reusable Astro components
 │   │   ├── DeviceCard.astro
 │   │   ├── ComponentCard.astro
-│   │   ├── ExampleCard.astro
+│   │   ├── ProjectCard.astro
 │   │   └── CodeBlock.astro
 │   ├── content/
 │   │   ├── config.ts         # Content collection schemas
 │   │   ├── devices/          # Device markdown files
 │   │   ├── components/       # Component markdown files
-│   │   └── examples/         # Example markdown files
+│   │   └── projects/         # Project markdown files
 │   ├── layouts/
 │   │   └── Layout.astro      # Base layout with header/nav
 │   └── pages/
@@ -92,9 +92,9 @@ esphome-docs/
 │       ├── components/
 │       │   ├── index.astro   # Components listing
 │       │   └── [slug].astro  # Individual component page
-│       └── examples/
-│           ├── index.astro   # Examples listing
-│           └── [slug].astro  # Individual example page
+│       └── projects/
+│           ├── index.astro   # Projects listing
+│           └── [slug].astro  # Individual project page
 ```
 
 ---
@@ -103,15 +103,15 @@ esphome-docs/
 
 The three collections are interconnected:
 
-- **Examples** reference both **Devices** and **Components** via slugs
+- **Projects** reference both **Devices** and **Components** via slugs
 - **Components** can reference related **Devices**
 - Cross-linking is automatic through Astro's content collections
 
 **Example flow:**
-1. An example "Temperature Monitor" lists devices: `['esp32-devkit-v1', 'bme280']`
+1. A project "Temperature Monitor" lists devices: `['esp32-devkit-v1', 'bme280']`
 2. It also lists components: `['i2c', 'sensor']`
 3. Detail pages automatically link to these related items
-4. Users can navigate from example → device → other examples using that device
+4. Users can navigate from project → device → other projects using that device
 
 ---
 
@@ -150,9 +150,9 @@ requiresHardware: false
 ```
 3. Write markdown explaining configuration options
 
-### Creating a New Example
+### Creating a New Project
 
-1. Create `src/content/examples/example-slug.md`
+1. Create `src/content/projects/project-slug.md`
 2. Add frontmatter:
 ```yaml
 ---
@@ -188,10 +188,10 @@ The project includes three reusable card components for consistent display acros
    - Shows: title, category, esphomeComponent name, description, hardware badge
    - Used in: `/components` listing page
 
-3. **`ExampleCard.astro`** - Displays example projects
-   - Props: `example` object with slug and data
+3. **`ProjectCard.astro`** - Displays projects
+   - Props: `project` object with slug and data
    - Shows: title, difficulty badge, description, device/component counts
-   - Used in: `/examples` listing page
+   - Used in: `/projects` listing page
 
 ### Design System
 
@@ -225,7 +225,7 @@ When asking AI to help with this project:
 
 ### Context to Provide
 - "This is an Astro site using content collections"
-- "Three collections: devices (hardware), components (ESPHome software), examples (projects)"
+- "Three collections: devices (hardware), components (ESPHome software), projects (complete projects)"
 - "Collections are interconnected via slug references"
 
 ### Common Tasks
@@ -237,7 +237,7 @@ When asking AI to help with this project:
 > "Create a listing page at /devices that shows all devices with filtering by category and connection type."
 
 **Cross-referencing:**
-> "On the example detail page, display cards for all referenced devices and components."
+> "On the project detail page, display cards for all referenced devices and components."
 
 **Styling:**
 > "Add a card component for devices that shows the title, category badge, and connection types."
@@ -279,8 +279,8 @@ When asking AI to help with this project:
 - [ ] Dark mode toggle
 - [ ] Interactive wiring diagrams
 - [ ] ESPHome YAML validator
-- [ ] User-contributed examples
-- [ ] RSS feed for new examples
+- [ ] User-contributed projects
+- [ ] RSS feed for new projects
 - [ ] Print-friendly layouts
 
 ---

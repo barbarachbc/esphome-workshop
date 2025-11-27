@@ -32,7 +32,7 @@ const components = defineCollection({
   }),
 });
 
-const examples = defineCollection({
+const projects = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
@@ -48,5 +48,5 @@ const examples = defineCollection({
 export const collections = {
   devices,
   components,
-  examples,
+  projects,
 };

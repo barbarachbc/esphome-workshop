@@ -1,14 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import ExampleCard from '../../components/ExampleCard.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
 
-const examples = await getCollection('examples');
-const difficulties = [...new Set(examples.map(e => e.data.difficulty))];
+const projects = await getCollection('projects');
+const difficulties = [...new Set(projects.map(p => p.data.difficulty))];
 ---
 
-<Layout title="Examples - ESPHome Documentation">
-  <h1>Examples</h1>
+<Layout title="Projects - ESPHome Documentation">
+  <h1>Projects</h1>
   <p class="subtitle">Complete projects with wiring and configuration</p>
 
   <div class="filters">
@@ -23,10 +23,10 @@ const difficulties = [...new Set(examples.map(e => e.data.difficulty))];
     </label>
   </div>
 
-  <div class="example-grid" id="exampleGrid">
-    {examples.map(example => (
-      <div data-difficulty={example.data.difficulty}>
-        <ExampleCard example={example} />
+  <div class="project-grid" id="projectGrid">
+    {projects.map(project => (
+      <div data-difficulty={project.data.difficulty}>
+        <ProjectCard project={project} />
       </div>
     ))}
   </div>
@@ -52,18 +52,18 @@ const difficulties = [...new Set(examples.map(e => e.data.difficulty))];
       font-size: 1rem;
     }
 
-    .example-grid {
+    .project-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 1.5rem;
     }
 
-    /* Card styles moved to ExampleCard.astro component */
+    /* Card styles moved to ProjectCard.astro component */
   </style>
 
   <script>
     const filter = document.getElementById('difficultyFilter') as HTMLSelectElement;
-    const grid = document.getElementById('exampleGrid');
+    const grid = document.getElementById('projectGrid');
     
     filter?.addEventListener('change', () => {
       const value = filter.value;

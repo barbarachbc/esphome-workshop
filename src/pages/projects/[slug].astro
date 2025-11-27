@@ -3,35 +3,35 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-  const examples = await getCollection('examples');
-  return examples.map(example => ({
-    params: { slug: example.slug },
-    props: { example },
+  const projects = await getCollection('projects');
+  return projects.map(project => ({
+    params: { slug: project.slug },
+    props: { project },
   }));
 }
 
-const { example } = Astro.props;
-const { Content } = await example.render();
+const { project } = Astro.props;
+const { Content } = await project.render();
 
 // Get related devices and components
 const allDevices = await getCollection('devices');
 const allComponents = await getCollection('components');
 
-const devices = allDevices.filter(d => example.data.devices.includes(d.slug));
-const components = allComponents.filter(c => example.data.components.includes(c.slug));
+const devices = allDevices.filter(d => project.data.devices.includes(d.slug));
+const components = allComponents.filter(c => project.data.components.includes(c.slug));
 ---
 
-<Layout title={`${example.data.title} - Examples`}>
+<Layout title={`${project.data.title} - Projects`}>
   <article>
     <div class="header">
-      <h1>{example.data.title}</h1>
+      <h1>{project.data.title}</h1>
       <div class="meta">
-        <span class="badge badge-{example.data.difficulty}">{example.data.difficulty}</span>
+        <span class="badge badge-{project.data.difficulty}">{project.data.difficulty}</span>
       </div>
     </div>
 
     <div class="description">
-      <p><strong>{example.data.description}</strong></p>
+      <p><strong>{project.data.description}</strong></p>
     </div>
 
     <div class="requirements">
@@ -66,7 +66,7 @@ const components = allComponents.filter(c => example.data.components.includes(c.
       <Content />
     </div>
 
-    <a href="/examples" class="back-link">← Back to all examples</a>
+    <a href="/projects" class="back-link">← Back to all projects</a>
   </article>
 
   <style>

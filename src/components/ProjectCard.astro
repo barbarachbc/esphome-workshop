@@ -1,6 +1,6 @@
 ---
 interface Props {
-  example: {
+  project: {
     slug: string;
     data: {
       title: string;
@@ -13,7 +13,7 @@ interface Props {
   };
 }
 
-const { example } = Astro.props;
+const { project } = Astro.props;
 
 const difficultyColors = {
   beginner: { bg: '#dbeafe', color: '#1e40af' },
@@ -21,25 +21,25 @@ const difficultyColors = {
   advanced: { bg: '#fee2e2', color: '#991b1b' }
 };
 
-const difficultyStyle = difficultyColors[example.data.difficulty as keyof typeof difficultyColors] || difficultyColors.beginner;
+const difficultyStyle = difficultyColors[project.data.difficulty as keyof typeof difficultyColors] || difficultyColors.beginner;
 ---
 
-<a href={`/examples/${example.slug}`} class="card">
-  {example.data.image && (
-    <img src={example.data.image} alt={example.data.title} class="card-image" />
+<a href={`/projects/${project.slug}`} class="card">
+  {project.data.image && (
+    <img src={project.data.image} alt={project.data.title} class="card-image" />
   )}
   <div class="card-content">
     <span class="card-difficulty" style={`background: ${difficultyStyle.bg}; color: ${difficultyStyle.color};`}>
-      {example.data.difficulty}
+      {project.data.difficulty}
     </span>
-    <h3>{example.data.title}</h3>
-    <p>{example.data.description}</p>
+    <h3>{project.data.title}</h3>
+    <p>{project.data.description}</p>
     <div class="card-tags">
       <div class="tag-group">
-        <strong>Devices:</strong> {example.data.devices.length}
+        <strong>Devices:</strong> {project.data.devices.length}
       </div>
       <div class="tag-group">
-        <strong>Components:</strong> {example.data.components.length}
+        <strong>Components:</strong> {project.data.components.length}
       </div>
     </div>
   </div>
