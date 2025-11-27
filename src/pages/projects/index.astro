@@ -7,7 +7,7 @@ const projects = await getCollection('projects');
 const difficulties = [...new Set(projects.map(p => p.data.difficulty))];
 ---
 
-<Layout title="Projects - ESPHome Documentation">
+<Layout title="Projects">
   <h1>Projects</h1>
   <p class="subtitle">Complete projects with wiring and configuration</p>
 

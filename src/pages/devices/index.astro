@@ -7,7 +7,7 @@ const devices = await getCollection('devices');
 const categories = [...new Set(devices.map(d => d.data.category))];
 ---
 
-<Layout title="Devices - ESPHome Documentation">
+<Layout title="Devices">
   <h1>Devices</h1>
   <p class="subtitle">Physical hardware components for ESPHome projects</p>
 

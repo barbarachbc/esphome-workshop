@@ -335,6 +335,10 @@ When asking AI to help with this project:
   - Device detail pages show "Used in Projects" with collapsible section
   - Project detail pages display dates and motivation
   - Smart status override: manual testing/deployed/retired status preserved
+- ✅ **Navigation & polish** (Session 5 ✅)
+  - Consistent site branding as "My ESPHome Workshop"
+  - Complete navigation with Notes section
+  - Standardized page titles throughout
 - ✅ Automatic routing via file-based pages
 - ✅ MDX support for rich content
 - ✅ Syntax highlighting for YAML/code
