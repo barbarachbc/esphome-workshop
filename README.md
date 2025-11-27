@@ -329,6 +329,12 @@ When asking AI to help with this project:
   - Stats embedded in Devices and Projects cards
   - Random device suggestion with horizontal layout
   - Random rotating hero description for personality
+- ✅ **Enhanced components with status badges** (Session 4 ✅)
+  - Status badges on all device and project cards
+  - Automatic status detection based on project usage
+  - Device detail pages show "Used in Projects" with collapsible section
+  - Project detail pages display dates and motivation
+  - Smart status override: manual testing/deployed/retired status preserved
 - ✅ Automatic routing via file-based pages
 - ✅ MDX support for rich content
 - ✅ Syntax highlighting for YAML/code
