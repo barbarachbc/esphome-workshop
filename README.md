@@ -315,7 +315,7 @@ When asking AI to help with this project:
 - ✅ Type-safe content with Zod schemas
 - ✅ Personal device inventory tracking (unused, testing, deployed, retired)
 - ✅ Project status tracking (idea, in-progress, completed, abandoned)
-- ✅ Notes collection for lessons learned and setup guides
+- ✅ **Notes collection for lessons learned and setup guides** (Session 2 ✅)
 - ✅ Automatic routing via file-based pages
 - ✅ MDX support for rich content
 - ✅ Syntax highlighting for YAML/code

@@ -1,0 +1,130 @@
+---
+interface Props {
+  note: {
+    slug: string;
+    data: {
+      title: string;
+      description: string;
+      category: string;
+      difficulty?: string;
+      tags?: string[];
+    };
+  };
+}
+
+const { note } = Astro.props;
+---
+
+<a href={`/notes/${note.slug}`} class="card">
+  <div class="card-content">
+    <div class="badges">
+      <span class="card-category">{note.data.category}</span>
+      {note.data.difficulty && (
+        <span class={`difficulty-badge ${note.data.difficulty}`}>
+          {note.data.difficulty}
+        </span>
+      )}
+    </div>
+    <h3>{note.data.title}</h3>
+    <p>{note.data.description}</p>
+    {note.data.tags && note.data.tags.length > 0 && (
+      <div class="tags">
+        {note.data.tags.map(tag => (
+          <span class="tag">{tag}</span>
+        ))}
+      </div>
+    )}
+  </div>
+</a>
+
+<style>
+  .card {
+    display: block;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    border-color: #8b5cf6;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
+
+  .badges {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .card-category {
+    display: inline-block;
+    background: #ede9fe;
+    color: #5b21b6;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .difficulty-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .difficulty-badge.beginner {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  .difficulty-badge.intermediate {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  .difficulty-badge.advanced {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  .card-content h3 {
+    margin: 0.5rem 0;
+    font-size: 1.25rem;
+    color: #111827;
+  }
+
+  .card-content p {
+    margin: 0.75rem 0;
+    color: #4b5563;
+    line-height: 1.5;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .tag {
+    display: inline-block;
+    background: #f3f4f6;
+    color: #374151;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+</style>
