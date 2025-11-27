@@ -33,6 +33,9 @@ The DFRobot Beetle ESP32-C6 is a compact development board based on the ESP32-C6
 Basic configuration with built in button and LED.
 
 ```yaml
+esphome:
+  name: my-esp32c6
+
 esp32:
   variant: esp32c6
 
