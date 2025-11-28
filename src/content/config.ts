@@ -5,10 +5,10 @@ const devices = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    category: z.enum(['board', 'sensor', 'display', 'actuator', 'peripheral', 'input', 'light', 'other']),
+    category: z.enum(['board', 'sensor', 'display', 'actuator', 'peripheral', 'input', 'light', 'audio', 'communication', 'network', 'output', 'storage', 'io-expander', 'other']),
     manufacturer: z.string().optional(),
     model: z.string().optional(),
-    connectionTypes: z.array(z.enum(['i2c', 'spi', 'uart', 'gpio', 'onewire', 'analog', 'pwm', 'built-in'])),
+    connectionTypes: z.array(z.enum(['i2c', 'spi', 'uart', 'gpio', 'onewire', 'analog', 'pwm', 'i2s', 'ethernet', 'nfc', 'built-in'])),
     image: z.string().optional(),
     purchaseLinks: z.array(z.object({
       vendor: z.string(),
