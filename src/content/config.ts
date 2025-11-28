@@ -5,7 +5,7 @@ const devices = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    category: z.enum(['board', 'sensor', 'display', 'actuator', 'peripheral', 'other']),
+    category: z.enum(['board', 'sensor', 'display', 'actuator', 'peripheral', 'input', 'light', 'other']),
     manufacturer: z.string().optional(),
     model: z.string().optional(),
     connectionTypes: z.array(z.enum(['i2c', 'spi', 'uart', 'gpio', 'onewire', 'analog', 'pwm', 'built-in'])),
@@ -16,7 +16,7 @@ const devices = defineCollection({
     })).optional(),
     tags: z.array(z.string()).optional(),
     // Personal tracking fields
-    status: z.enum(['unused', 'testing', 'deployed', 'retired']),
+    status: z.enum(['unused', 'testing', 'deployed', 'retired', 'unsupported']),
     notes: z.string().optional(),
     dateAcquired: z.string().optional(),
     // New fields

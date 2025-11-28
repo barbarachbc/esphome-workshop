@@ -9,10 +9,10 @@ interface Props {
       manufacturer?: string;
       connectionTypes: string[];
       image?: string;
-      status: 'unused' | 'testing' | 'deployed' | 'retired';
+      status: 'unused' | 'testing' | 'deployed' | 'retired' | 'unsupported';
       productionStatus?: 'active' | 'NRND' | 'discontinued' | 'unknown';
     };
-    displayStatus?: 'unused' | 'testing' | 'deployed' | 'retired';
+    displayStatus?: 'unused' | 'testing' | 'deployed' | 'retired' | 'unsupported';
   };
 }
 
@@ -26,6 +26,7 @@ const statusLabels = {
   testing: '🧪 Testing',
   deployed: '✅ Deployed',
   retired: '⏸️ Retired',
+  unsupported: '🚫 Unsupported',
 };
 
 const productionStatusLabels = {
@@ -147,6 +148,11 @@ const connectionTypeMap: Record<string, string> = {
   .status-badge.retired {
     background: #f3f4f6;
     color: #6b7280;
+  }
+
+  .status-badge.unsupported {
+    background: #fecaca;
+    color: #7f1d1d;
   }
 
   .card-content h3 {
