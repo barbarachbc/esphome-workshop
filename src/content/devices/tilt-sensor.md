@@ -11,10 +11,13 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon"
     url: "https://www.amazon.co.uk/dp/B01DKAAYK2"
+  - vendor: AZ Delivery
+    url: https://www.az-delivery.de/en/products/16-in-1-kit-zubehorset-fur-raspberry-pi-arduino-und-andere-mikrocontroller
 references:
-  - title: "ESPHome Binary Sensor"
-    url: "https://esphome.io/components/binary_sensor/index.html"
-status: "unused"
+  - title: "Interfacing Ball Tilt Switch Sensor with Arduino"
+    url: "https://lastminuteengineers.com/ball-tilt-switch-sensor-arduino-tutorial/"
+dateAcquired: "2016"
+status: "pending"
 ---
 
 ## Overview
@@ -30,32 +33,8 @@ The module features:
 - Wide sensing angle
 - Quick response
 - Onboard LED indicator
-- Suitable for tilt detection, orientation sensing, anti-theft alarms
+- Uses LM393 comparator for triggering digital output
 
 ## Configuration Notes
 
-- Requires **GPIO** pin configured as input
-- Platform: **gpio** (binary_sensor)
-- Output changes state when tilted beyond threshold angle
-- Simple two-state detection (tilted/not tilted)
-- Can be used for shake detection and orientation monitoring
-
-### Basic Configuration
-
-```yaml
-esphome:
-  name: my-tilt-sensor
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-binary_sensor:
-  - platform: gpio
-    pin: 
-      number: GPIO19
-      mode: INPUT_PULLUP
-    name: "Tilt Detected"
-    device_class: moving
-```
+Supported through [GPIO Binary Sensor](https://esphome.io/components/binary_sensor/gpio/) component.

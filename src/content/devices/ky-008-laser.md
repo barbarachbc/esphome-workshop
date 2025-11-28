@@ -11,10 +11,10 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon"
     url: "https://www.amazon.co.uk/dp/B01DKAAYK2"
-references:
-  - title: "ESPHome GPIO Switch"
-    url: "https://esphome.io/components/switch/gpio.html"
-status: "unused"
+  - vendor: AZ Delivery
+    url: https://www.az-delivery.de/en/products/16-in-1-kit-zubehorset-fur-raspberry-pi-arduino-und-andere-mikrocontroller
+dateAcquired: "2016"
+status: "pending"
 ---
 
 ## Overview
@@ -23,37 +23,10 @@ The KY-008 laser module is a 650nm red laser diode transmitter for pointing, ali
 
 The module features:
 - 650nm red laser diode
-- Operating voltage: 5V
+- Operating voltage: 3.3V-5V
 - Operating current: <40mA
 - Power: <5mW (Class 2 laser)
-- Compact module design
-- Easy to control via digital signal
-- Suitable for laser pointing, alignment, communication, sensors
-- Compatible with 3-pin interface
 
-## Configuration Notes
+## Remarks
 
-- Requires **GPIO** pin configured as output
-- Platform: **gpio** (switch or output)
-- Control with HIGH/LOW signal
-- Laser safety: Class 2 laser - do not point at eyes
-- May require external transistor for higher current
-- Can be PWM controlled for intensity modulation
-
-### Basic Configuration
-
-```yaml
-esphome:
-  name: my-laser-module
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-switch:
-  - platform: gpio
-    pin: GPIO25
-    name: "Laser"
-    id: laser_output
-```
+Can use PWM output to control the laser. Consider using [ESP32 LEDC Output](https://esphome.io/components/sensor/rotary_encoder/)

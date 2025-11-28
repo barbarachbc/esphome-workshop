@@ -9,10 +9,10 @@ interface Props {
       manufacturer?: string;
       connectionTypes: string[];
       image?: string;
-      status: 'unused' | 'testing' | 'deployed' | 'retired' | 'unsupported';
-      productionStatus?: 'active' | 'NRND' | 'discontinued' | 'unknown';
+      status: 'unused' | 'testing' | 'deployed' | 'retired' | 'pending' | 'unsupported';
+      productionStatus?: 'active' | 'NRND' | 'discontinued' | 'unknown' | 'obsolete';
     };
-    displayStatus?: 'unused' | 'testing' | 'deployed' | 'retired' | 'unsupported';
+    displayStatus?: 'unused' | 'testing' | 'deployed' | 'retired' | 'pending' | 'unsupported';
   };
 }
 
@@ -27,11 +27,13 @@ const statusLabels = {
   deployed: '✅ Deployed',
   retired: '⏸️ Retired',
   unsupported: '🚫 Unsupported',
+  pending: '🚫 Pending',
 };
 
 const productionStatusLabels = {
   active: '✅ Active',
   NRND: '⚠️ NRND',
+  obsolete: '❌ Obsolete',
   discontinued: '❌ Discontinued',
   unknown: '',
 };
@@ -148,6 +150,11 @@ const connectionTypeMap: Record<string, string> = {
   .status-badge.retired {
     background: #f3f4f6;
     color: #6b7280;
+  }
+
+  .status-badge.pending {
+    background: #fef3c7;
+    color: #000000;
   }
 
   .status-badge.unsupported {

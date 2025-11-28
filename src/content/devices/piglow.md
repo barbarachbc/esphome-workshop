@@ -18,7 +18,10 @@ references:
     url: "https://www.optimusdigital.ro/ro/index.php?controller=attachment&id_attachment=1146&srsltid=AfmBOopypUBGbn19vYc4OnRSD5zhejYSHCQSr-qmXbLgvEcijGMTNoHB"
   - title: Pimoroni Github Repository
     url: "https://github.com/pimoroni/piglow"
+  - title: Arduino Library
+    url: "https://github.com/pimoroni/pimoroni_arduino_sn3218"
 status: "unsupported"
+dateAcquired: "2017"
 ---
 
 
@@ -37,81 +40,7 @@ The board features:
 
 ## Configuration Notes
 
-TODO: review all; SN3218 probably also obsolete
 
-⚠️ **Note**: The SN3218 driver is not currently supported in ESPHome. You will need to use an external component to control this device.
+⚠️ **Note**: The SN3218 driver is not currently supported in ESPHome. 
 
-- Requires **I2C**, i2c_id is optional, but i2c component is required.
-- I2C address: **0x54** (fixed)
-- Platform: **sn3218**
-- Each of the 18 LEDs can be controlled individually
-
-### Basic Configuration
-
-Example configuration:
-
-```yaml
-esphome:
-  name: my-piglow
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-i2c:
-  sda: GPIO21
-  scl: GPIO22
-  scan: true
-
-light:
-  - platform: sn3218
-    id: piglow
-    address: 0x54
-    num_channels: 18
-    update_interval: 16ms
-    # Define individual LED outputs
-    channels:
-      - channel: 0
-        id: led_0
-      - channel: 1
-        id: led_1
-      - channel: 2
-        id: led_2
-      # Add remaining channels as needed (0-17)
-```
-
-### Advanced Configuration with Effects
-
-```yaml
-light:
-  - platform: sn3218
-    id: piglow
-    address: 0x54
-    num_channels: 18
-    channels:
-      - channel: 0
-        id: led_0
-        default_transition_length: 500ms
-        effects:
-          - pulse:
-              name: "Pulse"
-              transition_length: 1s
-              update_interval: 1s
-```
-
-## LED Layout
-
-The PiGlow has LEDs arranged in 3 arms with 6 LEDs each:
-- Each arm contains LEDs of 6 different colors
-- Colors: Red, Orange, Yellow, Green, Blue, White
-- LEDs are numbered 0-17
-
-Refer to the [pinout diagram](https://pinout.xyz/pinout/piglow) for the exact LED positions and channel assignments.
-
-## Troubleshooting
-
-- **LEDs not lighting**: Verify I2C wiring (SDA/SCL) and that the device appears at address 0x54 in the I2C scan
-- **Flickering LEDs**: Try adjusting the `update_interval` parameter
-- **Power issues**: Ensure adequate power supply when driving multiple LEDs at high brightness
-
+SN3218 probably obsolete.

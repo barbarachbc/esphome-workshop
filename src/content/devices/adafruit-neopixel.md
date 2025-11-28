@@ -12,14 +12,13 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Adafruit"
     url: "https://www.adafruit.com/category/168"
-  - vendor: "AliExpress"
-    url: "https://www.aliexpress.com"
+  - vendor: "Pimoroni"
+    url: "https://shop.pimoroni.com/products/adafruit-neopixel-mini-pcb-pack-of-5?variant=526757957"
 references:
-  - title: "ESPHome NeoPixelBus"
-    url: "https://esphome.io/components/light/neopixelbus.html"
   - title: "Adafruit NeoPixel Guide"
     url: "https://learn.adafruit.com/adafruit-neopixel-uberguide"
-status: "unused"
+dateAcquired: "Feb 2023"
+status: "testing"
 ---
 
 ## Overview
@@ -37,66 +36,6 @@ The NeoPixel family features:
 - Various form factors: strips, rings, sticks, matrices, individual LEDs
 - Suitable for decorative lighting, indicators, displays, wearables
 
-## Configuration Notes
+## Remarks
 
-- Requires **single GPIO pin** for data
-- Platform: **neopixelbus** or **fastled_clockless**
-- Type: **WS2812** or **WS2812B**
-- Requires accurate timing (use hardware SPI or RMT on ESP32)
-- Power supply sizing important for large LED counts
-- Consider level shifter for 3.3V to 5V logic
-- Add capacitor (1000µF) across power supply
-- Add resistor (300-500Ω) on data line
-
-### Basic Configuration
-
-```yaml
-esphome:
-  name: my-neopixel
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-light:
-  - platform: neopixelbus
-    type: GRB
-    variant: WS2812
-    pin: GPIO13
-    num_leds: 30
-    name: "NeoPixel Strip"
-    effects:
-      - random:
-      - strobe:
-      - flicker:
-      - addressable_rainbow:
-      - addressable_scan:
-```
-
-### Configuration with Multiple Segments
-
-```yaml
-light:
-  - platform: neopixelbus
-    type: GRB
-    variant: WS2812
-    pin: GPIO13
-    num_leds: 60
-    name: "NeoPixel Strip"
-    id: led_strip
-    
-  - platform: partition
-    name: "Segment 1"
-    segments:
-      - id: led_strip
-        from: 0
-        to: 19
-        
-  - platform: partition
-    name: "Segment 2"
-    segments:
-      - id: led_strip
-        from: 20
-        to: 39
-```
+Supported through [NeoPixelBus](https://esphome.io/components/light/neopixelbus/), [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip/) - depending on the framework used.

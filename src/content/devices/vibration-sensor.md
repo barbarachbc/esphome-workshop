@@ -11,10 +11,13 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon"
     url: "https://www.amazon.co.uk/dp/B01DKAAYK2"
+  - vendor: AZ Delivery
+    url: https://www.az-delivery.de/en/products/16-in-1-kit-zubehorset-fur-raspberry-pi-arduino-und-andere-mikrocontroller
 references:
-  - title: "ESPHome Binary Sensor"
-    url: "https://esphome.io/components/binary_sensor/index.html"
-status: "unused"
+  - title: "Vibration Sensor Module"
+    url: "https://docs.sunfounder.com/projects/ultimate-sensor-kit/en/latest/components_basic/04-component_vibration.html"
+dateAcquired: "2016"
+status: "pending"
 ---
 
 ## Overview
@@ -29,35 +32,8 @@ The module features:
 - Quick response time
 - Non-directional vibration detection
 - Onboard LED indicator
-- Suitable for theft alarms, knock detection, earthquake detection
+- Uses LM393 comparator for triggering digital output
 
 ## Configuration Notes
 
-- Requires **GPIO** pin configured as input
-- Platform: **gpio** (binary_sensor)
-- Output goes HIGH when vibration exceeds threshold
-- Sensitivity adjustable via onboard potentiometer
-- May need debouncing for stable readings
-
-### Basic Configuration
-
-```yaml
-esphome:
-  name: my-vibration-sensor
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-binary_sensor:
-  - platform: gpio
-    pin: 
-      number: GPIO23
-      mode: INPUT_PULLUP
-    name: "Vibration Detected"
-    device_class: vibration
-    filters:
-      - delayed_on: 10ms
-      - delayed_off: 100ms
-```
+Supported through [GPIO Binary Sensor](https://esphome.io/components/binary_sensor/gpio/) component.

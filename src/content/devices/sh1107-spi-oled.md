@@ -12,6 +12,7 @@ purchaseLinks:
   - vendor: "Pimoroni"
     url: "https://shop.pimoroni.com/products/1-12-oled-breakout?variant=12628508704851"
 status: "unused"
+dateAcquired: "Jan 2022"
 ---
 
 ## Overview

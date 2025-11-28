@@ -11,10 +11,10 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon"
     url: "https://www.amazon.co.uk/dp/B01DKAAYK2"
-references:
-  - title: "ESPHome ADC Sensor"
-    url: "https://esphome.io/components/sensor/adc.html"
-status: "unused"
+  - vendor: AZ Delivery
+    url: https://www.az-delivery.de/en/products/16-in-1-kit-zubehorset-fur-raspberry-pi-arduino-und-andere-mikrocontroller
+dateAcquired: "2016"
+status: "pending"
 ---
 
 ## Overview
@@ -30,37 +30,10 @@ The module features:
 - Quick response time
 - Wide sensing range
 - Onboard LED indicator
-- Compact PCB module
+- Uses LM393 comparator for triggering digital output
 
 ## Configuration Notes
 
-- Requires **ADC** (Analog-to-Digital Converter)
-- Platform: **adc**
-- Connect analog output to ESP GPIO with ADC capability
-- Output voltage increases with light intensity
-- Suitable for light detection, day/night sensing, automatic lighting control
-- May require calibration for specific applications
+Probably supported through [GPIO Binary Sensor](https://esphome.io/components/binary_sensor/gpio/) component.
 
-### Basic Configuration
-
-```yaml
-esphome:
-  name: my-light-sensor
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-sensor:
-  - platform: adc
-    pin: GPIO34
-    id: light_sensor
-    name: "Light Level"
-    update_interval: 2s
-    attenuation: 11db
-    filters:
-      - sliding_window_moving_average:
-          window_size: 5
-          send_every: 5
-```
+Analog output is not exposed by default.

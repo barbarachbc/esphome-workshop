@@ -1,6 +1,6 @@
 ---
 title: 'MCP4725 DAC'
-description: '12-bit I2C Digital-to-Analog Converter'
+description: 'MCP4725 Breakout Board - 12-Bit DAC w/I2C Interface'
 category: "output"
 manufacturer: "Microchip"
 model: "MCP4725"
@@ -9,16 +9,17 @@ components: ["i2c", "output", "mcp4725"]
 tags: ["dac", "analog", "output", "i2c"]
 productionStatus: "active"
 purchaseLinks:
-  - vendor: "AliExpress"
-    url: "https://www.aliexpress.com"
+  - vendor: "The PiHut"
+    url: "https://thepihut.com/products/adafruit-mcp4725-breakout-board-12-bit-dac-w-i2c-interface?variant=27740542673"
   - vendor: "Adafruit"
     url: "https://www.adafruit.com/product/935"
+  - vendor: AliExpress
+    url: https://www.aliexpress.com/item/1005005970420972.html
 references:
-  - title: "ESPHome MCP4725"
-    url: "https://esphome.io/components/output/mcp4725/"
-  - title: "Datasheet"
-    url: "https://ww1.microchip.com/downloads/en/DeviceDoc/22039d.pdf"
-status: "unused"
+  - title: Adafruit Tutorial
+    url: https://learn.adafruit.com/mcp4725-12-bit-dac-tutorial
+status: "pending"
+dateAcquired: "Sept 2024"
 ---
 
 ## Overview
@@ -26,7 +27,7 @@ status: "unused"
 The MCP4725 is a low-power, high accuracy, single channel 12-bit buffered voltage output Digital-to-Analog Converter (DAC) with I2C interface and EEPROM.
 
 The module features:
-- 12-bit resolution (4096 steps)
+- 12-bit resolution
 - I2C interface (up to 3.4MHz)
 - On-board voltage reference (VDD)
 - Output range: 0V to VDD
@@ -38,36 +39,4 @@ The module features:
 
 ## Configuration Notes
 
-- Requires **I2C** interface
-- Platform: **mcp4725**
-- Default I2C address: **0x60** (can be 0x60-0x67)
-- Output voltage: 0V to VCC (typically 0-5V or 0-3.3V)
-- Can be used to control analog devices, audio, motor speed, etc.
-- EEPROM allows persistence of output value through power cycles
-
-### Basic Configuration
-
-```yaml
-esphome:
-  name: my-mcp4725
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-i2c:
-  sda: GPIO21
-  scl: GPIO22
-  scan: true
-
-output:
-  - platform: mcp4725
-    id: dac_output
-    address: 0x60
-
-light:
-  - platform: monochromatic
-    name: "DAC Controlled Light"
-    output: dac_output
-```
+Supported by [MCP4725 Output](https://esphome.io/components/output/mcp4725/)

@@ -11,10 +11,10 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon"
     url: "https://www.amazon.co.uk/dp/B01DKAAYK2"
-references:
-  - title: "ESPHome Binary Sensor"
-    url: "https://esphome.io/components/binary_sensor/index.html"
-status: "unused"
+  - vendor: AZ Delivery
+    url: https://www.az-delivery.de/en/products/16-in-1-kit-zubehorset-fur-raspberry-pi-arduino-und-andere-mikrocontroller
+dateAcquired: "2016"
+status: "pending"
 ---
 
 ## Overview
@@ -30,34 +30,8 @@ The module features:
 - Adjustable sensitivity via potentiometer
 - Quick response time
 - Onboard LED indicator
-- Suitable for fire alarm systems
+- Uses LM393 comparator for triggering digital output
 
 ## Configuration Notes
 
-- Can use **GPIO** for digital output or **ADC** for analog output
-- Platform: **gpio** (binary_sensor) or **adc** (sensor)
-- Digital output: LOW when flame detected, HIGH when no flame
-- Analog output: voltage varies with flame intensity
-- Detection range can be adjusted via onboard potentiometer
-- Best results in environments with minimal IR interference
-
-### Basic Configuration (Digital)
-
-```yaml
-esphome:
-  name: my-flame-sensor
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-binary_sensor:
-  - platform: gpio
-    pin: 
-      number: GPIO18
-      mode: INPUT_PULLUP
-      inverted: true
-    name: "Flame Detected"
-    device_class: smoke
-```
+Probably supported through [GPIO Binary Sensor](https://esphome.io/components/binary_sensor/gpio/) component. And analog through [ADC](https://esphome.io/components/sensor/adc/)

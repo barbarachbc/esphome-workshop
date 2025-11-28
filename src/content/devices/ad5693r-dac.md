@@ -9,36 +9,31 @@ components: ["i2c"]
 tags: ["dac", "analog", "output", "i2c", "16-bit"]
 productionStatus: "active"
 purchaseLinks:
-  - vendor: "DigiKey"
-    url: "https://www.digikey.com"
+  - vendor: "Adafruit"
+    url: "https://thepihut.com/products/adafruit-ad5693r-breakout-board-16-bit-dac-with-i2c-interface-stemma-qt-qwiic?variant=42639165882563"
 references:
-  - title: "Datasheet"
-    url: "https://www.analog.com/media/en/technical-documentation/data-sheets/AD5693R_5692R_5691R_5690R.pdf"
-status: "unused"
+  - title: "Analog Product Page"
+    url: "https://www.analog.com/en/products/ad5693r.html"
+  - title: "Adafruit Github Page"
+    url: https://github.com/adafruit/Adafruit_AD569x/tree/main
+  - title: "Guide"
+    url: https://learn.adafruit.com/adafruit-ad5693r-16-bit-dac-breakout-board
+dateAcquired: "Sept 2024"
+status: "unsupported"
 ---
 
 ## Overview
 
-The AD5693R is a low power, single channel 16-bit buffered voltage output Digital-to-Analog Converter (DAC) with I2C interface and integrated reference.
+ Adafruit AD5693R Breakout Board is a 16-bit DAC with I2C Interface and temperature compensated 2.5V internal reference for a compact high-precision output.
 
 The module features:
-- 16-bit resolution (65536 steps)
+- 16-bit resolution
 - I2C interface (up to 400kHz standard, 3.4MHz fast mode)
 - Internal 2.5V reference (can also use external)
-- Output range: 0V to VDD or 0V to 2x VREF
-- Power-on reset to zero scale or midscale
-- Low power consumption: 120µA typical
-- I2C addresses: 0x4C-0x4F (configurable)
+- Output range rail-to-rail
+- I2C addresses: 0x4C-0x4F (configurable - ADDR/A0 pin breakout available)
 - Operating voltage: 2.7V-5.5V
-- 14-lead TSSOP or 10-lead MSOP package
-- High accuracy and low noise
 
 ## Configuration Notes
 
-⚠️ **Note**: ESPHome does not have native support for AD5693R. You may need to use a custom component or the I2C component directly.
-
-- Requires **I2C** interface
-- Default I2C addresses: **0x4C** to **0x4F** (configurable via A0/A1 pins)
-- 16-bit resolution provides finer control than 12-bit DACs like MCP4725
-- Integrated voltage reference simplifies design
-- Suitable for precision analog control applications
+⚠️ **Note**: ESPHome does not have native support for AD5693R. 

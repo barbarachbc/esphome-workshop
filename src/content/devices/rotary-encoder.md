@@ -3,19 +3,14 @@ title: 'Rotary Encoder'
 description: 'Mechanical rotary encoder for input control'
 category: "input"
 manufacturer: "Generic"
-model: "KY-040 / EC11"
+model: "KY-040"
 variants: ["KY-040", "EC11", "Incremental Encoder"]
 connectionTypes: ["gpio"]
 components: ["rotary_encoder", "binary_sensor"]
 tags: ["encoder", "input", "knob", "dial"]
 productionStatus: "active"
-purchaseLinks:
-  - vendor: "AliExpress"
-    url: "https://www.aliexpress.com"
-references:
-  - title: "ESPHome Rotary Encoder"
-    url: "https://esphome.io/components/sensor/rotary_encoder.html"
-status: "unused"
+status: "pending"
+dateAcquired: "Jan 2025"
 ---
 
 ## Overview
@@ -37,51 +32,7 @@ The module features:
 
 - Requires 2 **GPIO** pins for encoder (CLK/A and DT/B)
 - Optional: 1 **GPIO** pin for push button (SW)
-- Platform: **rotary_encoder**
+- Platform: [**rotary_encoder**](https://esphome.io/components/sensor/rotary_encoder/)
 - Software debouncing recommended
 - Can track position or detect rotation direction
 - Min/max value constraints can be set
-
-### Basic Configuration
-
-```yaml
-esphome:
-  name: my-encoder
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-sensor:
-  - platform: rotary_encoder
-    name: "Rotary Encoder"
-    id: my_encoder
-    pin_a:
-      number: GPIO14
-      mode:
-        input: true
-        pullup: true
-    pin_b:
-      number: GPIO15
-      mode:
-        input: true
-        pullup: true
-    resolution: 1
-    min_value: 0
-    max_value: 100
-    on_clockwise:
-      - logger.log: "Turned clockwise"
-    on_anticlockwise:
-      - logger.log: "Turned counter-clockwise"
-
-binary_sensor:
-  - platform: gpio
-    name: "Encoder Button"
-    pin:
-      number: GPIO16
-      inverted: true
-      mode:
-        input: true
-        pullup: true
-```

@@ -11,10 +11,10 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon"
     url: "https://www.amazon.co.uk/dp/B01DKAAYK2"
-references:
-  - title: "ESPHome Binary Sensor"
-    url: "https://esphome.io/components/binary_sensor/index.html"
-status: "unused"
+  - vendor: AZ Delivery
+    url: https://www.az-delivery.de/en/products/16-in-1-kit-zubehorset-fur-raspberry-pi-arduino-und-andere-mikrocontroller
+dateAcquired: "2016"
+status: "pending"
 ---
 
 ## Overview
@@ -29,32 +29,14 @@ The module features:
 - Adjustable sensitivity via potentiometer
 - Fast response time
 - Onboard LED indicators
-- Suitable for line-following robots, position detection, edge detection
+- Uses LM393 comparator for triggering digital output
+
+## Line tracking module
+IR light reflection switch, useful for obstacle avoidance or line following on models that move around
+the floor. An obstacle in front of the sender/receiver diodes will cause the ‘out’ pin to be pulled
+low(active low). A pot allows adjustment of the circuit’s sensitivity. The detection distance can be up
+to approximately 1 cm
 
 ## Configuration Notes
 
-- Requires **GPIO** pin configured as input
-- Platform: **gpio** (binary_sensor)
-- Output changes based on surface reflectivity
-- Works best with high contrast surfaces (black line on white)
-- Detection height adjustable via sensitivity potentiometer
-- Surface texture and ambient light affect performance
-
-### Basic Configuration
-
-```yaml
-esphome:
-  name: my-line-sensor
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-binary_sensor:
-  - platform: gpio
-    pin: 
-      number: GPIO33
-      mode: INPUT
-    name: "Line Detected"
-```
+Probably supported through [GPIO Binary Sensor](https://esphome.io/components/binary_sensor/gpio/) component.

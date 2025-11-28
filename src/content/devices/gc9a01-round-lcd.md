@@ -13,6 +13,8 @@ purchaseLinks:
   - vendor: "AliExpress"
     url: "https://www.aliexpress.com/item/1005006051175539.html"
 status: "unused"
+dateAcquired: "May 2024"
+count: 2
 ---
 
 ## Overview

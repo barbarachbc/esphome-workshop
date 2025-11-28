@@ -11,10 +11,13 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon"
     url: "https://www.amazon.co.uk/dp/B01DKAAYK2"
+  - vendor: AZ Delivery
+    url: https://www.az-delivery.de/en/products/16-in-1-kit-zubehorset-fur-raspberry-pi-arduino-und-andere-mikrocontroller
 references:
-  - title: "ESPHome ADC Sensor"
-    url: "https://esphome.io/components/sensor/adc.html"
-status: "unused"
+  - title: How MQ2 Gas/Smoke Sensor Works
+    url: "https://lastminuteengineers.com/mq2-gas-senser-arduino-tutorial/"
+dateAcquired: "2016"
+status: "pending"
 ---
 
 ## Overview
@@ -30,48 +33,8 @@ The module features:
 - Preheat time: 20 seconds (full stabilization ~24-48 hours)
 - Adjustable sensitivity via potentiometer
 - Onboard LED indicators
-- Suitable for gas leak detection, safety alarms, air quality monitoring
+- Uses LM393 comparator for triggering digital output
 
 ## Configuration Notes
 
-- Can use **GPIO** for digital output or **ADC** for analog output
-- Platform: **gpio** (binary_sensor) or **adc** (sensor)
-- Requires 5V power supply and heater warm-up time
-- Digital output: LOW when gas concentration exceeds threshold
-- Analog output: voltage increases with gas concentration
-- Sensor requires calibration in clean air
-- Not suitable for precise gas concentration measurement
-
-### Basic Configuration (Digital)
-
-```yaml
-esphome:
-  name: my-mq2-sensor
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-binary_sensor:
-  - platform: gpio
-    pin: 
-      number: GPIO15
-      mode: INPUT_PULLUP
-      inverted: true
-    name: "Gas Detected"
-    device_class: gas
-```
-
-### Analog Configuration
-
-```yaml
-sensor:
-  - platform: adc
-    pin: GPIO36
-    name: "Gas Level"
-    update_interval: 2s
-    attenuation: 11db
-    filters:
-      - multiply: 3.3
-```
+Probably supported through [GPIO Binary Sensor](https://esphome.io/components/binary_sensor/gpio/) component. And analog through [ADC](https://esphome.io/components/sensor/adc/)

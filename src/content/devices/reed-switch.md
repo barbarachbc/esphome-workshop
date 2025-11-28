@@ -2,89 +2,49 @@
 title: 'Reed Switch'
 description: 'Magnetic proximity sensor switch'
 category: "sensor"
-manufacturer: "Generic"
-model: "Reed Switch"
-variants: ["Normally Open", "Normally Closed"]
+manufacturer: "Littelfuse"
+model: "59165"
+variants: ["59165-1-T-00-A", "57045-000"]
 connectionTypes: ["gpio"]
 components: ["binary_sensor"]
 tags: ["magnetic", "switch", "sensor", "proximity"]
 productionStatus: "active"
 purchaseLinks:
-  - vendor: "AliExpress"
-    url: "https://www.aliexpress.com"
+  - vendor: "Mouser"
+    url: "https://www.mouser.ie/ProductDetail/Littelfuse/59165-1-T-00-A?qs=X8LBAgEWIKKHNfx72tHpiw%3D%3D"
+  - vendor: "Mouser"
+    url: "https://www.mouser.ie/ProductDetail/Littelfuse/57045-000?qs=X8LBAgEWIKLVJq%2FbiZDkww%3D%3D"
 references:
-  - title: "ESPHome Binary Sensor"
-    url: "https://esphome.io/components/binary_sensor/gpio.html"
-status: "unused"
+  - title: Datasheet - Reed Switch
+    url: "https://www.littelfuse.com/assetdocs/littelfuse_reed_switch_59165_datasheet.pdf?assetguid=5790fb05-694c-43c9-a75c-7a9f3464843b"
+  - title: Datasheet - Actuator
+    url: "https://www.littelfuse.com/assetdocs/littelfuse-magnetic-actuators-datasheet?assetguid=c6e760c4-1013-4fb5-9d12-56a308d43f9f"
+  - title: "Interfacing Reed Switch with Arduino"
+    url: "https://lastminuteengineers.com/reed-switch-arduino-tutorial/"
+status: "pending"
+dateAcquired: "Nov 2024"
+count: 3
 ---
 
 ## Overview
 
 A reed switch is a passive electronic switching device that operates via an applied magnetic field. It consists of two ferromagnetic contacts sealed in a glass tube that close when a magnetic field is present.
 
-The module features:
-- Magnetically actuated switch
-- Normally Open (NO) or Normally Closed (NC) configurations
-- No power required (passive device)
-- Hermetically sealed contacts (protected from dust/moisture)
-- Operating voltage: Up to switch rating (typically 100V-200V)
-- Current rating: Typically 0.5A-1A
-- Fast switching speed
-- Long lifespan (millions of operations)
-- Small form factor
-- Common in door/window sensors
+The 59165 is a miniature overmolded reed switch 16.00mm x
+2.40mm x 2.40mm (0.630” x 0.095” x 0.095”) with either straight
+or Gull Wing leads. It has normally open contact, capable of
+switching up to 200Vdc at 10W
+
+- Two-part magnetically operated proximity switch.
+- No standby power requirement
+- Operates through non-ferrous materials such as wood, plastic or aluminium
+
+57045-000 actuators
 
 ## Configuration Notes
 
 - Requires single **GPIO** pin (with pull-up/pull-down resistor)
-- Platform: **binary_sensor** with **gpio**
+- Platform: [GPIO Binary Sensor](https://esphome.io/components/binary_sensor/gpio/)
 - Passive device - acts as mechanical switch
 - Needs external or internal pull-up/pull-down resistor
 - NO type: open circuit without magnet, closed with magnet
-- NC type: closed without magnet, open with magnet
-- Ideal for door/window sensors, position detection, security systems
-
-### Basic Configuration (Normally Open)
-
-```yaml
-esphome:
-  name: my-reed-switch
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-binary_sensor:
-  - platform: gpio
-    pin:
-      number: GPIO14
-      mode:
-        input: true
-        pullup: true
-      inverted: true
-    name: "Door Sensor"
-    device_class: door
-    filters:
-      - delayed_on: 10ms
-      - delayed_off: 10ms
-```
-
-### Advanced Configuration with Notifications
-
-```yaml
-binary_sensor:
-  - platform: gpio
-    pin:
-      number: GPIO14
-      mode:
-        input: true
-        pullup: true
-      inverted: true
-    name: "Window Sensor"
-    device_class: window
-    on_press:
-      - logger.log: "Window opened!"
-    on_release:
-      - logger.log: "Window closed!"
-```

@@ -43,6 +43,8 @@ const deviceStats = {
   testing: devicesWithComputedStatus.filter(d => d.displayStatus === 'testing').length,
   deployed: devicesWithComputedStatus.filter(d => d.displayStatus === 'deployed').length,
   retired: devicesWithComputedStatus.filter(d => d.displayStatus === 'retired').length,
+  pending: devicesWithComputedStatus.filter(d => d.displayStatus === 'pending').length,
+  unsupported: devicesWithComputedStatus.filter(d => d.displayStatus === 'unsupported').length,
 };
 
 const projectStats = {
@@ -99,6 +101,8 @@ const randomHeroDescription = heroDescriptions[Math.floor(Math.random() * heroDe
         <span class="stat-item deployed">✅ {deviceStats.deployed} deployed</span>
         <span class="stat-item testing">🧪 {deviceStats.testing} testing</span>
         <span class="stat-item unused">📦 {deviceStats.unused} waiting</span>
+        <span class="stat-item pending">🔦 {deviceStats.pending} pending</span>
+        <span class="stat-item unsupported">❕ {deviceStats.unsupported} unsupported</span>
         {deviceStats.retired > 0 && (
           <span class="stat-item retired">⏸️ {deviceStats.retired} retired</span>
         )}
@@ -247,6 +251,7 @@ const randomHeroDescription = heroDescriptions[Math.floor(Math.random() * heroDe
 
     .stat-item.deployed { background: #d1fae5; color: #065f46; }
     .stat-item.testing { background: #fef3c7; color: #92400e; }
+    .stat-item.pending { background: #fef3c7; color: #92400e; }
     .stat-item.unused { background: #f3f4f6; color: #4b5563; }
     .stat-item.retired { background: #fee2e2; color: #991b1b; }
     .stat-item.completed { background: #d1fae5; color: #065f46; }

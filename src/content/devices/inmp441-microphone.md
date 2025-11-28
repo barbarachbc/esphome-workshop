@@ -12,11 +12,11 @@ purchaseLinks:
   - vendor: "AliExpress"
     url: "https://www.aliexpress.com/item/1005007395298977.html"
 references:
-  - title: "ESPHome I2S Audio"
-    url: "https://esphome.io/components/i2s_audio.html"
   - title: "Datasheet"
     url: "https://invensense.tdk.com/wp-content/uploads/2015/02/INMP441.pdf"
-status: "unused"
+status: "pending"
+dateAcquired: "Jan 2025"
+count: 3
 ---
 
 ## Overview
@@ -35,34 +35,6 @@ The module features:
 - Small form factor
 - Bottom port design
 
-## Configuration Notes
+## Remarks
 
-- Requires **I2S** interface
-- Platform: **i2s_audio** with **microphone** component
-- Typical connections: SCK (clock), WS (word select/LR), SD (data), VDD, GND, L/R (channel select)
-- L/R pin: tie to GND for left channel, VDD for right channel
-- Suitable for voice recognition, audio recording, and voice assistants
-- Works well with ESP32 I2S interface
-
-### Basic Configuration
-
-```yaml
-esphome:
-  name: my-inmp441
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-i2s_audio:
-  i2s_lrclk_pin: GPIO25
-  i2s_bclk_pin: GPIO26
-
-microphone:
-  - platform: i2s_audio
-    id: mic
-    i2s_din_pin: GPIO33
-    adc_type: external
-    pdm: false
-```
+Should be supported by [I2S Audio Microphone](https://esphome.io/components/microphone/i2s_audio/) component.

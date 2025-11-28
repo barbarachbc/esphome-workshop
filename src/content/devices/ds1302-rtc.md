@@ -11,10 +11,15 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon"
     url: "https://www.amazon.co.uk/dp/B01DKAAYK2"
+  - vendor: AZ Delivery
+    url: https://www.az-delivery.de/en/products/16-in-1-kit-zubehorset-fur-raspberry-pi-arduino-und-andere-mikrocontroller
 references:
-  - title: "ESPHome DS1302"
-    url: "https://esphome.io/components/time/ds1302.html"
-status: "unused"
+  - title: Datasheet
+    url: "https://www.analog.com/media/en/technical-documentation/data-sheets/ds1302.pdf"
+  - title: Arduino Library
+    url: "https://docs.arduino.cc/libraries/ds1302/"
+dateAcquired: "2016"
+status: "unsupported"
 ---
 
 ## Overview
@@ -31,31 +36,6 @@ The module features:
 - Automatic leap year compensation (valid through 2100)
 - Suitable for data logging, alarm clocks, timestamping
 
-## Configuration Notes
+## Remarks
 
-- Requires **three GPIO pins** (CLK, DAT, CE)
-- Platform: **ds1302**
-- Battery backup maintains time during power loss
-- Can be used as time source for ESPHome
-- Time can be synchronized from Home Assistant or NTP
-- RAM can store small amounts of persistent data
-
-### Basic Configuration
-
-```yaml
-esphome:
-  name: my-rtc-module
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-time:
-  - platform: ds1302
-    id: rtc_time
-    cs_pin: GPIO5
-    dio_pin: GPIO4
-    clk_pin: GPIO18
-    update_interval: 60s
-```
+DS1302 uses 3 wire protocol that is similar to SPI.

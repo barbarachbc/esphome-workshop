@@ -11,10 +11,10 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon"
     url: "https://www.amazon.co.uk/dp/B01DKAAYK2"
-references:
-  - title: "ESPHome Binary Sensor"
-    url: "https://esphome.io/components/binary_sensor/index.html"
-status: "unused"
+  - vendor: AZ Delivery
+    url: https://www.az-delivery.de/en/products/16-in-1-kit-zubehorset-fur-raspberry-pi-arduino-und-andere-mikrocontroller
+dateAcquired: "2016"
+status: "pending"
 ---
 
 ## Overview
@@ -30,34 +30,15 @@ The module features:
 - Adjustable sensitivity
 - Fast response time
 - Onboard LED indicators (power and detection)
-- Suitable for robotics, automation, collision avoidance
+- Uses LM393 comparator for triggering digital output
+
+## Obstacle avoidance sensor module
+IR-reflection sensor, useful for obstacle avoidance applications. When an obstacle is in front of the IR
+sender/receiver the ‘Out’ pin is switched low (active low). The circuit sensitivity can be adjusted with a
+pot. The obstacle detection distance can be adjusted up to approximately 7cm. An enable (EN) jumper
+can be fitted for continuous operation. Removal of the EN jumper allows an external logic signal (at
+the EN pin) to switch the detector on and off (low = active, high = off)
 
 ## Configuration Notes
 
-- Requires **GPIO** pin configured as input
-- Platform: **gpio** (binary_sensor)
-- Output goes LOW when obstacle is detected within range
-- Detection distance adjustable via onboard potentiometer
-- Works best with non-reflective surfaces
-- May be affected by ambient IR light
-
-### Basic Configuration
-
-```yaml
-esphome:
-  name: my-obstacle-sensor
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-binary_sensor:
-  - platform: gpio
-    pin: 
-      number: GPIO22
-      mode: INPUT_PULLUP
-      inverted: true
-    name: "Obstacle Detected"
-    device_class: presence
-```
+Probably supported through [GPIO Binary Sensor](https://esphome.io/components/binary_sensor/gpio/) component.

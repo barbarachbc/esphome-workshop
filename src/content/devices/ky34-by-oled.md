@@ -10,11 +10,9 @@ tags: ["display", "oled", "monochrome", "ssd1306", "blue", "kuman"]
 productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon"
-    url: "https://www.amazon.com"
-references:
-  - title: "ESPHome SSD1306"
-    url: "https://esphome.io/components/display/ssd1306.html"
-status: "unused"
+    url: "https://www.amazon.co.uk/dp/B01N2K3BC9"
+status: "testing"
+dateAcquired: "2017"
 ---
 
 ## Overview
@@ -26,47 +24,12 @@ OLED displays are self-illuminating (no backlight needed), have excellent contra
 - 0.96" blue OLED display (128x64 pixels)
 - Uses the SSD1306 driver chip
 - I2C interface
-- I2C address: 0x3C or 0x3D (configurable)
+- I2C address: 0x78 (or 0x7A - jumper)
 - Operating voltage: 3.3V-5V
-- Wide viewing angle
-- Low power consumption
-- High contrast ratio
+
 
 ## Configuration Notes
 
-- Requires **I2C** interface
-- Platform: **ssd1306_i2c**
-- Model: **SSD1306 128x64**
-- I2C address: **0x3C** or **0x3D** (most commonly 0x3C)
-- Compatible with standard SSD1306 driver in ESPHome
+Uses [SSD1306](https://esphome.io/components/display/ssd1306/) I2C (SSD1306 128x64).
 
-### Basic Configuration
-
-```yaml
-esphome:
-  name: my-ky34-oled
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-i2c:
-  sda: GPIO21
-  scl: GPIO22
-  scan: true
-
-display:
-  - platform: ssd1306_i2c
-    id: kuman_oled
-    model: "SSD1306 128x64"
-    address: 0x3C
-    lambda: |-
-      it.print(0, 0, id(font), "Hello World!");
-      it.print(0, 20, id(font), "KY34-BY OLED");
-
-font:
-  - file: "gfonts://Roboto"
-    id: font
-    size: 12
-```
+Similar to [grove-oled-ssd1315](./grove-oled-ssd1315), has the same addresses indicated.

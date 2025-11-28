@@ -9,14 +9,15 @@ components: ["i2c"]
 tags: ["nfc", "rfid", "eeprom", "i2c", "wireless"]
 productionStatus: "active"
 purchaseLinks:
-  - vendor: "Adafruit"
-    url: "https://www.adafruit.com/product/4701"
+  - vendor: "AliExpress"
+    url: "https://www.aliexpress.com/item/1005002054278531.html"
 references:
   - title: "Product Page"
     url: "https://www.adafruit.com/product/4701"
   - title: "Datasheet"
     url: "https://www.st.com/resource/en/datasheet/st25dv16k.pdf"
-status: "unused"
+status: "unsupported"
+dateAcquired: "Aug 2025"
 ---
 
 ## Overview

@@ -11,10 +11,13 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon"
     url: "https://www.amazon.co.uk/dp/B01DKAAYK2"
+  - vendor: AZ Delivery
+    url: https://www.az-delivery.de/en/products/16-in-1-kit-zubehorset-fur-raspberry-pi-arduino-und-andere-mikrocontroller
 references:
-  - title: "ESPHome ADC Sensor"
-    url: "https://esphome.io/components/sensor/adc.html"
-status: "unused"
+  - title: "Rain Sensor Arduino Tutorial"
+    url: "https://lastminuteengineers.com/rain-sensor-arduino-tutorial/"
+dateAcquired: "2016"
+status: "pending"
 ---
 
 ## Overview
@@ -30,49 +33,9 @@ The module features:
 - Large detection area
 - Adjustable sensitivity via potentiometer
 - Onboard LED indicators
-- Nickel-plated PCB for weather resistance
-- Suitable for weather stations, irrigation control, vehicle automation
+- Uses LM393 comparator for triggering digital output
 
 ## Configuration Notes
 
-- Can use **GPIO** for digital output or **ADC** for analog output
-- Platform: **gpio** (binary_sensor) or **adc** (sensor)
-- Digital output: LOW when water detected
-- Analog output: voltage decreases with water presence
-- Sensitivity adjustable via onboard potentiometer
-- Sensor board may require periodic cleaning
 
-### Basic Configuration (Digital)
-
-```yaml
-esphome:
-  name: my-rain-sensor
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-binary_sensor:
-  - platform: gpio
-    pin: 
-      number: GPIO2
-      mode: INPUT_PULLUP
-      inverted: true
-    name: "Rain Detected"
-    device_class: moisture
-```
-
-### Analog Configuration
-
-```yaml
-sensor:
-  - platform: adc
-    pin: GPIO39
-    name: "Rain Intensity"
-    update_interval: 2s
-    attenuation: 11db
-    filters:
-      - lambda: return 100.0 - (x / 3.3 * 100.0);
-    unit_of_measurement: "%"
-```
+Probably supported through [GPIO Binary Sensor](https://esphome.io/components/binary_sensor/gpio/) component. And analog through [ADC](https://esphome.io/components/sensor/adc/)

@@ -10,52 +10,36 @@ tags: ["pir", "motion", "sensor", "infrared"]
 productionStatus: "active"
 purchaseLinks:
   - vendor: "AliExpress"
-    url: "https://www.aliexpress.com"
-references:
-  - title: "ESPHome Binary Sensor"
-    url: "https://esphome.io/components/binary_sensor/gpio.html"
-status: "unused"
+    url: "https://www.aliexpress.com/item/1005005140420875.html"
+    color: "AM312"
+status: "pending"
+dateAcquired: "Aug 2025"
 ---
 
 ## Overview
 
 The AM312 is a miniature PIR (Passive Infrared) motion sensor module designed for automatic human body detection with very low power consumption.
 
-The module features:
-- Mini size: 15mm x 10mm
-- Low power consumption (< 100µA)
-- Digital output (HIGH when motion detected)
-- Wide voltage range: 2.7V-12V
-- Detection range: 3-5 meters
-- Detection angle: approximately 100°
-- Output high time: 2-3 seconds (non-adjustable)
-- Automatic re-triggering
-- Fresnel lens for improved sensitivity
+Product Features:
+- Repeatable trigger mode: that is, after the induction output is high, in the delay period, if the body in its induction range of activities, the output will remain high until the delay after the person to become Low level.  (Ie, the sensing module automatically detects a delay period after each activity of the human body, and takes the last active time as the starting point for the delay time).
+
+Technical Parameters:
+- Operating voltage: DC 2.7-12V;
+- Static power consumption: <0.1mA;
+- Delay time: 2 seconds;
+- Block time: 2 seconds;
+- Trigger mode: repeatable;
+- Sensing range: ≤ 100 degrees cone angle, 3-5 meters; (according to the specific lens)
+- PCB Dimensions: 10mm * 8mm
+- Module lens: small lens
 
 ## Configuration Notes
 
-- Requires single **GPIO** pin
-- Digital output: HIGH (3.3V) when motion detected, LOW when idle
-- No configuration jumpers or potentiometers (unlike HC-SR501)
-- Very simple to use - just connect VCC, GND, and OUT
-- Lower power consumption than HC-SR501
+Pinout:
+1) VCC
+2) VOUT
+3) GND
 
-### Basic Configuration
+## Remarks
 
-```yaml
-esphome:
-  name: my-am312
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-binary_sensor:
-  - platform: gpio
-    pin: GPIO14
-    name: "Motion Sensor"
-    device_class: motion
-    filters:
-      - delayed_off: 500ms
-```
+Probably supported through [GPIO Binary Sensor](https://esphome.io/components/binary_sensor/gpio/) component.

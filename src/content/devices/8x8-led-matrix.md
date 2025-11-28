@@ -1,75 +1,32 @@
 ---
-title: '8x8 LED Matrix'
-description: '64 LED dot matrix display module'
+title: '8x8 BiColor LED Matrix'
+description: '8x8 Red and Green LED matrix display module'
 category: "display"
-manufacturer: "Generic"
-model: "8x8 LED Matrix"
-variants: ["MAX7219", "HT16K33", "WS2812"]
-connectionTypes: ["spi", "i2c"]
-components: ["display", "max7219", "spi"]
-tags: ["led", "matrix", "display", "dot-matrix"]
-productionStatus: "active"
-purchaseLinks:
-  - vendor: "AliExpress"
-    url: "https://www.aliexpress.com"
+manufacturer: "Sure Electronics"
+model: "LE-MM103"
+connectionTypes: ["gpio"]
+components: []
+tags: ["led", "matrix", "display"]
+productionStatus: "unknown"
 references:
-  - title: "ESPHome MAX7219"
-    url: "https://esphome.io/components/display/max7219.html"
-status: "unused"
+  - title: Datasheet
+    url: https://www.hackerstore.nl/PDFs/BiColor.pdf
+  - title: Code Example
+    url: https://blog.duklabs.com/arduino-8x8-led-matrix/
+  - title: Charlieplexing
+    url: https://en.wikipedia.org/wiki/Charlieplexing
+status: "unsupported"
+count: 3
 ---
 
 ## Overview
 
-The 8x8 LED Matrix is a square array of 64 LEDs arranged in 8 rows and 8 columns, commonly driven by MAX7219/MAX7221 controllers. These matrices can be cascaded to create larger displays.
-
-Common variants include:
-- **MAX7219/MAX7221** - SPI interface, most common
-- **HT16K33** - I2C interface (used in Adafruit modules)
-- **WS2812 RGB** - Individually addressable RGB LED matrix
+The 8x8 BiColor LED Matrix is a square array of 128 (64 Red and Green each) LEDs arranged in 8 rows and 8 columns. There are 24 pins on the side, 12 on each, with 0.1" spacing so you can easily plug it into a breadboard.
 
 The module features:
-- 64 LEDs in 8x8 grid
-- Cascadable (multiple modules can be chained)
-- SPI interface (MAX7219) or I2C (HT16K33)
-- Brightness control (typically 16 levels)
-- Operating voltage: 5V (MAX7219) or 3.3V-5V
-- Low current draw when using multiplexing
-- Common anode or common cathode configurations
+- 128 LEDs in 8x8 grid (2 LEDs per dot)
+- Common cathode configurations
 
-## Configuration Notes
+## Status Remarks
 
-- Most common: **MAX7219** with **SPI** interface
-- Platform: **max7219**
-- Can cascade multiple 8x8 modules
-- Typical connections: DIN (MOSI), CS, CLK
-- Some variants use I2C (HT16K33)
-- RGB matrices typically use FastLED or NeoPixel protocols
-
-### Basic Configuration (MAX7219)
-
-```yaml
-esphome:
-  name: my-led-matrix
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-spi:
-  clk_pin: GPIO18
-  mosi_pin: GPIO23
-
-display:
-  - platform: max7219
-    cs_pin: GPIO5
-    num_chips: 1
-    lambda: |-
-      it.print(0, 0, id(font), "Hi");
-
-font:
-  - file: "gfonts://Roboto"
-    id: font
-    size: 8
-    glyphs: "!\"%()+,-_.:°0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz"
-```
+One matrix requires 24 GPIOs (16 if only one color used). Treating it as unsupported for now because I need to see how to incorporate it.

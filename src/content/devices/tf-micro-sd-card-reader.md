@@ -10,11 +10,13 @@ tags: ["sd-card", "storage", "spi", "microsd"]
 productionStatus: "active"
 purchaseLinks:
   - vendor: "AliExpress"
-    url: "https://www.aliexpress.com"
+    url: "https://www.aliexpress.com/item/1005005302035188.html"
 references:
   - title: "Arduino SD Library"
     url: "https://www.arduino.cc/reference/en/libraries/sd/"
-status: "unused"
+status: "unsupported"
+dateAcquired: "Aug 2025"
+count: 2
 ---
 
 ## Overview

@@ -16,12 +16,12 @@ const devices = defineCollection({
     })).optional(),
     tags: z.array(z.string()).optional(),
     // Personal tracking fields
-    status: z.enum(['unused', 'testing', 'deployed', 'retired', 'unsupported']),
+    status: z.enum(['unused', 'testing', 'deployed', 'retired', 'pending', 'unsupported']),
     notes: z.string().optional(),
     dateAcquired: z.string().optional(),
     // New fields
     variants: z.array(z.string()).optional(),
-    productionStatus: z.enum(['active', 'NRND', 'discontinued', 'unknown']).default('unknown'),
+    productionStatus: z.enum(['active', 'NRND', 'discontinued', 'obsolete', 'unknown']).default('unknown'),
     references: z.array(z.object({
       title: z.string(),
       url: z.string(),

@@ -1,41 +1,35 @@
 ---
-title: 'PKM22EPPH4001 Piezo Buzzer'
+title: 'PS1240P02CT3 Piezo Buzzer'
 description: 'Piezoelectric buzzer with built-in oscillator'
 category: "output"
-manufacturer: "Murata"
-model: "PKM22EPPH4001"
+manufacturer: "TDK"
+model: "PS1240P02CT3"
 connectionTypes: ["gpio"]
 components: ["output", "rtttl"]
 tags: ["buzzer", "piezo", "audio", "alarm"]
-productionStatus: "obsolete"
+productionStatus: "active"
 purchaseLinks:
   - vendor: "Mouser"
-    url: "https://www.mouser.ie/ProductDetail/Murata-Electronics/PKM22EPPH4001-B0?qs=flZjIlU0hx2Fke4m2iZ9MA%3D%3D"
+    url: "https://www.mouser.ie/ProductDetail/TDK/PS1240P02CT3?qs=d7g9p1yFhWaOLjub80XcMw%3D%3D"
 references:
   - title: "Datasheet"
-    url: "https://www.mouser.ie/datasheet/3/76/1/PKM22EPPH4001-B0.pdf"
-  - title: "Application Notes"
-    url: "https://datasheet.octopart.com/PKM22EPP-4001-Murata-datasheet-141439074.pdf"
-  - title: "Overview of Driver Circuits for Piezo Transducer Buzzers"
-    url: "https://www.allaboutcircuits.com/industry-articles/an-overview-of-driver-circuits-for-piezo-transducer-buzzers/"
+    url: "https://product.tdk.com/system/files/dam/doc/product/sw_piezo/sw_piezo/piezo-buzzer/catalog/piezoelectronic_buzzer_ps_en.pdf"
 status: "pending"
 dateAcquired: "Dec 2024"
 ---
 
 ## Overview
 
-The PKM22EPPH4001 is a piezoelectric buzzer with a built-in oscillator circuit, requiring only a DC voltage to operate. It produces a loud tone suitable for alarms, notifications, and alerts.
+The PS1240P02CT3 is a compact piezoelectric buzzer with a built-in oscillator circuit from TDK. It requires only a DC voltage to produce sound, making it ideal for simple alert and notification applications.
 
 The module features:
-- Oscillation Circuit NOT built in
-- Drive Type: External
-- Operating voltage: 3V square wave
-- Sound pressure level: ~85dB at 10cm
+- Built-in oscillator (no external driver needed)
+- Operating voltage: 3V - rectangular waves
+- Sound pressure level: min 60dB at 10cm (3V)
 - Resonant frequency: ~4000Hz
-- Low current consumption: ~3-30mA
+- Low current consumption: typically 10-30mA
 - Simple 2-wire connection (+ and -)
-- Compact 22mm diameter
-- Through-hole mounting
+- Compact 12mm diameter
 
 ## Configuration Notes
 

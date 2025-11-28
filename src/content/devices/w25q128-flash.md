@@ -10,11 +10,13 @@ tags: ["flash", "storage", "memory", "spi"]
 productionStatus: "active"
 purchaseLinks:
   - vendor: "AliExpress"
-    url: "https://www.aliexpress.com"
+    url: "https://www.aliexpress.com/item/32944330840.html"
+    color: W25Q128
 references:
   - title: "Datasheet"
     url: "https://www.winbond.com/hq/product/code-storage-flash-memory/serial-nor-flash/?__locale=en&partNo=W25Q128JV"
-status: "unused"
+status: "unsupported"
+dateAcquired: "Aug 2025"
 ---
 
 ## Overview
@@ -25,12 +27,7 @@ The module features:
 - 128Mbit (16MB) storage capacity
 - Standard/Dual/Quad SPI interface
 - 104MHz clock frequency
-- Low power consumption
-- Page program: 256 bytes
-- Sector erase: 4KB
-- Block erase: 32KB/64KB
-- Wide voltage range: 2.7V-3.6V
-- Industrial temperature range: -40°C to +85°C
+- Supply Voltage: 2.7V-3.6V
 
 ## Configuration Notes
 

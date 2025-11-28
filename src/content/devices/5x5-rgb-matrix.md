@@ -18,6 +18,7 @@ references:
     url: "https://github.com/pimoroni/rgbmatrix5x5-python"
   - title: Feature Request
     url: "https://github.com/esphome/feature-requests/issues/2245"
+dateAcquired: "Jan 2022"
 status: "unsupported"
 ---
 
@@ -41,77 +42,6 @@ The board features:
 - Each LED has independent RGB control with 8-bit PWM
 - Can be used as an addressable light or display component
 
-### Basic Configuration
+## Status Remarks
 
-TODO: none of this works because there's no support for IS31FL...
-
-Example configuration using the addressable light platform:
-
-```yaml
-esphome:
-  name: my-rgb-matrix
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-i2c:
-  sda: GPIO21
-  scl: GPIO22
-  scan: true
-
-light:
-  - platform: is31fl3731
-    id: rgb_matrix_5x5
-    address: 0x74
-    width: 5
-    height: 5
-```
-
-### Display Configuration
-
-The matrix can also be used as a display:
-
-```yaml
-display:
-  - platform: is31fl3731
-    id: rgb_matrix_display
-    address: 0x74
-    width: 5
-    height: 5
-    lambda: |-
-      // Draw patterns or text
-      it.rectangle(0, 0, 5, 5);
-      it.line(0, 0, 4, 4);
-```
-
-### Advanced Configuration with Effects
-
-```yaml
-light:
-  - platform: is31fl3731
-    id: rgb_matrix_5x5
-    address: 0x74
-    width: 5
-    height: 5
-    effects:
-      - addressable_rainbow:
-          name: Rainbow
-          speed: 10
-          width: 5
-      - addressable_scan:
-          name: Scan
-          move_interval: 100ms
-      - addressable_twinkle:
-          name: Twinkle
-          twinkle_probability: 5%
-```
-
-## Troubleshooting
-TODO: review
-
-- **Matrix not responding**: Verify I2C wiring and that the device appears at address 0x74 (or 0x77) in the I2C scan
-- **Wrong colors**: Check the RGB channel ordering in your configuration
-- **Dim LEDs**: Increase the brightness setting or check power supply
-- **I2C address conflict**: If using multiple devices, cut the address selection trace to change to 0x77
+IS31FL3731 not supported yet in ESPHome

@@ -11,12 +11,13 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon"
     url: "https://www.amazon.co.uk/dp/B01DKAAYK2"
+  - vendor: AZ Delivery
+    url: https://www.az-delivery.de/en/products/16-in-1-kit-zubehorset-fur-raspberry-pi-arduino-und-andere-mikrocontroller
 references:
-  - title: "ESPHome Remote Transmitter"
-    url: "https://esphome.io/components/remote_transmitter.html"
-  - title: "ESPHome Remote Receiver"
-    url: "https://esphome.io/components/remote_receiver.html"
-status: "unused"
+  - title: Usage example
+    url: https://www.instructables.com/RF-315433-MHz-Transmitter-receiver-Module-and-Ardu/
+dateAcquired: "2016"
+status: "pending"
 ---
 
 ## Overview
@@ -24,45 +25,18 @@ status: "unused"
 The 315MHz wireless transceiver module enables RF communication for remote control and wireless sensor applications.
 
 The module features:
-- Operating frequency: 315MHz
+- Operating frequency: 
+    - transmitter 315MHz or 433MHz
+    - receiver 315MHz-433.92MHz
 - Transmitter and receiver pair
 - Operating voltage: 3.5V-12V (transmitter), 5V (receiver)
 - Transmission range: up to 100m (open area)
-- Low power consumption
+- Low power consumption - transmitter: max  Less than 40mA max , and min 9mA, receiver: ≤5.5mA max
 - Simple digital interface
 - ASK/OOK modulation
-- Wide operating temperature range
-- Suitable for remote controls, wireless sensors, home automation
 
-## Configuration Notes
+## Remarks
 
-- Requires **GPIO pins** for data transmission/reception
-- Platform: **remote_transmitter** and **remote_receiver**
-- Transmitter connects to one GPIO pin
-- Receiver connects to another GPIO pin
-- Supports various protocols (RC Switch, etc.)
-- Range depends on antenna length and environment
-- Consider using 433MHz modules for better range in some regions
+Pending testing. Can possibly use [Remote Transmitter](https://esphome.io/components/remote_transmitter/) and [Remote Receiver](https://esphome.io/components/remote_receiver/) components.
 
-### Basic Configuration
-
-```yaml
-esphome:
-  name: my-rf-module
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-remote_transmitter:
-  pin: GPIO17
-  carrier_duty_percent: 100%
-
-remote_receiver:
-  pin: GPIO16
-  dump: all
-  tolerance: 50%
-  filter: 250us
-  idle: 4ms
-```
+Setting up [RF Devices](https://esphome.io/guides/setting_up_rmt_devices/#remote-setting-up-rf)

@@ -11,10 +11,10 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon"
     url: "https://www.amazon.co.uk/dp/B01DKAAYK2"
-references:
-  - title: "ESPHome Binary Sensor"
-    url: "https://esphome.io/components/binary_sensor/index.html"
-status: "unused"
+  - vendor: AZ Delivery
+    url: https://www.az-delivery.de/en/products/16-in-1-kit-zubehorset-fur-raspberry-pi-arduino-und-andere-mikrocontroller
+dateAcquired: "2016"
+status: "pending"
 ---
 
 ## Overview
@@ -27,37 +27,17 @@ The module features:
 - Detection angle: ~110 degrees
 - Operating voltage: 4.5V-20V (typically 5V)
 - Output: HIGH (3.3V) when motion detected
-- Adjustable delay time: 0.3s-200s
-- Adjustable sensitivity
-- Repeatable/non-repeatable trigger modes
-- Low power consumption
-- Suitable for security systems, automatic lighting, presence detection
+- Adjustable delay time: 0.3s-200s (Time Delay Adjust)
+- Adjustable sensitivity (Sensitivity Adjust)
+- Repeatable/non-repeatable trigger modes (Trigger Selection Jumper)
 
-## Configuration Notes
+## Operation
 
-- Requires **GPIO** pin configured as input
-- Platform: **gpio** (binary_sensor)
-- Output goes HIGH when motion is detected
-- Delay and sensitivity adjustable via onboard potentiometers
-- Jumper selects trigger mode (repeatable or single trigger)
-- Warm-up time: ~1 minute after power-on for stable operation
+If motion detected PIR sets output high for the set time delay. After time delay elapses, output is set low for about 3 seconds. During this time no motion will be detected. After 3 seconds, PIR will detect motion again.
 
-### Basic Configuration
+- **Single Mode Trigger** - the time delay starts immediately when motion is first detected. Output will be high just for this time delay.
+- **Repeatable Trigger** - Each detected motion resets the time delay, so the output will be HIGH all the while the motion is detected and then plus the delay time.
 
-```yaml
-esphome:
-  name: my-hcsr501-sensor
+## Remarks
 
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-binary_sensor:
-  - platform: gpio
-    pin: 
-      number: GPIO13
-      mode: INPUT
-    name: "Motion Detected"
-    device_class: motion
-```
+Probably supported through [GPIO Binary Sensor](https://esphome.io/components/binary_sensor/gpio/) component.
