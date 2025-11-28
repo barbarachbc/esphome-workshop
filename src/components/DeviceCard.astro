@@ -27,7 +27,7 @@ const statusLabels = {
   deployed: '✅ Deployed',
   retired: '⏸️ Retired',
   unsupported: '🚫 Unsupported',
-  pending: '🚫 Pending',
+  pending: '🔦 Pending',
 };
 
 const productionStatusLabels = {
@@ -50,8 +50,8 @@ const connectionTypeMap: Record<string, string> = {
   'built-in': 'builtin',
 };
 ---
-
-<a href={`/devices/${device.slug}`} class="card">
+<div class="card">
+<a href={`/devices/${device.slug}`} class="card-body-a">
   {device.data.image && (
     <img src={device.data.image} alt={device.data.title} class="card-image" />
   )}
@@ -64,20 +64,21 @@ const connectionTypeMap: Record<string, string> = {
     </div>
     <h3>{device.data.title}</h3>
     <p>{device.data.description}</p>
-    {device.data.connectionTypes.length > 0 && (
-      <div class="connections">
-        {device.data.connectionTypes.map(conn => {
+  </div>
+  {device.data.connectionTypes.length > 0 && (   
+    <div class="card-footer">
+      {device.data.connectionTypes.map(conn => {
           const componentSlug = connectionTypeMap[conn.toLowerCase()];
           return componentSlug ? (
-            <a href={`/components/${componentSlug}`} class="tag tag-link">{conn}</a>
+            <a href={`/components/${componentSlug}`} class="tag tag-link" onclick="event.stopPropagation();">{conn}</a>
           ) : (
             <span class="tag">{conn}</span>
-          );
+          )
         })}
-      </div>
-    )}
-  </div>
+    </div>
+  )}
 </a>
+</div>
 
 <style>
   .card {
@@ -87,6 +88,12 @@ const connectionTypeMap: Record<string, string> = {
     border-radius: 8px;
     overflow: hidden;
     transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  div.card a.card-body-a {
+    border: none;
     text-decoration: none;
     color: inherit;
   }
@@ -174,23 +181,25 @@ const connectionTypeMap: Record<string, string> = {
     line-height: 1.5;
   }
 
-  .connections {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 1rem;
-  }
+.card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.75rem 1.25rem;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
 
-  .tag {
-    display: inline-block;
-    background: #f3f4f6;
-    color: #374151;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-  }
+.tag {
+  display: inline-block;
+  background: #e5e7eb;
+  color: #374151;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
 
   .tag-link {
     text-decoration: none;
