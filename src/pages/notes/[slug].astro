@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import IssueReportButton from '../../components/IssueReportButton.astro';
 import LastModified from '../../components/LastModified.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
 
 export async function getStaticPaths() {
   const notes = await getCollection('notes');
@@ -13,59 +14,104 @@ export async function getStaticPaths() {
 }
 
 const { note } = Astro.props;
-const { Content } = await note.render();
+const { Content, headings } = await note.render();
 ---
 
 <Layout title={`${note.data.title} - Notes`}>
-  <article>
-    <div class="header">
-      <h1>{note.data.title}</h1>
-      <div class="meta">
-        <span class="badge category">{note.data.category}</span>
-        {note.data.difficulty && (
-          <span class={`badge difficulty ${note.data.difficulty}`}>
-            {note.data.difficulty}
-          </span>
-        )}
-      </div>
-    </div>
-
-    <div class="description">
-      <p><strong>{note.data.description}</strong></p>
-    </div>
-
-    <LastModified 
-      date={note.data.lastUpdated}
-      verified={note.data.lastVerified}
-      showAge={true}
-    />
-
-    {note.data.tags && note.data.tags.length > 0 && (
-      <div class="section">
-        <div class="tags">
-          {note.data.tags.map(tag => (
-            <span class="tag">{tag}</span>
-          ))}
+  <div class="page-layout">
+    <article class="main-content">
+      <div class="header">
+        <h1>{note.data.title}</h1>
+        <div class="meta">
+          <span class="badge category">{note.data.category}</span>
+          {note.data.difficulty && (
+            <span class={`badge difficulty ${note.data.difficulty}`}>
+              {note.data.difficulty}
+            </span>
+          )}
         </div>
       </div>
+
+      <div class="description">
+        <p><strong>{note.data.description}</strong></p>
+      </div>
+
+      <LastModified 
+        date={note.data.lastUpdated}
+        verified={note.data.lastVerified}
+        showAge={true}
+      />
+
+      {note.data.tags && note.data.tags.length > 0 && (
+        <div class="section">
+          <div class="tags">
+            {note.data.tags.map(tag => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div class="content">
+        <Content />
+      </div>
+
+      <a href="/notes" class="back-link">← Back to all notes</a>
+
+      <IssueReportButton 
+        pageType="note"
+        pageTitle={note.data.title}
+        pageSlug={note.slug}
+      />
+    </article>
+
+    {headings.length >= 3 && (
+      <aside class="toc-sidebar">
+        <TableOfContents headings={headings} minDepth={1} />
+      </aside>
     )}
-
-    <div class="content">
-      <Content />
-    </div>
-
-    <a href="/notes" class="back-link">← Back to all notes</a>
-
-    <IssueReportButton 
-      pageType="note"
-      pageTitle={note.data.title}
-      pageSlug={note.slug}
-    />
-  </article>
+  </div>
 
   <style>
-    article {
-      max-width: 800px;
+    .page-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .main-content {
+      min-width: 0;
+    }
+
+    .toc-sidebar {
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
+    }
+
+    @media (max-width: 1024px) {
+      .page-layout {
+        grid-template-columns: 1fr 250px;
+        gap: 1.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .page-layout {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .toc-sidebar {
+        position: static;
+        order: -1;
+        max-height: none;
+      }
     }
 
     .header {

@@ -5,12 +5,14 @@ interface Props {
     slug: string;
     text: string;
   }>;
+  minDepth?: number; // Minimum heading depth to include (default: 2)
+  maxDepth?: number; // Maximum heading depth to include (default: 4)
 }
 
-const { headings } = Astro.props;
+const { headings, minDepth = 2, maxDepth = 4 } = Astro.props;
 
-// Filter to only H2-H4 headings
-const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
+// Filter headings based on depth range
+const tocHeadings = headings.filter(h => h.depth >= minDepth && h.depth <= maxDepth);
 ---
 
 <nav class="table-of-contents" aria-label="Table of Contents">
@@ -80,6 +82,11 @@ const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
   }
 
   /* Hierarchical indentation */
+  .toc-item.depth-1 {
+    padding-left: 0;
+    font-weight: 600;
+  }
+
   .toc-item.depth-2 {
     padding-left: 0;
   }

@@ -241,7 +241,7 @@ This will update all your docker images. Pull is getting the latest version, dow
 
 Things to consider: backup of your configuration and your data. I am subscribed to Home Assistant \- whatever the name is, so I can access it from the internet, it also does backup for me, but also it is good to support the project. You can setup your own VPN or whatever, but consider backing up your stuff.
 
-# Setting up mDNS
+## Setting up mDNS
 
 ISSUE: pinging your devices by their name is working from your machine and server but not from docker containers.
 
@@ -249,12 +249,12 @@ EXPLANATION: Esphome includes mDNS component and enables all devices to be addre
 
 SOLUTION: Use mDNS reflector
 
-## Install avahi
+### Install avahi
 
 If you don’t have avahi daemon installed on your server do it now:  
 `sudo apt-get install avahi-daemon`
 
-## Create Docker Network
+### Create Docker Network
 
 Create the network externally in docker so it is not re-created on each `docker compose up`. This will cause new adapter to be registered on your server and further configuration will be invalidated.  
 `sudo docker network create mysmarthomenet`
@@ -271,14 +271,14 @@ networks:
     external: true
 ```
 
-## Find Docker Network Id
+### Find Docker Network Id
 
 To find network id that docker uses:  
 `sudo docker network ls`  
 This will list the networks and you’ll see that id of the network is something like:  
 `ebc051595c69 mysmarthomenet`
 
-## Turn on mDNS
+### Turn on mDNS
 
 By default mDNS was not configured for neither my ethernet nor my docker network. To check run:  
 `ifconfig`
@@ -298,7 +298,7 @@ For mysmarthomenet (bridge interface)
 For the actual network card  
 `sudo resolvectl mdns enp0s31ab yes`
 
-## Configure mDNS Reflector
+### Configure mDNS Reflector
 
 Change avahi-daemon.conf:  
 `sudo nano /etc/avahi/avahi-daemon.conf`
@@ -310,7 +310,7 @@ allow-interfaces=enp0s31ab,br-ebc051595c69
 Restart the daemon:  
 `sudo systemctl restart avahi-daemon`
 
-## Test
+### Test
 
 EspHome uses [python-zeroconf](https://github.com/python-zeroconf/python-zeroconf). So to test this:
 - get [resolve_address.py](https://github.com/python-zeroconf/python-zeroconf/blob/master/examples/resolve_address.py) 
