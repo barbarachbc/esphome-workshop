@@ -27,9 +27,6 @@ const { Content } = await note.render();
             {note.data.difficulty}
           </span>
         )}
-        {note.data.lastUpdated && (
-          <span class="last-updated">Updated: {note.data.lastUpdated}</span>
-        )}
       </div>
     </div>
 
@@ -38,7 +35,7 @@ const { Content } = await note.render();
     </div>
 
     <LastModified 
-      date={note.data.lastModified}
+      date={note.data.lastUpdated}
       verified={note.data.lastVerified}
       showAge={true}
     />

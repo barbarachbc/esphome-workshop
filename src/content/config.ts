@@ -90,14 +90,13 @@ const notes = defineCollection({
     category: z.enum(['setup', 'networking', 'development', 'home-assistant', 'troubleshooting', 'custom-components', 'other']),
     difficulty: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
     tags: z.array(z.string()).optional(),
-    lastUpdated: z.string().optional(),
+    lastUpdated: z.string().optional(),  // ISO date: YYYY-MM-DD
+    lastVerified: z.string().optional(),  // When info was confirmed accurate
     changelog: z.array(z.object({
       date: z.string(),  // ISO format: YYYY-MM-DD
       type: z.enum(['added', 'updated', 'fixed']),
       description: z.string(),
     })).optional(),
-    lastModified: z.string().optional(),  // ISO date: YYYY-MM-DD
-    lastVerified: z.string().optional(),  // When info was confirmed accurate
   }),
 });
 
