@@ -10,7 +10,7 @@ tags: ["buzzer", "piezo", "audio", "alarm"]
 productionStatus: "active"
 purchaseLinks:
   - vendor: "Mouser"
-    url: "https://www.mouser.ie/ProductDetail/TDK/PS1240P02CT3?qs=d7g9p1yFhWaOLjub80XcMw%3D%3D"
+    url: "https://www.mouser.ie/ProductDetail/810-PS1240P02CT3"
 references:
   - title: "Datasheet"
     url: "https://product.tdk.com/system/files/dam/doc/product/sw_piezo/sw_piezo/piezo-buzzer/catalog/piezoelectronic_buzzer_ps_en.pdf"

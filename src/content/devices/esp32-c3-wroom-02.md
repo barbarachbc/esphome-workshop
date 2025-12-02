@@ -13,8 +13,11 @@ references:
     url: https://www.espressif.com/en/module/esp32-c3-wroom-02-en
   - title: Datasheet
     url: https://documentation.espressif.com/esp32-c3-wroom-02_datasheet_en.pdf
-purchaseLinks: []
+purchaseLinks:
+  - vendor: Mouser
+    url: "https://www.mouser.ie/ProductDetail/356-ESP32C3WROOM02N4"
 #image: "/images/devices/"
+dateAcquired: "Dec 2024"
 ---
 
 ## Overview

@@ -10,7 +10,7 @@ tags: ["buzzer", "piezo", "audio", "alarm"]
 productionStatus: "obsolete"
 purchaseLinks:
   - vendor: "Mouser"
-    url: "https://www.mouser.ie/ProductDetail/Murata-Electronics/PKM22EPPH4001-B0?qs=flZjIlU0hx2Fke4m2iZ9MA%3D%3D"
+    url: "https://www.mouser.ie/ProductDetail/81-PKM22EPPH4001-B0"
 references:
   - title: "Datasheet"
     url: "https://www.mouser.ie/datasheet/3/76/1/PKM22EPPH4001-B0.pdf"

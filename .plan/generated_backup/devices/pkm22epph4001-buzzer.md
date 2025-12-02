@@ -9,8 +9,8 @@ components: ["output", "rtttl"]
 tags: ["buzzer", "piezo", "audio", "alarm"]
 productionStatus: "active"
 purchaseLinks:
-  - vendor: "DigiKey"
-    url: "https://www.digikey.com"
+  - vendor: "Mouser"
+    url: "https://www.mouser.ie/ProductDetail/81-PKM22EPPH4001-B0"
 references:
   - title: "Datasheet"
     url: "https://www.murata.com/products/productdetail?partno=PKM22EPP-4001-B0"
