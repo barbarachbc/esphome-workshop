@@ -405,8 +405,8 @@ When asking AI to help with this project:
   - ✅ Smooth scroll behavior with motion preference support
   - ✅ Device detail pages with two-column layout and sticky ToC sidebar
   - ✅ Notes detail pages with integrated ToC
+  - ✅ Project detail pages with integrated ToC
   - ✅ Active section highlighting with Intersection Observer
-  - Projects pages integration (pending)
   - Component pages integration (optional, pending)
 - ✅ Automatic routing via file-based pages
 - ✅ MDX support for rich content

@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import IssueReportButton from '../../components/IssueReportButton.astro';
 import LastModified from '../../components/LastModified.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -13,7 +14,15 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const { Content } = await project.render();
+const { Content, headings } = await project.render();
+
+// Build complete ToC including conditional sections
+const tocHeadings = [
+  // Add "Page Info" link to top
+  { depth: 2, slug: 'page-info', text: 'Page Info' },
+  // Add markdown headings (H2-H4 only)
+  ...headings.filter(h => h.depth >= 2 && h.depth <= 4),
+];
 
 // Get related devices and components
 const allDevices = await getCollection('devices');
@@ -28,36 +37,50 @@ const statusLabels = {
   completed: '✅ Completed',
   abandoned: '⏸️ Abandoned',
 };
+
+const difficultyLabels = {
+  beginner: '🟢 Beginner',
+  intermediate: '🟡 Intermediate',
+  advanced: '🔴 Advanced',
+};
 ---
 
 <Layout title={`${project.data.title} - Projects`}>
-  <article>
-    <div class="header">
-      <h1>{project.data.title}</h1>
-      <span class={`status-badge ${project.data.status}`}>
-        {statusLabels[project.data.status]}
-      </span>
-    </div>
+  <div class="page-layout">
+    <article class="main-content">
+      <div id="page-info" class="header">
+        <h1>{project.data.title}</h1>
+        <span class={`status-badge ${project.data.status}`}>
+          {statusLabels[project.data.status]}
+        </span>
+      </div>
 
-    <div class="meta">
-      <span class="badge badge-{project.data.difficulty}">{project.data.difficulty}</span>
-      {project.data.dateStarted && (
-        <span class="date-info">Started: {project.data.dateStarted}</span>
-      )}
-      {project.data.dateCompleted && (
-        <span class="date-info">Completed: {project.data.dateCompleted}</span>
-      )}
-    </div>
+      <div class="meta">
+        <span class={`badge badge-${project.data.difficulty}`}>
+          {difficultyLabels[project.data.difficulty]}
+        </span>
+        {project.data.dateStarted && (
+          <span class="date-info">📅 Started: {project.data.dateStarted}</span>
+        )}
+        {project.data.dateCompleted && (
+          <span class="date-info">✅ Completed: {project.data.dateCompleted}</span>
+        )}
+        {project.data.tags && project.data.tags.length > 0 && (
+          project.data.tags.map(tag => (
+            <span class="tag-pill">{tag}</span>
+          ))
+        )}
+      </div>
 
-    <div class="description">
-      <p><strong>{project.data.description}</strong></p>
-    </div>
+      <div class="description">
+        <p><strong>{project.data.description}</strong></p>
+      </div>
 
-    <LastModified 
-      date={project.data.lastModified}
-      verified={project.data.lastVerified}
-      showAge={true}
-    />
+      <LastModified 
+        date={project.data.lastModified}
+        verified={project.data.lastVerified}
+        showAge={true}
+      />
 
     {project.data.motivation && (
       <div class="motivation-callout">
@@ -105,11 +128,55 @@ const statusLabels = {
       pageTitle={project.data.title}
       pageSlug={project.slug}
     />
-  </article>
+    </article>
+
+    {tocHeadings.length >= 3 && (
+      <aside class="toc-sidebar">
+        <TableOfContents headings={tocHeadings} />
+      </aside>
+    )}
+  </div>
 
   <style>
-    article {
-      max-width: 900px;
+    .page-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .main-content {
+      min-width: 0;
+    }
+
+    .toc-sidebar {
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
+    }
+
+    @media (max-width: 1024px) {
+      .page-layout {
+        grid-template-columns: 1fr 250px;
+        gap: 1.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .page-layout {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .toc-sidebar {
+        position: static;
+        order: -1;
+        max-height: none;
+      }
     }
 
     .header {
@@ -156,6 +223,16 @@ const statusLabels = {
     .date-info {
       color: var(--gray);
       font-size: 0.875rem;
+    }
+
+    .tag-pill {
+      display: inline-block;
+      background: var(--light-gray);
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--text);
+      font-weight: 500;
     }
 
     .description {
