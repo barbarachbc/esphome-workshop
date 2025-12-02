@@ -27,6 +27,9 @@ Physical hardware components used in ESPHome projects.
 - **`variants`** - Array of variant names for different board versions (optional)
 - **`productionStatus`** - **REQUIRED:** `active`, `NRND` (not recommended for new designs), `discontinued`, `unknown` (default)
 - **`references`** - Array of reference objects with `title` and `url` for additional info (optional)
+- **`lastModified`** - ISO date (YYYY-MM-DD) when content was last updated (optional)
+- **`lastVerified`** - ISO date (YYYY-MM-DD) when info was last verified accurate (optional)
+- **`changelog`** - Array of changelog entries with `date`, `type` (added/updated/fixed), and `description` (optional)
 
 **Example file:** `src/content/devices/esp32-devkit-v1.md`
 
@@ -44,6 +47,9 @@ ESPHome software components and platforms.
 - `requiresHardware` - Boolean (default: false)
 - `relatedDevices` - Array of device slugs (optional)
 - `tags` - Array of strings (optional)
+- **`lastModified`** - ISO date (YYYY-MM-DD) when content was last updated (optional)
+- **`lastVerified`** - ISO date (YYYY-MM-DD) when info was last verified accurate (optional)
+- **`changelog`** - Array of changelog entries with `date`, `type` (added/updated/fixed), and `description` (optional)
 
 **Example file:** `src/content/components/i2c.md`
 
@@ -64,6 +70,9 @@ Complete projects combining devices and components.
 - `dateStarted` - When project started (optional)
 - `dateCompleted` - When project finished (optional)
 - `motivation` - Why this project matters (optional)
+- **`lastModified`** - ISO date (YYYY-MM-DD) when content was last updated (optional)
+- **`lastVerified`** - ISO date (YYYY-MM-DD) when info was last verified accurate (optional)
+- **`changelog`** - Array of changelog entries with `date`, `type` (added/updated/fixed), and `description` (optional)
 
 **Example file:** `src/content/projects/temperature-monitor.md`
 
@@ -79,6 +88,9 @@ Setup guides, networking tricks, and lessons learned - non-device-specific knowl
 - `difficulty` - `beginner`, `intermediate`, `advanced` (optional)
 - `tags` - Array of strings (optional)
 - `lastUpdated` - When last updated (optional)
+- **`lastModified`** - ISO date (YYYY-MM-DD) when content was last updated (optional)
+- **`lastVerified`** - ISO date (YYYY-MM-DD) when info was last verified accurate (optional)
+- **`changelog`** - Array of changelog entries with `date`, `type` (added/updated/fixed), and `description` (optional)
 
 **Example file:** `src/content/notes/mdns-docker-setup.md`
 
@@ -102,7 +114,12 @@ esphome-docs/
 │   │   ├── ComponentCard.astro
 │   │   ├── ProjectCard.astro
 │   │   ├── NoteCard.astro
+│   │   ├── TableOfContents.astro
+│   │   ├── IssueReportButton.astro
+│   │   ├── LastModified.astro
+│   │   ├── Footer.astro
 │   │   └── CodeBlock.astro
+│   ├── config.ts             # Site configuration (GitHub repo, etc.)
 │   ├── content/
 │   │   ├── config.ts         # Content collection schemas
 │   │   ├── devices/          # Device markdown files
@@ -110,9 +127,12 @@ esphome-docs/
 │   │   ├── projects/         # Project markdown files
 │   │   └── notes/            # Notes/guides markdown files
 │   ├── layouts/
-│   │   └── Layout.astro      # Base layout with header/nav
+│   │   └── Layout.astro      # Base layout with header/nav/footer
+│   ├── utils/
+│   │   └── changelog.ts      # Changelog aggregation utilities
 │   └── pages/
 │       ├── index.astro       # Homepage
+│       ├── about.astro       # About page with site info
 │       ├── devices/
 │       │   ├── index.astro   # Devices listing
 │       │   └── [slug].astro  # Individual device page
@@ -260,6 +280,26 @@ The project includes four reusable card components for consistent display across
    - Shows: title, category badge, difficulty badge, description
    - Used in: `/notes` listing page
 
+5. **`IssueReportButton.astro`** - GitHub issue reporting
+   - Props: `pageType`, `pageTitle`, `pageSlug`
+   - Generates pre-filled GitHub issue link
+   - Used on: All content detail pages
+
+6. **`LastModified.astro`** - Content freshness indicator
+   - Props: `date`, `verified`
+   - Displays last modified/verified dates with color-coded freshness
+   - Used on: All content detail pages
+
+7. **`TableOfContents.astro`** - In-page navigation (Phase 7)
+   - Props: `headings` array from Astro's `render()` API
+   - Generates hierarchical table of contents from H2-H4 headings
+   - Features: Active section highlighting, smooth scroll, sticky sidebar (desktop), collapsible (mobile)
+   - Used on: Device, project, and note detail pages (when 3+ headings present)
+
+8. **`Footer.astro`** - Site-wide footer
+   - Shows: Navigation links, community links, build date
+   - Used in: `Layout.astro` on all pages
+
 ### Homepage Features (Session 3)
 
 The homepage (`/`) includes:
@@ -353,6 +393,18 @@ When asking AI to help with this project:
   - Consistent site branding as "My ESPHome Workshop"
   - Complete navigation with Notes section
   - Standardized page titles throughout
+- ✅ **Community & documentation features** (Session 6 ✅)
+  - GitHub issue reporting from all content pages
+  - About page with usage guides and status explanations
+  - What's New section with manual changelog system
+  - Last modified/verified dates on all content
+  - Site-wide footer with navigation and build date
+  - GitHub link in header
+- 🚧 **In-page navigation** (Phase 7 in progress)
+  - Automatic table of contents generation from markdown headings
+  - Sticky sidebar on desktop, collapsible on mobile
+  - Active section highlighting with Intersection Observer
+  - Smooth scroll behavior (respects motion preferences)
 - ✅ Automatic routing via file-based pages
 - ✅ MDX support for rich content
 - ✅ Syntax highlighting for YAML/code

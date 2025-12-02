@@ -1,0 +1,137 @@
+---
+import { siteConfig } from '../config';
+
+const currentYear = new Date().getFullYear();
+const buildDate = new Date().toLocaleDateString('en-US', { 
+  year: 'numeric', 
+  month: 'long', 
+  day: 'numeric' 
+});
+---
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/devices">Devices</a></li>
+        <li><a href="/components">Components</a></li>
+        <li><a href="/projects">Projects</a></li>
+        <li><a href="/notes">Notes</a></li>
+        <li><a href="/about">About</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-section">
+      <h3>Community</h3>
+      <ul>
+        <li><a href={siteConfig.github.issuesUrl} target="_blank" rel="noopener noreferrer">Report an Issue</a></li>
+        <li><a href={`https://github.com/${siteConfig.github.repo}`} target="_blank" rel="noopener noreferrer">View on GitHub</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-section">
+      <h3>Info</h3>
+      <p class="footer-text">
+        A personal workshop for tracking ESPHome devices and projects.
+      </p>
+      <p class="footer-meta">
+        Last built: {buildDate}
+      </p>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <p>&copy; {currentYear} My ESPHome Workshop. Built with <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a>.</p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    margin-top: 4rem;
+    padding: 2rem 2rem 1rem;
+    background-color: var(--light-gray);
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .footer-section h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem 0;
+    color: var(--text);
+  }
+
+  .footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-section li {
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-section a {
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+
+  .footer-section a:hover {
+    color: var(--accent);
+  }
+
+  .footer-text {
+    color: var(--gray);
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .footer-meta {
+    color: var(--gray-dark);
+    font-size: 0.8rem;
+    margin: 0;
+    font-style: italic;
+  }
+
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .footer-bottom p {
+    color: var(--gray);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .footer-bottom a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .footer-bottom a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .footer-content {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>
