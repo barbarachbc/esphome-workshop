@@ -6,6 +6,13 @@ devices: ["esp32-devkit-v1", "bme280"]
 components: ["i2c", "sensor"]
 tags: ["weather", "monitoring", "temperature", "humidity", "pressure"]
 status: "completed"
+changelog:
+  - date: "2025-12-01"
+    type: "updated"
+    description: "Added Home Assistant automation examples"
+  - date: "2025-11-28"
+    type: "fixed"
+    description: "Fixed I2C address typo in wiring diagram"
 ---
 
 ## Project Overview

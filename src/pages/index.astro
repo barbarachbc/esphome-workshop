@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { getRecentChanges, formatChangelogDate, getChangeTypeEmoji } from '../utils/changelog';
 
 // Query all devices and projects
 const allDevices = await getCollection('devices');
@@ -78,6 +79,9 @@ const heroDescriptions = [
 ];
 
 const randomHeroDescription = heroDescriptions[Math.floor(Math.random() * heroDescriptions.length)];
+
+// Get recent changes for "What's New" section
+const recentChanges = await getRecentChanges(7);
 ---
 
 <Layout title="Home">
@@ -145,6 +149,25 @@ const randomHeroDescription = heroDescriptions[Math.floor(Math.random() * heroDe
             Let's Use This! →
           </a>
         </div>
+      </div>
+    </div>
+  )}
+
+  {recentChanges.length > 0 && (
+    <div class="whats-new-section">
+      <h2>✨ What's New</h2>
+      <div class="changelog-list">
+        {recentChanges.map(change => (
+          <div class="changelog-item">
+            <span class="change-emoji">{getChangeTypeEmoji(change.type)}</span>
+            <span class="change-type">{change.type}:</span>
+            <a href={`/${change.contentType}s/${change.slug}`} class="change-link">
+              {change.title}
+            </a>
+            <span class="change-description">- {change.description}</span>
+            <span class="change-date">({formatChangelogDate(change.date)})</span>
+          </div>
+        ))}
       </div>
     </div>
   )}
@@ -350,6 +373,75 @@ const randomHeroDescription = heroDescriptions[Math.floor(Math.random() * heroDe
       grid-template-columns: repeat(2, 1fr);
       gap: 1.25rem;
       margin-bottom: 3rem;
+    }
+
+    .whats-new-section {
+      margin-bottom: 2rem;
+      padding: 1.25rem;
+      background: white;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .whats-new-section h2 {
+      margin: 0 0 1rem 0;
+      color: var(--text);
+      font-size: 1.25rem;
+    }
+
+    .changelog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .changelog-item {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      transition: background 0.2s;
+    }
+
+    .changelog-item:hover {
+      background: var(--gray-light);
+    }
+
+    .change-emoji {
+      flex-shrink: 0;
+    }
+
+    .change-type {
+      flex-shrink: 0;
+      font-weight: 500;
+      text-transform: capitalize;
+      color: var(--gray-dark);
+    }
+
+    .change-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .change-link:hover {
+      color: var(--accent-dark);
+      text-decoration: underline;
+    }
+
+    .change-description {
+      color: var(--gray);
+    }
+
+    .change-date {
+      color: var(--gray);
+      font-size: 0.85rem;
+      margin-left: auto;
+      flex-shrink: 0;
     }
   </style>
 </Layout>

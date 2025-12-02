@@ -26,6 +26,11 @@ const devices = defineCollection({
       title: z.string(),
       url: z.string(),
     })).optional(),
+    changelog: z.array(z.object({
+      date: z.string(),  // ISO format: YYYY-MM-DD
+      type: z.enum(['added', 'updated', 'fixed']),
+      description: z.string(),
+    })).optional(),
   }),
 });
 
@@ -40,6 +45,11 @@ const components = defineCollection({
     requiresHardware: z.boolean().default(false),
     relatedDevices: z.array(z.string()).optional(), // References to device slugs
     tags: z.array(z.string()).optional(),
+    changelog: z.array(z.object({
+      date: z.string(),  // ISO format: YYYY-MM-DD
+      type: z.enum(['added', 'updated', 'fixed']),
+      description: z.string(),
+    })).optional(),
   }),
 });
 
@@ -58,6 +68,11 @@ const projects = defineCollection({
     dateStarted: z.string().optional(),
     dateCompleted: z.string().optional(),
     motivation: z.string().optional(),
+    changelog: z.array(z.object({
+      date: z.string(),  // ISO format: YYYY-MM-DD
+      type: z.enum(['added', 'updated', 'fixed']),
+      description: z.string(),
+    })).optional(),
   }),
 });
 
@@ -70,6 +85,11 @@ const notes = defineCollection({
     difficulty: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
     tags: z.array(z.string()).optional(),
     lastUpdated: z.string().optional(),
+    changelog: z.array(z.object({
+      date: z.string(),  // ISO format: YYYY-MM-DD
+      type: z.enum(['added', 'updated', 'fixed']),
+      description: z.string(),
+    })).optional(),
   }),
 });
 
