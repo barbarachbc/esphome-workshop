@@ -400,14 +400,15 @@ When asking AI to help with this project:
   - Last modified/verified dates on all content
   - Site-wide footer with navigation and build date
   - GitHub link in header
-- 🚧 **In-page navigation** (Phase 7 in progress)
+- ✅ **In-page navigation** (Phase 7 complete)
   - ✅ Automatic table of contents component created
   - ✅ Smooth scroll behavior with motion preference support
   - ✅ Device detail pages with two-column layout and sticky ToC sidebar
   - ✅ Notes detail pages with integrated ToC
   - ✅ Project detail pages with integrated ToC
+  - ✅ Component detail pages with integrated ToC
   - ✅ Active section highlighting with Intersection Observer
-  - Component pages integration (optional, pending)
+  - ✅ Page Info sections with smart conditional ToC items
 - ✅ Automatic routing via file-based pages
 - ✅ MDX support for rich content
 - ✅ Syntax highlighting for YAML/code
