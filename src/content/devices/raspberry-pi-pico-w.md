@@ -4,7 +4,7 @@ description: "RP2040-based microcontroller board with WiFi and Bluetooth"
 category: "board"
 manufacturer: "Raspberry Pi"
 model: "Pico W"
-connectionTypes: ["gpio", "wifi", "bluetooth"]
+connectionTypes: ["gpio", "i2c", "spi", "uart"]
 components: ["rp2040", "wifi", "bluetooth"]
 tags: ["rp2040", "wifi", "bluetooth", "raspberry-pi", "pico", "arm-cortex-m0+"]
 productionStatus: "active"

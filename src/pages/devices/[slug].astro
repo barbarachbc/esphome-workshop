@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import IssueReportButton from '../../components/IssueReportButton.astro';
 
 export async function getStaticPaths() {
   const devices = await getCollection('devices');
@@ -29,6 +30,7 @@ const statusLabels = {
   testing: '🧪 Testing',
   deployed: '✅ Deployed',
   pending: '🔦 Pending',
+  unsupported: '❕ Unsupported',
   retired: '⏸️ Retired',
 };
 
@@ -194,6 +196,12 @@ if (projectsUsingDevice.length > 0) {
     )}
 
     <a href="/devices" class="back-link">← Back to all devices</a>
+
+    <IssueReportButton 
+      pageType="device"
+      pageTitle={device.data.title}
+      pageSlug={device.slug}
+    />
   </article>
 
   <style>

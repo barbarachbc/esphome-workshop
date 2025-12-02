@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import IssueReportButton from '../../components/IssueReportButton.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -91,6 +92,12 @@ const statusLabels = {
     </div>
 
     <a href="/projects" class="back-link">← Back to all projects</a>
+
+    <IssueReportButton 
+      pageType="project"
+      pageTitle={project.data.title}
+      pageSlug={project.slug}
+    />
   </article>
 
   <style>

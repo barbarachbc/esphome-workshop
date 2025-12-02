@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import IssueReportButton from '../../components/IssueReportButton.astro';
 
 export async function getStaticPaths() {
   const components = await getCollection('components');
@@ -14,13 +15,10 @@ const { component } = Astro.props;
 const { Content } = await component.render();
 
 // Get related devices if specified
-let relatedDevices = [];
-if (component.data.relatedDevices && component.data.relatedDevices.length > 0) {
-  const allDevices = await getCollection('devices');
-  relatedDevices = allDevices.filter(d => 
-    component.data.relatedDevices?.includes(d.slug)
-  );
-}
+const allDevices = await getCollection('devices');
+let relatedDevices = component.data.relatedDevices && component.data.relatedDevices.length > 0
+  ? allDevices.filter(d => component.data.relatedDevices?.includes(d.slug))
+  : [];
 ---
 
 <Layout title={`${component.data.title} - Components`}>
@@ -67,6 +65,12 @@ if (component.data.relatedDevices && component.data.relatedDevices.length > 0) {
     )}
 
     <a href="/components" class="back-link">← Back to all components</a>
+
+    <IssueReportButton 
+      pageType="component"
+      pageTitle={component.data.title}
+      pageSlug={component.slug}
+    />
   </article>
 
   <style>
