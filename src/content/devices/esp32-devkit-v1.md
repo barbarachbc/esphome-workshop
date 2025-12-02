@@ -10,7 +10,7 @@ variants: ["HW-463", "HW-394"]
 connectionTypes: ["gpio"]
 tags: ["wifi", "bluetooth", "esp32"]
 productionStatus: "NRND"
-status: "unused"
+status: "ready"
 references:
   - title: ESP32 Modules and Boards
     url: https://docs.espressif.com/projects/esp-idf/en/v3.3/hw-reference/modules-and-boards.html

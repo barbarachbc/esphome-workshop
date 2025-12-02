@@ -19,7 +19,7 @@ purchaseLinks:
   - vendor: "The PiHut"
     url: "https://thepihut.com/products/beetle-esp32-c6-mini-development-board?variant=43471779332291"
 dateAcquired: "Sept 2024"
-status: "unused"
+status: "ready"
 count: 2
 ---
 

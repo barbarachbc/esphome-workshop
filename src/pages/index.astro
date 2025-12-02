@@ -19,8 +19,8 @@ const devicesWithComputedStatus = allDevices.map(device => {
 
   let displayStatus = device.data.status;
   
-  // Only override if device is currently marked as 'unused'
-  if (projectsUsingDevice.length > 0 && device.data.status === 'unused') {
+  // Only override if device is currently marked as 'ready'
+  if (projectsUsingDevice.length > 0 && device.data.status === 'ready') {
     const hasDeployedProject = projectsUsingDevice.some(p => p.data.status === 'completed');
     const hasInProgressProject = projectsUsingDevice.some(p => p.data.status === 'in-progress');
     
@@ -40,7 +40,7 @@ const devicesWithComputedStatus = allDevices.map(device => {
 // Calculate stats based on computed status
 const deviceStats = {
   total: devicesWithComputedStatus.length,
-  unused: devicesWithComputedStatus.filter(d => d.displayStatus === 'unused').length,
+  ready: devicesWithComputedStatus.filter(d => d.displayStatus === 'ready').length,
   testing: devicesWithComputedStatus.filter(d => d.displayStatus === 'testing').length,
   deployed: devicesWithComputedStatus.filter(d => d.displayStatus === 'deployed').length,
   retired: devicesWithComputedStatus.filter(d => d.displayStatus === 'retired').length,
@@ -62,9 +62,9 @@ const noteStats = {
   total: allNotes.length,
 };
 
-// Get unused or testing devices for random picker (using computed status)
+// Get ready or testing devices for random picker (using computed status)
 const availableDevices = devicesWithComputedStatus.filter(d => 
-  d.displayStatus === 'unused' || d.displayStatus === 'testing'
+  d.displayStatus === 'ready' || d.displayStatus === 'testing'
 );
 
 // Pick random one
@@ -104,7 +104,7 @@ const recentChanges = await getRecentChanges(7);
       <div class="stat-breakdown">
         <span class="stat-item deployed">✅ {deviceStats.deployed} deployed</span>
         <span class="stat-item testing">🧪 {deviceStats.testing} testing</span>
-        <span class="stat-item unused">📦 {deviceStats.unused} waiting</span>
+        <span class="stat-item ready">📦 {deviceStats.ready} ready</span>
         <span class="stat-item pending">🔦 {deviceStats.pending} pending</span>
         <span class="stat-item unsupported">❕ {deviceStats.unsupported} unsupported</span>
         {deviceStats.retired > 0 && (
@@ -275,7 +275,7 @@ const recentChanges = await getRecentChanges(7);
     .stat-item.deployed { background: #d1fae5; color: #065f46; }
     .stat-item.testing { background: #fef3c7; color: #92400e; }
     .stat-item.pending { background: #fef3c7; color: #92400e; }
-    .stat-item.unused { background: #f3f4f6; color: #4b5563; }
+    .stat-item.ready { background: #f3f4f6; color: #4b5563; }
     .stat-item.retired { background: #fee2e2; color: #991b1b; }
     .stat-item.completed { background: #d1fae5; color: #065f46; }
     .stat-item.in-progress { background: #fed7aa; color: #9a3412; }

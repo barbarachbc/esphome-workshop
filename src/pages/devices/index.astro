@@ -18,8 +18,8 @@ const devicesWithStatus = devices.map(device => {
 
   let displayStatus = device.data.status;
   
-  // Only override if device is currently marked as 'unused'
-  if (projectsUsingDevice.length > 0 && device.data.status === 'unused') {
+  // Only override if device is currently marked as 'ready'
+  if (projectsUsingDevice.length > 0 && device.data.status === 'ready') {
     const hasDeployedProject = projectsUsingDevice.some(p => p.data.status === 'completed');
     const hasInProgressProject = projectsUsingDevice.some(p => p.data.status === 'in-progress');
     

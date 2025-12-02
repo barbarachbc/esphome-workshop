@@ -21,7 +21,7 @@ Physical hardware components used in ESPHome projects.
 - `image` - Path to device image (optional)
 - `purchaseLinks` - Array of vendor/URL objects (optional)
 - `tags` - Array of strings for categorization (optional)
-- **`status`** - **REQUIRED:** `unused`, `testing`, `deployed`, `retired`
+- **`status`** - **REQUIRED:** `ready`, `testing`, `deployed`, `retired`
 - `notes` - Personal notes, stories, salvage info (optional)
 - `dateAcquired` - When acquired, flexible format like "2015" or "early 2012" (optional)
 - **`variants`** - Array of variant names for different board versions (optional)
@@ -163,7 +163,7 @@ The four collections are interconnected:
 2. It also lists components: `['i2c', 'sensor']`
 3. Detail pages automatically link to these related items
 4. Users can navigate from project → device → other projects using that device
-5. Device pages show status badges (unused, testing, deployed, retired)
+5. Device pages show status badges (ready, testing, deployed, retired)
 
 ---
 
@@ -182,7 +182,7 @@ manufacturer: "Bosch"
 model: "BME280"
 connectionTypes: ["i2c"]  # Only connections you actually used
 tags: ["temperature", "humidity", "pressure"]
-status: "unused"  # REQUIRED: unused, testing, deployed, or retired
+status: "ready"  # REQUIRED: ready, testing, deployed, or retired
 productionStatus: "active"  # REQUIRED: active, NRND, discontinued, or unknown (default)
 notes: "Bought in 2015, finally time to use it!"  # optional
 dateAcquired: "2015"  # optional
@@ -372,7 +372,7 @@ When asking AI to help with this project:
 ## 🎯 Key Features
 
 - ✅ Type-safe content with Zod schemas
-- ✅ Personal device inventory tracking (unused, testing, deployed, retired)
+- ✅ Personal device inventory tracking (ready, testing, deployed, retired)
 - ✅ Production status tracking (active, NRND, discontinued, unknown)
 - ✅ Device variants support for different board versions
 - ✅ Clickable connection type tags linking to component pages

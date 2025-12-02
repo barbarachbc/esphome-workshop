@@ -9,10 +9,10 @@ interface Props {
       manufacturer?: string;
       connectionTypes: string[];
       image?: string;
-      status: 'unused' | 'testing' | 'deployed' | 'retired' | 'pending' | 'unsupported';
+      status: 'ready' | 'testing' | 'deployed' | 'retired' | 'pending' | 'unsupported';
       productionStatus?: 'active' | 'NRND' | 'discontinued' | 'unknown' | 'obsolete';
     };
-    displayStatus?: 'unused' | 'testing' | 'deployed' | 'retired' | 'pending' | 'unsupported';
+    displayStatus?: 'ready' | 'testing' | 'deployed' | 'retired' | 'pending' | 'unsupported';
   };
 }
 
@@ -22,7 +22,7 @@ const { device } = Astro.props;
 const effectiveStatus = device.displayStatus || device.data.status;
 
 const statusLabels = {
-  unused: '📦 Unused',
+  ready: '📦 Ready',
   testing: '🧪 Testing',
   deployed: '✅ Deployed',
   retired: '⏸️ Retired',
@@ -139,7 +139,7 @@ const connectionTypeMap: Record<string, string> = {
     font-weight: 500;
   }
 
-  .status-badge.unused {
+  .status-badge.ready {
     background: #fee2e2;
     color: #991b1b;
   }

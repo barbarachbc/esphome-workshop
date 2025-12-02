@@ -7,7 +7,7 @@ model: "esp32-c3-wroom-02"
 connectionTypes: ["gpio"]
 tags: ["wifi", "bluetooth", "esp32-c3", "risc-v"]
 productionStatus: "active"
-status: "unused"
+status: "pending"
 references:
   - title: ESP32-C3-WROOM-02 Product Page
     url: https://www.espressif.com/en/module/esp32-c3-wroom-02-en
