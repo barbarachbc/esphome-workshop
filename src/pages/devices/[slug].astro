@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import IssueReportButton from '../../components/IssueReportButton.astro';
 import LastModified from '../../components/LastModified.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
 
 export async function getStaticPaths() {
   const devices = await getCollection('devices');
@@ -13,7 +14,23 @@ export async function getStaticPaths() {
 }
 
 const { device } = Astro.props;
-const { Content } = await device.render();
+const { Content, headings } = await device.render();
+
+// Build complete ToC including conditional sections
+const tocHeadings = [
+  // Add "Page Info" link to top
+  { depth: 2, slug: 'page-info', text: 'Page Info' },
+  // Add markdown headings (H2-H4 only)
+  ...headings.filter(h => h.depth >= 2 && h.depth <= 4),
+];
+
+// Add conditional sections to ToC if they exist in frontmatter
+if (device.data.references && device.data.references.length > 0) {
+  tocHeadings.push({ depth: 2, slug: 'references', text: 'References' });
+}
+if (device.data.purchaseLinks && device.data.purchaseLinks.length > 0) {
+  tocHeadings.push({ depth: 2, slug: 'where-to-buy', text: 'Where to Buy' });
+}
 
 // Get projects using this device
 const allProjects = await getCollection('projects');
@@ -82,20 +99,21 @@ if (projectsUsingDevice.length > 0) {
 ---
 
 <Layout title={`${device.data.title} - Devices`}>
-  <article>
-    <div class="header">
-      <h1>{device.data.title}</h1>
-      <div class="header-badges">
-        {device.data.productionStatus && device.data.productionStatus !== 'unknown' && (
-          <span class={`production-status-badge ${device.data.productionStatus.toLowerCase()}`}>
-            {productionStatusLabels[device.data.productionStatus]}
+  <div class="page-layout">
+    <article class="main-content">
+      <div id="page-info" class="header">
+        <h1>{device.data.title}</h1>
+        <div class="header-badges">
+          {device.data.productionStatus && device.data.productionStatus !== 'unknown' && (
+            <span class={`production-status-badge ${device.data.productionStatus.toLowerCase()}`}>
+              {productionStatusLabels[device.data.productionStatus]}
+            </span>
+          )}
+          <span class={`status-badge ${displayStatus}`}>
+            {statusLabels[displayStatus]}
           </span>
-        )}
-        <span class={`status-badge ${displayStatus}`}>
-          {statusLabels[displayStatus]}
-        </span>
+        </div>
       </div>
-    </div>
 
     <div class="meta">
       <span class="badge">{device.data.category}</span>
@@ -173,7 +191,7 @@ if (projectsUsingDevice.length > 0) {
     </div>
 
     {device.data.references && device.data.references.length > 0 && (
-      <div class="section">
+      <div id="references" class="section">
         <h2>References</h2>
         <ul class="reference-links">
           {device.data.references.map(ref => (
@@ -188,7 +206,7 @@ if (projectsUsingDevice.length > 0) {
     )}
 
     {device.data.purchaseLinks && device.data.purchaseLinks.length > 0 && (
-      <div class="section">
+      <div id="where-to-buy" class="section">
         <h2>Where to Buy</h2>
         <ul class="purchase-links">
           {device.data.purchaseLinks.map(link => (
@@ -211,9 +229,58 @@ if (projectsUsingDevice.length > 0) {
     />
   </article>
 
+  {tocHeadings.length >= 3 && (
+    <aside class="toc-sidebar">
+      <TableOfContents headings={tocHeadings} />
+    </aside>
+  )}
+  </div>
+
   <style>
+    .page-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 1024px) {
+      .page-layout {
+        grid-template-columns: 1fr 300px;
+      }
+    }
+
+    .main-content {
+      min-width: 0; /* Prevent overflow */
+    }
+
+    .toc-sidebar {
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      .toc-sidebar {
+        display: block;
+      }
+    }
+
+    @media (max-width: 1023px) {
+      .toc-sidebar {
+        display: block;
+        position: static;
+        order: -1;
+        max-height: none;
+      }
+    }
+
     article {
-      max-width: 800px;
+      width: 100%;
     }
 
     .header {

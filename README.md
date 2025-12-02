@@ -401,10 +401,11 @@ When asking AI to help with this project:
   - Site-wide footer with navigation and build date
   - GitHub link in header
 - 🚧 **In-page navigation** (Phase 7 in progress)
-  - Automatic table of contents generation from markdown headings
-  - Sticky sidebar on desktop, collapsible on mobile
+  - ✅ Automatic table of contents component created
+  - ✅ Smooth scroll behavior with motion preference support
+  - ✅ Device detail pages with two-column layout and sticky ToC sidebar
   - Active section highlighting with Intersection Observer
-  - Smooth scroll behavior (respects motion preferences)
+  - Notes and projects pages integration (pending)
 - ✅ Automatic routing via file-based pages
 - ✅ MDX support for rich content
 - ✅ Syntax highlighting for YAML/code

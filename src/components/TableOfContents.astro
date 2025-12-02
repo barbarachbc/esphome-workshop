@@ -152,15 +152,41 @@ const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const tocLinks = document.querySelectorAll('.toc-link');
-    const sections = Array.from(tocLinks).map(link => {
+    
+    // Function to update active link based on hash
+    function updateActiveLink(hash: string) {
+      tocLinks.forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href');
+        if (href === hash) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    // Update on page load
+    if (window.location.hash) {
+      updateActiveLink(window.location.hash);
+    }
+
+    // Update when hash changes (clicking ToC links or browser back/forward)
+    window.addEventListener('hashchange', () => {
+      updateActiveLink(window.location.hash);
+    });
+
+    // Build a map of sections that actually exist in the DOM
+    const sectionMap = new Map();
+    tocLinks.forEach(link => {
       const href = link.getAttribute('href');
       if (href) {
-        return document.querySelector(href);
+        const section = document.querySelector(href);
+        if (section) {
+          sectionMap.set(href, { link, section });
+        }
       }
-      return null;
-    }).filter(Boolean);
+    });
 
-    if (sections.length === 0) return;
+    if (sectionMap.size === 0) return;
 
     const observerOptions = {
       rootMargin: '-20% 0px -60% 0px',
@@ -171,18 +197,24 @@ const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const id = entry.target.getAttribute('id');
-          tocLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${id}`) {
-              link.classList.add('active');
+          const targetHref = `#${id}`;
+          
+          // Only update if we're not navigating via hash (to avoid conflicts)
+          if (!window.location.hash || window.location.hash === targetHref) {
+            updateActiveLink(targetHref);
+            
+            // Update URL hash without scrolling
+            if (history.replaceState) {
+              history.replaceState(null, '', targetHref);
             }
-          });
+          }
         }
       });
     }, observerOptions);
 
-    sections.forEach(section => {
-      if (section) observer.observe(section);
+    // Observe all sections
+    sectionMap.forEach(({ section }) => {
+      observer.observe(section);
     });
 
     // Auto-collapse ToC on mobile after clicking a link
