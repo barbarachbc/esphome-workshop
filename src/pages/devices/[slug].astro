@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import IssueReportButton from '../../components/IssueReportButton.astro';
+import LastModified from '../../components/LastModified.astro';
 
 export async function getStaticPaths() {
   const devices = await getCollection('devices');
@@ -117,6 +118,12 @@ if (projectsUsingDevice.length > 0) {
     <div class="description">
       <p><strong>{device.data.description}</strong></p>
     </div>
+
+    <LastModified 
+      date={device.data.lastModified}
+      verified={device.data.lastVerified}
+      showAge={true}
+    />
 
     {projectsUsingDevice.length > 0 && (
       <details class="used-in-projects-collapsible" open>

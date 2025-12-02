@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import IssueReportButton from '../../components/IssueReportButton.astro';
+import LastModified from '../../components/LastModified.astro';
 
 export async function getStaticPaths() {
   const notes = await getCollection('notes');
@@ -35,6 +36,12 @@ const { Content } = await note.render();
     <div class="description">
       <p><strong>{note.data.description}</strong></p>
     </div>
+
+    <LastModified 
+      date={note.data.lastModified}
+      verified={note.data.lastVerified}
+      showAge={true}
+    />
 
     {note.data.tags && note.data.tags.length > 0 && (
       <div class="section">

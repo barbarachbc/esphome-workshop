@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import IssueReportButton from '../../components/IssueReportButton.astro';
+import LastModified from '../../components/LastModified.astro';
 
 export async function getStaticPaths() {
   const components = await getCollection('components');
@@ -37,6 +38,12 @@ let relatedDevices = component.data.relatedDevices && component.data.relatedDevi
     <div class="description">
       <p><strong>{component.data.description}</strong></p>
     </div>
+
+    <LastModified 
+      date={component.data.lastModified}
+      verified={component.data.lastVerified}
+      showAge={true}
+    />
 
     {component.data.documentation && (
       <div class="section">

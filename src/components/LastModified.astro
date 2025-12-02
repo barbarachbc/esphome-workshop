@@ -1,0 +1,148 @@
+---
+interface Props {
+  date?: string;
+  verified?: string;
+  showAge?: boolean;
+}
+
+const { date, verified, showAge = false } = Astro.props;
+
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+}
+
+function getAgeInDays(dateStr: string): number {
+  const date = new Date(dateStr);
+  const now = new Date();
+  return Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+function getAgeBadge(days: number): string {
+  if (days < 30) return 'fresh';
+  if (days < 180) return 'recent';
+  return 'old';
+}
+
+function formatAge(days: number): string {
+  if (days < 30) {
+    return `${days} day${days === 1 ? '' : 's'} ago`;
+  } else if (days < 365) {
+    const months = Math.floor(days / 30);
+    return `${months} month${months === 1 ? '' : 's'} ago`;
+  } else {
+    const years = Math.floor(days / 365);
+    return `${years} year${years === 1 ? '' : 's'} ago`;
+  }
+}
+
+const hasDate = date || verified;
+const modifiedAge = date ? getAgeInDays(date) : null;
+const verifiedAge = verified ? getAgeInDays(verified) : null;
+
+// Determine the overall freshness badge based on the most recent date
+let freshnessBadge = '';
+if (modifiedAge !== null || verifiedAge !== null) {
+  const mostRecentAge = modifiedAge !== null && verifiedAge !== null
+    ? Math.min(modifiedAge, verifiedAge)
+    : (modifiedAge !== null ? modifiedAge : verifiedAge!);
+  freshnessBadge = getAgeBadge(mostRecentAge);
+}
+---
+
+{hasDate && (
+  <div class={`last-modified ${freshnessBadge}`}>
+    {date && (
+      <div class="meta-item">
+        <span class="icon">📅</span>
+        <span class="label">Last updated:</span>
+        <span class="date">{formatDate(date)}</span>
+        {showAge && modifiedAge !== null && (
+          <span class="age">({formatAge(modifiedAge)})</span>
+        )}
+      </div>
+    )}
+    {verified && (
+      <div class="meta-item">
+        <span class="icon">✓</span>
+        <span class="label">Last verified:</span>
+        <span class="date">{formatDate(verified)}</span>
+        {showAge && verifiedAge !== null && (
+          <span class="age">({formatAge(verifiedAge)})</span>
+        )}
+      </div>
+    )}
+  </div>
+)}
+
+<style>
+  .last-modified {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--gray-light, #f9fafb);
+    border-left: 3px solid var(--border, #e5e7eb);
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    margin: 1rem 0;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gray, #6b7280);
+  }
+
+  .icon {
+    font-size: 1rem;
+  }
+
+  .label {
+    font-weight: 500;
+    color: var(--text, #1f2937);
+  }
+
+  .date {
+    color: var(--text, #1f2937);
+  }
+
+  .age {
+    color: var(--gray, #6b7280);
+    font-style: italic;
+  }
+
+  /* Freshness badges - apply to container */
+  .last-modified.fresh {
+    border-left-color: #10b981;
+    background: #ecfdf5;
+  }
+
+  .last-modified.recent {
+    border-left-color: #f59e0b;
+    background: #fffbeb;
+  }
+
+  .last-modified.old {
+    border-left-color: #ef4444;
+    background: #fef2f2;
+  }
+
+  .last-modified.old .age {
+    color: #ef4444;
+    font-weight: 500;
+  }
+
+  @media (min-width: 640px) {
+    .last-modified {
+      flex-direction: row;
+      align-items: center;
+      gap: 1.5rem;
+    }
+  }
+</style>

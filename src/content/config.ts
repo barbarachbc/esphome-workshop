@@ -31,6 +31,8 @@ const devices = defineCollection({
       type: z.enum(['added', 'updated', 'fixed']),
       description: z.string(),
     })).optional(),
+    lastModified: z.string().optional(),  // ISO date: YYYY-MM-DD
+    lastVerified: z.string().optional(),  // When info was confirmed accurate
   }),
 });
 
@@ -50,6 +52,8 @@ const components = defineCollection({
       type: z.enum(['added', 'updated', 'fixed']),
       description: z.string(),
     })).optional(),
+    lastModified: z.string().optional(),  // ISO date: YYYY-MM-DD
+    lastVerified: z.string().optional(),  // When info was confirmed accurate
   }),
 });
 
@@ -73,6 +77,8 @@ const projects = defineCollection({
       type: z.enum(['added', 'updated', 'fixed']),
       description: z.string(),
     })).optional(),
+    lastModified: z.string().optional(),  // ISO date: YYYY-MM-DD
+    lastVerified: z.string().optional(),  // When info was confirmed accurate
   }),
 });
 
@@ -90,6 +96,8 @@ const notes = defineCollection({
       type: z.enum(['added', 'updated', 'fixed']),
       description: z.string(),
     })).optional(),
+    lastModified: z.string().optional(),  // ISO date: YYYY-MM-DD
+    lastVerified: z.string().optional(),  // When info was confirmed accurate
   }),
 });
 
