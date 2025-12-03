@@ -55,94 +55,31 @@ if (modifiedAge !== null || verifiedAge !== null) {
 ---
 
 {hasDate && (
-  <div class={`last-modified ${freshnessBadge}`}>
+  <div class={`flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 py-3 px-4 rounded text-sm my-4 ${
+    freshnessBadge === 'fresh' ? 'bg-emerald-50 border-l-4 border-emerald-500' :
+    freshnessBadge === 'recent' ? 'bg-amber-50 border-l-4 border-amber-500' :
+    freshnessBadge === 'old' ? 'bg-red-50 border-l-4 border-red-500' :
+    'bg-gray-50 border-l-4 border-gray-300'
+  }`}>
     {date && (
-      <div class="meta-item">
-        <span class="icon">📅</span>
-        <span class="label">Last updated:</span>
-        <span class="date">{formatDate(date)}</span>
+      <div class="flex items-center gap-2 text-gray-500">
+        <span class="text-base">📅</span>
+        <span class="font-medium text-gray-800">Last updated:</span>
+        <span class="text-gray-800">{formatDate(date)}</span>
         {showAge && modifiedAge !== null && (
-          <span class="age">({formatAge(modifiedAge)})</span>
+          <span class="text-gray-500 italic">({formatAge(modifiedAge)})</span>
         )}
       </div>
     )}
     {verified && (
-      <div class="meta-item">
-        <span class="icon">✓</span>
-        <span class="label">Last verified:</span>
-        <span class="date">{formatDate(verified)}</span>
+      <div class="flex items-center gap-2 text-gray-500">
+        <span class="text-base">✓</span>
+        <span class="font-medium text-gray-800">Last verified:</span>
+        <span class="text-gray-800">{formatDate(verified)}</span>
         {showAge && verifiedAge !== null && (
-          <span class="age">({formatAge(verifiedAge)})</span>
+          <span class={`italic ${freshnessBadge === 'old' ? 'text-red-500 font-medium' : 'text-gray-500'}`}>({formatAge(verifiedAge)})</span>
         )}
       </div>
     )}
   </div>
 )}
-
-<style>
-  .last-modified {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    background: var(--gray-light, #f9fafb);
-    border-left: 3px solid var(--border, #e5e7eb);
-    border-radius: 0.25rem;
-    font-size: 0.875rem;
-    margin: 1rem 0;
-  }
-
-  .meta-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--gray, #6b7280);
-  }
-
-  .icon {
-    font-size: 1rem;
-  }
-
-  .label {
-    font-weight: 500;
-    color: var(--text, #1f2937);
-  }
-
-  .date {
-    color: var(--text, #1f2937);
-  }
-
-  .age {
-    color: var(--gray, #6b7280);
-    font-style: italic;
-  }
-
-  /* Freshness badges - apply to container */
-  .last-modified.fresh {
-    border-left-color: #10b981;
-    background: #ecfdf5;
-  }
-
-  .last-modified.recent {
-    border-left-color: #f59e0b;
-    background: #fffbeb;
-  }
-
-  .last-modified.old {
-    border-left-color: #ef4444;
-    background: #fef2f2;
-  }
-
-  .last-modified.old .age {
-    color: #ef4444;
-    font-weight: 500;
-  }
-
-  @media (min-width: 640px) {
-    .last-modified {
-      flex-direction: row;
-      align-items: center;
-      gap: 1.5rem;
-    }
-  }
-</style>
