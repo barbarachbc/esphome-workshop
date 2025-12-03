@@ -55,9 +55,33 @@
 }
 
 @layer components {
-  /* Prose styling (consider @tailwindcss/typography instead) */
+  /* Prose styling for markdown content */
+  .prose h1 {
+    @apply text-4xl font-semibold mt-0 mb-3;
+  }
+  
   .prose h2 {
-    @apply border-b-2 border-gray-200 pb-2;
+    @apply text-3xl font-semibold mt-6 mb-3 border-b-2 border-gray-200 pb-2;
+  }
+  
+  .prose h3 {
+    @apply text-2xl font-semibold mt-6 mb-3;
+  }
+  
+  .prose p {
+    @apply mb-4;
+  }
+  
+  .prose code {
+    @apply bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+  
+  .prose pre {
+    @apply bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto my-4;
+  }
+  
+  .prose pre code {
+    @apply bg-transparent p-0;
   }
   
   .prose code::before,
@@ -68,16 +92,46 @@
   /* Status badge base */
   .status-badge {
     @apply inline-block text-sm px-2 py-1 rounded font-medium;
-    
-    &[data-status="ready"] { @apply bg-red-100 text-red-800; }
-    &[data-status="testing"] { @apply bg-amber-100 text-amber-800; }
-    &[data-status="deployed"] { @apply bg-emerald-100 text-emerald-800; }
-    &[data-status="retired"] { @apply bg-gray-100 text-gray-600; }
-    &[data-status="pending"] { @apply bg-amber-100 text-black; }
-    &[data-status="unsupported"] { @apply bg-red-200 text-red-900; }
-    &[data-status="idea"] { @apply bg-blue-100 text-blue-800; }
-    &[data-status="in-progress"] { @apply bg-orange-200 text-orange-900; }
-    &[data-status="completed"] { @apply bg-emerald-100 text-emerald-800; }
-    &[data-status="abandoned"] { @apply bg-gray-100 text-gray-600; }
+  }
+  
+  /* Status badge variants */
+  .status-badge-ready {
+    @apply bg-red-100 text-red-800;
+  }
+  
+  .status-badge-testing {
+    @apply bg-amber-100 text-amber-800;
+  }
+  
+  .status-badge-deployed {
+    @apply bg-emerald-100 text-emerald-800;
+  }
+  
+  .status-badge-retired {
+    @apply bg-gray-100 text-gray-600;
+  }
+  
+  .status-badge-pending {
+    @apply bg-amber-100 text-black;
+  }
+  
+  .status-badge-unsupported {
+    @apply bg-red-200 text-red-900;
+  }
+  
+  .status-badge-idea {
+    @apply bg-blue-100 text-blue-800;
+  }
+  
+  .status-badge-in-progress {
+    @apply bg-orange-200 text-orange-900;
+  }
+  
+  .status-badge-completed {
+    @apply bg-emerald-100 text-emerald-800;
+  }
+  
+  .status-badge-abandoned {
+    @apply bg-gray-100 text-gray-600;
   }
 }

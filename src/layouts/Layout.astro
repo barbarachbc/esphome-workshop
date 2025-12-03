@@ -46,55 +46,5 @@ const { title } = Astro.props;
       <slot />
     </main>
     <Footer />
-    
-    <style is:global>
-      /* Import Tailwind and custom styles */
-      @import '../styles/global.css';
-      
-      /* Legacy tag/badge styles for backward compatibility during migration */
-      .tag {
-        display: inline-block;
-        background-color: #2563eb;
-        color: white;
-        padding: 0.25rem 0.75rem;
-        border-radius: 1rem;
-        font-size: 0.875rem;
-        margin-right: 0.5rem;
-        margin-bottom: 0.5rem;
-      }
-
-      .connection-type {
-        display: inline-block;
-        background-color: #f3f4f6;
-        color: #1f2937;
-        padding: 0.25rem 0.75rem;
-        border-radius: 0.25rem;
-        font-size: 0.875rem;
-        margin-right: 0.5rem;
-        margin-bottom: 0.5rem;
-        border: 1px solid #e5e7eb;
-      }
-
-      /* Badge variations */
-      .badge {
-        display: inline-block;
-        font-size: 0.75rem;
-        padding: 0.125rem 0.5rem;
-        border-radius: 0.25rem;
-        background: #f3f4f6;
-        color: #1f2937;
-        margin-right: 0.25rem;
-      }
-
-      .badge.category {
-        background: #dbeafe;
-        color: #1e40af;
-      }
-
-      .badge.connection {
-        background: #f3f4f6;
-        color: #4b5563;
-      }
-    </style>
   </body>
 </html>
