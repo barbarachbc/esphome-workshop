@@ -1,6 +1,7 @@
 ---
 import Footer from '../components/Footer.astro';
 import { siteConfig } from '../config';
+import "../styles/global.css";
 
 interface Props {
   title: string;
@@ -17,177 +18,43 @@ const { title } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} | My ESPHome Workshop</title>
-    <style>
-      :root {
-        --accent: #2563eb;
-        --accent-dark: #1e40af;
-        --accent-light: #dbeafe;
-        --background: #ffffff;
-        --text: #1f2937;
-        --gray: #6b7280;
-        --gray-dark: #4b5563;
-        --gray-light: #f3f4f6;
-        --light-gray: #f3f4f6;
-        --border: #e5e7eb;
-      }
-
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      html {
-        scroll-behavior: smooth;
-        scroll-padding-top: 2rem;
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        html {
-          scroll-behavior: auto;
-        }
-      }
-
-      body {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        line-height: 1.6;
-        color: var(--text);
-        background-color: var(--background);
-      }
-
-      header {
-        background-color: var(--accent);
-        color: white;
-        padding: 1rem 2rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      header h1 {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin: 0;
-      }
-
-      .header-links {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-      }
-
-      .header-links a {
-        color: white;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-        font-size: 0.9rem;
-        transition: opacity 0.2s;
-      }
-
-      .header-links a:hover {
-        opacity: 0.8;
-        text-decoration: none;
-      }
-
-      .github-icon {
-        width: 20px;
-        height: 20px;
-        fill: currentColor;
-      }
-
-      nav {
-        background-color: var(--light-gray);
-        border-bottom: 1px solid var(--border);
-        padding: 0.75rem 2rem;
-      }
-
-      nav ul {
-        list-style: none;
-        display: flex;
-        gap: 2rem;
-        flex-wrap: wrap;
-      }
-
-      nav a {
-        color: var(--text);
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.2s;
-      }
-
-      nav a:hover {
-        color: var(--accent);
-      }
-
-      main {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem;
-      }
-
-      h1, h2, h3, h4, h5, h6 {
-        margin-top: 1.5rem;
-        margin-bottom: 0.75rem;
-        font-weight: 600;
-      }
-
-      h1 {
-        font-size: 2.25rem;
-        margin-top: 0;
-      }
-
-      h2 {
-        font-size: 1.875rem;
-        border-bottom: 2px solid var(--border);
-        padding-bottom: 0.5rem;
-      }
-
-      h3 {
-        font-size: 1.5rem;
-      }
-
-      p {
-        margin-bottom: 1rem;
-      }
-
-      a {
-        color: var(--accent);
-        text-decoration: none;
-      }
-
-      a:hover {
-        text-decoration: underline;
-      }
-
-      code {
-        background-color: var(--light-gray);
-        padding: 0.2rem 0.4rem;
-        border-radius: 0.25rem;
-        font-size: 0.875rem;
-        font-family: 'Courier New', monospace;
-      }
-
-      pre {
-        background-color: #1f2937;
-        color: #f3f4f6;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        overflow-x: auto;
-        margin: 1rem 0;
-      }
-
-      pre code {
-        background-color: transparent;
-        padding: 0;
-        color: inherit;
-      }
-
+  </head>
+  <body>
+    <header class="bg-blue-600 text-white px-8 py-4 shadow-md flex justify-between items-center">
+      <h1 class="text-2xl font-semibold m-0">My ESPHome Workshop</h1>
+      <div class="flex gap-4 items-center">
+        <a href={`https://github.com/${siteConfig.github.repo}`} target="_blank" rel="noopener noreferrer" title="View on GitHub"
+           class="text-white no-underline flex items-center gap-1 text-sm transition-opacity hover:opacity-80">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          GitHub
+        </a>
+      </div>
+    </header>
+    <nav class="bg-gray-100 border-b border-gray-200 px-8 py-3">
+      <ul class="list-none flex gap-8 flex-wrap p-0 m-0">
+        <li><a href="/" class="text-gray-800 no-underline font-medium transition-colors hover:text-blue-600">Home</a></li>
+        <li><a href="/devices" class="text-gray-800 no-underline font-medium transition-colors hover:text-blue-600">Devices</a></li>
+        <li><a href="/components" class="text-gray-800 no-underline font-medium transition-colors hover:text-blue-600">Components</a></li>
+        <li><a href="/projects" class="text-gray-800 no-underline font-medium transition-colors hover:text-blue-600">Projects</a></li>
+        <li><a href="/notes" class="text-gray-800 no-underline font-medium transition-colors hover:text-blue-600">Notes</a></li>
+        <li><a href="/about" class="text-gray-800 no-underline font-medium transition-colors hover:text-blue-600">About</a></li>
+      </ul>
+    </nav>
+    <main class="max-w-7xl mx-auto px-8 py-8">
+      <slot />
+    </main>
+    <Footer />
+    
+    <style is:global>
+      /* Import Tailwind and custom styles */
+      @import '../styles/global.css';
+      
+      /* Legacy tag/badge styles for backward compatibility during migration */
       .tag {
         display: inline-block;
-        background-color: var(--accent);
+        background-color: #2563eb;
         color: white;
         padding: 0.25rem 0.75rem;
         border-radius: 1rem;
@@ -198,65 +65,14 @@ const { title } = Astro.props;
 
       .connection-type {
         display: inline-block;
-        background-color: var(--light-gray);
-        color: var(--text);
+        background-color: #f3f4f6;
+        color: #1f2937;
         padding: 0.25rem 0.75rem;
         border-radius: 0.25rem;
         font-size: 0.875rem;
         margin-right: 0.5rem;
         margin-bottom: 0.5rem;
-        border: 1px solid var(--border);
-      }
-
-      /* Status badges - shared across all components */
-      .status-badge {
-        display: inline-block;
-        font-size: 0.875rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.25rem;
-        font-weight: 500;
-      }
-
-      /* Device statuses */
-      .status-badge.ready {
-        background: #f3f4f6;
-        color: #4b5563;
-      }
-
-      .status-badge.testing {
-        background: #fef3c7;
-        color: #92400e;
-      }
-
-      .status-badge.deployed {
-        background: #d1fae5;
-        color: #065f46;
-      }
-
-      .status-badge.retired {
-        background: #fee2e2;
-        color: #991b1b;
-      }
-
-      /* Project statuses */
-      .status-badge.idea {
-        background: #dbeafe;
-        color: #1e40af;
-      }
-
-      .status-badge.in-progress {
-        background: #fed7aa;
-        color: #9a3412;
-      }
-
-      .status-badge.completed {
-        background: #d1fae5;
-        color: #065f46;
-      }
-
-      .status-badge.abandoned {
-        background: #f3f4f6;
-        color: #6b7280;
+        border: 1px solid #e5e7eb;
       }
 
       /* Badge variations */
@@ -265,47 +81,20 @@ const { title } = Astro.props;
         font-size: 0.75rem;
         padding: 0.125rem 0.5rem;
         border-radius: 0.25rem;
-        background: var(--gray-light);
-        color: var(--text);
+        background: #f3f4f6;
+        color: #1f2937;
         margin-right: 0.25rem;
       }
 
       .badge.category {
-        background: var(--accent-light);
-        color: var(--accent-dark);
+        background: #dbeafe;
+        color: #1e40af;
       }
 
       .badge.connection {
-        background: var(--gray-light);
-        color: var(--gray-dark);
+        background: #f3f4f6;
+        color: #4b5563;
       }
     </style>
-  </head>
-  <body>
-    <header>
-      <h1>My ESPHome Workshop</h1>
-      <div class="header-links">
-        <a href={`https://github.com/${siteConfig.github.repo}`} target="_blank" rel="noopener noreferrer" title="View on GitHub">
-          <svg class="github-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-          GitHub
-        </a>
-      </div>
-    </header>
-    <nav>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/devices">Devices</a></li>
-        <li><a href="/components">Components</a></li>
-        <li><a href="/projects">Projects</a></li>
-        <li><a href="/notes">Notes</a></li>
-        <li><a href="/about">About</a></li>
-      </ul>
-    </nav>
-    <main>
-      <slot />
-    </main>
-    <Footer />
   </body>
 </html>

@@ -1,1 +1,83 @@
 @import "tailwindcss";
+
+@theme {
+  /* Extend with custom colors */
+  --color-accent: #2563eb;
+  --color-accent-dark: #1e40af;
+  --color-accent-light: #dbeafe;
+  --color-text: #1f2937;
+  --color-border: #e5e7eb;
+}
+
+@layer base {
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  
+  html {
+    @apply scroll-smooth;
+    scroll-padding-top: 2rem;
+  }
+  
+  body {
+    @apply m-0 p-0 font-sans leading-normal text-gray-800 bg-white;
+  }
+  
+  /* Typography - minimal global defaults */
+  h1, h2, h3, h4, h5, h6 {
+    @apply mt-6 mb-3 font-semibold;
+  }
+  
+  h1 { @apply text-4xl mt-0; }
+  h2 { @apply text-3xl; }
+  h3 { @apply text-2xl; }
+  
+  p { @apply mb-4; }
+  
+  a {
+    @apply text-blue-600 no-underline hover:underline;
+  }
+  
+  code {
+    @apply bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+  
+  pre {
+    @apply bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto my-4;
+  }
+  
+  pre code {
+    @apply bg-transparent p-0;
+  }
+}
+
+@layer components {
+  /* Prose styling (consider @tailwindcss/typography instead) */
+  .prose h2 {
+    @apply border-b-2 border-gray-200 pb-2;
+  }
+  
+  .prose code::before,
+  .prose code::after {
+    content: '';
+  }
+  
+  /* Status badge base */
+  .status-badge {
+    @apply inline-block text-sm px-2 py-1 rounded font-medium;
+    
+    &[data-status="ready"] { @apply bg-red-100 text-red-800; }
+    &[data-status="testing"] { @apply bg-amber-100 text-amber-800; }
+    &[data-status="deployed"] { @apply bg-emerald-100 text-emerald-800; }
+    &[data-status="retired"] { @apply bg-gray-100 text-gray-600; }
+    &[data-status="pending"] { @apply bg-amber-100 text-black; }
+    &[data-status="unsupported"] { @apply bg-red-200 text-red-900; }
+    &[data-status="idea"] { @apply bg-blue-100 text-blue-800; }
+    &[data-status="in-progress"] { @apply bg-orange-200 text-orange-900; }
+    &[data-status="completed"] { @apply bg-emerald-100 text-emerald-800; }
+    &[data-status="abandoned"] { @apply bg-gray-100 text-gray-600; }
+  }
+}
