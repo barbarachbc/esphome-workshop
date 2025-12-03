@@ -16,6 +16,116 @@
   --color-dark-text-muted: #94a3b8;
 }
 
+/* ========================================
+   CSS CUSTOM PROPERTIES FOR THEMING
+   ======================================== */
+
+:root {
+  /* Background Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f4f6;
+  --bg-tertiary: #f9fafb;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f9fafb;
+  --bg-header: #2563eb;
+  --bg-nav: #f3f4f6;
+  --bg-footer: #f3f4f6;
+  --bg-code: #1f2937;
+  --bg-code-inline: #f3f4f6;
+  --bg-note: #fef3c7;
+  --bg-hero: linear-gradient(to bottom right, #2563eb, #1d4ed8);
+  
+  /* Text Colors */
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --text-inverse: #ffffff;
+  --text-heading: #111827;
+  --text-link: #2563eb;
+  --text-link-hover: #1d4ed8;
+  --text-code: #f3f4f6;
+  
+  /* Border Colors */
+  --border-primary: #e5e7eb;
+  --border-secondary: #d1d5db;
+  --border-accent: #2563eb;
+  --border-card: #e5e7eb;
+  
+  /* Accent Colors */
+  --accent-blue: #2563eb;
+  --accent-blue-light: #dbeafe;
+  --accent-blue-dark: #1e40af;
+  --accent-emerald: #10b981;
+  --accent-emerald-light: #d1fae5;
+  --accent-amber: #f59e0b;
+  --accent-amber-light: #fef3c7;
+  --accent-red: #ef4444;
+  --accent-red-light: #fee2e2;
+  --accent-purple: #8b5cf6;
+  --accent-purple-light: #ede9fe;
+  --accent-orange: #f97316;
+  --accent-orange-light: #ffedd5;
+  
+  /* Shadow */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+}
+
+.dark {
+  /* Background Colors */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-card: #1e293b;
+  --bg-card-hover: #334155;
+  --bg-header: #1e293b;
+  --bg-nav: #1e293b;
+  --bg-footer: #1e293b;
+  --bg-code: #020617;
+  --bg-code-inline: #334155;
+  --bg-note: #451a03;
+  --bg-hero: linear-gradient(to bottom right, #1e293b, #0f172a);
+  
+  /* Text Colors */
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  --text-inverse: #0f172a;
+  --text-heading: #f8fafc;
+  --text-link: #60a5fa;
+  --text-link-hover: #93c5fd;
+  --text-code: #f1f5f9;
+  
+  /* Border Colors */
+  --border-primary: #334155;
+  --border-secondary: #475569;
+  --border-accent: #3b82f6;
+  --border-card: #334155;
+  
+  /* Accent Colors */
+  --accent-blue: #3b82f6;
+  --accent-blue-light: #1e3a5f;
+  --accent-blue-dark: #60a5fa;
+  --accent-emerald: #10b981;
+  --accent-emerald-light: #064e3b;
+  --accent-amber: #f59e0b;
+  --accent-amber-light: #451a03;
+  --accent-red: #ef4444;
+  --accent-red-light: #450a0a;
+  --accent-purple: #8b5cf6;
+  --accent-purple-light: #3b0764;
+  --accent-orange: #f97316;
+  --accent-orange-light: #431407;
+  
+  /* Shadow */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.6);
+}
+
 @layer base {
   /* Accessibility */
   @media (prefers-reduced-motion: reduce) {
@@ -30,7 +140,9 @@
   }
   
   body {
-    @apply m-0 p-0 font-sans leading-normal text-gray-800 bg-white;
+    @apply m-0 p-0 font-sans leading-normal;
+    background: var(--bg-primary);
+    color: var(--text-primary);
   }
   
   /* Dark mode base styles */
@@ -38,87 +150,101 @@
     color-scheme: dark;
   }
   
-  .dark body {
-    @apply bg-slate-900 text-slate-100;
-  }
-  
-  .dark h1, 
-  .dark h2, 
-  .dark h3, 
-  .dark h4, 
-  .dark h5, 
-  .dark h6 {
-    @apply text-slate-100;
-  }
-  
-  .dark a {
-    @apply text-blue-400 hover:text-blue-300;
-  }
-  
-  .dark code {
-    @apply bg-slate-800 text-slate-100;
-  }
-  
-  .dark pre {
-    @apply bg-slate-950 border border-slate-800;
-  }
-  
   /* Typography - minimal global defaults */
   h1, h2, h3, h4, h5, h6 {
     @apply mt-6 mb-3 font-semibold;
+    color: var(--text-heading);
   }
   
   h1 { @apply text-4xl mt-0; }
   h2 { @apply text-3xl; }
   h3 { @apply text-2xl; }
   
-  p { @apply mb-4; }
+  p { 
+    @apply mb-4; 
+    color: var(--text-primary);
+  }
   
   a {
-    @apply text-blue-600 no-underline hover:underline;
+    @apply no-underline;
+    color: var(--text-link);
+    transition: color 0.2s ease;
+  }
+  
+  a:hover {
+    color: var(--text-link-hover);
+    text-decoration: underline;
   }
   
   code {
-    @apply bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono;
+    background: var(--bg-code-inline);
+    color: var(--text-primary);
+    @apply px-1.5 py-0.5 rounded text-sm font-mono;
   }
   
   pre {
-    @apply bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto my-4;
+    background: var(--bg-code);
+    color: var(--text-code);
+    border: 1px solid var(--border-primary);
+    @apply p-4 rounded-lg overflow-x-auto my-4;
   }
   
   pre code {
     @apply bg-transparent p-0;
+    color: var(--text-code);
   }
 }
 
 @layer components {
-  /* Prose styling for markdown content */
+  /* ========================================
+     PROSE STYLING FOR MARKDOWN CONTENT
+     ======================================== */
+  
   .prose h1 {
     @apply text-4xl font-semibold mt-0 mb-3;
+    color: var(--text-heading);
   }
   
   .prose h2 {
-    @apply text-3xl font-semibold mt-6 mb-3 border-b-2 border-gray-200 pb-2;
+    @apply text-3xl font-semibold mt-6 mb-3 pb-2;
+    color: var(--text-heading);
+    border-bottom: 2px solid var(--border-primary);
   }
   
   .prose h3 {
     @apply text-2xl font-semibold mt-6 mb-3;
+    color: var(--text-heading);
   }
   
   .prose p {
     @apply mb-4;
+    color: var(--text-primary);
+  }
+  
+  .prose a {
+    color: var(--text-link);
+  }
+  
+  .prose a:hover {
+    color: var(--text-link-hover);
   }
   
   .prose code {
-    @apply bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono;
+    background: var(--bg-code-inline);
+    color: var(--text-primary);
+    @apply px-1.5 py-0.5 rounded text-sm font-mono;
   }
   
   .prose pre {
-    @apply bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto my-4;
+    background: var(--bg-code);
+    color: var(--text-code);
+    border: 1px solid var(--border-primary);
+    @apply p-4 rounded-lg overflow-x-auto my-4;
   }
   
   .prose pre code {
     @apply bg-transparent p-0;
+    color: var(--text-code);
   }
   
   .prose code::before,
@@ -126,62 +252,61 @@
     content: '';
   }
   
-  /* Dark mode prose adjustments */
-  .dark .prose h2 {
-    @apply border-slate-700;
-  }
+  /* ========================================
+     STATUS BADGE VARIANTS
+     ======================================== */
   
-  .dark .prose code {
-    @apply bg-slate-800 text-slate-100;
-  }
-  
-  .dark .prose pre {
-    @apply bg-slate-950 border border-slate-800;
-  }
-  
-  /* Status badge base */
   .status-badge {
     @apply inline-block text-sm px-2 py-1 rounded font-medium;
   }
   
-  /* Status badge variants */
   .status-badge-ready {
-    @apply bg-red-100 text-red-800;
+    background: var(--accent-red-light);
+    color: var(--text-primary);
   }
   
   .status-badge-testing {
-    @apply bg-amber-100 text-amber-800;
+    background: var(--accent-amber-light);
+    color: var(--text-primary);
   }
   
   .status-badge-deployed {
-    @apply bg-emerald-100 text-emerald-800;
+    background: var(--accent-emerald-light);
+    color: var(--text-primary);
   }
   
   .status-badge-retired {
-    @apply bg-gray-100 text-gray-600;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
   }
   
   .status-badge-pending {
-    @apply bg-amber-100 text-black;
+    background: var(--accent-amber-light);
+    color: var(--text-primary);
   }
   
   .status-badge-unsupported {
-    @apply bg-red-200 text-red-900;
+    background: var(--accent-red-light);
+    color: var(--text-primary);
   }
   
   .status-badge-idea {
-    @apply bg-blue-100 text-blue-800;
+    background: var(--accent-blue-light);
+    color: var(--text-primary);
   }
   
   .status-badge-in-progress {
-    @apply bg-orange-200 text-orange-900;
+    background: var(--accent-orange-light);
+    color: var(--text-primary);
   }
   
   .status-badge-completed {
-    @apply bg-emerald-100 text-emerald-800;
+    background: var(--accent-emerald-light);
+    color: var(--text-primary);
   }
   
   .status-badge-abandoned {
-    @apply bg-gray-100 text-gray-600;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
   }
 }

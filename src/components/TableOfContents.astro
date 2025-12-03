@@ -38,11 +38,11 @@ tocHeadings.forEach(heading => {
 const enableCollapsible = headingSections.filter(s => s.children.length > 0).length >= 3;
 ---
 
-<nav class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6 md:mb-0 mb-8" aria-label="Table of Contents">
+<nav class="rounded-lg p-6 md:mb-0 mb-8" style="background: var(--bg-card); border: 1px solid var(--border-card);" aria-label="Table of Contents">
   <details class="toc-container" open>
     <summary class="flex justify-between items-center cursor-pointer list-none mb-4 md:pointer-events-none md:py-0 py-2 [&::-webkit-details-marker]:hidden [&:not([open])]:mb-0 md:[&:not([open])]:mb-4">
-      <h2 class="m-0 text-xl text-gray-800 dark:text-slate-100 font-semibold">On This Page</h2>
-      <svg class="toc-toggle-icon w-5 h-5 text-gray-500 dark:text-slate-400 transition-transform duration-200 md:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <h2 class="m-0 text-xl font-semibold" style="color: var(--text-heading);">On This Page</h2>
+      <svg class="toc-toggle-icon w-5 h-5 transition-transform duration-200 md:hidden" style="color: var(--text-secondary);" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
     </summary>
@@ -53,18 +53,18 @@ const enableCollapsible = headingSections.filter(s => s.children.length > 0).len
           section.children.length > 0 ? (
             <li class="mb-2">
               <details class="toc-section" open={index === 0} data-slug={section.heading.slug}>
-                <summary class="flex items-center gap-1 py-1 px-2 rounded transition-colors hover:bg-blue-50 dark:hover:bg-slate-700/50 list-none [&::-webkit-details-marker]:hidden">
-                  <svg class="toc-section-icon w-3 h-3 text-gray-500 dark:text-slate-400 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <summary class="flex items-center gap-1 py-1 px-2 rounded transition-colors list-none [&::-webkit-details-marker]:hidden" onmouseover="this.style.background='var(--bg-secondary)';" onmouseout="this.style.background='transparent';">
+                  <svg class="toc-section-icon w-3 h-3 transition-transform duration-200 shrink-0" style="color: var(--text-secondary);" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
                   </svg>
-                  <a href={`#${section.heading.slug}`} class="toc-link toc-section-link flex-1 text-gray-700 dark:text-slate-300 no-underline font-medium text-[0.9375rem] leading-6 hover:text-blue-600 dark:hover:text-blue-400">
+                  <a href={`#${section.heading.slug}`} class="toc-link toc-section-link flex-1 no-underline font-medium text-[0.9375rem] leading-6" style="color: var(--text-secondary);" onmouseover="this.style.color='var(--text-link)';" onmouseout="this.style.color='var(--text-secondary)';">
                     {section.heading.text}
                   </a>
                 </summary>
                 <ul class="list-none pl-4 mt-1">
                   {section.children.map(child => (
                     <li class={`mb-1 ${child.depth === 3 ? 'pl-0' : 'pl-4'}`}>
-                      <a href={`#${child.slug}`} class="toc-link block text-gray-500 dark:text-slate-400 no-underline py-1 px-2 rounded transition-all duration-200 text-[0.9375rem] leading-6 hover:text-blue-600 dark:hover:text-blue-400 hover:underline hover:bg-blue-50 dark:hover:bg-slate-700">
+                      <a href={`#${child.slug}`} class="toc-link block no-underline py-1 px-2 rounded transition-all duration-200 text-[0.9375rem] leading-6 hover:underline" style="color: var(--text-secondary);" onmouseover="this.style.color='var(--text-link)'; this.style.background='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.background='transparent';">
                         {child.text}
                       </a>
                     </li>
@@ -74,7 +74,7 @@ const enableCollapsible = headingSections.filter(s => s.children.length > 0).len
             </li>
           ) : (
             <li class="mb-2">
-              <a href={`#${section.heading.slug}`} class="toc-link block text-gray-500 dark:text-slate-400 no-underline py-1 px-2 rounded transition-all duration-200 text-[0.9375rem] leading-6 hover:text-blue-600 dark:hover:text-blue-400 hover:underline hover:bg-blue-50 dark:hover:bg-slate-700">
+              <a href={`#${section.heading.slug}`} class="toc-link block no-underline py-1 px-2 rounded transition-all duration-200 text-[0.9375rem] leading-6 hover:underline" style="color: var(--text-secondary);" onmouseover="this.style.color='var(--text-link)'; this.style.background='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.background='transparent';">
                 {section.heading.text}
               </a>
             </li>
@@ -90,7 +90,7 @@ const enableCollapsible = headingSections.filter(s => s.children.length > 0).len
             heading.depth === 3 ? 'pl-4' :
             'pl-8'
           }`}>
-            <a href={`#${heading.slug}`} class="toc-link block text-gray-500 dark:text-slate-400 no-underline py-1 px-2 rounded transition-all duration-200 text-[0.9375rem] leading-6 hover:text-blue-600 dark:hover:text-blue-400 hover:underline hover:bg-blue-50 dark:hover:bg-slate-700 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2">
+            <a href={`#${heading.slug}`} class="toc-link block no-underline py-1 px-2 rounded transition-all duration-200 text-[0.9375rem] leading-6 hover:underline focus:outline-2 focus:outline-offset-2" style="color: var(--text-secondary); outline-color: var(--accent-blue);" onmouseover="this.style.color='var(--text-link)'; this.style.background='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.background='transparent';">
               {heading.text}
             </a>
           </li>
@@ -104,17 +104,11 @@ const enableCollapsible = headingSections.filter(s => s.children.length > 0).len
 <style>
   /* Active state styling - uses dynamic class toggling from script */
   .toc-link.active {
-    color: #2563eb;
+    color: var(--accent-blue);
     font-weight: 600;
-    border-left: 3px solid #2563eb;
+    border-left: 3px solid var(--accent-blue);
     padding-left: calc(0.5rem - 3px);
-    background: #eff6ff;
-  }
-
-  .dark .toc-link.active {
-    color: #60a5fa;
-    border-left-color: #60a5fa;
-    background: #1e3a5f;
+    background: var(--accent-blue-light);
   }
 
   /* Toggle icon rotation when details is open */
@@ -132,6 +126,11 @@ const enableCollapsible = headingSections.filter(s => s.children.length > 0).len
     opacity: 0;
     pointer-events: none;
     will-change: opacity;
+    background: var(--accent-blue);
+  }
+  
+  #back-to-top:hover {
+    background: var(--accent-blue-dark);
   }
 
   #back-to-top.visible {
@@ -150,11 +149,12 @@ const enableCollapsible = headingSections.filter(s => s.children.length > 0).len
       backToTopButton = document.createElement('button');
       backToTopButton.id = 'back-to-top';
       backToTopButton.setAttribute('aria-label', 'Back to top');
-      backToTopButton.className = 'fixed bottom-8 right-8 p-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-full shadow-lg transition-opacity duration-300 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2';
+      backToTopButton.className = 'fixed bottom-8 right-8 p-3 text-white rounded-full shadow-lg transition-opacity duration-300 focus:outline-2 focus:outline-offset-2';
       backToTopButton.style.zIndex = '9999';
       backToTopButton.style.opacity = '0';
       backToTopButton.style.pointerEvents = 'none';
       backToTopButton.style.transition = 'opacity 300ms ease-in-out';
+      backToTopButton.style.background = 'var(--accent-blue)';
       backToTopButton.innerHTML = `
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />

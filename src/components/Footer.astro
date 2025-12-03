@@ -9,44 +9,44 @@ const buildDate = new Date().toLocaleDateString('en-US', {
 });
 ---
 
-<footer class="mt-16 pt-8 pb-4 px-8 bg-gray-100 dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700">
+<footer class="mt-16 pt-8 pb-4 px-8 border-t" style="background: var(--bg-footer); border-color: var(--border-primary);">
   <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8 mb-8">
     <div>
-      <h3 class="text-base font-semibold m-0 mb-3 text-gray-800 dark:text-slate-100">Navigation</h3>
+      <h3 class="text-base font-semibold m-0 mb-3" style="color: var(--text-heading);">Navigation</h3>
       <ul class="list-none p-0 m-0">
         <li class="mb-2">
-          <a href="/" class="text-gray-500 dark:text-slate-400 no-underline text-sm transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">Home</a>
+          <a href="/" class="no-underline text-sm transition-colors duration-200" style="color: var(--text-secondary);" onmouseover="this.style.color='var(--text-link)';" onmouseout="this.style.color='var(--text-secondary)';">Home</a>
         </li>
         <li class="mb-2">
-          <a href="/devices" class="text-gray-500 dark:text-slate-400 no-underline text-sm transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">Devices</a>
+          <a href="/devices" class="no-underline text-sm transition-colors duration-200" style="color: var(--text-secondary);" onmouseover="this.style.color='var(--text-link)';" onmouseout="this.style.color='var(--text-secondary)';">Devices</a>
         </li>
         <li class="mb-2">
-          <a href="/components" class="text-gray-500 dark:text-slate-400 no-underline text-sm transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">Components</a>
+          <a href="/components" class="no-underline text-sm transition-colors duration-200" style="color: var(--text-secondary);" onmouseover="this.style.color='var(--text-link)';" onmouseout="this.style.color='var(--text-secondary)';">Components</a>
         </li>
         <li class="mb-2">
-          <a href="/projects" class="text-gray-500 dark:text-slate-400 no-underline text-sm transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">Projects</a>
+          <a href="/projects" class="no-underline text-sm transition-colors duration-200" style="color: var(--text-secondary);" onmouseover="this.style.color='var(--text-link)';" onmouseout="this.style.color='var(--text-secondary)';">Projects</a>
         </li>
         <li class="mb-2">
-          <a href="/notes" class="text-gray-500 dark:text-slate-400 no-underline text-sm transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">Notes</a>
+          <a href="/notes" class="no-underline text-sm transition-colors duration-200" style="color: var(--text-secondary);" onmouseover="this.style.color='var(--text-link)';" onmouseout="this.style.color='var(--text-secondary)';">Notes</a>
         </li>
         <li class="mb-2">
-          <a href="/about" class="text-gray-500 dark:text-slate-400 no-underline text-sm transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">About</a>
+          <a href="/about" class="no-underline text-sm transition-colors duration-200" style="color: var(--text-secondary);" onmouseover="this.style.color='var(--text-link)';" onmouseout="this.style.color='var(--text-secondary)';">About</a>
         </li>
       </ul>
     </div>
     
     <div>
-      <h3 class="text-base font-semibold m-0 mb-3 text-gray-800 dark:text-slate-100">Community</h3>
+      <h3 class="text-base font-semibold m-0 mb-3" style="color: var(--text-heading);">Community</h3>
       <ul class="list-none p-0 m-0">
         <li class="mb-2">
           <a href={siteConfig.github.issuesUrl} target="_blank" rel="noopener noreferrer"
-             class="text-gray-500 dark:text-slate-400 no-underline text-sm transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">
+             class="no-underline text-sm transition-colors duration-200" style="color: var(--text-secondary);" onmouseover="this.style.color='var(--text-link)';" onmouseout="this.style.color='var(--text-secondary)';">
             Report an Issue
           </a>
         </li>
         <li class="mb-2">
           <a href={`https://github.com/${siteConfig.github.repo}`} target="_blank" rel="noopener noreferrer"
-             class="text-gray-500 dark:text-slate-400 no-underline text-sm transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">
+             class="no-underline text-sm transition-colors duration-200" style="color: var(--text-secondary);" onmouseover="this.style.color='var(--text-link)';" onmouseout="this.style.color='var(--text-secondary)';">
             View on GitHub
           </a>
         </li>
@@ -54,21 +54,21 @@ const buildDate = new Date().toLocaleDateString('en-US', {
     </div>
     
     <div>
-      <h3 class="text-base font-semibold m-0 mb-3 text-gray-800 dark:text-slate-100">Info</h3>
-      <p class="text-gray-500 dark:text-slate-400 text-sm m-0 mb-2">
+      <h3 class="text-base font-semibold m-0 mb-3" style="color: var(--text-heading);">Info</h3>
+      <p class="text-sm m-0 mb-2" style="color: var(--text-secondary);">
         A personal workshop for tracking ESPHome devices and projects.
       </p>
-      <p class="text-gray-700 dark:text-slate-300 text-xs m-0 italic">
+      <p class="text-xs m-0 italic" style="color: var(--text-secondary);">
         Last built: {buildDate}
       </p>
     </div>
   </div>
   
-  <div class="max-w-7xl mx-auto pt-6 border-t border-gray-200 dark:border-slate-700 text-center">
-    <p class="text-gray-500 dark:text-slate-400 text-sm m-0">
+  <div class="max-w-7xl mx-auto pt-6 border-t text-center" style="border-color: var(--border-primary);">
+    <p class="text-sm m-0" style="color: var(--text-secondary);">
       &copy; {currentYear} My ESPHome Workshop. Built with 
       <a href="https://astro.build" target="_blank" rel="noopener noreferrer"
-         class="text-blue-600 dark:text-blue-400 no-underline hover:underline">
+         class="no-underline hover:underline" style="color: var(--text-link);">
         Astro
       </a>.
     </p>

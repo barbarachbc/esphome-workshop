@@ -85,70 +85,71 @@ const recentChanges = await getRecentChanges(7);
 ---
 
 <Layout title="Home">
-  <div class="text-center py-12 bg-gradient-to-br from-blue-600 to-blue-700 dark:from-slate-800 dark:to-slate-900 text-white rounded-lg mb-12 dark:border dark:border-slate-700">
-    <h1 class="m-0 mb-4 text-4xl text-white">My ESPHome Workshop</h1>
-    <p class="text-lg max-w-2xl mx-auto mb-4 opacity-95 dark:opacity-90">
+  <div class="text-center py-12 rounded-lg mb-12 border" style="background: var(--bg-hero); color: var(--text-inverse); border-color: var(--border-primary);">
+    <h1 class="m-0 mb-4 text-4xl" style="color: var(--text-inverse);">My ESPHome Workshop</h1>
+    <p class="text-lg max-w-2xl mx-auto mb-4" style="color: var(--text-inverse); opacity: 0.95;">
       After 15+ years collecting dev boards, sensors, and random gadgets, 
       it's finally time to build something useful.
     </p>
-    <p class="text-lg max-w-2xl mx-auto mb-0 opacity-95 dark:opacity-90">{randomHeroDescription}</p>
+    <p class="text-lg max-w-2xl mx-auto mb-0" style="color: var(--text-inverse); opacity: 0.95;">{randomHeroDescription}</p>
   </div>
 
   <div class="grid grid-cols-2 gap-6 mb-8">
-    <a href="/devices" class="block bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-5 no-underline text-gray-800 dark:text-slate-100 transition-all duration-200 shadow-sm hover:-translate-y-0.5 hover:shadow-xl hover:border-blue-600 dark:hover:border-blue-400">
+    <a href="/devices" class="block rounded-lg p-5 no-underline transition-all duration-200 shadow-sm hover:-translate-y-0.5 hover:shadow-xl" style="background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-primary);">
       <div class="flex justify-between items-center mb-2">
-        <h2 class="m-0 mb-2 text-xl text-blue-600 dark:text-blue-400">📟 Devices</h2>
-        <div class="text-5xl font-bold text-blue-600 dark:text-blue-400">{deviceStats.total}</div>
+        <h2 class="m-0 mb-2 text-xl" style="color: var(--accent-blue);">📟 Devices</h2>
+        <div class="text-5xl font-bold" style="color: var(--accent-blue);">{deviceStats.total}</div>
       </div>
-      <p class="m-0 mb-4 text-gray-500 dark:text-slate-400 text-sm">Browse physical hardware - boards, sensors, displays, and more.</p>
+      <p class="m-0 mb-4 text-sm" style="color: var(--text-secondary);">Browse physical hardware - boards, sensors, displays, and more.</p>
       <div class="flex flex-col gap-2 text-sm">
-        <span class="px-2 py-1 rounded bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">✅ {deviceStats.deployed} deployed</span>
-        <span class="px-2 py-1 rounded bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200">🧪 {deviceStats.testing} testing</span>
-        <span class="px-2 py-1 rounded bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300">📦 {deviceStats.ready} ready</span>
-        <span class="px-2 py-1 rounded bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200">🔦 {deviceStats.pending} pending</span>
-        <span class="px-2 py-1 rounded bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">❕ {deviceStats.unsupported} unsupported</span>
+        <span class="px-2 py-1 rounded" style="background: var(--accent-emerald-light); color: var(--text-primary);">✅ {deviceStats.deployed} deployed</span>
+        <span class="px-2 py-1 rounded" style="background: var(--accent-amber-light); color: var(--text-primary);">🧪 {deviceStats.testing} testing</span>
+        <span class="px-2 py-1 rounded" style="background: var(--bg-secondary); color: var(--text-secondary);">📦 {deviceStats.ready} ready</span>
+        <span class="px-2 py-1 rounded" style="background: var(--accent-amber-light); color: var(--text-primary);">🔦 {deviceStats.pending} pending</span>
+        <span class="px-2 py-1 rounded" style="background: var(--accent-red-light); color: var(--text-primary);">❕ {deviceStats.unsupported} unsupported</span>
         {deviceStats.retired > 0 && (
-          <span class="px-2 py-1 rounded bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">⏸️ {deviceStats.retired} retired</span>
+          <span class="px-2 py-1 rounded" style="background: var(--accent-red-light); color: var(--text-primary);">⏸️ {deviceStats.retired} retired</span>
         )}
       </div>
     </a>
 
-    <a href="/projects" class="block bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-5 no-underline text-gray-800 dark:text-slate-100 transition-all duration-200 shadow-sm hover:-translate-y-0.5 hover:shadow-xl hover:border-blue-600 dark:hover:border-blue-400">
+    <a href="/projects" class="block rounded-lg p-5 no-underline transition-all duration-200 shadow-sm hover:-translate-y-0.5 hover:shadow-xl" style="background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-primary);">
       <div class="flex justify-between items-center mb-2">
-        <h2 class="m-0 mb-2 text-xl text-blue-600 dark:text-blue-400">💡 Projects</h2>
-        <div class="text-5xl font-bold text-blue-600 dark:text-blue-400">{projectStats.total}</div>
+        <h2 class="m-0 mb-2 text-xl" style="color: var(--accent-blue);">💡 Projects</h2>
+        <div class="text-5xl font-bold" style="color: var(--accent-blue);">{projectStats.total}</div>
       </div>
-      <p class="m-0 mb-4 text-gray-500 dark:text-slate-400 text-sm">Complete projects with wiring and configuration.</p>
+      <p class="m-0 mb-4 text-sm" style="color: var(--text-secondary);">Complete projects with wiring and configuration.</p>
       <div class="flex flex-col gap-2 text-sm">
-        <span class="px-2 py-1 rounded bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">✅ {projectStats.completed} completed</span>
-        <span class="px-2 py-1 rounded bg-orange-200 dark:bg-orange-900 text-orange-900 dark:text-orange-200">🛠️ {projectStats.inProgress} in progress</span>
-        <span class="px-2 py-1 rounded bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">💭 {projectStats.ideas} ideas</span>
+        <span class="px-2 py-1 rounded" style="background: var(--accent-emerald-light); color: var(--text-primary);">✅ {projectStats.completed} completed</span>
+        <span class="px-2 py-1 rounded" style="background: var(--accent-orange-light); color: var(--text-primary);">🛠️ {projectStats.inProgress} in progress</span>
+        <span class="px-2 py-1 rounded" style="background: var(--accent-blue-light); color: var(--text-primary);">💭 {projectStats.ideas} ideas</span>
         {projectStats.abandoned > 0 && (
-          <span class="px-2 py-1 rounded bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300">⏸️ {projectStats.abandoned} abandoned</span>
+          <span class="px-2 py-1 rounded" style="background: var(--bg-secondary); color: var(--text-secondary);">⏸️ {projectStats.abandoned} abandoned</span>
         )}
       </div>
     </a>
   </div>
 
   {randomDevice && (
-    <div class="mb-8 p-5 bg-gradient-to-br from-blue-100 to-blue-50 dark:from-slate-800 dark:to-slate-900 rounded-lg border-2 border-blue-600 dark:border-blue-500">
-      <h2 class="m-0 mb-4 text-xl text-blue-900 dark:text-blue-300">🎲 Random Device to Try Next</h2>
-      <div class="bg-white dark:bg-slate-800 p-4 rounded-lg grid grid-cols-[auto_1fr] gap-6 items-center border dark:border-slate-700">
+    <div class="mb-8 p-5 rounded-lg border-2" style="background: var(--accent-blue-light); border-color: var(--accent-blue);">
+      <h2 class="m-0 mb-4 text-xl" style="color: var(--accent-blue);">🎲 Random Device to Try Next</h2>
+      <div class="p-4 rounded-lg grid grid-cols-[auto_1fr] gap-6 items-center border" style="background: var(--bg-card); border-color: var(--border-card);">
         <div>
-          <h3 class="m-0 text-gray-800 dark:text-slate-100 text-lg whitespace-nowrap">{randomDevice.data.title}</h3>
+          <h3 class="m-0 text-lg whitespace-nowrap" style="color: var(--text-heading);">{randomDevice.data.title}</h3>
         </div>
         <div class="flex flex-col gap-2">
-          <p class="text-gray-500 dark:text-slate-400 m-0 text-sm">{randomDevice.data.description}</p>
+          <p class="m-0 text-sm" style="color: var(--text-secondary);">{randomDevice.data.description}</p>
           <div class="flex gap-2 flex-wrap">
-            <span class="inline-block text-xs px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+            <span class="inline-block text-xs px-2 py-0.5 rounded" style="background: var(--accent-blue-light); color: var(--accent-blue);">
               {randomDevice.data.category}
             </span>
             {randomDevice.data.connectionTypes.map(type => (
-              <span class="inline-block text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300">{type}</span>
+              <span class="inline-block text-xs px-2 py-0.5 rounded" style="background: var(--bg-secondary); color: var(--text-secondary);">{type}</span>
             ))}
           </div>
           <a href={`/devices/${randomDevice.slug}`} 
-             class="inline-block w-fit px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white no-underline rounded-lg font-medium text-sm transition-all duration-200 hover:bg-blue-700 dark:hover:bg-blue-400 hover:-translate-y-0.5">
+             class="inline-block w-fit px-4 py-2 text-white no-underline rounded-lg font-medium text-sm transition-all duration-200 hover:-translate-y-0.5" 
+             style="background: var(--accent-blue);">
             Let's Use This! →
           </a>
         </div>
@@ -157,19 +158,19 @@ const recentChanges = await getRecentChanges(7);
   )}
 
   {recentChanges.length > 0 && (
-    <div class="mb-8 p-5 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 shadow-sm">
-      <h2 class="m-0 mb-4 text-xl text-gray-800 dark:text-slate-100">✨ What's New</h2>
+    <div class="mb-8 p-5 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
+      <h2 class="m-0 mb-4 text-xl" style="color: var(--text-heading);">✨ What's New</h2>
       <div class="flex flex-col gap-3">
         {recentChanges.map(change => (
-          <div class="flex items-baseline gap-2 text-sm px-2 py-2 rounded transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-slate-700">
+          <div class="flex items-baseline gap-2 text-sm px-2 py-2 rounded transition-colors duration-200" onmouseover="this.style.background='var(--bg-secondary)';" onmouseout="this.style.background='transparent';">
             <span class="shrink-0">{getChangeTypeEmoji(change.type)}</span>
-            <span class="shrink-0 font-medium capitalize text-gray-700 dark:text-slate-300">{change.type}:</span>
+            <span class="shrink-0 font-medium capitalize" style="color: var(--text-secondary);">{change.type}:</span>
             <a href={`/${change.contentType}s/${change.slug}`} 
-               class="text-blue-600 dark:text-blue-400 no-underline font-medium transition-colors duration-200 hover:text-blue-700 dark:hover:text-blue-300 hover:underline">
+               class="no-underline font-medium transition-colors duration-200" style="color: var(--text-link);">
               {change.title}
             </a>
-            <span class="text-gray-500 dark:text-slate-400">- {change.description}</span>
-            <span class="text-gray-500 dark:text-slate-400 text-[0.85rem] ml-auto shrink-0">
+            <span style="color: var(--text-secondary);">- {change.description}</span>
+            <span class="text-[0.85rem] ml-auto shrink-0" style="color: var(--text-secondary);">
               ({formatChangelogDate(change.date)})
             </span>
           </div>
@@ -179,13 +180,13 @@ const recentChanges = await getRecentChanges(7);
   )}
 
   <div class="grid grid-cols-2 gap-5 mb-12">
-    <a href="/components" class="block bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-5 no-underline text-gray-800 dark:text-slate-100 transition-all duration-200 shadow-sm hover:-translate-y-0.5 hover:shadow-xl hover:border-blue-600 dark:hover:border-blue-400">
-      <h2 class="m-0 mb-2 text-xl text-blue-600 dark:text-blue-400">🔧 Components</h2>
-      <p class="m-0 text-gray-500 dark:text-slate-400 text-sm">Explore ESPHome software components and platforms.</p>
+    <a href="/components" class="block rounded-lg p-5 no-underline transition-all duration-200 shadow-sm hover:-translate-y-0.5 hover:shadow-xl" style="background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-primary);">
+      <h2 class="m-0 mb-2 text-xl" style="color: var(--accent-blue);">🔧 Components</h2>
+      <p class="m-0 text-sm" style="color: var(--text-secondary);">Explore ESPHome software components and platforms.</p>
     </a>
-    <a href="/notes" class="block bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-5 no-underline text-gray-800 dark:text-slate-100 transition-all duration-200 shadow-sm hover:-translate-y-0.5 hover:shadow-xl hover:border-blue-600 dark:hover:border-blue-400">
-      <h2 class="m-0 mb-2 text-xl text-blue-600 dark:text-blue-400">📓 Notes</h2>
-      <p class="m-0 text-gray-500 dark:text-slate-400 text-sm">Setup guides, networking tricks, and lessons learned along the way.</p>
+    <a href="/notes" class="block rounded-lg p-5 no-underline transition-all duration-200 shadow-sm hover:-translate-y-0.5 hover:shadow-xl" style="background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-primary);">
+      <h2 class="m-0 mb-2 text-xl" style="color: var(--accent-blue);">📓 Notes</h2>
+      <p class="m-0 text-sm" style="color: var(--text-secondary);">Setup guides, networking tricks, and lessons learned along the way.</p>
     </a>
   </div>
 </Layout>

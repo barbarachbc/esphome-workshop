@@ -8,13 +8,13 @@ const difficulties = [...new Set(projects.map(p => p.data.difficulty))];
 ---
 
 <Layout title="Projects">
-  <h1 class="text-4xl font-semibold mt-0 mb-6">Projects</h1>
-  <p class="text-gray-500 text-lg mb-8">Complete projects with wiring and configuration</p>
+  <h1 class="text-4xl font-semibold mt-0 mb-6" style="color: var(--text-heading);">Projects</h1>
+  <p class="text-lg mb-8" style="color: var(--text-secondary);">Complete projects with wiring and configuration</p>
 
-  <div class="mb-8 p-4 bg-gray-100 rounded-lg">
+  <div class="mb-8 p-4 rounded-lg" style="background: var(--bg-secondary);">
     <label class="flex items-center gap-2">
-      <span class="font-medium">Filter by difficulty:</span>
-      <select id="difficultyFilter" class="px-3 py-2 border border-gray-200 rounded text-base">
+      <span class="font-medium" style="color: var(--text-primary);">Filter by difficulty:</span>
+      <select id="difficultyFilter" class="px-3 py-2 rounded text-base" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-card);">
         <option value="">All Levels</option>
         {difficulties.map(diff => (
           <option value={diff}>{diff}</option>
