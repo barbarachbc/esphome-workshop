@@ -40,13 +40,13 @@ const categories = [...new Set(devices.map(d => d.data.category))];
 ---
 
 <Layout title="Devices">
-  <h1>Devices</h1>
-  <p class="subtitle">Physical hardware components for ESPHome projects</p>
+  <h1 class="text-4xl font-semibold mt-0 mb-6">Devices</h1>
+  <p class="text-gray-500 text-lg mb-8">Physical hardware components for ESPHome projects</p>
 
-  <div class="filters">
-    <label>
-      Filter by category:
-      <select id="categoryFilter">
+  <div class="mb-8 p-4 bg-gray-100 rounded-lg">
+    <label class="flex items-center gap-2">
+      <span class="font-medium">Filter by category:</span>
+      <select id="categoryFilter" class="px-3 py-2 border border-gray-200 rounded text-base">
         <option value="">All Categories</option>
         {categories.map(cat => (
           <option value={cat}>{cat}</option>
@@ -55,43 +55,13 @@ const categories = [...new Set(devices.map(d => d.data.category))];
     </label>
   </div>
 
-  <div class="device-grid" id="deviceGrid">
+  <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6" id="deviceGrid">
     {devicesWithStatus.map(device => (
       <div data-category={device.data.category}>
         <DeviceCard device={device} />
       </div>
     ))}
   </div>
-
-  <style>
-    .subtitle {
-      color: var(--gray);
-      font-size: 1.125rem;
-      margin-bottom: 2rem;
-    }
-
-    .filters {
-      margin-bottom: 2rem;
-      padding: 1rem;
-      background: var(--light-gray);
-      border-radius: 0.5rem;
-    }
-
-    .filters select {
-      padding: 0.5rem;
-      border: 1px solid var(--border);
-      border-radius: 0.25rem;
-      font-size: 1rem;
-    }
-
-    .device-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-
-    /* Card styles moved to DeviceCard.astro component */
-  </style>
 
   <script>
     const filter = document.getElementById('categoryFilter') as HTMLSelectElement;
