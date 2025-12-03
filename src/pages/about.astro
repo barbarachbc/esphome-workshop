@@ -4,304 +4,150 @@ import { siteConfig } from '../config';
 ---
 
 <Layout title="About">
-  <div class="about-page">
-    <div class="hero">
-      <h1>About My ESPHome Workshop</h1>
-      <p class="hero-description">
-        Welcome to my personal documentation site where I track my journey 
-        turning a collection of dev boards and sensors into (maybe) useful smart home devices.
-      </p>
-    </div>
+  <div class="hero text-center py-12 bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-lg mb-12">
+    <h1 class="m-0 mb-4 text-4xl text-white">About My ESPHome Workshop</h1>
+    <p class="hero-description text-lg max-w-2xl mx-auto mb-0 opacity-95">
+      Welcome to my personal documentation site where I track my journey 
+      turning a collection of dev boards and sensors into (maybe) useful smart home devices.
+    </p>
+  </div>
 
-    <div class="content-grid">
-      <!-- Site Purpose -->
-      <section class="card">
-        <h2>Why This Site Exists</h2>
-        <p>
+  <div class="content-grid flex flex-col gap-8">
+    <!-- Site Purpose -->
+    <section class="bg-white border border-gray-200 rounded-lg p-5">
+      <h2 class="m-0 mb-4 text-xl text-blue-600 font-semibold">Why This Site Exists</h2>
+        <p class="text-gray-500 leading-relaxed mb-4">
           After 15+ years of accumulating microcontrollers, sensors, and random gadgets, 
           I decided it was time to actually use them. This site serves as my workshop 
           documentation—tracking what I have, what I've built, and what I've learned 
           along the way.
         </p>
-        <p>
+        <p class="text-gray-500 leading-relaxed mb-4">
           After all these years I realized that it wasn't me going for the new shiny thing, it was
-          just that the world wasn't ready! Now that we have great projects like <a href="https://esphome.io" target="_blank" rel="noopener noreferrer">ESPHome</a> and 
-          <a href="https://www.home-assistant.io" target="_blank" rel="noopener noreferrer">Home Assistant</a>, 
+          just that the world wasn't ready! Now that we have great projects like <a href="https://esphome.io" target="_blank" rel="noopener noreferrer" class="text-blue-600 no-underline hover:underline">ESPHome</a> and 
+          <a href="https://www.home-assistant.io" target="_blank" rel="noopener noreferrer" class="text-blue-600 no-underline hover:underline">Home Assistant</a>, 
           it's finally time to take over the <strike>world</strike> home.
         </p>
       </section>
 
-      <!-- How to Use This Site -->
-      <section class="card">
-        <h2>How to Use This Site</h2>
-        <div class="usage-section">
-          <h3>🔌 Devices</h3>
-          <p>
+    <!-- How to Use This Site -->
+    <section class="bg-white border border-gray-200 rounded-lg p-5">
+      <h2 class="m-0 mb-4 text-xl text-blue-600 font-semibold">How to Use This Site</h2>
+        <div class="mb-6">
+          <h3 class="mt-0 mb-2 text-gray-800 text-xl font-semibold">🔌 Devices</h3>
+          <p class="text-gray-500 leading-relaxed mb-4">
             Browse all the hardware in my collection. Each device includes wiring 
             diagrams, example code, and my personal notes about using it. Well ... that's the plan at least.
           </p>
         </div>
-        <div class="usage-section">
-          <h3>🛠️ Projects</h3>
-          <p>
+        <div class="mb-6">
+          <h3 class="mt-0 mb-2 text-gray-800 text-xl font-semibold">🛠️ Projects</h3>
+          <p class="text-gray-500 leading-relaxed mb-4">
             Complete project builds with full documentation. Shows what devices 
             were used, the motivation behind the project, and how it turned out.
           </p>
         </div>
-        <div class="usage-section">
-          <h3>🧩 Components</h3>
-          <p>
+        <div class="mb-6">
+          <h3 class="mt-0 mb-2 text-gray-800 text-xl font-semibold">🧩 Components</h3>
+          <p class="text-gray-500 leading-relaxed mb-4">
             ESPHome software components and integrations. These are the building 
             blocks that make the hardware work. Just notes and tying components together.
           </p>
         </div>
-        <div class="usage-section">
-          <h3>📓 Notes</h3>
-          <p>
+        <div class="mb-0">
+          <h3 class="mt-0 mb-2 text-gray-800 text-xl font-semibold">📓 Notes</h3>
+          <p class="text-gray-500 leading-relaxed mb-4">
             General knowledge, setup guides, troubleshooting tips, and lessons 
             learned. The stuff that doesn't fit neatly into device or project docs.
           </p>
         </div>
       </section>
 
-      <!-- Device Status Guide -->
-      <section class="card">
-        <h2>Understanding Device Statuses</h2>
-        <p>Every device has a status that shows how I'm currently using it:</p>
-        <div class="status-guide">
-          <div class="status-row">
-            <span class="status-badge ready">📦 Ready</span>
-            <span class="status-description">Tested, working, ready to use ... but not used just yet</span>
+    <!-- Device Status Guide -->
+    <section class="bg-white border border-gray-200 rounded-lg p-5">
+      <h2 class="m-0 mb-4 text-xl text-blue-600 font-semibold">Understanding Device Statuses</h2>
+        <p class="text-gray-500 leading-relaxed mb-4">Every device has a status that shows how I'm currently using it:</p>
+        <div class="flex flex-col gap-4 mt-4">
+          <div class="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
+            <span class="status-badge status-badge-ready">📦 Ready</span>
+            <span class="text-gray-500 flex-1">Tested, working, ready to use ... but not used just yet</span>
           </div>
-          <div class="status-row">
-            <span class="status-badge testing">🧪 Testing</span>
-            <span class="status-description">Currently experimenting with this on my bench. Updating documentation as I go along.</span>
+          <div class="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
+            <span class="status-badge status-badge-testing">🧪 Testing</span>
+            <span class="text-gray-500 flex-1">Currently experimenting with this on my bench. Updating documentation as I go along.</span>
           </div>
-          <div class="status-row">
-            <span class="status-badge deployed">✅ Deployed</span>
-            <span class="status-description">Actively used in a working project - contains a link to the project where it is used.</span>
+          <div class="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
+            <span class="status-badge status-badge-deployed">✅ Deployed</span>
+            <span class="text-gray-500 flex-1">Actively used in a working project - contains a link to the project where it is used.</span>
           </div>
-          <div class="status-row">
-            <span class="status-badge pending">🔦 Pending</span>
-            <span class="status-description">Documentation incomplete, waiting to start testing it. NOTE that documentation might not be fully correct until I finish testing.</span>
+          <div class="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
+            <span class="status-badge status-badge-pending">🔦 Pending</span>
+            <span class="text-gray-500 flex-1">Documentation incomplete, waiting to start testing it. NOTE that documentation might not be fully correct until I finish testing.</span>
           </div>
-          <div class="status-row">
-            <span class="status-badge unsupported">❕ Unsupported</span>
-            <span class="status-description">Doesn't work with ESPHome - for now 😉</span>
+          <div class="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
+            <span class="status-badge status-badge-unsupported">❕ Unsupported</span>
+            <span class="text-gray-500 flex-1">Doesn't work with ESPHome - for now 😉</span>
           </div>
-          <div class="status-row">
-            <span class="status-badge retired">⏸️ Retired</span>
-            <span class="status-description">Was deployed but no longer in use</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Project Status Guide -->
-      <section class="card">
-        <h2>Understanding Project Statuses</h2>
-        <p>Projects are tracked through their lifecycle:</p>
-        <div class="status-guide">
-          <div class="status-row">
-            <span class="status-badge idea">💭 Idea</span>
-            <span class="status-description">Concept stage, planning and gathering parts</span>
-          </div>
-          <div class="status-row">
-            <span class="status-badge in-progress">🛠️ In Progress</span>
-            <span class="status-description">Actively building and testing</span>
-          </div>
-          <div class="status-row">
-            <span class="status-badge completed">✅ Completed</span>
-            <span class="status-description">Working and deployed in production</span>
-          </div>
-          <div class="status-row">
-            <span class="status-badge abandoned">⏸️ Abandoned</span>
-            <span class="status-description">Discontinued (but documented for future reference)</span>
+          <div class="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
+            <span class="status-badge status-badge-retired">⏸️ Retired</span>
+            <span class="text-gray-500 flex-1">Was deployed but no longer in use</span>
           </div>
         </div>
       </section>
 
-      <!-- How to Contribute -->
-      <section class="card">
-        <h2>How to Contribute</h2>
-        <p>
+    <!-- Project Status Guide -->
+    <section class="bg-white border border-gray-200 rounded-lg p-5">
+      <h2 class="m-0 mb-4 text-xl text-blue-600 font-semibold">Understanding Project Statuses</h2>
+        <p class="text-gray-500 leading-relaxed mb-4">Projects are tracked through their lifecycle:</p>
+        <div class="flex flex-col gap-4 mt-4">
+          <div class="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
+            <span class="status-badge status-badge-idea">💭 Idea</span>
+            <span class="text-gray-500 flex-1">Concept stage, planning and gathering parts</span>
+          </div>
+          <div class="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
+            <span class="status-badge status-badge-in-progress">🛠️ In Progress</span>
+            <span class="text-gray-500 flex-1">Actively building and testing</span>
+          </div>
+          <div class="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
+            <span class="status-badge status-badge-completed">✅ Completed</span>
+            <span class="text-gray-500 flex-1">Working and deployed in production</span>
+          </div>
+          <div class="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
+            <span class="status-badge status-badge-abandoned">⏸️ Abandoned</span>
+            <span class="text-gray-500 flex-1">Discontinued (but documented for future reference)</span>
+          </div>
+        </div>
+      </section>
+
+    <!-- How to Contribute -->
+    <section class="bg-white border border-gray-200 rounded-lg p-5">
+      <h2 class="m-0 mb-4 text-xl text-blue-600 font-semibold">How to Contribute</h2>
+        <p class="text-gray-500 leading-relaxed mb-4">
           Found an error? Have a suggestion?
         </p>
-        <div class="usage-section">
-          <h3>Report an Issue</h3>
-          <p>
+        <div class="mb-6">
+          <h3 class="mt-0 mb-2 text-gray-800 text-xl font-semibold">Report an Issue</h3>
+          <p class="text-gray-500 leading-relaxed mb-4">
             Every content page has a "Report an Issue" button that opens a GitHub 
             issue with the page details pre-filled. Use this to report errors, 
             broken links, or outdated information.
           </p>
         </div>
-        <div class="usage-section">
-          <h3>Suggest a Feature</h3>
-          <p>
+        <div class="mb-0">
+          <h3 class="mt-0 mb-2 text-gray-800 text-xl font-semibold">Suggest a Feature</h3>
+          <p class="text-gray-500 leading-relaxed mb-4">
             Have an idea for a new feature or improvement? Open a feature request 
             on GitHub with your suggestion.
           </p>
         </div>
-        <div class="contribution-links">
-          <a href={`https://github.com/${siteConfig.github.repo}`} class="button" target="_blank" rel="noopener noreferrer">
+        <div class="flex gap-4 mt-6 flex-wrap md:flex-row flex-col">
+          <a href={`https://github.com/${siteConfig.github.repo}`} class="inline-block px-6 py-3 bg-blue-600 text-white no-underline rounded-lg font-medium transition-all duration-200 hover:bg-blue-700 hover:-translate-y-0.5 md:text-left text-center md:w-auto w-full" target="_blank" rel="noopener noreferrer">
             View on GitHub →
           </a>
-          <a href={siteConfig.github.issuesUrl} class="button button-secondary" target="_blank" rel="noopener noreferrer">
+          <a href={siteConfig.github.issuesUrl} class="inline-block px-6 py-3 bg-white text-blue-600 no-underline rounded-lg font-medium border-2 border-blue-600 transition-all duration-200 hover:bg-blue-100 hover:border-blue-700 hover:text-blue-700 md:text-left text-center md:w-auto w-full" target="_blank" rel="noopener noreferrer">
             Open an Issue →
           </a>
         </div>
       </section>
     </div>
-  </div>
 </Layout>
-
-<style>
-  .about-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-  }
-
-  .hero {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-
-  .hero h1 {
-    font-size: 2.5rem;
-    margin: 0 0 1rem 0;
-    color: var(--text);
-  }
-
-  .hero-description {
-    font-size: 1.25rem;
-    color: var(--gray);
-    max-width: 700px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
-
-  .content-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 0.5rem;
-    padding: 2rem;
-  }
-
-  .card h2 {
-    margin: 0 0 1rem 0;
-    color: var(--accent-dark);
-    font-size: 1.75rem;
-  }
-
-  .card h3 {
-    margin: 1.5rem 0 0.5rem 0;
-    color: var(--text);
-    font-size: 1.25rem;
-  }
-
-  .card p {
-    color: var(--gray);
-    line-height: 1.6;
-    margin-bottom: 1rem;
-  }
-
-  .usage-section {
-    margin-bottom: 1.5rem;
-  }
-
-  .usage-section:last-child {
-    margin-bottom: 0;
-  }
-
-  .usage-section h3 {
-    margin-top: 0;
-  }
-
-  .status-guide {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .status-row {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .status-description {
-    color: var(--gray);
-    flex: 1;
-  }
-
-  .contribution-links {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  .button {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    background: var(--accent);
-    color: white;
-    text-decoration: none;
-    border-radius: 0.5rem;
-    font-weight: 500;
-    transition: all 0.2s;
-  }
-
-  .button:hover {
-    background: var(--accent-dark);
-    transform: translateY(-2px);
-  }
-
-  .button-secondary {
-    background: white;
-    color: var(--accent);
-    border: 2px solid var(--accent);
-  }
-
-  .button-secondary:hover {
-    background: var(--accent-light);
-    border-color: var(--accent-dark);
-    color: var(--accent-dark);
-  }
-
-  @media (max-width: 768px) {
-    .hero h1 {
-      font-size: 2rem;
-    }
-
-    .hero-description {
-      font-size: 1rem;
-    }
-
-    .card {
-      padding: 1.5rem;
-    }
-
-    .status-row {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    .contribution-links {
-      flex-direction: column;
-    }
-
-    .button {
-      text-align: center;
-      width: 100%;
-    }
-  }
-</style>
