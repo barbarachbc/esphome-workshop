@@ -13,6 +13,29 @@ const { headings, minDepth = 2, maxDepth = 4 } = Astro.props;
 
 // Filter headings based on depth range
 const tocHeadings = headings.filter(h => h.depth >= minDepth && h.depth <= maxDepth);
+
+// Group headings by H2 (or H1 if included) sections for collapsible functionality
+interface HeadingSection {
+  heading: { depth: number; slug: string; text: string };
+  children: Array<{ depth: number; slug: string; text: string }>;
+}
+
+const headingSections: HeadingSection[] = [];
+let currentSection: HeadingSection | null = null;
+
+tocHeadings.forEach(heading => {
+  if (heading.depth === 1 || heading.depth === 2) {
+    // Start new section
+    currentSection = { heading, children: [] };
+    headingSections.push(currentSection);
+  } else if (currentSection && heading.depth > currentSection.heading.depth) {
+    // Add to current section
+    currentSection.children.push(heading);
+  }
+});
+
+// Only enable collapsible sections if there are 3+ sections with children
+const enableCollapsible = headingSections.filter(s => s.children.length > 0).length >= 3;
 ---
 
 <nav class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6 md:mb-0 mb-8" aria-label="Table of Contents">
@@ -21,20 +44,67 @@ const tocHeadings = headings.filter(h => h.depth >= minDepth && h.depth <= maxDe
       <h2 class="m-0 text-xl text-gray-800 dark:text-slate-100 font-semibold">On This Page</h2>
       <span class="toc-toggle-icon text-gray-500 dark:text-slate-400 text-sm transition-transform duration-200 md:hidden" aria-hidden="true">▼</span>
     </summary>
-    <ul class="list-none p-0 m-0">
-      {tocHeadings.map((heading) => (
-        <li class={`mb-2 ${
-          heading.depth === 1 ? 'pl-0 font-semibold' :
-          heading.depth === 2 ? 'pl-0' :
-          heading.depth === 3 ? 'pl-4' :
-          'pl-8'
-        }`}>
-          <a href={`#${heading.slug}`} class="toc-link block text-gray-500 dark:text-slate-400 no-underline py-1 px-2 rounded transition-all duration-200 text-[0.9375rem] leading-6 hover:text-blue-600 dark:hover:text-blue-400 hover:underline hover:bg-blue-50 dark:hover:bg-slate-700 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2">
-            {heading.text}
-          </a>
-        </li>
-      ))}
-    </ul>
+    
+    {enableCollapsible ? (
+      <ul class="list-none p-0 m-0">
+        {headingSections.map((section, index) => (
+          section.children.length > 0 ? (
+            <li class="mb-2">
+              <details class="toc-section" open={index === 0}>
+                <summary class="flex items-center gap-1 cursor-pointer py-1 px-2 rounded transition-colors hover:bg-blue-50 dark:hover:bg-slate-700/50 list-none [&::-webkit-details-marker]:hidden">
+                  <span class="text-xs text-gray-500 dark:text-slate-400 transition-transform duration-200 inline-block" aria-hidden="true">▶</span>
+                  <a href={`#${section.heading.slug}`} class="toc-link flex-1 text-gray-700 dark:text-slate-300 no-underline font-medium text-[0.9375rem] leading-6 hover:text-blue-600 dark:hover:text-blue-400">
+                    {section.heading.text}
+                  </a>
+                </summary>
+                <ul class="list-none pl-4 mt-1">
+                  {section.children.map(child => (
+                    <li class={`mb-1 ${child.depth === 3 ? 'pl-0' : 'pl-4'}`}>
+                      <a href={`#${child.slug}`} class="toc-link block text-gray-500 dark:text-slate-400 no-underline py-1 px-2 rounded transition-all duration-200 text-[0.9375rem] leading-6 hover:text-blue-600 dark:hover:text-blue-400 hover:underline hover:bg-blue-50 dark:hover:bg-slate-700">
+                        {child.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </li>
+          ) : (
+            <li class="mb-2">
+              <a href={`#${section.heading.slug}`} class="toc-link block text-gray-500 dark:text-slate-400 no-underline py-1 px-2 rounded transition-all duration-200 text-[0.9375rem] leading-6 hover:text-blue-600 dark:hover:text-blue-400 hover:underline hover:bg-blue-50 dark:hover:bg-slate-700">
+                {section.heading.text}
+              </a>
+            </li>
+          )
+        ))}
+      </ul>
+    ) : (
+      <ul class="list-none p-0 m-0">
+        {tocHeadings.map((heading) => (
+          <li class={`mb-2 ${
+            heading.depth === 1 ? 'pl-0 font-semibold' :
+            heading.depth === 2 ? 'pl-0' :
+            heading.depth === 3 ? 'pl-4' :
+            'pl-8'
+          }`}>
+            <a href={`#${heading.slug}`} class="toc-link block text-gray-500 dark:text-slate-400 no-underline py-1 px-2 rounded transition-all duration-200 text-[0.9375rem] leading-6 hover:text-blue-600 dark:hover:text-blue-400 hover:underline hover:bg-blue-50 dark:hover:bg-slate-700 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2">
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+    
+    <!-- Back to Top button -->
+    <button 
+      id="back-to-top"
+      class="mt-4 w-full py-2 px-4 text-sm text-gray-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800 rounded transition-colors flex items-center justify-center gap-2 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2"
+      aria-label="Back to top"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+      Back to Top
+    </button>
   </details>
 </nav>
 
@@ -57,6 +127,11 @@ const tocHeadings = headings.filter(h => h.depth >= minDepth && h.depth <= maxDe
   /* Toggle icon rotation when details is open */
   .toc-container[open] .toc-toggle-icon {
     transform: rotate(180deg);
+  }
+
+  /* Collapsible section styling */
+  .toc-section[open] > summary > span:first-child {
+    transform: rotate(90deg);
   }
 </style>
 
@@ -144,5 +219,23 @@ const tocHeadings = headings.filter(h => h.depth >= minDepth && h.depth <= maxDe
         }
       });
     });
+
+    // Back to Top button functionality
+    const backToTopButton = document.getElementById('back-to-top');
+    if (backToTopButton) {
+      backToTopButton.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Remove active state from all ToC links
+        tocLinks.forEach(link => {
+          link.classList.remove('active');
+        });
+        
+        // Update URL to remove hash
+        if (history.replaceState) {
+          history.replaceState(null, '', window.location.pathname);
+        }
+      });
+    }
   });
 </script>

@@ -290,15 +290,28 @@ The project includes four reusable card components for consistent display across
    - Displays last modified/verified dates with color-coded freshness
    - Used on: All content detail pages
 
-7. **`TableOfContents.astro`** - In-page navigation (Phase 7)
-   - Props: `headings` array from Astro's `render()` API
-   - Generates hierarchical table of contents from H2-H4 headings
-   - Features: Active section highlighting, smooth scroll, sticky sidebar (desktop), collapsible (mobile)
-   - Used on: Device, project, and note detail pages (when 3+ headings present)
+7. **`TableOfContents.astro`** - In-page navigation (Phase 7 & 8)
+   - Props: `headings` array from Astro's `render()` API, `minDepth`, `maxDepth`
+   - Generates hierarchical table of contents from headings
+   - Features: 
+     - Active section highlighting with Intersection Observer
+     - Smooth scroll to sections
+     - Sticky sidebar on desktop
+     - Collapsible on mobile
+     - **Back to Top button** for quick navigation (Phase 8)
+     - **Collapsible sections** for long ToCs with 3+ parent sections (Phase 8)
+   - Used on: Device, project, note, and component detail pages (when 3+ headings present)
 
 8. **`Footer.astro`** - Site-wide footer
    - Shows: Navigation links, community links, build date
    - Used in: `Layout.astro` on all pages
+
+9. **`ThemeToggle.astro`** - Dark mode switcher (Phase 8)
+   - Props: None
+   - Features: Toggle between light/dark mode with localStorage persistence
+   - Respects system preference on first visit
+   - Smooth color transitions
+   - Used in: `Layout.astro` header on all pages
 
 ### Homepage Features (Session 3)
 
@@ -312,11 +325,18 @@ The homepage (`/`) includes:
 ### Design System
 
 - CSS is in `Layout.astro` using CSS custom properties
-- Design system variables:
-  - `--accent`: Primary blue
-  - `--text`: Dark gray text
-  - `--background`: White
-  - `--border`: Light gray borders
+- **Dark mode support** with Tailwind CSS utilities (Phase 8)
+- Design system variables (light mode):
+  - `--accent`: Primary blue (#2563eb)
+  - `--text`: Dark gray text (#1f2937)
+  - `--background`: White (#ffffff)
+  - `--border`: Light gray borders (#e5e7eb)
+- Dark mode color palette:
+  - Background: slate-900 (#0f172a)
+  - Surface: slate-800 (#1e293b)
+  - Text: slate-100 (#f1f5f9)
+  - Borders: slate-700 (#334155)
+  - Accent blue: blue-500 (#3b82f6)
 
 ---
 
@@ -409,6 +429,14 @@ When asking AI to help with this project:
   - ✅ Component detail pages with integrated ToC
   - ✅ Active section highlighting with Intersection Observer
   - ✅ Page Info sections with smart conditional ToC items
+  - ✅ **Back to Top button** for quick navigation (Phase 8)
+  - ✅ **Collapsible ToC sections** for better organization in long pages (Phase 8)
+- ✅ **Dark mode** (Phase 8 complete)
+  - ✅ Theme toggle in header with sun/moon icons
+  - ✅ Respects system preference on first visit
+  - ✅ Persists user choice in localStorage
+  - ✅ All components and pages styled for dark mode
+  - ✅ Smooth color transitions between themes
 - ✅ Automatic routing via file-based pages
 - ✅ MDX support for rich content
 - ✅ Syntax highlighting for YAML/code
@@ -430,12 +458,13 @@ When asking AI to help with this project:
 ## 🔮 Future Enhancements
 
 - [ ] Search functionality (Pagefind or Algolia)
-- [ ] Dark mode toggle
 - [ ] Interactive wiring diagrams
 - [ ] ESPHome YAML validator
 - [ ] User-contributed projects
 - [ ] RSS feed for new projects
 - [ ] Print-friendly layouts
+- [ ] Global tag filtering across collections
+- [ ] More detailed stats/charts (devices by category, connection type distribution)
 
 ---
 
