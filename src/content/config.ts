@@ -41,7 +41,24 @@ const components = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    category: z.enum(['sensor', 'binary_sensor', 'switch', 'light', 'climate', 'cover', 'fan', 'text_sensor', 'platform', 'other']),
+    category: z.enum([
+      // Core components
+      'core',
+      // Communication & networking
+      'spi', 'i2c', 'uart', 'ethernet', 'bluetooth', 'wifi',
+      // Sensors
+      'sensor', 'binary-sensor', 'text-sensor',
+      // Outputs & controls
+      'output', 'switch', 'light', 'climate', 'cover', 'fan', 'number',
+      // Display & UI
+      'display', 'touchscreen',
+      // Time
+      'time',
+      // Automation
+      'automation',
+      // Other/generic
+      'platform', 'other'
+    ]),
     esphomeComponent: z.string(), // The ESPHome component name (e.g., 'gpio', 'i2c', 'bme280')
     documentation: z.string().optional(), // Link to official ESPHome docs
     requiresHardware: z.boolean().default(false),

@@ -3,12 +3,12 @@ title: 'Info Panel with ESP32 2.8" Display'
 description: "Build a control panel using ESP32 2.8 inch Display to control heating, lights, switches and display time and temperature"
 difficulty: "advanced"
 devices: ["jc2432w328c"]
-components: ["api", "ota", "wifi", "captive_portal", "substitutions", 
-            "time", "time_homeassistant", "script", "number", "number_template",
-            "sensor", "sensor_homeassistant", "text_sensor", "text_sensor_homeassistant",
-            "output", "output_ledc", "switch", "switch_homeassistant", "switch_template",
-            "light", "light_monochromatic", "light_rgb", "display", "display_mipi_spi",
-            "touchscreen", "touchscreen_cst816", "display_color", "image",
+components: ["api", "ota", "wifi", "captive-portal", "substitutions", 
+            "time-homeassistant", "script", "number-template",
+            "sensor-homeassistant", "text-sensor-homeassistant",
+            "output-ledc", "switch-homeassistant", "switch-template",
+            "light-monochromatic", "light-rgb", "display-mipi-spi",
+            "touchscreen-cst816", "display-color", "image",
             "font", "lvgl", "i2c", "spi" ]
 tags: ["weather", "monitoring", "temperature", "humidity", "light", "control", "heating", "lvgl", "touchscreen", "dashboard"]
 status: "completed"
