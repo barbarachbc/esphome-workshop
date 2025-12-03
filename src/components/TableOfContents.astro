@@ -15,16 +15,21 @@ const { headings, minDepth = 2, maxDepth = 4 } = Astro.props;
 const tocHeadings = headings.filter(h => h.depth >= minDepth && h.depth <= maxDepth);
 ---
 
-<nav class="table-of-contents" aria-label="Table of Contents">
+<nav class="bg-white border border-gray-200 rounded-lg p-6 md:mb-0 mb-8" aria-label="Table of Contents">
   <details class="toc-container" open>
-    <summary>
-      <h2>On This Page</h2>
-      <span class="toggle-icon" aria-hidden="true">▼</span>
+    <summary class="flex justify-between items-center cursor-pointer list-none mb-4 md:pointer-events-none md:py-0 py-2 [&::-webkit-details-marker]:hidden [&:not([open])]:mb-0 md:[&:not([open])]:mb-4">
+      <h2 class="m-0 text-xl text-gray-800 font-semibold">On This Page</h2>
+      <span class="toc-toggle-icon text-gray-500 text-sm transition-transform duration-200 md:hidden" aria-hidden="true">▼</span>
     </summary>
-    <ul class="toc-list">
+    <ul class="list-none p-0 m-0">
       {tocHeadings.map((heading) => (
-        <li class={`toc-item depth-${heading.depth}`}>
-          <a href={`#${heading.slug}`} class="toc-link">
+        <li class={`mb-2 ${
+          heading.depth === 1 ? 'pl-0 font-semibold' :
+          heading.depth === 2 ? 'pl-0' :
+          heading.depth === 3 ? 'pl-4' :
+          'pl-8'
+        }`}>
+          <a href={`#${heading.slug}`} class="toc-link block text-gray-500 no-underline py-1 px-2 rounded transition-all duration-200 text-[0.9375rem] leading-6 hover:text-blue-600 hover:underline hover:bg-blue-50 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2">
             {heading.text}
           </a>
         </li>
@@ -34,125 +39,18 @@ const tocHeadings = headings.filter(h => h.depth >= minDepth && h.depth <= maxDe
 </nav>
 
 <style>
-  .table-of-contents {
-    background: white;
-    border: 1px solid var(--border, #e5e7eb);
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-  }
-
-  .toc-container summary {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    list-style: none;
-    margin-bottom: 1rem;
-  }
-
-  .toc-container summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .toc-container summary h2 {
-    margin: 0;
-    font-size: 1.25rem;
-    color: var(--text, #1f2937);
-    font-weight: 600;
-  }
-
-  .toggle-icon {
-    color: var(--gray, #6b7280);
-    font-size: 0.875rem;
-    transition: transform 0.2s ease;
-  }
-
-  .toc-container[open] .toggle-icon {
-    transform: rotate(180deg);
-  }
-
-  .toc-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .toc-item {
-    margin-bottom: 0.5rem;
-  }
-
-  /* Hierarchical indentation */
-  .toc-item.depth-1 {
-    padding-left: 0;
-    font-weight: 600;
-  }
-
-  .toc-item.depth-2 {
-    padding-left: 0;
-  }
-
-  .toc-item.depth-3 {
-    padding-left: 1rem;
-  }
-
-  .toc-item.depth-4 {
-    padding-left: 2rem;
-  }
-
-  .toc-link {
-    display: block;
-    color: var(--gray, #6b7280);
-    text-decoration: none;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    transition: all 0.2s ease;
-    font-size: 0.9375rem;
-    line-height: 1.5;
-  }
-
-  .toc-link:hover {
-    color: var(--accent, #2563eb);
-    text-decoration: underline;
-    background: var(--accent-light, #eff6ff);
-  }
-
-  .toc-link:focus {
-    outline: 2px solid var(--accent, #2563eb);
-    outline-offset: 2px;
-  }
-
+  /* Active state styling - uses dynamic class toggling from script */
   .toc-link.active {
-    color: var(--accent, #2563eb);
+    color: #2563eb;
     font-weight: 600;
-    border-left: 3px solid var(--accent, #2563eb);
+    border-left: 3px solid #2563eb;
     padding-left: calc(0.5rem - 3px);
-    background: var(--accent-light, #eff6ff);
+    background: #eff6ff;
   }
 
-  /* Mobile styles */
-  @media (max-width: 768px) {
-    .table-of-contents {
-      margin-bottom: 2rem;
-    }
-
-    .toc-container summary {
-      padding: 0.5rem 0;
-    }
-
-    .toc-container:not([open]) summary {
-      margin-bottom: 0;
-    }
-  }
-
-  /* Desktop styles - for when used in sidebar */
-  @media (min-width: 769px) {
-    .toc-container summary {
-      pointer-events: none; /* Keep open on desktop */
-    }
-
-    .toggle-icon {
-      display: none; /* Hide toggle icon on desktop */
-    }
+  /* Toggle icon rotation when details is open */
+  .toc-container[open] .toc-toggle-icon {
+    transform: rotate(180deg);
   }
 </style>
 
