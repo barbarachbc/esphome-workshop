@@ -142,21 +142,26 @@ const enableCollapsible = headingSections.filter(s => s.children.length > 0).len
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Guard against duplicate script execution
-    if (document.getElementById('back-to-top')) return;
-
-    // Create and append floating back-to-top button to body
-    const backToTopButton = document.createElement('button');
-    backToTopButton.id = 'back-to-top';
-    backToTopButton.setAttribute('aria-label', 'Back to top');
-    backToTopButton.className = 'fixed bottom-8 right-8 p-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-full shadow-lg transition-opacity duration-300 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2';
-    backToTopButton.style.zIndex = '9999';
-    backToTopButton.innerHTML = `
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-      </svg>
-    `;
-    document.body.appendChild(backToTopButton);
+    // Get or create back-to-top button
+    let backToTopButton = document.getElementById('back-to-top');
+    
+    if (!backToTopButton) {
+      // Create and append floating back-to-top button to body
+      backToTopButton = document.createElement('button');
+      backToTopButton.id = 'back-to-top';
+      backToTopButton.setAttribute('aria-label', 'Back to top');
+      backToTopButton.className = 'fixed bottom-8 right-8 p-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-full shadow-lg transition-opacity duration-300 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2';
+      backToTopButton.style.zIndex = '9999';
+      backToTopButton.style.opacity = '0';
+      backToTopButton.style.pointerEvents = 'none';
+      backToTopButton.style.transition = 'opacity 300ms ease-in-out';
+      backToTopButton.innerHTML = `
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+      `;
+      document.body.appendChild(backToTopButton);
+    }
 
     const tocLinks = document.querySelectorAll('.toc-link');
     
@@ -254,9 +259,11 @@ const enableCollapsible = headingSections.filter(s => s.children.length > 0).len
       // Show/hide button based on scroll position
       const toggleBackToTopButton = () => {
         if (window.scrollY > 300) {
-          backToTopButton.classList.add('visible');
+          backToTopButton.style.opacity = '1';
+          backToTopButton.style.pointerEvents = 'auto';
         } else {
-          backToTopButton.classList.remove('visible');
+          backToTopButton.style.opacity = '0';
+          backToTopButton.style.pointerEvents = 'none';
         }
       };
 
