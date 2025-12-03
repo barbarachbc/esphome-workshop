@@ -4,6 +4,7 @@ description: 'Character-based LCD display with HD44780 controller'
 category: "display"
 manufacturer: "Generic"
 model: "HD44780"
+variants: ["1602A"]
 connectionTypes: ["i2c", "gpio"]
 components: ["i2c", "display", "lcd_pcf8574", "lcd_gpio"]
 tags: ["display", "lcd", "character", "text", "hd44780", "i2c", "pcf8574"]
@@ -31,14 +32,14 @@ The HD44780 is a character-based LCD display controller that has become the de f
 
 Display features:
 - Character-based display (not pixel-addressable)
-- Common sizes: 16x2, 20x4, 8x2, 20x2, 40x2
+- Common sizes: **16x2** (mine 1602A), 20x4, 8x2, 20x2, 40x2
 - HD44780 or compatible controller chip
 - Multiple character sets available:
   - HD44780UA00: English-Japanese (katakana, Greek letters, math symbols)
   - HD44780UA02: English-European (Greek, Cyrillic, Western European)
   - Custom manufacturer-specific character sets
 - 8 user-definable custom characters
-- Built-in backlight (usually blue or green)
+- Built-in backlight (usually blue or **green** (mine))
 - Operating voltage: 5V (display logic), 3.3V compatible with I2C module
 - Adjustable contrast via potentiometer
 
