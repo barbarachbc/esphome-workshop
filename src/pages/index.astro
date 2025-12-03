@@ -85,67 +85,70 @@ const recentChanges = await getRecentChanges(7);
 ---
 
 <Layout title="Home">
-  <div class="hero">
-    <h1>My ESPHome Workshop</h1>
-    <p class="hero-description">
+  <div class="text-center py-12 bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-lg mb-12">
+    <h1 class="m-0 mb-4 text-4xl text-white">My ESPHome Workshop</h1>
+    <p class="text-lg max-w-2xl mx-auto mb-4 opacity-95">
       After 15+ years collecting dev boards, sensors, and random gadgets, 
       it's finally time to build something useful.
     </p>
-    <p class="hero-description">{randomHeroDescription}</p>
+    <p class="text-lg max-w-2xl mx-auto mb-0 opacity-95">{randomHeroDescription}</p>
   </div>
 
-  <div class="top-row">
-    <a href="/devices" class="card stat-card">
-      <div class="card-header">
-        <h2>📟 Devices</h2>
-        <div class="stat-number">{deviceStats.total}</div>
+  <div class="grid grid-cols-2 gap-6 mb-8">
+    <a href="/devices" class="block bg-white border border-gray-200 rounded-lg p-5 no-underline text-gray-800 transition-all duration-200 shadow-sm hover:-translate-y-0.5 hover:shadow-xl hover:border-blue-600">
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="m-0 mb-2 text-xl text-blue-600">📟 Devices</h2>
+        <div class="text-5xl font-bold text-blue-600">{deviceStats.total}</div>
       </div>
-      <p>Browse physical hardware - boards, sensors, displays, and more.</p>
-      <div class="stat-breakdown">
-        <span class="stat-item deployed">✅ {deviceStats.deployed} deployed</span>
-        <span class="stat-item testing">🧪 {deviceStats.testing} testing</span>
-        <span class="stat-item ready">📦 {deviceStats.ready} ready</span>
-        <span class="stat-item pending">🔦 {deviceStats.pending} pending</span>
-        <span class="stat-item unsupported">❕ {deviceStats.unsupported} unsupported</span>
+      <p class="m-0 mb-4 text-gray-500 text-sm">Browse physical hardware - boards, sensors, displays, and more.</p>
+      <div class="flex flex-col gap-2 text-sm">
+        <span class="px-2 py-1 rounded bg-emerald-100 text-emerald-800">✅ {deviceStats.deployed} deployed</span>
+        <span class="px-2 py-1 rounded bg-amber-100 text-amber-800">🧪 {deviceStats.testing} testing</span>
+        <span class="px-2 py-1 rounded bg-gray-100 text-gray-600">📦 {deviceStats.ready} ready</span>
+        <span class="px-2 py-1 rounded bg-amber-100 text-amber-800">🔦 {deviceStats.pending} pending</span>
+        <span class="px-2 py-1 rounded bg-red-100 text-red-800">❕ {deviceStats.unsupported} unsupported</span>
         {deviceStats.retired > 0 && (
-          <span class="stat-item retired">⏸️ {deviceStats.retired} retired</span>
+          <span class="px-2 py-1 rounded bg-red-100 text-red-800">⏸️ {deviceStats.retired} retired</span>
         )}
       </div>
     </a>
 
-    <a href="/projects" class="card stat-card">
-      <div class="card-header">
-        <h2>💡 Projects</h2>
-        <div class="stat-number">{projectStats.total}</div>
+    <a href="/projects" class="block bg-white border border-gray-200 rounded-lg p-5 no-underline text-gray-800 transition-all duration-200 shadow-sm hover:-translate-y-0.5 hover:shadow-xl hover:border-blue-600">
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="m-0 mb-2 text-xl text-blue-600">💡 Projects</h2>
+        <div class="text-5xl font-bold text-blue-600">{projectStats.total}</div>
       </div>
-      <p>Complete projects with wiring and configuration.</p>
-      <div class="stat-breakdown">
-        <span class="stat-item completed">✅ {projectStats.completed} completed</span>
-        <span class="stat-item in-progress">🛠️ {projectStats.inProgress} in progress</span>
-        <span class="stat-item idea">💭 {projectStats.ideas} ideas</span>
+      <p class="m-0 mb-4 text-gray-500 text-sm">Complete projects with wiring and configuration.</p>
+      <div class="flex flex-col gap-2 text-sm">
+        <span class="px-2 py-1 rounded bg-emerald-100 text-emerald-800">✅ {projectStats.completed} completed</span>
+        <span class="px-2 py-1 rounded bg-orange-200 text-orange-900">🛠️ {projectStats.inProgress} in progress</span>
+        <span class="px-2 py-1 rounded bg-blue-100 text-blue-800">💭 {projectStats.ideas} ideas</span>
         {projectStats.abandoned > 0 && (
-          <span class="stat-item abandoned">⏸️ {projectStats.abandoned} abandoned</span>
+          <span class="px-2 py-1 rounded bg-gray-100 text-gray-600">⏸️ {projectStats.abandoned} abandoned</span>
         )}
       </div>
     </a>
   </div>
 
   {randomDevice && (
-    <div class="next-device-section">
-      <h2>🎲 Random Device to Try Next</h2>
-      <div class="device-suggestion">
-        <div class="device-title">
-          <h3>{randomDevice.data.title}</h3>
+    <div class="mb-8 p-5 bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg border-2 border-blue-600">
+      <h2 class="m-0 mb-4 text-xl text-blue-900">🎲 Random Device to Try Next</h2>
+      <div class="bg-white p-4 rounded-lg grid grid-cols-[auto_1fr] gap-6 items-center">
+        <div>
+          <h3 class="m-0 text-gray-800 text-lg whitespace-nowrap">{randomDevice.data.title}</h3>
         </div>
-        <div class="device-details">
-          <p>{randomDevice.data.description}</p>
-          <div class="device-meta">
-            <span class="badge category">{randomDevice.data.category}</span>
+        <div class="flex flex-col gap-2">
+          <p class="text-gray-500 m-0 text-sm">{randomDevice.data.description}</p>
+          <div class="flex gap-2 flex-wrap">
+            <span class="inline-block text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-800">
+              {randomDevice.data.category}
+            </span>
             {randomDevice.data.connectionTypes.map(type => (
-              <span class="badge connection">{type}</span>
+              <span class="inline-block text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">{type}</span>
             ))}
           </div>
-          <a href={`/devices/${randomDevice.slug}`} class="cta-button">
+          <a href={`/devices/${randomDevice.slug}`} 
+             class="inline-block w-fit px-4 py-2 bg-blue-600 text-white no-underline rounded-lg font-medium text-sm transition-all duration-200 hover:bg-blue-700 hover:-translate-y-0.5">
             Let's Use This! →
           </a>
         </div>
@@ -154,294 +157,35 @@ const recentChanges = await getRecentChanges(7);
   )}
 
   {recentChanges.length > 0 && (
-    <div class="whats-new-section">
-      <h2>✨ What's New</h2>
-      <div class="changelog-list">
+    <div class="mb-8 p-5 bg-white rounded-lg border border-gray-200 shadow-sm">
+      <h2 class="m-0 mb-4 text-xl text-gray-800">✨ What's New</h2>
+      <div class="flex flex-col gap-3">
         {recentChanges.map(change => (
-          <div class="changelog-item">
-            <span class="change-emoji">{getChangeTypeEmoji(change.type)}</span>
-            <span class="change-type">{change.type}:</span>
-            <a href={`/${change.contentType}s/${change.slug}`} class="change-link">
+          <div class="flex items-baseline gap-2 text-sm px-2 py-2 rounded transition-colors duration-200 hover:bg-gray-100">
+            <span class="flex-shrink-0">{getChangeTypeEmoji(change.type)}</span>
+            <span class="flex-shrink-0 font-medium capitalize text-gray-700">{change.type}:</span>
+            <a href={`/${change.contentType}s/${change.slug}`} 
+               class="text-blue-600 no-underline font-medium transition-colors duration-200 hover:text-blue-700 hover:underline">
               {change.title}
             </a>
-            <span class="change-description">- {change.description}</span>
-            <span class="change-date">({formatChangelogDate(change.date)})</span>
+            <span class="text-gray-500">- {change.description}</span>
+            <span class="text-gray-500 text-[0.85rem] ml-auto flex-shrink-0">
+              ({formatChangelogDate(change.date)})
+            </span>
           </div>
         ))}
       </div>
     </div>
   )}
 
-  <div class="quick-links">
-    <a href="/components" class="card">
-      <h2>🔧 Components</h2>
-      <p>Explore ESPHome software components and platforms.</p>
+  <div class="grid grid-cols-2 gap-5 mb-12">
+    <a href="/components" class="block bg-white border border-gray-200 rounded-lg p-5 no-underline text-gray-800 transition-all duration-200 shadow-sm hover:-translate-y-0.5 hover:shadow-xl hover:border-blue-600">
+      <h2 class="m-0 mb-2 text-xl text-blue-600">🔧 Components</h2>
+      <p class="m-0 text-gray-500 text-sm">Explore ESPHome software components and platforms.</p>
     </a>
-    <a href="/notes" class="card">
-      <h2>📓 Notes</h2>
-      <p>Setup guides, networking tricks, and lessons learned along the way.</p>
+    <a href="/notes" class="block bg-white border border-gray-200 rounded-lg p-5 no-underline text-gray-800 transition-all duration-200 shadow-sm hover:-translate-y-0.5 hover:shadow-xl hover:border-blue-600">
+      <h2 class="m-0 mb-2 text-xl text-blue-600">📓 Notes</h2>
+      <p class="m-0 text-gray-500 text-sm">Setup guides, networking tricks, and lessons learned along the way.</p>
     </a>
   </div>
-
-  <style>
-    .hero {
-      text-align: center;
-      padding: 3rem 0;
-      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
-      color: white;
-      border-radius: 0.5rem;
-      margin-bottom: 3rem;
-    }
-
-    .hero h1 {
-      margin: 0 0 1rem 0;
-      font-size: 2.5rem;
-      color: white;
-    }
-
-    .hero-description {
-      font-size: 1.125rem;
-      max-width: 600px;
-      margin: 0 auto 1rem auto;
-      opacity: 0.95;
-    }
-
-    .hero-description:last-of-type {
-      margin-bottom: 0;
-    }
-
-    .top-row {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 0.5rem;
-      padding: 1.25rem;
-      text-decoration: none;
-      color: var(--text);
-      transition: all 0.2s;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      display: block;
-    }
-
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      border-color: var(--accent);
-    }
-
-    .card h2 {
-      margin: 0 0 0.5rem 0;
-      font-size: 1.25rem;
-      color: var(--accent);
-    }
-
-    .card p {
-      margin: 0 0 1rem 0;
-      color: var(--gray);
-      font-size: 0.9rem;
-    }
-
-    .stat-card .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-card .stat-number {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--accent);
-    }
-
-    .stat-breakdown {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      font-size: 0.875rem;
-    }
-
-    .stat-item {
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
-    }
-
-    .stat-item.deployed { background: #d1fae5; color: #065f46; }
-    .stat-item.testing { background: #fef3c7; color: #92400e; }
-    .stat-item.pending { background: #fef3c7; color: #92400e; }
-    .stat-item.ready { background: #f3f4f6; color: #4b5563; }
-    .stat-item.retired { background: #fee2e2; color: #991b1b; }
-    .stat-item.completed { background: #d1fae5; color: #065f46; }
-    .stat-item.in-progress { background: #fed7aa; color: #9a3412; }
-    .stat-item.idea { background: #dbeafe; color: #1e40af; }
-    .stat-item.abandoned { background: #f3f4f6; color: #6b7280; }
-
-    .next-device-section {
-      margin-bottom: 2rem;
-      padding: 1.25rem;
-      background: linear-gradient(135deg, var(--accent-light) 0%, #f0f9ff 100%);
-      border-radius: 0.5rem;
-      border: 2px solid var(--accent);
-    }
-
-    .next-device-section h2 {
-      margin: 0 0 1rem 0;
-      color: var(--accent-dark);
-      font-size: 1.25rem;
-    }
-
-    .device-suggestion {
-      background: white;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 1.5rem;
-      align-items: center;
-    }
-
-    .device-title h3 {
-      margin: 0;
-      color: var(--text);
-      font-size: 1.125rem;
-      white-space: nowrap;
-    }
-
-    .device-details {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .device-details p {
-      color: var(--gray);
-      margin: 0;
-      font-size: 0.9rem;
-    }
-
-    .device-meta {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .badge {
-      display: inline-block;
-      font-size: 0.75rem;
-      padding: 0.125rem 0.5rem;
-      border-radius: 0.25rem;
-      background: var(--gray-light);
-      color: var(--text);
-    }
-
-    .badge.category {
-      background: var(--accent-light);
-      color: var(--accent-dark);
-    }
-
-    .badge.connection {
-      background: var(--gray-light);
-      color: var(--gray-dark);
-    }
-
-    .cta-button {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      background: var(--accent);
-      color: white;
-      text-decoration: none;
-      border-radius: 0.5rem;
-      font-weight: 500;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-      width: fit-content;
-    }
-
-    .cta-button:hover {
-      background: var(--accent-dark);
-      transform: translateY(-2px);
-    }
-
-    .quick-links {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.25rem;
-      margin-bottom: 3rem;
-    }
-
-    .whats-new-section {
-      margin-bottom: 2rem;
-      padding: 1.25rem;
-      background: white;
-      border-radius: 0.5rem;
-      border: 1px solid var(--border);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .whats-new-section h2 {
-      margin: 0 0 1rem 0;
-      color: var(--text);
-      font-size: 1.25rem;
-    }
-
-    .changelog-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .changelog-item {
-      display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-      padding: 0.5rem;
-      border-radius: 0.25rem;
-      transition: background 0.2s;
-    }
-
-    .changelog-item:hover {
-      background: var(--gray-light);
-    }
-
-    .change-emoji {
-      flex-shrink: 0;
-    }
-
-    .change-type {
-      flex-shrink: 0;
-      font-weight: 500;
-      text-transform: capitalize;
-      color: var(--gray-dark);
-    }
-
-    .change-link {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .change-link:hover {
-      color: var(--accent-dark);
-      text-decoration: underline;
-    }
-
-    .change-description {
-      color: var(--gray);
-    }
-
-    .change-date {
-      color: var(--gray);
-      font-size: 0.85rem;
-      margin-left: auto;
-      flex-shrink: 0;
-    }
-  </style>
 </Layout>
