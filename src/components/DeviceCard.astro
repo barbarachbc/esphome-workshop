@@ -50,166 +50,40 @@ const connectionTypeMap: Record<string, string> = {
   'built-in': 'builtin',
 };
 ---
-<div class="card">
-<a href={`/devices/${device.slug}`} class="card-body-a">
-  {device.data.image && (
-    <img src={device.data.image} alt={device.data.title} class="card-image" />
-  )}
-  <div class="card-content">
-    <div class="card-header">
-      <span class="card-category">{device.data.category}</span>
-      <span class={`status-badge ${effectiveStatus}`}>
-        {statusLabels[effectiveStatus]}
-      </span>
+<div class="block bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 hover:border-blue-500">
+  <a href={`/devices/${device.slug}`} class="no-underline text-inherit">
+    {device.data.image && (
+      <img src={device.data.image} alt={device.data.title} class="w-full h-48 object-cover" />
+    )}
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-2">
+        <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded text-sm font-medium">
+          {device.data.category}
+        </span>
+        <span class={`status-badge status-badge-${effectiveStatus}`}>
+          {statusLabels[effectiveStatus]}
+        </span>
+      </div>
+      <h3 class="my-2 text-xl text-gray-900">{device.data.title}</h3>
+      <p class="my-3 text-gray-600 leading-relaxed">{device.data.description}</p>
     </div>
-    <h3>{device.data.title}</h3>
-    <p>{device.data.description}</p>
-  </div>
-  {device.data.connectionTypes.length > 0 && (   
-    <div class="card-footer">
-      {device.data.connectionTypes.map(conn => {
+    {device.data.connectionTypes.length > 0 && (   
+      <div class="flex flex-wrap gap-1.5 px-5 py-3 bg-gray-50 border-t border-gray-200">
+        {device.data.connectionTypes.map(conn => {
           const componentSlug = connectionTypeMap[conn.toLowerCase()];
           return componentSlug ? (
-            <a href={`/components/${componentSlug}`} class="tag tag-link" onclick="event.stopPropagation();">{conn}</a>
+            <a href={`/components/${componentSlug}`} 
+               class="inline-block bg-gray-200 text-gray-700 px-2 py-1 rounded-md text-xs font-medium uppercase no-underline transition-all duration-200 hover:bg-blue-600 hover:text-white hover:-translate-y-0.5" 
+               onclick="event.stopPropagation();">
+              {conn}
+            </a>
           ) : (
-            <span class="tag">{conn}</span>
+            <span class="inline-block bg-gray-200 text-gray-700 px-2 py-1 rounded-md text-xs font-medium uppercase">
+              {conn}
+            </span>
           )
         })}
-    </div>
-  )}
-</a>
+      </div>
+    )}
+  </a>
 </div>
-
-<style>
-  .card {
-    display: block;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: all 0.2s;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  div.card a.card-body-a {
-    border: none;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-    border-color: #3b82f6;
-  }
-
-  .card-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-
-  .card-content {
-    padding: 1.5rem;
-  }
-
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-  }
-
-  .card-category {
-    display: inline-block;
-    background: #dbeafe;
-    color: #1e40af;
-    padding: 0.25rem 0.75rem;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-
-  .status-badge {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-
-  .status-badge.ready {
-    background: #fee2e2;
-    color: #991b1b;
-  }
-
-  .status-badge.testing {
-    background: #fef3c7;
-    color: #92400e;
-  }
-
-  .status-badge.deployed {
-    background: #d1fae5;
-    color: #065f46;
-  }
-
-  .status-badge.retired {
-    background: #f3f4f6;
-    color: #6b7280;
-  }
-
-  .status-badge.pending {
-    background: #fef3c7;
-    color: #000000;
-  }
-
-  .status-badge.unsupported {
-    background: #fecaca;
-    color: #7f1d1d;
-  }
-
-  .card-content h3 {
-    margin: 0.5rem 0;
-    font-size: 1.25rem;
-    color: #111827;
-  }
-
-  .card-content p {
-    margin: 0.75rem 0;
-    color: #4b5563;
-    line-height: 1.5;
-  }
-
-.card-footer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  padding: 0.75rem 1.25rem;
-  background: #f9fafb;
-  border-top: 1px solid #e5e7eb;
-}
-
-.tag {
-  display: inline-block;
-  background: #e5e7eb;
-  color: #374151;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: uppercase;
-}
-
-  .tag-link {
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .tag-link:hover {
-    background: var(--accent);
-    color: white;
-    transform: translateY(-1px);
-  }
-</style>

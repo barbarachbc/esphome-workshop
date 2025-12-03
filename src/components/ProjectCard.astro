@@ -32,103 +32,29 @@ const statusLabels = {
 };
 ---
 
-<a href={`/projects/${project.slug}`} class="card">
+<a href={`/projects/${project.slug}`} class="block bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 hover:border-purple-600 no-underline text-inherit">
   {project.data.image && (
-    <img src={project.data.image} alt={project.data.title} class="card-image" />
+    <img src={project.data.image} alt={project.data.title} class="w-full h-48 object-cover" />
   )}
-  <div class="card-content">
-    <div class="card-header">
-      <span class="card-difficulty" style={`background: ${difficultyStyle.bg}; color: ${difficultyStyle.color};`}>
+  <div class="p-6">
+    <div class="flex justify-between items-center mb-2">
+      <span class="inline-block px-3 py-1 rounded text-sm font-medium capitalize" 
+            style={`background: ${difficultyStyle.bg}; color: ${difficultyStyle.color};`}>
         {project.data.difficulty}
       </span>
-      <span class={`status-badge ${project.data.status}`}>
+      <span class={`status-badge status-badge-${project.data.status}`}>
         {statusLabels[project.data.status]}
       </span>
     </div>
-    <h3>{project.data.title}</h3>
-    <p>{project.data.description}</p>
-    <div class="card-tags">
-      <div class="tag-group">
-        <strong>Devices:</strong> {project.data.devices.length}
+    <h3 class="my-2 text-xl text-gray-900">{project.data.title}</h3>
+    <p class="my-3 text-gray-600 leading-relaxed">{project.data.description}</p>
+    <div class="flex gap-4 mt-4 pt-4 border-t border-gray-200">
+      <div class="text-sm text-gray-600">
+        <strong class="text-gray-900">Devices:</strong> {project.data.devices.length}
       </div>
-      <div class="tag-group">
-        <strong>Components:</strong> {project.data.components.length}
+      <div class="text-sm text-gray-600">
+        <strong class="text-gray-900">Components:</strong> {project.data.components.length}
       </div>
     </div>
   </div>
 </a>
-
-<style>
-  .card {
-    display: block;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: all 0.2s;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-    border-color: #8b5cf6;
-  }
-
-  .card-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-
-  .card-content {
-    padding: 1.5rem;
-  }
-
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-  }
-
-  .card-difficulty {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    text-transform: capitalize;
-  }
-
-  .card-content h3 {
-    margin: 0.5rem 0;
-    font-size: 1.25rem;
-    color: #111827;
-  }
-
-  .card-content p {
-    margin: 0.75rem 0;
-    color: #4b5563;
-    line-height: 1.5;
-  }
-
-  .card-tags {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #e5e7eb;
-  }
-
-  .tag-group {
-    font-size: 0.875rem;
-    color: #6b7280;
-  }
-
-  .tag-group strong {
-    color: #111827;
-  }
-</style>
