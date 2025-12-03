@@ -32,7 +32,7 @@ const statusLabels = {
 };
 ---
 
-<a href={`/projects/${project.slug}`} class="block bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 hover:border-purple-600 no-underline text-inherit">
+<a href={`/projects/${project.slug}`} class="block bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 hover:border-purple-600 dark:hover:border-purple-500 no-underline text-inherit">
   {project.data.image && (
     <img src={project.data.image} alt={project.data.title} class="w-full h-48 object-cover" />
   )}
@@ -46,14 +46,14 @@ const statusLabels = {
         {statusLabels[project.data.status]}
       </span>
     </div>
-    <h3 class="my-2 text-xl text-gray-900">{project.data.title}</h3>
-    <p class="my-3 text-gray-600 leading-relaxed">{project.data.description}</p>
-    <div class="flex gap-4 mt-4 pt-4 border-t border-gray-200">
-      <div class="text-sm text-gray-600">
-        <strong class="text-gray-900">Devices:</strong> {project.data.devices.length}
+    <h3 class="my-2 text-xl text-gray-900 dark:text-slate-100">{project.data.title}</h3>
+    <p class="my-3 text-gray-600 dark:text-slate-400 leading-relaxed">{project.data.description}</p>
+    <div class="flex gap-4 mt-4 pt-4 border-t border-gray-200 dark:border-slate-700">
+      <div class="text-sm text-gray-600 dark:text-slate-400">
+        <strong class="text-gray-900 dark:text-slate-100">Devices:</strong> {project.data.devices.length}
       </div>
-      <div class="text-sm text-gray-600">
-        <strong class="text-gray-900">Components:</strong> {project.data.components.length}
+      <div class="text-sm text-gray-600 dark:text-slate-400">
+        <strong class="text-gray-900 dark:text-slate-100">Components:</strong> {project.data.components.length}
       </div>
     </div>
   </div>

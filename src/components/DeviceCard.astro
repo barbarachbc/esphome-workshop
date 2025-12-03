@@ -50,35 +50,35 @@ const connectionTypeMap: Record<string, string> = {
   'built-in': 'builtin',
 };
 ---
-<div class="block bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 hover:border-blue-500">
+<div class="block bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 hover:border-blue-500 dark:hover:border-blue-400">
   <a href={`/devices/${device.slug}`} class="no-underline text-inherit">
     {device.data.image && (
       <img src={device.data.image} alt={device.data.title} class="w-full h-48 object-cover" />
     )}
     <div class="p-6">
       <div class="flex justify-between items-center mb-2">
-        <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded text-sm font-medium">
+        <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded text-sm font-medium">
           {device.data.category}
         </span>
         <span class={`status-badge status-badge-${effectiveStatus}`}>
           {statusLabels[effectiveStatus]}
         </span>
       </div>
-      <h3 class="my-2 text-xl text-gray-900">{device.data.title}</h3>
-      <p class="my-3 text-gray-600 leading-relaxed">{device.data.description}</p>
+      <h3 class="my-2 text-xl text-gray-900 dark:text-slate-100">{device.data.title}</h3>
+      <p class="my-3 text-gray-600 dark:text-slate-400 leading-relaxed">{device.data.description}</p>
     </div>
     {device.data.connectionTypes.length > 0 && (   
-      <div class="flex flex-wrap gap-1.5 px-5 py-3 bg-gray-50 border-t border-gray-200">
+      <div class="flex flex-wrap gap-1.5 px-5 py-3 bg-gray-50 dark:bg-slate-700 border-t border-gray-200 dark:border-slate-600">
         {device.data.connectionTypes.map(conn => {
           const componentSlug = connectionTypeMap[conn.toLowerCase()];
           return componentSlug ? (
             <a href={`/components/${componentSlug}`} 
-               class="inline-block bg-gray-200 text-gray-700 px-2 py-1 rounded-md text-xs font-medium uppercase no-underline transition-all duration-200 hover:bg-blue-600 hover:text-white hover:-translate-y-0.5" 
+               class="inline-block bg-gray-200 dark:bg-slate-600 text-gray-700 dark:text-slate-200 px-2 py-1 rounded-md text-xs font-medium uppercase no-underline transition-all duration-200 hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white hover:-translate-y-0.5" 
                onclick="event.stopPropagation();">
               {conn}
             </a>
           ) : (
-            <span class="inline-block bg-gray-200 text-gray-700 px-2 py-1 rounded-md text-xs font-medium uppercase">
+            <span class="inline-block bg-gray-200 dark:bg-slate-600 text-gray-700 dark:text-slate-200 px-2 py-1 rounded-md text-xs font-medium uppercase">
               {conn}
             </span>
           )

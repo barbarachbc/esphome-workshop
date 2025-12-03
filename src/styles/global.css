@@ -7,6 +7,13 @@
   --color-accent-light: #dbeafe;
   --color-text: #1f2937;
   --color-border: #e5e7eb;
+  
+  /* Dark mode color palette */
+  --color-dark-bg: #0f172a;
+  --color-dark-surface: #1e293b;
+  --color-dark-border: #334155;
+  --color-dark-text: #f1f5f9;
+  --color-dark-text-muted: #94a3b8;
 }
 
 @layer base {
@@ -24,6 +31,36 @@
   
   body {
     @apply m-0 p-0 font-sans leading-normal text-gray-800 bg-white;
+  }
+  
+  /* Dark mode base styles */
+  .dark {
+    color-scheme: dark;
+  }
+  
+  .dark body {
+    @apply bg-slate-900 text-slate-100;
+  }
+  
+  .dark h1, 
+  .dark h2, 
+  .dark h3, 
+  .dark h4, 
+  .dark h5, 
+  .dark h6 {
+    @apply text-slate-100;
+  }
+  
+  .dark a {
+    @apply text-blue-400 hover:text-blue-300;
+  }
+  
+  .dark code {
+    @apply bg-slate-800 text-slate-100;
+  }
+  
+  .dark pre {
+    @apply bg-slate-950 border border-slate-800;
   }
   
   /* Typography - minimal global defaults */
@@ -87,6 +124,19 @@
   .prose code::before,
   .prose code::after {
     content: '';
+  }
+  
+  /* Dark mode prose adjustments */
+  .dark .prose h2 {
+    @apply border-slate-700;
+  }
+  
+  .dark .prose code {
+    @apply bg-slate-800 text-slate-100;
+  }
+  
+  .dark .prose pre {
+    @apply bg-slate-950 border border-slate-800;
   }
   
   /* Status badge base */

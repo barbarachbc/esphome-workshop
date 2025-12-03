@@ -15,14 +15,14 @@ interface Props {
 const { component } = Astro.props;
 ---
 
-<a href={`/components/${component.slug}`} class="block bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-200 no-underline text-inherit hover:shadow-lg hover:-translate-y-0.5 hover:border-emerald-500">
+<a href={`/components/${component.slug}`} class="block bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg overflow-hidden transition-all duration-200 no-underline text-inherit hover:shadow-lg hover:-translate-y-0.5 hover:border-emerald-500 dark:hover:border-emerald-400">
   <div class="p-6">
-    <span class="inline-block bg-emerald-100 text-emerald-800 px-3 py-1 rounded text-sm font-medium mb-2">{component.data.category}</span>
-    <h3 class="my-2 text-xl text-gray-900">{component.data.title}</h3>
-    <code class="block bg-gray-100 text-gray-800 p-2 rounded text-sm my-2 font-mono">{component.data.esphomeComponent}</code>
-    <p class="mt-3 mb-0 text-gray-600 leading-normal">{component.data.description}</p>
+    <span class="inline-block bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-3 py-1 rounded text-sm font-medium mb-2">{component.data.category}</span>
+    <h3 class="my-2 text-xl text-gray-900 dark:text-slate-100">{component.data.title}</h3>
+    <code class="block bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-slate-200 p-2 rounded text-sm my-2 font-mono">{component.data.esphomeComponent}</code>
+    <p class="mt-3 mb-0 text-gray-600 dark:text-slate-400 leading-normal">{component.data.description}</p>
     {component.data.requiresHardware && (
-      <span class="inline-block bg-amber-100 text-amber-900 px-2 py-1 rounded text-xs font-medium mt-2">Requires Hardware</span>
+      <span class="inline-block bg-amber-100 dark:bg-amber-900 text-amber-900 dark:text-amber-200 px-2 py-1 rounded text-xs font-medium mt-2">Requires Hardware</span>
     )}
   </div>
 </a>

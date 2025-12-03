@@ -15,11 +15,11 @@ const { headings, minDepth = 2, maxDepth = 4 } = Astro.props;
 const tocHeadings = headings.filter(h => h.depth >= minDepth && h.depth <= maxDepth);
 ---
 
-<nav class="bg-white border border-gray-200 rounded-lg p-6 md:mb-0 mb-8" aria-label="Table of Contents">
+<nav class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6 md:mb-0 mb-8" aria-label="Table of Contents">
   <details class="toc-container" open>
     <summary class="flex justify-between items-center cursor-pointer list-none mb-4 md:pointer-events-none md:py-0 py-2 [&::-webkit-details-marker]:hidden [&:not([open])]:mb-0 md:[&:not([open])]:mb-4">
-      <h2 class="m-0 text-xl text-gray-800 font-semibold">On This Page</h2>
-      <span class="toc-toggle-icon text-gray-500 text-sm transition-transform duration-200 md:hidden" aria-hidden="true">▼</span>
+      <h2 class="m-0 text-xl text-gray-800 dark:text-slate-100 font-semibold">On This Page</h2>
+      <span class="toc-toggle-icon text-gray-500 dark:text-slate-400 text-sm transition-transform duration-200 md:hidden" aria-hidden="true">▼</span>
     </summary>
     <ul class="list-none p-0 m-0">
       {tocHeadings.map((heading) => (
@@ -29,7 +29,7 @@ const tocHeadings = headings.filter(h => h.depth >= minDepth && h.depth <= maxDe
           heading.depth === 3 ? 'pl-4' :
           'pl-8'
         }`}>
-          <a href={`#${heading.slug}`} class="toc-link block text-gray-500 no-underline py-1 px-2 rounded transition-all duration-200 text-[0.9375rem] leading-6 hover:text-blue-600 hover:underline hover:bg-blue-50 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2">
+          <a href={`#${heading.slug}`} class="toc-link block text-gray-500 dark:text-slate-400 no-underline py-1 px-2 rounded transition-all duration-200 text-[0.9375rem] leading-6 hover:text-blue-600 dark:hover:text-blue-400 hover:underline hover:bg-blue-50 dark:hover:bg-slate-700 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2">
             {heading.text}
           </a>
         </li>
@@ -46,6 +46,12 @@ const tocHeadings = headings.filter(h => h.depth >= minDepth && h.depth <= maxDe
     border-left: 3px solid #2563eb;
     padding-left: calc(0.5rem - 3px);
     background: #eff6ff;
+  }
+
+  .dark .toc-link.active {
+    color: #60a5fa;
+    border-left-color: #60a5fa;
+    background: #1e3a5f;
   }
 
   /* Toggle icon rotation when details is open */
