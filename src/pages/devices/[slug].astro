@@ -99,483 +99,159 @@ if (projectsUsingDevice.length > 0) {
 ---
 
 <Layout title={`${device.data.title} - Devices`}>
-  <div class="page-layout">
-    <article class="main-content">
-      <div id="page-info" class="header">
-        <h1>{device.data.title}</h1>
-        <div class="header-badges">
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 max-w-7xl mx-auto">
+    {tocHeadings.length >= 3 && (
+      <div class="lg:hidden mb-8">
+        <TableOfContents headings={tocHeadings} />
+      </div>
+    )}
+    
+    <article class="min-w-0">
+      <div id="page-info" class="flex justify-between items-center mb-4 flex-wrap gap-4">
+        <h1 class="text-4xl font-semibold m-0">{device.data.title}</h1>
+        <div class="flex gap-2 items-center flex-wrap">
           {device.data.productionStatus && device.data.productionStatus !== 'unknown' && (
-            <span class={`production-status-badge ${device.data.productionStatus.toLowerCase()}`}>
+            <span class={`inline-block text-sm px-3 py-2 rounded-lg font-medium ${
+              device.data.productionStatus === 'active' ? 'bg-emerald-200 text-emerald-900' :
+              device.data.productionStatus === 'NRND' ? 'bg-amber-100 text-amber-900' :
+              'bg-red-100 text-red-900'
+            }`}>
               {productionStatusLabels[device.data.productionStatus]}
             </span>
           )}
-          <span class={`status-badge ${displayStatus}`}>
+          <span class={`status-badge status-badge-${displayStatus}`}>
             {statusLabels[displayStatus]}
           </span>
         </div>
       </div>
 
-    <div class="meta">
-      <span class="badge">{device.data.category}</span>
-      {device.data.manufacturer && (
-        <span class="manufacturer">{device.data.manufacturer}</span>
-      )}
-      {device.data.model && (
-        <span class="model">Model: {device.data.model}</span>
-      )}
-      {device.data.variants && device.data.variants.length > 0 && (
-        device.data.variants.map(variant => (
-          <span class="variant-pill">{variant}</span>
-        ))
-      )}
-      {device.data.dateAcquired && (
-        <span class="date-acquired">📅 Acquired: {device.data.dateAcquired}</span>
-      )}
-    </div>
+      <div class="flex items-center gap-4 flex-wrap mb-8">
+        <span class="inline-block bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold">{device.data.category}</span>
+        {device.data.manufacturer && (
+          <span class="text-gray-500 text-sm">{device.data.manufacturer}</span>
+        )}
+        {device.data.model && (
+          <span class="text-gray-500 text-sm">Model: {device.data.model}</span>
+        )}
+        {device.data.variants && device.data.variants.length > 0 && (
+          device.data.variants.map(variant => (
+            <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">{variant}</span>
+          ))
+        )}
+        {device.data.dateAcquired && (
+          <span class="text-gray-500 text-sm">📅 Acquired: {device.data.dateAcquired}</span>
+        )}
+      </div>
 
-    <div class="description">
-      <p><strong>{device.data.description}</strong></p>
-    </div>
+      <div class="bg-gray-100 p-6 rounded-lg mb-8">
+        <p class="m-0 text-lg"><strong>{device.data.description}</strong></p>
+      </div>
 
-    <LastModified 
-      date={device.data.lastModified}
-      verified={device.data.lastVerified}
-      showAge={true}
-    />
+      <LastModified 
+        date={device.data.lastModified}
+        verified={device.data.lastVerified}
+        showAge={true}
+      />
 
-    {projectsUsingDevice.length > 0 && (
-      <details class="used-in-projects-collapsible" open>
-        <summary>
-          <h3>🚀 Used in Projects ({projectsUsingDevice.length})</h3>
-        </summary>
-        <div class="projects-list">
-          {projectsUsingDevice.map(project => (
-            <div class="project-item">
-              <a href={`/projects/${project.slug}`}>
-                {project.data.title}
-              </a>
-              <span class={`status-badge ${project.data.status}`}>
-                {projectStatusLabels[project.data.status]}
-              </span>
-            </div>
-          ))}
+      {projectsUsingDevice.length > 0 && (
+        <details class="bg-gray-100 border-2 border-blue-600 rounded-lg p-0 my-8" open>
+          <summary class="cursor-pointer px-6 py-4 select-none list-none bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg transition-colors duration-200 hover:from-blue-200 hover:to-blue-100 [&::-webkit-details-marker]:hidden before:content-['▶'] before:inline-block before:mr-2 before:transition-transform before:duration-200 [[open]>&]:before:rotate-90">
+            <h3 class="inline m-0 text-blue-800 text-xl">🚀 Used in Projects ({projectsUsingDevice.length})</h3>
+          </summary>
+          <div class="px-6 py-4">
+            {projectsUsingDevice.map(project => (
+              <div class="flex justify-between items-center px-3 py-3 mb-2 last:mb-0 bg-white rounded-lg border border-gray-200">
+                <a href={`/projects/${project.slug}`} class="text-blue-600 no-underline font-medium text-base hover:underline">
+                  {project.data.title}
+                </a>
+                <span class={`status-badge status-badge-${project.data.status}`}>
+                  {projectStatusLabels[project.data.status]}
+                </span>
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
+
+      {device.data.notes && (
+        <div class="bg-amber-100 border-l-4 border-amber-500 px-6 py-6 rounded-lg my-8">
+          <h3 class="m-0 mb-2 text-amber-900">📝 Notes</h3>
+          <p class="m-0 text-amber-950">{device.data.notes}</p>
         </div>
-      </details>
-    )}
+      )}
 
-    {device.data.notes && (
-      <div class="notes-section">
-        <h3>📝 Notes</h3>
-        <p>{device.data.notes}</p>
-      </div>
-    )}
-
-    {device.data.connectionTypes.length > 0 && (
-      <div class="section">
-        <h2>Connection Types</h2>
-        <div class="connections">
-          {device.data.connectionTypes.map(conn => {
-            const componentSlug = connectionTypeMap[conn.toLowerCase()];
-            return componentSlug ? (
-              <a href={`/components/${componentSlug}`} class="tag tag-link">{conn}</a>
-            ) : (
-              <span class="tag">{conn}</span>
-            );
-          })}
+      {device.data.connectionTypes.length > 0 && (
+        <div class="my-8">
+          <h2 class="text-2xl font-semibold mt-6 mb-3 border-b-2 border-gray-200 pb-2">Connection Types</h2>
+          <div class="flex flex-wrap gap-2">
+            {device.data.connectionTypes.map(conn => {
+              const componentSlug = connectionTypeMap[conn.toLowerCase()];
+              return componentSlug ? (
+                <a href={`/components/${componentSlug}`} class="inline-block bg-gray-100 text-gray-800 px-4 py-2 rounded text-base font-medium no-underline transition-all duration-200 hover:bg-blue-600 hover:text-white hover:-translate-y-0.5">{conn}</a>
+              ) : (
+                <span class="inline-block bg-gray-100 text-gray-800 px-4 py-2 rounded text-base font-medium">{conn}</span>
+              );
+            })}
+          </div>
         </div>
+      )}
+
+      <div class="my-8 prose max-w-none">
+        <Content />
       </div>
+
+      {device.data.references && device.data.references.length > 0 && (
+        <div id="references" class="my-8">
+          <h2 class="text-2xl font-semibold mt-6 mb-3 border-b-2 border-gray-200 pb-2">References</h2>
+          <ul class="list-none p-0">
+            {device.data.references.map(ref => (
+              <li class="mb-2">
+                <a href={ref.url} target="_blank" rel="noopener noreferrer" class="text-blue-600 no-underline font-medium hover:underline">
+                  {ref.title} →
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {device.data.purchaseLinks && device.data.purchaseLinks.length > 0 && (
+        <div id="where-to-buy" class="my-8">
+          <h2 class="text-2xl font-semibold mt-6 mb-3 border-b-2 border-gray-200 pb-2">Where to Buy</h2>
+          <ul class="list-none p-0">
+            {device.data.purchaseLinks.map(link => (
+              <li class="mb-2">
+                <a href={link.url} target="_blank" rel="noopener noreferrer" class="text-blue-600 no-underline font-medium hover:underline">
+                  {link.vendor} →
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <a href="/devices" class="inline-block mt-8 text-blue-600 no-underline font-medium hover:underline">← Back to all devices</a>
+
+      <IssueReportButton 
+        pageType="device"
+        pageTitle={device.data.title}
+        pageSlug={device.slug}
+      />
+    </article>
+
+    {tocHeadings.length >= 3 && (
+      <aside class="hidden lg:block">
+        <div class="sticky top-8 max-h-[calc(100vh-4rem)] overflow-y-auto">
+          <TableOfContents headings={tocHeadings} />
+        </div>
+      </aside>
     )}
-
-    <div class="content">
-      <Content />
-    </div>
-
-    {device.data.references && device.data.references.length > 0 && (
-      <div id="references" class="section">
-        <h2>References</h2>
-        <ul class="reference-links">
-          {device.data.references.map(ref => (
-            <li>
-              <a href={ref.url} target="_blank" rel="noopener noreferrer">
-                {ref.title} →
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
-
-    {device.data.purchaseLinks && device.data.purchaseLinks.length > 0 && (
-      <div id="where-to-buy" class="section">
-        <h2>Where to Buy</h2>
-        <ul class="purchase-links">
-          {device.data.purchaseLinks.map(link => (
-            <li>
-              <a href={link.url} target="_blank" rel="noopener noreferrer">
-                {link.vendor} →
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
-
-    <a href="/devices" class="back-link">← Back to all devices</a>
-
-    <IssueReportButton 
-      pageType="device"
-      pageTitle={device.data.title}
-      pageSlug={device.slug}
-    />
-  </article>
-
-  {tocHeadings.length >= 3 && (
-    <aside class="toc-sidebar">
-      <TableOfContents headings={tocHeadings} />
-    </aside>
-  )}
   </div>
 
   <style>
-    .page-layout {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 2rem;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    @media (min-width: 1024px) {
-      .page-layout {
-        grid-template-columns: 1fr 300px;
-      }
-    }
-
-    .main-content {
-      min-width: 0; /* Prevent overflow */
-    }
-
-    .toc-sidebar {
-      position: sticky;
-      top: 2rem;
-      height: fit-content;
-      max-height: calc(100vh - 4rem);
-      overflow-y: auto;
-      display: none;
-    }
-
-    @media (min-width: 1024px) {
-      .toc-sidebar {
-        display: block;
-      }
-    }
-
-    @media (max-width: 1023px) {
-      .toc-sidebar {
-        display: block;
-        position: static;
-        order: -1;
-        max-height: none;
-      }
-    }
-
-    article {
-      width: 100%;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .header h1 {
-      margin: 0;
-    }
-
-    .header-badges {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .production-status-badge {
-      display: inline-block;
-      font-size: 0.875rem;
-      padding: 0.5rem 0.75rem;
-      border-radius: 0.5rem;
-      font-weight: 500;
-    }
-
-    .production-status-badge.active {
-      background: #d1fae5;
-      color: #065f46;
-    }
-
-    .production-status-badge.nrnd {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .production-status-badge.discontinued {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .meta {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-    }
-
-    .badge {
-      display: inline-block;
-      background: var(--accent);
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 1rem;
-      font-size: 0.875rem;
-      font-weight: 600;
-    }
-
-    .manufacturer, .model {
-      color: var(--gray);
-      font-size: 0.875rem;
-    }
-
-    .variant-pill {
-      display: inline-block;
-      background: var(--accent-light);
-      color: var(--accent-dark);
-      padding: 0.25rem 0.75rem;
-      border-radius: 1rem;
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-
-    .date-acquired {
-      color: var(--gray);
-      font-size: 0.875rem;
-    }
-
-    .description {
-      background: var(--light-gray);
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .description p {
-      margin: 0;
-      font-size: 1.125rem;
-    }
-
-    .notes-section {
-      background: #fef3c7;
-      border-left: 4px solid #f59e0b;
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      margin: 2rem 0;
-    }
-
-    .notes-section h3 {
-      margin: 0 0 0.5rem 0;
-      color: #92400e;
-    }
-
-    .notes-section p {
-      margin: 0;
-      color: #78350f;
-    }
-
-    .section {
-      margin: 2rem 0;
-    }
-
-    .connections {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .tag {
-      display: inline-block;
-      background: var(--light-gray);
-      padding: 0.5rem 1rem;
-      border-radius: 0.25rem;
-      font-size: 1rem;
-      color: var(--text);
-      font-weight: 500;
-      text-decoration: none;
-    }
-
-    .tag-link {
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .tag-link:hover {
-      background: var(--accent);
-      color: white;
-      transform: translateY(-2px);
-    }
-
-    .content {
-      margin: 2rem 0;
-    }
-
-    .reference-links {
-      list-style: none;
-      padding: 0;
-    }
-
-    .reference-links li {
-      margin-bottom: 0.5rem;
-    }
-
-    .reference-links a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .reference-links a:hover {
-      text-decoration: underline;
-    }
-
-    .purchase-links {
-      list-style: none;
-      padding: 0;
-    }
-
-    .purchase-links li {
-      margin-bottom: 0.5rem;
-    }
-
-    .purchase-links a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .purchase-links a:hover {
-      text-decoration: underline;
-    }
-
-    .used-in-projects-collapsible {
-      background: var(--light-gray);
-      border: 2px solid var(--accent);
-      border-radius: 0.5rem;
-      padding: 0;
-      margin: 2rem 0;
-    }
-
-    .used-in-projects-collapsible summary {
-      cursor: pointer;
-      padding: 1rem 1.5rem;
-      user-select: none;
-      list-style: none;
-      background: linear-gradient(135deg, var(--accent-light) 0%, #f0f9ff 100%);
-      border-radius: 0.5rem;
-    }
-
-    .used-in-projects-collapsible summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .used-in-projects-collapsible summary::before {
-      content: '▶';
-      display: inline-block;
-      margin-right: 0.5rem;
-      transition: transform 0.2s;
-    }
-
-    .used-in-projects-collapsible[open] summary::before {
+    /* Details marker rotation for open state */
+    details[open] summary::before {
       transform: rotate(90deg);
-    }
-
-    .used-in-projects-collapsible summary h3 {
-      display: inline;
-      margin: 0;
-      color: var(--accent-dark);
-      font-size: 1.25rem;
-    }
-
-    .used-in-projects-collapsible summary:hover {
-      background: linear-gradient(135deg, #bfdbfe 0%, #dbeafe 100%);
-    }
-
-    .projects-list {
-      padding: 1rem 1.5rem;
-    }
-
-    .project-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem;
-      margin-bottom: 0.5rem;
-      background: white;
-      border-radius: 0.5rem;
-      border: 1px solid var(--border);
-    }
-
-    .project-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .project-item a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 1rem;
-    }
-
-    .project-item a:hover {
-      text-decoration: underline;
-    }
-
-    .used-in-projects ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .used-in-projects li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem;
-      margin-bottom: 0.5rem;
-      background: var(--light-gray);
-      border-radius: 0.5rem;
-    }
-
-    .used-in-projects a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .used-in-projects a:hover {
-      text-decoration: underline;
-    }
-
-    .back-link {
-      display: inline-block;
-      margin-top: 2rem;
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .back-link:hover {
-      text-decoration: underline;
     }
   </style>
 </Layout>

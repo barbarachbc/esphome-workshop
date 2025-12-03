@@ -18,22 +18,32 @@ const { Content, headings } = await note.render();
 ---
 
 <Layout title={`${note.data.title} - Notes`}>
-  <div class="page-layout">
-    <article class="main-content">
-      <div class="header">
-        <h1>{note.data.title}</h1>
-        <div class="meta">
-          <span class="badge category">{note.data.category}</span>
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 max-w-7xl mx-auto px-4">
+    {headings.length >= 3 && (
+      <div class="lg:hidden mb-8">
+        <TableOfContents headings={headings} minDepth={1} />
+      </div>
+    )}
+    
+    <article class="min-w-0">
+      <div class="mb-8">
+        <h1 class="text-4xl font-semibold mb-4">{note.data.title}</h1>
+        <div class="flex items-center gap-4 flex-wrap">
+          <span class="inline-block bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold">{note.data.category}</span>
           {note.data.difficulty && (
-            <span class={`badge difficulty ${note.data.difficulty}`}>
+            <span class={`inline-block text-white px-4 py-2 rounded-full text-sm font-semibold ${
+              note.data.difficulty === 'beginner' ? 'bg-emerald-500' :
+              note.data.difficulty === 'intermediate' ? 'bg-amber-500' :
+              'bg-red-500'
+            }`}>
               {note.data.difficulty}
             </span>
           )}
         </div>
       </div>
 
-      <div class="description">
-        <p><strong>{note.data.description}</strong></p>
+      <div class="bg-gray-100 p-6 rounded-lg mb-8">
+        <p class="m-0 text-lg"><strong>{note.data.description}</strong></p>
       </div>
 
       <LastModified 
@@ -43,20 +53,20 @@ const { Content, headings } = await note.render();
       />
 
       {note.data.tags && note.data.tags.length > 0 && (
-        <div class="section">
-          <div class="tags">
+        <div class="my-8">
+          <div class="flex flex-wrap gap-2">
             {note.data.tags.map(tag => (
-              <span class="tag">{tag}</span>
+              <span class="inline-block bg-gray-100 text-gray-800 px-4 py-2 rounded text-sm font-medium">{tag}</span>
             ))}
           </div>
         </div>
       )}
 
-      <div class="content">
+      <div class="my-8 prose max-w-none">
         <Content />
       </div>
 
-      <a href="/notes" class="back-link">← Back to all notes</a>
+      <a href="/notes" class="inline-block mt-8 text-blue-600 no-underline font-medium hover:underline">← Back to all notes</a>
 
       <IssueReportButton 
         pageType="note"
@@ -66,149 +76,11 @@ const { Content, headings } = await note.render();
     </article>
 
     {headings.length >= 3 && (
-      <aside class="toc-sidebar">
-        <TableOfContents headings={headings} minDepth={1} />
+      <aside class="hidden lg:block">
+        <div class="sticky top-8 max-h-[calc(100vh-4rem)] overflow-y-auto">
+          <TableOfContents headings={headings} minDepth={1} />
+        </div>
       </aside>
     )}
   </div>
-
-  <style>
-    .page-layout {
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 2rem;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 1rem;
-    }
-
-    .main-content {
-      min-width: 0;
-    }
-
-    .toc-sidebar {
-      position: sticky;
-      top: 2rem;
-      height: fit-content;
-      max-height: calc(100vh - 4rem);
-      overflow-y: auto;
-    }
-
-    @media (max-width: 1024px) {
-      .page-layout {
-        grid-template-columns: 1fr 250px;
-        gap: 1.5rem;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .page-layout {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-      
-      .toc-sidebar {
-        position: static;
-        order: -1;
-        max-height: none;
-      }
-    }
-
-    .header {
-      margin-bottom: 2rem;
-    }
-
-    .header h1 {
-      margin-bottom: 1rem;
-    }
-
-    .meta {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      border-radius: 1rem;
-      font-size: 0.875rem;
-      font-weight: 600;
-    }
-
-    .badge.category {
-      background: #8b5cf6;
-      color: white;
-    }
-
-    .badge.difficulty {
-      color: white;
-    }
-
-    .badge.difficulty.beginner {
-      background: #10b981;
-    }
-
-    .badge.difficulty.intermediate {
-      background: #f59e0b;
-    }
-
-    .badge.difficulty.advanced {
-      background: #ef4444;
-    }
-
-    .last-updated {
-      color: var(--gray);
-      font-size: 0.875rem;
-    }
-
-    .description {
-      background: var(--light-gray);
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .description p {
-      margin: 0;
-      font-size: 1.125rem;
-    }
-
-    .section {
-      margin: 2rem 0;
-    }
-
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .tag {
-      display: inline-block;
-      background: var(--light-gray);
-      padding: 0.5rem 1rem;
-      border-radius: 0.25rem;
-      font-size: 0.875rem;
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    .content {
-      margin: 2rem 0;
-    }
-
-    .back-link {
-      display: inline-block;
-      margin-top: 2rem;
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .back-link:hover {
-      text-decoration: underline;
-    }
-  </style>
 </Layout>

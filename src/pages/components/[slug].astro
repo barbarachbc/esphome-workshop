@@ -41,234 +41,77 @@ if (relatedDevices.length > 0) {
 ---
 
 <Layout title={`${component.data.title} - Components`}>
-  <div class="page-layout">
-    <article class="main-content">
-      <div id="page-info" class="header">
-        <h1>{component.data.title}</h1>
-        <div class="meta">
-        <span class="badge">{component.data.category}</span>
-        <code class="component-name">{component.data.esphomeComponent}</code>
-        {component.data.requiresHardware && (
-          <span class="hardware-badge">Requires Hardware</span>
-        )}
-      </div>
-    </div>
-
-    <div class="description">
-      <p><strong>{component.data.description}</strong></p>
-    </div>
-
-    <LastModified 
-      date={component.data.lastModified}
-      verified={component.data.lastVerified}
-      showAge={true}
-    />
-
-    {component.data.documentation && (
-      <div id="official-docs" class="section">
-        <h2>Official Documentation</h2>
-        <a href={component.data.documentation} target="_blank" rel="noopener noreferrer" class="doc-link">
-          📚 ESPHome Documentation →
-        </a>
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 max-w-7xl mx-auto px-4">
+    {tocHeadings.length >= 3 && (
+      <div class="lg:hidden mb-8">
+        <TableOfContents headings={tocHeadings} />
       </div>
     )}
-
-    <div class="content">
-      <Content />
-    </div>
-
-    {relatedDevices.length > 0 && (
-      <div id="related-devices" class="section">
-        <h2>Related Devices</h2>
-        <div class="related-grid">
-          {relatedDevices.map(device => (
-            <a href={`/devices/${device.slug}`} class="related-card">
-              <h4>{device.data.title}</h4>
-              <p>{device.data.description}</p>
-            </a>
-          ))}
+    
+    <article class="min-w-0">
+      <div id="page-info" class="mb-8">
+        <h1 class="text-4xl font-semibold mb-4">{component.data.title}</h1>
+        <div class="flex items-center gap-4 flex-wrap">
+          <span class="inline-block bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold">{component.data.category}</span>
+          <code class="bg-gray-100 px-4 py-2 rounded text-sm text-pink-700">{component.data.esphomeComponent}</code>
+          {component.data.requiresHardware && (
+            <span class="bg-amber-500 text-white px-4 py-2 rounded-full text-xs font-semibold">Requires Hardware</span>
+          )}
         </div>
       </div>
-    )}
 
-    <a href="/components" class="back-link">← Back to all components</a>
+      <div class="bg-gray-100 p-6 rounded-lg mb-8">
+        <p class="m-0 text-lg"><strong>{component.data.description}</strong></p>
+      </div>
 
-    <IssueReportButton 
-      pageType="component"
-      pageTitle={component.data.title}
-      pageSlug={component.slug}
-    />
+      <LastModified 
+        date={component.data.lastModified}
+        verified={component.data.lastVerified}
+        showAge={true}
+      />
+
+      {component.data.documentation && (
+        <div id="official-docs" class="my-8">
+          <h2 class="text-2xl font-semibold mb-4">Official Documentation</h2>
+          <a href={component.data.documentation} target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg no-underline font-medium transition-colors duration-200 hover:bg-blue-700">
+            📚 ESPHome Documentation →
+          </a>
+        </div>
+      )}
+
+      <div class="my-8 prose max-w-none">
+        <Content />
+      </div>
+
+      {relatedDevices.length > 0 && (
+        <div id="related-devices" class="my-8">
+          <h2 class="text-2xl font-semibold mb-4">Related Devices</h2>
+          <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
+            {relatedDevices.map(device => (
+              <a href={`/devices/${device.slug}`} class="block bg-white border border-gray-200 rounded-lg p-4 no-underline text-gray-800 transition-all duration-200 hover:border-blue-600 hover:-translate-y-0.5">
+                <h4 class="m-0 mb-2 text-blue-600 text-base">{device.data.title}</h4>
+                <p class="m-0 text-gray-500 text-sm">{device.data.description}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <a href="/components" class="inline-block mt-8 text-blue-600 no-underline font-medium hover:underline">← Back to all components</a>
+
+      <IssueReportButton 
+        pageType="component"
+        pageTitle={component.data.title}
+        pageSlug={component.slug}
+      />
     </article>
 
     {tocHeadings.length >= 3 && (
-      <aside class="toc-sidebar">
-        <TableOfContents headings={tocHeadings} />
+      <aside class="hidden lg:block">
+        <div class="sticky top-8 max-h-[calc(100vh-4rem)] overflow-y-auto">
+          <TableOfContents headings={tocHeadings} />
+        </div>
       </aside>
     )}
   </div>
-
-  <style>
-    .page-layout {
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 2rem;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 1rem;
-    }
-
-    .main-content {
-      min-width: 0;
-    }
-
-    .toc-sidebar {
-      position: sticky;
-      top: 2rem;
-      height: fit-content;
-      max-height: calc(100vh - 4rem);
-      overflow-y: auto;
-    }
-
-    @media (max-width: 1024px) {
-      .page-layout {
-        grid-template-columns: 1fr 250px;
-        gap: 1.5rem;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .page-layout {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-      
-      .toc-sidebar {
-        position: static;
-        order: -1;
-        max-height: none;
-      }
-    }
-
-    .header {
-      margin-bottom: 2rem;
-    }
-
-    .header h1 {
-      margin-bottom: 1rem;
-    }
-
-    .meta {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .badge {
-      display: inline-block;
-      background: var(--accent);
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 1rem;
-      font-size: 0.875rem;
-      font-weight: 600;
-    }
-
-    .component-name {
-      background: var(--light-gray);
-      padding: 0.5rem 1rem;
-      border-radius: 0.25rem;
-      font-size: 0.875rem;
-      color: #c7254e;
-    }
-
-    .hardware-badge {
-      background: #f59e0b;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 1rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-
-    .description {
-      background: var(--light-gray);
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .description p {
-      margin: 0;
-      font-size: 1.125rem;
-    }
-
-    .section {
-      margin: 2rem 0;
-    }
-
-    .doc-link {
-      display: inline-block;
-      background: var(--accent);
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
-      text-decoration: none;
-      font-weight: 500;
-      transition: background 0.2s;
-    }
-
-    .doc-link:hover {
-      background: var(--accent-dark);
-    }
-
-    .content {
-      margin: 2rem 0;
-    }
-
-    .related-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1rem;
-    }
-
-    .related-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 0.5rem;
-      padding: 1rem;
-      text-decoration: none;
-      color: var(--text);
-      transition: all 0.2s;
-    }
-
-    .related-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    .related-card h4 {
-      margin: 0 0 0.5rem 0;
-      color: var(--accent);
-      font-size: 1rem;
-    }
-
-    .related-card p {
-      margin: 0;
-      color: var(--gray);
-      font-size: 0.875rem;
-    }
-
-    .back-link {
-      display: inline-block;
-      margin-top: 2rem;
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .back-link:hover {
-      text-decoration: underline;
-    }
-  </style>
 </Layout>

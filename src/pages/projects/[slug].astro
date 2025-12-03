@@ -46,34 +46,44 @@ const difficultyLabels = {
 ---
 
 <Layout title={`${project.data.title} - Projects`}>
-  <div class="page-layout">
-    <article class="main-content">
-      <div id="page-info" class="header">
-        <h1>{project.data.title}</h1>
-        <span class={`status-badge ${project.data.status}`}>
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 max-w-7xl mx-auto px-4">
+    {tocHeadings.length >= 3 && (
+      <div class="lg:hidden mb-8">
+        <TableOfContents headings={tocHeadings} />
+      </div>
+    )}
+    
+    <article class="min-w-0">
+      <div id="page-info" class="flex justify-between items-center mb-4">
+        <h1 class="text-4xl font-semibold m-0">{project.data.title}</h1>
+        <span class={`status-badge status-badge-${project.data.status}`}>
           {statusLabels[project.data.status]}
         </span>
       </div>
 
-      <div class="meta">
-        <span class={`badge badge-${project.data.difficulty}`}>
+      <div class="flex items-center gap-4 flex-wrap mb-8">
+        <span class={`inline-block text-white px-4 py-2 rounded-full text-sm font-semibold capitalize ${
+          project.data.difficulty === 'beginner' ? 'bg-emerald-500' :
+          project.data.difficulty === 'intermediate' ? 'bg-amber-500' :
+          'bg-red-500'
+        }`}>
           {difficultyLabels[project.data.difficulty]}
         </span>
         {project.data.dateStarted && (
-          <span class="date-info">📅 Started: {project.data.dateStarted}</span>
+          <span class="text-gray-500 text-sm">📅 Started: {project.data.dateStarted}</span>
         )}
         {project.data.dateCompleted && (
-          <span class="date-info">✅ Completed: {project.data.dateCompleted}</span>
+          <span class="text-gray-500 text-sm">✅ Completed: {project.data.dateCompleted}</span>
         )}
         {project.data.tags && project.data.tags.length > 0 && (
           project.data.tags.map(tag => (
-            <span class="tag-pill">{tag}</span>
+            <span class="inline-block bg-gray-100 text-gray-800 px-3 py-2 rounded-lg text-sm font-medium">{tag}</span>
           ))
         )}
       </div>
 
-      <div class="description">
-        <p><strong>{project.data.description}</strong></p>
+      <div class="bg-gray-100 p-6 rounded-lg mb-8">
+        <p class="m-0 text-lg"><strong>{project.data.description}</strong></p>
       </div>
 
       <LastModified 
@@ -82,269 +92,60 @@ const difficultyLabels = {
         showAge={true}
       />
 
-    {project.data.motivation && (
-      <div class="motivation-callout">
-        <h3>💡 Why This Project?</h3>
-        <p>{project.data.motivation}</p>
-      </div>
-    )}
+      {project.data.motivation && (
+        <div class="bg-gradient-to-br from-blue-100 to-blue-50 border-l-4 border-blue-600 px-6 py-6 rounded-lg my-8">
+          <h3 class="m-0 mb-2 text-blue-800">💡 Why This Project?</h3>
+          <p class="m-0 text-gray-800">{project.data.motivation}</p>
+        </div>
+      )}
 
-    <div class="requirements">
-      <div class="requirement-section">
-        <h2>Required Devices</h2>
-        <div class="card-grid">
-          {devices.map(device => (
-            <a href={`/devices/${device.slug}`} class="info-card">
-              <h4>{device.data.title}</h4>
-              <p>{device.data.description}</p>
-              <span class="mini-badge">{device.data.category}</span>
-            </a>
-          ))}
+      <div class="my-8">
+        <div class="mb-8">
+          <h2 class="text-2xl font-semibold mb-4">Required Devices</h2>
+          <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
+            {devices.map(device => (
+              <a href={`/devices/${device.slug}`} class="block bg-white border border-gray-200 rounded-lg p-4 no-underline text-gray-800 transition-all duration-200 hover:border-blue-600 hover:-translate-y-0.5 hover:shadow-md">
+                <h4 class="m-0 mb-2 text-blue-600 text-base">{device.data.title}</h4>
+                <p class="my-2 text-gray-500 text-sm">{device.data.description}</p>
+                <span class="inline-block bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">{device.data.category}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div class="mb-8">
+          <h2 class="text-2xl font-semibold mb-4">Required Components</h2>
+          <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
+            {components.map(component => (
+              <a href={`/components/${component.slug}`} class="block bg-white border border-gray-200 rounded-lg p-4 no-underline text-gray-800 transition-all duration-200 hover:border-blue-600 hover:-translate-y-0.5 hover:shadow-md">
+                <h4 class="m-0 mb-2 text-blue-600 text-base">{component.data.title}</h4>
+                <code class="block bg-gray-100 px-2 py-1 rounded text-xs mb-2 text-pink-700">{component.data.esphomeComponent}</code>
+                <p class="m-0 text-gray-500 text-sm">{component.data.description}</p>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div class="requirement-section">
-        <h2>Required Components</h2>
-        <div class="card-grid">
-          {components.map(component => (
-            <a href={`/components/${component.slug}`} class="info-card">
-              <h4>{component.data.title}</h4>
-              <code class="component-code">{component.data.esphomeComponent}</code>
-              <p>{component.data.description}</p>
-            </a>
-          ))}
-        </div>
+      <div class="my-8 prose max-w-none">
+        <Content />
       </div>
-    </div>
 
-    <div class="content">
-      <Content />
-    </div>
+      <a href="/projects" class="inline-block mt-8 text-blue-600 no-underline font-medium hover:underline">← Back to all projects</a>
 
-    <a href="/projects" class="back-link">← Back to all projects</a>
-
-    <IssueReportButton 
-      pageType="project"
-      pageTitle={project.data.title}
-      pageSlug={project.slug}
-    />
+      <IssueReportButton 
+        pageType="project"
+        pageTitle={project.data.title}
+        pageSlug={project.slug}
+      />
     </article>
 
     {tocHeadings.length >= 3 && (
-      <aside class="toc-sidebar">
-        <TableOfContents headings={tocHeadings} />
+      <aside class="hidden lg:block">
+        <div class="sticky top-8 max-h-[calc(100vh-4rem)] overflow-y-auto">
+          <TableOfContents headings={tocHeadings} />
+        </div>
       </aside>
     )}
   </div>
-
-  <style>
-    .page-layout {
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 2rem;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 1rem;
-    }
-
-    .main-content {
-      min-width: 0;
-    }
-
-    .toc-sidebar {
-      position: sticky;
-      top: 2rem;
-      height: fit-content;
-      max-height: calc(100vh - 4rem);
-      overflow-y: auto;
-    }
-
-    @media (max-width: 1024px) {
-      .page-layout {
-        grid-template-columns: 1fr 250px;
-        gap: 1.5rem;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .page-layout {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-      
-      .toc-sidebar {
-        position: static;
-        order: -1;
-        max-height: none;
-      }
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-
-    .header h1 {
-      margin: 0;
-    }
-
-    .meta {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-    }
-
-    .badge {
-      display: inline-block;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 1rem;
-      font-size: 0.875rem;
-      font-weight: 600;
-      text-transform: capitalize;
-    }
-
-    .badge-beginner {
-      background: #10b981;
-    }
-
-    .badge-intermediate {
-      background: #f59e0b;
-    }
-
-    .badge-advanced {
-      background: #ef4444;
-    }
-
-    .date-info {
-      color: var(--gray);
-      font-size: 0.875rem;
-    }
-
-    .tag-pill {
-      display: inline-block;
-      background: var(--light-gray);
-      padding: 0.5rem 0.75rem;
-      border-radius: 0.5rem;
-      font-size: 0.875rem;
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    .description {
-      background: var(--light-gray);
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .description p {
-      margin: 0;
-      font-size: 1.125rem;
-    }
-
-    .motivation-callout {
-      background: linear-gradient(135deg, #dbeafe 0%, #f0f9ff 100%);
-      border-left: 4px solid var(--accent);
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      margin: 2rem 0;
-    }
-
-    .motivation-callout h3 {
-      margin: 0 0 0.5rem 0;
-      color: var(--accent-dark);
-    }
-
-    .motivation-callout p {
-      margin: 0;
-      color: var(--text);
-    }
-
-    .requirements {
-      margin: 2rem 0;
-    }
-
-    .requirement-section {
-      margin-bottom: 2rem;
-    }
-
-    .requirement-section h2 {
-      margin-bottom: 1rem;
-    }
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1rem;
-    }
-
-    .info-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 0.5rem;
-      padding: 1rem;
-      text-decoration: none;
-      color: var(--text);
-      transition: all 0.2s;
-      display: block;
-    }
-
-    .info-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .info-card h4 {
-      margin: 0 0 0.5rem 0;
-      color: var(--accent);
-      font-size: 1rem;
-    }
-
-    .info-card p {
-      margin: 0.5rem 0;
-      color: var(--gray);
-      font-size: 0.875rem;
-    }
-
-    .mini-badge {
-      display: inline-block;
-      background: var(--light-gray);
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
-      font-size: 0.75rem;
-      color: var(--text);
-    }
-
-    .component-code {
-      display: block;
-      background: var(--light-gray);
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
-      font-size: 0.75rem;
-      margin-bottom: 0.5rem;
-      color: #c7254e;
-    }
-
-    .content {
-      margin: 2rem 0;
-    }
-
-    .back-link {
-      display: inline-block;
-      margin-top: 2rem;
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .back-link:hover {
-      text-decoration: underline;
-    }
-  </style>
 </Layout>
