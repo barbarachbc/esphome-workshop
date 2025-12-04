@@ -85,13 +85,13 @@ const recentChanges = await getRecentChanges(7);
 ---
 
 <Layout title="Home">
-  <div class="text-center py-12 rounded-lg mb-12 border" style="background: var(--bg-hero); color: var(--text-inverse); border-color: var(--border-primary);">
-    <h1 class="m-0 mb-4 text-4xl" style="color: var(--text-inverse);">My ESPHome Workshop</h1>
-    <p class="text-lg max-w-2xl mx-auto mb-4" style="color: var(--text-inverse); opacity: 0.95;">
+  <div class="text-center py-12 rounded-lg mb-12 border" style="background: var(--bg-hero); color: var(--text-hero); border-color: var(--border-primary);">
+    <h1 class="m-0 mb-4 text-4xl" style="color: var(--text-hero);">My ESPHome Workshop</h1>
+    <p class="text-lg max-w-2xl mx-auto mb-4" style="color: var(--text-hero); opacity: 0.95;">
       After 15+ years collecting dev boards, sensors, and random gadgets, 
       it's finally time to build something useful.
     </p>
-    <p class="text-lg max-w-2xl mx-auto mb-0" style="color: var(--text-inverse); opacity: 0.95;">{randomHeroDescription}</p>
+    <p class="text-lg max-w-2xl mx-auto mb-0" style="color: var(--text-hero); opacity: 0.95;">{randomHeroDescription}</p>
   </div>
 
   <div class="grid grid-cols-2 gap-6 mb-8">
@@ -106,7 +106,7 @@ const recentChanges = await getRecentChanges(7);
         <span class="px-2 py-1 rounded" style="background: var(--accent-amber-light); color: var(--text-primary);">🧪 {deviceStats.testing} testing</span>
         <span class="px-2 py-1 rounded" style="background: var(--bg-secondary); color: var(--text-secondary);">📦 {deviceStats.ready} ready</span>
         <span class="px-2 py-1 rounded" style="background: var(--accent-amber-light); color: var(--text-primary);">🔦 {deviceStats.pending} pending</span>
-        <span class="px-2 py-1 rounded" style="background: var(--accent-red-light); color: var(--text-primary);">❕ {deviceStats.unsupported} unsupported</span>
+        <span class="px-2 py-1 rounded" style="background: var(--accent-red-light); color: var(--text-primary);">🚫 {deviceStats.unsupported} unsupported</span>
         {deviceStats.retired > 0 && (
           <span class="px-2 py-1 rounded" style="background: var(--accent-red-light); color: var(--text-primary);">⏸️ {deviceStats.retired} retired</span>
         )}
