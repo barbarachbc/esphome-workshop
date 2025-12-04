@@ -16,20 +16,31 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content, headings } = await project.render();
 
-// Build complete ToC including conditional sections
-const tocHeadings = [
-  // Add "Page Info" link to top
-  { depth: 2, slug: 'page-info', text: 'Page Info' },
-  // Add markdown headings (H2-H4 only)
-  ...headings.filter(h => h.depth >= 2 && h.depth <= 4),
-];
-
 // Get related devices and components
 const allDevices = await getCollection('devices');
 const allComponents = await getCollection('components');
 
 const devices = allDevices.filter(d => project.data.devices.includes(d.slug));
 const components = allComponents.filter(c => project.data.components.includes(c.slug));
+
+// Build complete ToC including conditional sections
+const tocHeadings = [
+  // Add "Page Info" link to top
+  { depth: 2, slug: 'page-info', text: 'Page Info' },
+];
+
+// Add Required Devices and Required Components sections to ToC if they exist
+if (devices.length > 0) {
+  tocHeadings.push({ depth: 2, slug: 'required-devices', text: 'Required Devices' });
+}
+if (components.length > 0) {
+  tocHeadings.push({ depth: 2, slug: 'required-components', text: 'Required Components' });
+}
+
+tocHeadings.push(
+  // Add markdown headings (H2-H4 only)
+  ...headings.filter(h => h.depth >= 2 && h.depth <= 4),
+);
 
 const statusLabels = {
   idea: '💭 Idea',
@@ -46,7 +57,7 @@ const difficultyLabels = {
 ---
 
 <Layout title={`${project.data.title} - Projects`}>
-  <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 max-w-7xl mx-auto px-4">
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 max-w-7xl mx-auto">
     {tocHeadings.length >= 3 && (
       <div class="lg:hidden mb-8">
         <TableOfContents headings={tocHeadings} />
@@ -100,7 +111,7 @@ const difficultyLabels = {
       )}
 
       <div class="my-8">
-        <div class="mb-8">
+        <div id="required-devices" class="mb-8">
           <h2 class="text-2xl font-semibold mb-4">Required Devices</h2>
           <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
             {devices.map(device => (
@@ -113,17 +124,24 @@ const difficultyLabels = {
           </div>
         </div>
 
-        <div class="mb-8">
-          <h2 class="text-2xl font-semibold mb-4">Required Components</h2>
-          <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
-            {components.map(component => (
-              <a href={`/components/${component.slug}`} class="block bg-white border border-gray-200 rounded-lg p-4 no-underline text-gray-800 transition-all duration-200 hover:border-blue-600 hover:-translate-y-0.5 hover:shadow-md">
-                <h4 class="m-0 mb-2 text-blue-600 text-base">{component.data.title}</h4>
-                <code class="block bg-gray-100 px-2 py-1 rounded text-xs mb-2 text-pink-700">{component.data.esphomeComponent}</code>
-                <p class="m-0 text-gray-500 text-sm">{component.data.description}</p>
-              </a>
-            ))}
-          </div>
+        <div id="required-components" class="mb-8">
+          <details class="group">
+            <summary class="cursor-pointer list-none flex items-center gap-2 text-2xl font-semibold mb-4 hover:text-blue-600 transition-colors">
+              <svg class="w-6 h-6 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+              <span>Required Components ({components.length})</span>
+            </summary>
+            <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 mt-4">
+              {components.map(component => (
+                <a href={`/components/${component.slug}`} class="block bg-white border border-gray-200 rounded-lg p-4 no-underline text-gray-800 transition-all duration-200 hover:border-blue-600 hover:-translate-y-0.5 hover:shadow-md">
+                  <h4 class="m-0 mb-2 text-blue-600 text-base">{component.data.title}</h4>
+                  <code class="block bg-gray-100 px-2 py-1 rounded text-xs mb-2 text-pink-700">{component.data.esphomeComponent}</code>
+                  <p class="m-0 text-gray-500 text-sm">{component.data.description}</p>
+                </a>
+              ))}
+            </div>
+          </details>
         </div>
       </div>
 

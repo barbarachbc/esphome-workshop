@@ -310,3 +310,45 @@
     color: var(--text-secondary);
   }
 }
+/* ========================================
+   COLLAPSIBLE SECTIONS
+   ======================================== */
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details summary::marker {
+  display: none;
+}
+
+.dark details summary:hover {
+  color: var(--accent-blue);
+}
+
+.dark details summary svg {
+  color: var(--text-primary);
+}
+
+.dark details a {
+  background: var(--bg-card);
+  border-color: var(--border-card);
+  color: var(--text-primary);
+}
+
+.dark details a:hover {
+  border-color: var(--accent-blue);
+}
+
+.dark details code {
+  background: var(--bg-code-inline);
+  color: #ec4899;
+}
+
+.dark details p {
+  color: var(--text-secondary);
+}
+
+.dark details h4 {
+  color: var(--accent-blue);
+}
