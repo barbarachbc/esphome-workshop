@@ -82,8 +82,6 @@ The Raspberry Pi Pico W is officially supported by ESPHome with the RP2040 platf
 
 ⚠️ **Development Status:** RP2040 support in ESPHome is still maturing. Some features may have limitations.
 
-⚠️ **Antenna Placement:** For best wireless performance, keep the antenna in free space. Avoid placing metal underneath or near the antenna.
-
 ## Basic Configuration
 
 ```yaml
@@ -94,28 +92,6 @@ esphome:
 rp2040:
   board: rpipicow
 
-# Enable logging
-logger:
-
-# Enable Home Assistant API
-api:
-  encryption:
-    key: !secret api_key
-
-ota:
-  - platform: esphome
-    password: !secret ota_password
-
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "Pico-W Fallback"
-    password: !secret ap_password
-
-captive_portal:
 ```
 
 ## Configuration Options
@@ -131,155 +107,9 @@ rp2040:
   # Set to 0s to disable watchdog
 ```
 
-### GPIO Configuration Example
-
-```yaml
-# Example with various GPIO components
-binary_sensor:
-  - platform: gpio
-    pin:
-      number: GPIO15
-      mode:
-        input: true
-        pullup: true
-    name: "Button"
-
-switch:
-  - platform: gpio
-    pin: GPIO16
-    name: "Relay"
-
-sensor:
-  - platform: adc
-    pin: GPIO26  # ADC0
-    name: "Analog Sensor"
-    update_interval: 60s
-    
-  - platform: internal_temperature
-    name: "Pico W Temperature"
-    update_interval: 60s
-
-light:
-  - platform: monochromatic
-    output: pwm_output
-    name: "LED"
-
-output:
-  - platform: rp2040_pwm
-    id: pwm_output
-    pin: GPIO17
-    frequency: 1000 Hz
-```
-
-### I2C Example
-
-```yaml
-i2c:
-  sda: GPIO4
-  scl: GPIO5
-  scan: true
-  frequency: 400kHz
-
-sensor:
-  - platform: bme280
-    temperature:
-      name: "BME280 Temperature"
-    pressure:
-      name: "BME280 Pressure"
-    humidity:
-      name: "BME280 Humidity"
-    address: 0x76
-    update_interval: 60s
-```
-
-### SPI Example
-
-```yaml
-spi:
-  clk_pin: GPIO2
-  mosi_pin: GPIO3
-  miso_pin: GPIO4
-
-# Example with SPI device
-display:
-  - platform: st7735
-    cs_pin: GPIO5
-    dc_pin: GPIO6
-    reset_pin: GPIO7
-    lambda: |-
-      it.print(0, 0, id(font), "Hello Pico W!");
-```
-
-## GPIO Pinout
-
-The Raspberry Pi Pico W has 26 multi-function GPIO pins (GPIO0-GPIO28, with GPIO23-25 used internally):
-
-### Usable GPIO Pins
-- **GPIO0 - GPIO22**: General purpose I/O
-- **GPIO26 - GPIO28**: ADC-capable pins (ADC0, ADC1, ADC2)
-
-### Special Function Pins
-- **GPIO0-GPIO1**: UART0 (TX, RX) or I2C0 (SDA, SCL) or SPI0
-- **GPIO2-GPIO5**: SPI0 or I2C1 or UART1
-- **GPIO6-GPIO9**: SPI0 or I2C0 or UART1
-- **GPIO10-GPIO15**: SPI1 or I2C1 or UART1
-- **GPIO16-GPIO21**: SPI0 or I2C0 or UART0
-- **GPIO26-GPIO28**: ADC0, ADC1, ADC2 (analog inputs)
-
-### Reserved/Internal Pins
-- **GPIO23**: Wireless chip control (used by CYW43439)
-- **GPIO24**: Wireless chip data (used by CYW43439)
-- **GPIO25**: Connected to on-board LED (**not directly accessible**)
-- **GPIO29**: Used for VSYS voltage monitoring
-
-### ADC Reference
-- **ADC0** - GPIO26
-- **ADC1** - GPIO27
-- **ADC2** - GPIO28
-- **ADC3** - Internal (VSYS/3 voltage monitoring via GPIO29)
-
 ## On-Board LED
 
 ⚠️ **Important:** The on-board LED on the Pico W is **NOT** connected to GPIO25 like on the non-wireless Pico. It's controlled by the CYW43439 wireless chip and requires special handling.
-
-```yaml
-# On-board LED control (requires custom implementation)
-# Standard GPIO control of GPIO25 will NOT work on Pico W
-```
-
-## Power Supply
-
-- **VSYS (pin 39)**: Main power input (1.8V - 5.5V)
-- **VBUS (pin 40)**: USB power input (5V when USB connected)
-- **3V3 (pin 36)**: 3.3V output from on-board regulator
-- **3V3_EN (pin 37)**: Enable pin for 3.3V regulator
-- **GND**: Multiple ground pins available
-
-### Power Consumption
-- **Active (WiFi)**: ~80-100mA typical
-- **Sleep modes**: Can reduce to microamps in dormant mode
-
-## Programming Methods
-
-### Method 1: USB Mass Storage (BOOTSEL)
-1. Hold down BOOTSEL button while connecting USB
-2. Device appears as USB mass storage "RPI-RP2"
-3. Drag and drop `.uf2` firmware file
-4. Device automatically reboots and runs new firmware
-
-### Method 2: ESPHome OTA Updates
-Once initially flashed with ESPHome:
-```bash
-esphome run pico-w-device.yaml
-```
-
-## PIO (Programmable I/O)
-
-The RP2040 features 8 PIO state machines that can implement custom peripherals:
-- Can emulate various interfaces (SD Card, VGA, etc.)
-- High-speed I/O operations
-- Custom protocol implementation
-- Advanced use cases beyond standard ESPHome
 
 ## Temperature Sensor
 
@@ -292,38 +122,3 @@ sensor:
     update_interval: 60s
 ```
 
-## Known Limitations
-
-1. **On-board LED control**: Requires special handling via wireless chip
-2. **ESPHome maturity**: Some features still in development
-3. **WiFi power consumption**: Can be higher than low-power ESP32 modes
-4. **Bluetooth support**: May have limited ESPHome integration
-5. **Some shared pins**: Wireless chip shares some internal pins
-
-## Troubleshooting
-
-### Device not appearing in mass storage mode
-- Ensure BOOTSEL button is held **before** connecting USB
-- Try different USB cable (must support data, not just power)
-- Try different USB port
-
-### WiFi connection issues
-- Verify antenna has clear space (no metal nearby)
-- Check 2.4GHz WiFi settings (5GHz not supported)
-- Ensure WPA2/WPA3 security settings are compatible
-
-### Upload failures
-- Press and hold BOOTSEL button during upload
-- Use USB mass storage method for initial flash
-- Check USB cable quality
-
-### GPIO not working
-- Verify pin is not reserved (GPIO23-25 are used internally)
-- Check for pin conflicts with SPI/I2C/UART assignments
-- Consult pinout diagram for alternate functions
-
-## Variants
-
-- **Pico W**: Standard version with castellated edges
-- **Pico WH**: Same as Pico W but with pre-soldered headers
-- **Pico 2 W**: Newer version with RP2350 chip (not supported by ESPHome)
