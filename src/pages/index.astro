@@ -76,6 +76,8 @@ const randomDevice = availableDevices.length > 0
 const heroDescriptions = [
   "This is my personal documentation as I turn all my junk into smart home devices.",
   "As they say - one man's garbage is another man's treasure, just in this case I'm that same man! 😂 Maybe the world just wasn't ready for me all these years!",
+  "Take the Power Back! ✊",
+  "My home my rules 🛖! ... well, as long as wife's approval rating is high 📈"
 ];
 
 const randomHeroDescription = heroDescriptions[Math.floor(Math.random() * heroDescriptions.length)];
@@ -102,13 +104,13 @@ const recentChanges = await getRecentChanges(7);
       </div>
       <p class="m-0 mb-4 text-sm" style="color: var(--text-secondary);">Browse physical hardware - boards, sensors, displays, and more.</p>
       <div class="flex flex-col gap-2 text-sm">
-        <span class="px-2 py-1 rounded" style="background: var(--accent-emerald-light); color: var(--text-primary);">✅ {deviceStats.deployed} deployed</span>
-        <span class="px-2 py-1 rounded" style="background: var(--accent-amber-light); color: var(--text-primary);">🧪 {deviceStats.testing} testing</span>
-        <span class="px-2 py-1 rounded" style="background: var(--bg-secondary); color: var(--text-secondary);">📦 {deviceStats.ready} ready</span>
-        <span class="px-2 py-1 rounded" style="background: var(--accent-amber-light); color: var(--text-primary);">🔦 {deviceStats.pending} pending</span>
-        <span class="px-2 py-1 rounded" style="background: var(--accent-red-light); color: var(--text-primary);">🚫 {deviceStats.unsupported} unsupported</span>
+        <span class="status-badge status-badge-deployed">✅ {deviceStats.deployed} deployed</span>
+        <span class="status-badge status-badge-testing">🧪 {deviceStats.testing} testing</span>
+        <span class="status-badge status-badge-ready">📦 {deviceStats.ready} ready</span>
+        <span class="status-badge status-badge-pending">🔦 {deviceStats.pending} pending</span>
+        <span class="status-badge status-badge-unsupported">🚫 {deviceStats.unsupported} unsupported</span>
         {deviceStats.retired > 0 && (
-          <span class="px-2 py-1 rounded" style="background: var(--accent-red-light); color: var(--text-primary);">⏸️ {deviceStats.retired} retired</span>
+          <span class="status-badge status-badge-retired">⏸️ {deviceStats.retired} retired</span>
         )}
       </div>
     </a>
@@ -120,11 +122,11 @@ const recentChanges = await getRecentChanges(7);
       </div>
       <p class="m-0 mb-4 text-sm" style="color: var(--text-secondary);">Complete projects with wiring and configuration.</p>
       <div class="flex flex-col gap-2 text-sm">
-        <span class="px-2 py-1 rounded" style="background: var(--accent-emerald-light); color: var(--text-primary);">✅ {projectStats.completed} completed</span>
-        <span class="px-2 py-1 rounded" style="background: var(--accent-orange-light); color: var(--text-primary);">🛠️ {projectStats.inProgress} in progress</span>
-        <span class="px-2 py-1 rounded" style="background: var(--accent-blue-light); color: var(--text-primary);">💭 {projectStats.ideas} ideas</span>
+        <span class="status-badge status-badge-completed">✅ {projectStats.completed} completed</span>
+        <span class="status-badge status-badge-in-progress">🛠️ {projectStats.inProgress} in progress</span>
+        <span class="status-badge status-badge-idea">💭 {projectStats.ideas} ideas</span>
         {projectStats.abandoned > 0 && (
-          <span class="px-2 py-1 rounded" style="background: var(--bg-secondary); color: var(--text-secondary);">⏸️ {projectStats.abandoned} abandoned</span>
+          <span class="status-badge status-badge-abandoned">⏸️ {projectStats.abandoned} abandoned</span>
         )}
       </div>
     </a>

@@ -67,7 +67,8 @@ const connectionTypeMap: Record<string, string> = {
       <h3 class="my-2 text-xl" style="color: var(--text-heading);">{device.data.title}</h3>
       <p class="my-3 leading-relaxed" style="color: var(--text-secondary);">{device.data.description}</p>
     </div>
-    {device.data.connectionTypes.length > 0 && (   
+  </a>
+  {device.data.connectionTypes.length > 0 && (   
       <div class="flex flex-wrap gap-1.5 px-5 py-3 border-t" style="background: var(--bg-secondary); border-color: var(--border-primary);">
         {device.data.connectionTypes.map(conn => {
           const componentSlug = connectionTypeMap[conn.toLowerCase()];
@@ -88,5 +89,4 @@ const connectionTypeMap: Record<string, string> = {
         })}
       </div>
     )}
-  </a>
 </div>
