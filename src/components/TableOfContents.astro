@@ -192,7 +192,10 @@ const enableCollapsible = headingSections.filter(s => s.children.length > 0).len
     tocLinks.forEach(link => {
       const href = link.getAttribute('href');
       if (href) {
-        const section = document.querySelector(href);
+        //querySelector fails for #3d.... leading digit, so let's fix it
+        const patchForLeadingDigit = !isNaN(Number(href[1]));
+        //if href starts with a digit, it requires that digit is unicode escaped
+        const section = document.querySelector(!patchForLeadingDigit ? href : ('#\\3'+href.substring(1)));
         if (section) {
           sectionMap.set(href, { link, section });
         }
