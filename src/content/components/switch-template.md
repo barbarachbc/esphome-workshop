@@ -4,7 +4,7 @@ description: "Create custom virtual switches with programmable behavior"
 category: "switch"
 esphomeComponent: "template"
 documentation: "https://esphome.io/components/switch/template.html"
-requiresHardware: false
+
 relatedDevices: ["jc2432w328c", "beetle-esp32-c6"]
 tags: ["switch", "template", "virtual", "automation"]
 ---

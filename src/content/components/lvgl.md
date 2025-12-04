@@ -4,7 +4,7 @@ description: "Light and Versatile Graphics Library for advanced touchscreen UIs"
 category: "display"
 esphomeComponent: "lvgl"
 documentation: "https://esphome.io/components/lvgl.html"
-requiresHardware: true
+
 relatedDevices: ["jc2432w328c"]
 tags: ["display", "ui", "graphics", "touchscreen", "lvgl", "gui"]
 ---

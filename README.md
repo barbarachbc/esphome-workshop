@@ -44,7 +44,6 @@ ESPHome software components and platforms.
 - `category` - `sensor`, `binary_sensor`, `switch`, `light`, `climate`, `cover`, `fan`, `text_sensor`, `platform`, `other`
 - `esphomeComponent` - The ESPHome YAML component name (e.g., `gpio`, `bme280`)
 - `documentation` - Link to official ESPHome docs (optional)
-- `requiresHardware` - Boolean (default: false)
 - `relatedDevices` - Array of device slugs (optional)
 - `tags` - Array of strings (optional)
 - **`lastModified`** - ISO date (YYYY-MM-DD) when content was last updated (optional)
@@ -207,7 +206,6 @@ description: "What it does in ESPHome"
 category: "platform"
 esphomeComponent: "i2c"
 documentation: "https://esphome.io/components/i2c.html"
-requiresHardware: false
 ---
 ```
 3. Write markdown explaining configuration options

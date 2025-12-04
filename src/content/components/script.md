@@ -4,7 +4,7 @@ description: "Create reusable automation sequences"
 category: "automation"
 esphomeComponent: "script"
 documentation: "https://esphome.io/guides/automations.html#script-component"
-requiresHardware: false
+
 relatedDevices: ["jc2432w328c", "beetle-esp32-c6"]
 tags: ["automation", "sequences", "actions"]
 ---

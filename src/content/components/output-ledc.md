@@ -4,7 +4,7 @@ description: "PWM output using ESP32's LED Control peripheral"
 category: "output"
 esphomeComponent: "ledc"
 documentation: "https://esphome.io/components/output/ledc.html"
-requiresHardware: true
+
 relatedDevices: ["jc2432w328c"]
 tags: ["output", "pwm", "esp32", "led", "dimming"]
 ---

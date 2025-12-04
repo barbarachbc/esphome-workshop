@@ -4,7 +4,7 @@ description: "Display driver for MIPI-compliant SPI displays like ST7789V"
 category: "display"
 esphomeComponent: "mipi_spi"
 documentation: "https://esphome.io/components/display/mipi_spi.html"
-requiresHardware: true
+
 relatedDevices: ["jc2432w328c"]
 tags: ["display", "spi", "mipi", "tft", "lcd"]
 ---

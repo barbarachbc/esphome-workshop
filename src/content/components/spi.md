@@ -4,7 +4,7 @@ description: "Serial Peripheral Interface communication bus for high-speed devic
 category: "spi"
 esphomeComponent: "spi"
 documentation: "https://esphome.io/components/spi.html"
-requiresHardware: false
+
 relatedDevices: ["jc2432w328c", "sh1107-spi-oled"]
 tags: ["communication", "bus", "spi", "serial"]
 ---

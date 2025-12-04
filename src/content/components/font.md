@@ -4,7 +4,7 @@ description: "Load and use TrueType fonts for display text rendering"
 category: "display"
 esphomeComponent: "font"
 documentation: "https://esphome.io/components/display/index.html#fonts"
-requiresHardware: false
+
 relatedDevices: ["jc2432w328c", "beetle-esp32-c6"]
 tags: ["display", "text", "typography", "font"]
 ---

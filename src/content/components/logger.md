@@ -4,7 +4,7 @@ description: "Control logging output and verbosity for debugging"
 category: "core"
 esphomeComponent: "logger"
 documentation: "https://esphome.io/components/logger.html"
-requiresHardware: false
+
 tags: ["debugging", "logging", "serial"]
 ---
 

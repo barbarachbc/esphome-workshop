@@ -4,7 +4,7 @@ description: "Color definitions and helpers for display components"
 category: "display"
 esphomeComponent: "color"
 documentation: "https://esphome.io/components/display/index.html#color"
-requiresHardware: false
+
 relatedDevices: ["jc2432w328c"]
 tags: ["display", "color", "graphics", "helper"]
 ---

@@ -4,7 +4,7 @@ description: "Base component for all sensor types that report numerical values"
 category: "sensor"
 esphomeComponent: "sensor"
 documentation: "https://esphome.io/components/sensor/index.html"
-requiresHardware: true
+
 relatedDevices: ["esp32-devkit-v1"]
 tags: ["measurement", "data", "monitoring"]
 ---

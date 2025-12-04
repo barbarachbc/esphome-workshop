@@ -4,7 +4,7 @@ description: "Synchronize time from Home Assistant"
 category: "time"
 esphomeComponent: "homeassistant"
 documentation: "https://esphome.io/components/time/homeassistant.html"
-requiresHardware: false
+
 relatedDevices: ["jc2432w328c"]
 tags: ["time", "sync", "home-assistant"]
 ---

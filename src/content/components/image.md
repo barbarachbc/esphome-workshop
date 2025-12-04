@@ -4,7 +4,7 @@ description: "Display bitmap images on screens and displays"
 category: "display"
 esphomeComponent: "image"
 documentation: "https://esphome.io/components/display/index.html#images"
-requiresHardware: false
+
 relatedDevices: ["jc2432w328c", "beetle-esp32-c6"]
 tags: ["display", "graphics", "bitmap", "icon"]
 ---

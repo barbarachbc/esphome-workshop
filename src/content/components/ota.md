@@ -4,7 +4,7 @@ description: "Update ESPHome firmware wirelessly over the network"
 category: "core"
 esphomeComponent: "ota"
 documentation: "https://esphome.io/components/ota.html"
-requiresHardware: false
+
 tags: ["update", "firmware", "wireless"]
 ---
 

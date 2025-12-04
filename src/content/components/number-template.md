@@ -4,7 +4,7 @@ description: "Create custom number entities with computed or user-adjustable val
 category: "number"
 esphomeComponent: "template"
 documentation: "https://esphome.io/components/number/template.html"
-requiresHardware: false
+
 relatedDevices: ["jc2432w328c", "beetle-esp32-c6"]
 tags: ["number", "template", "input", "configuration"]
 ---

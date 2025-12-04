@@ -61,7 +61,6 @@ const components = defineCollection({
     ]),
     esphomeComponent: z.string(), // The ESPHome component name (e.g., 'gpio', 'i2c', 'bme280')
     documentation: z.string().optional(), // Link to official ESPHome docs
-    requiresHardware: z.boolean().default(false),
     relatedDevices: z.array(z.string()).optional(), // References to device slugs
     tags: z.array(z.string()).optional(),
     changelog: z.array(z.object({

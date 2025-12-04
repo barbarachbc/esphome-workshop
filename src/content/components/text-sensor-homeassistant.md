@@ -4,7 +4,7 @@ description: "Import text and string values from Home Assistant entities"
 category: "text-sensor"
 esphomeComponent: "homeassistant"
 documentation: "https://esphome.io/components/text_sensor/homeassistant.html"
-requiresHardware: false
+
 relatedDevices: ["jc2432w328c", "beetle-esp32-c6"]
 tags: ["text-sensor", "home-assistant", "import", "string"]
 ---

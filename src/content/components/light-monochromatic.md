@@ -4,7 +4,7 @@ description: "Single-channel dimmable light control"
 category: "light"
 esphomeComponent: "monochromatic"
 documentation: "https://esphome.io/components/light/monochromatic.html"
-requiresHardware: true
+
 relatedDevices: ["jc2432w328c", "beetle-esp32-c6"]
 tags: ["light", "dimming", "brightness", "led"]
 ---

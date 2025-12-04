@@ -4,7 +4,7 @@ description: "Configure WiFi connectivity for ESP devices"
 category: "core"
 esphomeComponent: "wifi"
 documentation: "https://esphome.io/components/wifi.html"
-requiresHardware: false
+
 tags: ["network", "wireless", "connectivity"]
 ---
 

@@ -4,7 +4,7 @@ description: "Inter-Integrated Circuit communication bus for connecting multiple
 category: "platform"
 esphomeComponent: "i2c"
 documentation: "https://esphome.io/components/i2c.html"
-requiresHardware: false
+
 tags: ["communication", "bus", "platform"]
 ---
 

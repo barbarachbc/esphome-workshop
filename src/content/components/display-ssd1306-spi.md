@@ -4,7 +4,7 @@ description: "Display driver for SSD1306 and SH1106/SH1107 OLED displays over SP
 category: "display"
 esphomeComponent: "ssd1306_spi"
 documentation: "https://esphome.io/components/display/ssd1306.html"
-requiresHardware: true
+
 relatedDevices: ["sh1107-spi-oled"]
 tags: ["display", "oled", "spi", "monochrome"]
 ---

@@ -4,7 +4,7 @@ description: "Three-channel color light control"
 category: "light"
 esphomeComponent: "rgb"
 documentation: "https://esphome.io/components/light/rgb.html"
-requiresHardware: true
+
 relatedDevices: ["jc2432w328c", "touch-phat"]
 tags: ["light", "rgb", "color", "led"]
 ---

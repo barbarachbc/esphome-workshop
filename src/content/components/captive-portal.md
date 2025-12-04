@@ -4,7 +4,7 @@ description: "Fallback WiFi configuration portal when device cannot connect"
 category: "core"
 esphomeComponent: "captive_portal"
 documentation: "https://esphome.io/components/captive_portal.html"
-requiresHardware: false
+
 tags: ["network", "configuration", "setup"]
 ---
 

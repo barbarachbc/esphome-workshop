@@ -4,7 +4,7 @@ description: "Define reusable variables for ESPHome configurations"
 category: "core"
 esphomeComponent: "substitutions"
 documentation: "https://esphome.io/guides/configuration-types.html#substitutions"
-requiresHardware: false
+
 tags: ["configuration", "variables", "reusability"]
 ---
 

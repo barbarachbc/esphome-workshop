@@ -4,7 +4,7 @@ description: "Load custom or third-party ESPHome components"
 category: "core"
 esphomeComponent: "external_components"
 documentation: "https://esphome.io/components/external_components.html"
-requiresHardware: false
+
 tags: ["custom", "integration", "extension"]
 ---
 

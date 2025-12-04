@@ -4,7 +4,7 @@ description: "Import sensor values from Home Assistant entities"
 category: "sensor"
 esphomeComponent: "homeassistant"
 documentation: "https://esphome.io/components/sensor/homeassistant.html"
-requiresHardware: false
+
 relatedDevices: ["jc2432w328c", "beetle-esp32-c6"]
 tags: ["sensor", "home-assistant", "import"]
 ---

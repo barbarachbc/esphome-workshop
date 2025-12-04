@@ -4,7 +4,7 @@ description: "Synchronize time using Simple Network Time Protocol"
 category: "time"
 esphomeComponent: "sntp"
 documentation: "https://esphome.io/components/time/sntp.html"
-requiresHardware: false
+
 relatedDevices: ["beetle-esp32-c6"]
 tags: ["time", "sync", "ntp", "network"]
 ---

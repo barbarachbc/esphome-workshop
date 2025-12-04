@@ -4,7 +4,7 @@ description: "Control Home Assistant switch entities from ESPHome"
 category: "switch"
 esphomeComponent: "homeassistant"
 documentation: "https://esphome.io/components/switch/homeassistant.html"
-requiresHardware: false
+
 relatedDevices: ["jc2432w328c", "beetle-esp32-c6"]
 tags: ["switch", "home-assistant", "control"]
 ---

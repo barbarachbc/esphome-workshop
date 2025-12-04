@@ -4,7 +4,7 @@ description: "Communication protocol for connecting ESPHome to Home Assistant an
 category: "core"
 esphomeComponent: "api"
 documentation: "https://esphome.io/components/api.html"
-requiresHardware: false
+
 tags: ["communication", "home-assistant", "network"]
 ---
 

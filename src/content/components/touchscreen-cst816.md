@@ -4,7 +4,7 @@ description: "Capacitive touchscreen driver for CST816 controller"
 category: "touchscreen"
 esphomeComponent: "cst816"
 documentation: "https://esphome.io/components/touchscreen/cst816.html"
-requiresHardware: true
+
 relatedDevices: ["jc2432w328c"]
 tags: ["touchscreen", "touch", "input", "i2c", "capacitive"]
 ---
