@@ -63,56 +63,30 @@ The Circuit Playground Express uses the **ATSAMD21** (ARM Cortex-M0+) microcontr
 
 ## Built-in Sensors and Components
 
-### NeoPixel LEDs (10×)
-- Individually addressable RGB LEDs
-- Full color spectrum
-- Can create animations and patterns
-- Arranged in a circle around the board
-- Library: `Adafruit_NeoPixel` (Arduino) or built-in CircuitPython
-
-### Accelerometer (LIS3DH)
-- 3-axis motion sensor
-- Tap detection
-- Free-fall detection
-- Orientation sensing
-- Shake detection
-- I2C address: 0x19
-
-### Temperature Sensor
-- Thermistor-based
-- Measures ambient temperature
-- Celsius or Fahrenheit
-- Good for basic temperature monitoring
-
-### Light Sensor
-- Phototransistor
-- Ambient light detection
-- Can also function as:
-  - Color sensor (with NeoPixels)
-  - Pulse sensor (heart rate monitoring)
-
-### Sound Sensor (MEMS Microphone)
-- Measures sound level
-- Can trigger on loud sounds
-- Useful for sound-reactive projects
-- Not for voice recording
-
-### Speaker
-- 7.5mm magnetic speaker
-- Plays tones and simple melodies
-- Class D amplifier
-- Volume control in software
-
-### Infrared TX/RX
-- Send and receive IR signals
-- Compatible with TV remotes
-- Can send messages between Circuit Playground boards
-- Proximity sensing capability
-
-### Buttons and Switch
-- **Button A & B**: Programmable input buttons
-- **Slide Switch**: On/off switch
-- **Reset Button**: Hardware reset
+- NeoPixel LEDs (10×)
+- Accelerometer (LIS3DH)
+  - I2C address: 0x19
+- Temperature Sensor
+- Light Sensor
+  - Ambient light detection
+  - Can also function as:
+    - Color sensor (with NeoPixels)
+    - Pulse sensor (heart rate monitoring)
+- Sound Sensor (MEMS Microphone)
+  - Not for voice recording
+- Speaker
+  - 7.5mm magnetic speaker
+  - Plays tones and simple melodies
+  - Class D amplifier
+  - Volume control in software
+- Infrared TX/RX
+  - Send and receive IR signals
+  - Compatible with TV remotes
+  - Proximity sensing capability
+- Buttons and Switch
+  - 2x Programmable input buttons
+  - 1x Slide Switch
+  - 1x Reset Button
 
 ## Pin Layout
 
@@ -151,7 +125,7 @@ The Circuit Playground Express has **8 main pads** around the edge, all alligato
 - Can power all features
 
 ### Battery Power
-- 3 × AAA battery pack (sold separately)
+- LiPo battery or 3 × AAA battery pack
 - Connects to JST connector on back
 - Portable operation
 - Battery voltage available on VOUT pad
