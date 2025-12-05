@@ -154,9 +154,12 @@ if (projectsUsingDevice.length > 0) {
       />
 
       {projectsUsingDevice.length > 0 && (
-        <details class="border-2 rounded-lg p-0 my-8" style="background: var(--bg-secondary); border-color: var(--accent-blue);" open>
-          <summary class="cursor-pointer px-6 py-4 select-none list-none rounded-lg transition-colors duration-200 [&::-webkit-details-marker]:hidden before:content-['▶'] before:inline-block before:mr-2 before:transition-transform before:duration-200 [[open]>&]:before:rotate-90" style="background: var(--accent-blue-light);">
-            <h3 class="inline m-0 text-xl text-accent">🚀 Used in Projects ({projectsUsingDevice.length})</h3>
+        <details class="group border rounded-lg p-0 m-2px my-8" style="background: var(--bg-secondary);" open>
+          <summary class="cursor-pointer list-none flex items-center gap-2 text-2xl font-semibold mb-1 mt-1 p-1px hover:text-blue-600 transition-colors">
+              <svg class="w-6 h-6 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            <span class="inline m-0 text-xl">🚀 Used in Projects ({projectsUsingDevice.length})</span>
           </summary>
           <div class="px-6 py-4">
             {projectsUsingDevice.map(project => (
