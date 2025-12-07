@@ -199,6 +199,36 @@
     @apply bg-transparent p-0;
     color: var(--text-code);
   }
+  
+  /* Copy code button */
+  .copy-code-button {
+    @apply absolute top-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-all duration-200 cursor-pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-primary);
+    opacity: 0;
+  }
+  
+  div:has(> pre):hover .copy-code-button {
+    opacity: 1;
+  }
+  
+  .copy-code-button:hover {
+    background: var(--accent-blue);
+    color: white;
+    border-color: var(--accent-blue);
+  }
+  
+  .copy-code-button.copied {
+    background: var(--accent-emerald);
+    color: white;
+    border-color: var(--accent-emerald);
+    opacity: 1;
+  }
+  
+  .copy-code-button svg {
+    flex-shrink: 0;
+  }
 
   ul, ol {
       all: revert;
@@ -270,6 +300,11 @@
   .prose code::before,
   .prose code::after {
     content: '';
+  }
+  
+  /* Ensure copy button works in prose context */
+  .prose div:has(> pre):hover .copy-code-button {
+    opacity: 1;
   }
   
   /* ========================================

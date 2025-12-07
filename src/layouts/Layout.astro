@@ -49,5 +49,48 @@ const { title } = Astro.props;
       <slot />
     </main>
     <Footer />
+    <script>
+      // Add copy buttons to code blocks
+      document.addEventListener('DOMContentLoaded', () => {
+        const codeBlocks = document.querySelectorAll('pre');
+        
+        codeBlocks.forEach((pre) => {
+          // Create wrapper for relative positioning
+          const wrapper = document.createElement('div');
+          wrapper.style.position = 'relative';
+          pre.parentNode?.insertBefore(wrapper, pre);
+          wrapper.appendChild(pre);
+          
+          // Create copy button
+          const button = document.createElement('button');
+          button.className = 'copy-code-button';
+          button.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="10" height="10" rx="1"></rect><path d="M5 1h8a2 2 0 0 1 2 2v8"></path></svg><span>Copy</span>';
+          button.setAttribute('aria-label', 'Copy code to clipboard');
+          
+          button.addEventListener('click', async () => {
+            const code = pre.querySelector('code');
+            const text = code?.textContent || '';
+            
+            try {
+              await navigator.clipboard.writeText(text);
+              
+              // Show success feedback
+              button.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 8 6 11 13 4"></polyline></svg><span>Copied!</span>';
+              button.classList.add('copied');
+              
+              // Reset after 2 seconds
+              setTimeout(() => {
+                button.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="10" height="10" rx="1"></rect><path d="M5 1h8a2 2 0 0 1 2 2v8"></path></svg><span>Copy</span>';
+                button.classList.remove('copied');
+              }, 2000);
+            } catch (err) {
+              console.error('Failed to copy code:', err);
+            }
+          });
+          
+          wrapper.appendChild(button);
+        });
+      });
+    </script>
   </body>
 </html>
