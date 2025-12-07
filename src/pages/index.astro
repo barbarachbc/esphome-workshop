@@ -1,11 +1,39 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import ShowcaseCarousel from '../components/ShowcaseCarousel.astro';
+import { getEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
 import { getRecentChanges, formatChangelogDate, getChangeTypeEmoji } from '../utils/changelog';
 
 // Query all devices and projects
 const allDevices = await getCollection('devices');
 const allProjects = await getCollection('projects');
+
+
+const showcase = [
+  { type: 'device', slug: 'gc9a01-round-lcd' },
+  { type: 'project', slug: 'info-panel-28' },
+  { type: 'note', slug: 'mdns-docker-setup' },
+];
+
+// Fetch full data for each showcase item
+const showcaseItems = await Promise.all(
+  showcase.map(async (item) => {
+    if (item.type === 'device') {
+      const entry = await getEntry('devices', item.slug);
+      return entry ? { type: 'device', ...entry } : null;
+    }
+    if (item.type === 'project') {
+      const entry = await getEntry('projects', item.slug);
+      return entry ? { type: 'project', ...entry } : null;
+    }
+    if (item.type === 'note') {
+      const entry = await getEntry('notes', item.slug);
+      return entry ? { type: 'note', ...entry } : null;
+    }
+    return null;
+  })
+);
 
 // Compute display status for each device based on project usage
 const devicesWithComputedStatus = allDevices.map(device => {
@@ -95,6 +123,8 @@ const recentChanges = await getRecentChanges(7);
     </p>
     <p class="text-lg max-w-2xl mx-auto mb-0" style="color: var(--text-hero); opacity: 0.95;">{randomHeroDescription}</p>
   </div>
+
+  <ShowcaseCarousel items={showcaseItems.filter(Boolean)} />
 
   <div class="grid grid-cols-2 gap-6 mb-8">
     <a href="/devices" class="block rounded-lg p-5 no-underline transition-all duration-200 shadow-sm hover:-translate-y-0.5 hover:shadow-xl" style="background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-primary);">
