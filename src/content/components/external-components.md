@@ -12,6 +12,12 @@ tags: ["custom", "integration", "extension"]
 
 External Components allows you to use custom or community-developed ESPHome components that are not part of the official ESPHome distribution.
 
-## Related Devices
+## Notes
 
 This component works with all ESPHome-compatible devices. The hardware requirements depend on the specific external component being used.
+
+## List of External Components
+
+
+- Component: [CAP1166](/components/cap1166)
+    - GitHub: [CAP1166 and TCA9554](https://github.com/barbarachbc/esphomecomponents)

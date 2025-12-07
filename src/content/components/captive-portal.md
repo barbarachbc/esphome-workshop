@@ -12,6 +12,6 @@ tags: ["network", "configuration", "setup"]
 
 The Captive Portal component creates a fallback WiFi access point when the device cannot connect to the configured network. Users can connect to this AP and reconfigure WiFi settings through a web interface.
 
-## Related Devices
+## Notes
 
 This component works with all ESP8266 and ESP32-based devices with WiFi capability.

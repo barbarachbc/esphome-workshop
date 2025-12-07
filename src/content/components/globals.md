@@ -4,7 +4,7 @@ description: "Store persistent values that can be accessed across automations"
 category: "core"
 esphomeComponent: "globals"
 documentation: "https://esphome.io/guides/automations.html#global-variables"
-
+relatedProjects: ["bedroom-climate-controller-touch"]
 tags: ["variables", "state", "automation"]
 ---
 
@@ -12,6 +12,6 @@ tags: ["variables", "state", "automation"]
 
 Global variables allow you to store values in memory that persist during device runtime and can be accessed or modified by automations, scripts, and lambdas.
 
-## Related Devices
+## Notes
 
 This component works with all ESPHome-compatible devices.

@@ -5,7 +5,9 @@ category: "output"
 esphomeComponent: "ledc"
 documentation: "https://esphome.io/components/output/ledc.html"
 
-relatedDevices: ["jc2432w328c"]
+relatedDevices: 
+  - id: jc2432w328c
+    description: Used for RGB LED control and display backlight dimming
 tags: ["output", "pwm", "esp32", "led", "dimming"]
 ---
 
@@ -13,6 +15,3 @@ tags: ["output", "pwm", "esp32", "led", "dimming"]
 
 The LEDC (LED Control) output platform provides hardware PWM output on ESP32 devices, commonly used for LED dimming, motor speed control, and backlight brightness adjustment.
 
-## Related Devices
-
-- [JC2432W328C ESP32 2.8" Display](/devices/jc2432w328c) - Used for RGB LED control and display backlight dimming

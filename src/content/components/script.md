@@ -5,7 +5,11 @@ category: "automation"
 esphomeComponent: "script"
 documentation: "https://esphome.io/guides/automations.html#script-component"
 
-relatedDevices: ["jc2432w328c", "beetle-esp32-c6"]
+relatedProjects: 
+    - id: bedroom-climate-controller-touch
+      description: Used for button click response and many other things
+    - id: info-panel-28
+      description: Used for many things - updating screen, handling touchscreen actions etc.
 tags: ["automation", "sequences", "actions"]
 ---
 
@@ -13,7 +17,4 @@ tags: ["automation", "sequences", "actions"]
 
 Scripts are reusable automation sequences that can be called from various triggers throughout your ESPHome configuration. They help organize complex logic and avoid code duplication.
 
-## Related Devices
 
-- [JC2432W328C ESP32 2.8" Display](/devices/jc2432w328c) - Used for UI update scripts in info panels
-- [DFRobot Beetle ESP32-C6](/devices/beetle-esp32-c6) - Used for climate control and display update scripts
