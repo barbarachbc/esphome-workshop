@@ -58,11 +58,13 @@ Setup guides, notes, recepies, and lessons learned.
 - ✅ Device inventory tracking with status badges
 - ✅ Project status tracking
 - ✅ Cross-referenced content via slug-based relationships
+- ✅ Featured content carousel on homepage
 - ✅ Personal homepage with stats and random device picker
 - ✅ GitHub issue reporting from content pages
 - ✅ What's New section with changelog aggregation
 - ✅ Last modified/verified dates with freshness indicators
 - ✅ In-page table of contents with active section highlighting
+- ✅ Copy buttons on all code blocks
 - ✅ Dark mode with system preference + manual toggle
 - ✅ Fully responsive design
 

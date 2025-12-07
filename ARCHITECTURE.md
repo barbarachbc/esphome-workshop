@@ -1,6 +1,6 @@
 # ESPHome Workshop - Architecture
 
-**Last Updated:** December 4, 2025
+**Last Updated:** December 7, 2025
 
 This document describes the project-specific architecture, design decisions, and organizational patterns for the ESPHome Workshop documentation site.
 
@@ -254,6 +254,42 @@ interface Props {
 
 ---
 
+#### ShowcaseCarousel (`src/components/ShowcaseCarousel.astro`)
+
+**Purpose:** Featured content carousel on homepage
+
+**Props:**
+```typescript
+interface Props {
+  items?: Array<{
+    type: 'device' | 'project' | 'note';
+    slug: string;
+    data: any;
+  }>;
+  autoPlayInterval?: number; // Default: 5000ms
+}
+```
+
+**Features:**
+- Auto-rotating carousel with manual navigation
+- Supports devices, projects, and notes
+- Previous/Next buttons
+- Dot indicators for navigation
+- Pause on hover
+- Responsive layout
+- Smooth transitions
+
+**Usage on Homepage:**
+```typescript
+const showcase = [
+  { type: 'device', slug: 'gc9a01-round-lcd' },
+  { type: 'project', slug: 'info-panel-28' },
+  { type: 'note', slug: 'mdns-docker-setup' },
+];
+```
+
+---
+
 ### Utility Components
 
 #### TableOfContents (`src/components/TableOfContents.astro`)
@@ -338,6 +374,35 @@ interface Props {
 - Community links
 - Build date display
 - Responsive layout
+
+---
+
+### Code Block Features
+
+#### Copy Button (Client-Side Enhancement)
+
+**Purpose:** Enable users to copy code from code blocks
+
+**Implementation:**
+- Client-side JavaScript in `Layout.astro`
+- Auto-detects all `<pre>` elements on page load
+- Adds copy button to each code block
+
+**Features:**
+- Top-right corner positioning
+- Hidden by default, appears on hover
+- Copy icon (clipboard) → Checkmark icon on success
+- "Copy" text → "Copied!" feedback
+- Auto-resets after 2 seconds
+- Only applies to multi-line code blocks (`<pre><code>`)
+- Inline `<code>` elements unaffected
+- Uses Clipboard API with error handling
+- Themed styling (matches site design system)
+- Dark mode support
+
+**CSS Classes:**
+- `.copy-code-button` - Base button styling
+- `.copy-code-button.copied` - Success state styling
 
 ---
 
