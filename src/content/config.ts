@@ -61,7 +61,19 @@ const components = defineCollection({
     ]),
     esphomeComponent: z.string(), // The ESPHome component name (e.g., 'gpio', 'i2c', 'bme280')
     documentation: z.string().optional(), // Link to official ESPHome docs
-    relatedDevices: z.array(z.string()).optional(), // References to device slugs
+    //relatedDevices: z.array(z.string()).optional(), // References to device slugs
+    relatedDevices: z.array( 
+      z.union([z.string().transform(val => ({id: val, description: undefined})), z.object({
+      id: z.string(),
+      description: z.string().optional(),
+    })]
+    )).optional(), // References to device slugs or id/description object
+    relatedProjects: z.array( 
+      z.union([z.string().transform(val => ({id: val, description: undefined})), z.object({
+      id: z.string(),
+      description: z.string().optional(),
+    })]
+    )).optional(),
     tags: z.array(z.string()).optional(),
     changelog: z.array(z.object({
       date: z.string(),  // ISO format: YYYY-MM-DD

@@ -5,7 +5,6 @@ category: "display"
 esphomeComponent: "font"
 documentation: "https://esphome.io/components/font/"
 
-relatedDevices: ["jc2432w328c", "beetle-esp32-c6"]
 relatedProjects:
     - id: info-panel-28
       description: Great example how to use Material Design Icons and different fonts with LVGL

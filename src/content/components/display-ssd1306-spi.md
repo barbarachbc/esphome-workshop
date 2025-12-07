@@ -6,13 +6,10 @@ esphomeComponent: "ssd1306_spi"
 documentation: "https://esphome.io/components/display/ssd1306.html"
 
 relatedDevices: ["sh1107-spi-oled"]
+relatedProjects: ["bedroom-climate-controller-touch"]
 tags: ["display", "oled", "spi", "monochrome"]
 ---
 
 ## Overview
 
 The SSD1306 SPI Display platform supports monochrome OLED displays using SSD1306, SH1106, or SH1107 controllers connected via SPI interface.
-
-## Related Devices
-
-- [SH1107 OLED Display (128x128, SPI)](/devices/sh1107-spi-oled) - 128x128 monochrome OLED for compact interfaces

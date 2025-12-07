@@ -32,11 +32,21 @@ if (component.data.documentation) {
 // Get related devices if specified
 const allDevices = await getCollection('devices');
 let relatedDevices = component.data.relatedDevices && component.data.relatedDevices.length > 0
-  ? allDevices.filter(d => component.data.relatedDevices?.includes(d.slug))
+  ? component.data.relatedDevices.map(d => ({ description: d.description, device: allDevices.find(ad => ad.slug == d.id)}))
+  : [];
+
+// Get related projects if specified
+const allProjects = await getCollection('projects');
+let relatedProjects = component.data.relatedProjects && component.data.relatedProjects.length > 0
+  ? component.data.relatedProjects.map(p => ({ description: p.description, project: allProjects.find(ap => ap.slug == p.id)}))
   : [];
 
 if (relatedDevices.length > 0) {
   tocHeadings.push({ depth: 2, slug: 'related-devices', text: 'Related Devices' });
+}
+
+if (relatedProjects.length > 0) {
+  tocHeadings.push({ depth: 2, slug: 'related-projects', text: 'Related Projects' });
 }
 ---
 
@@ -84,10 +94,30 @@ if (relatedDevices.length > 0) {
         <div id="related-devices" class="my-8">
           <h2 class="text-2xl font-semibold mb-4">Related Devices</h2>
           <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
-            {relatedDevices.map(device => (
-              <a href={`/devices/${device.slug}`} class="block bg-white border border-gray-200 rounded-lg p-4 no-underline text-gray-800 transition-all duration-200 hover:border-blue-600 hover:-translate-y-0.5">
-                <h4 class="m-0 mb-2 text-blue-600 text-base">{device.data.title}</h4>
-                <p class="m-0 text-gray-500 text-sm">{device.data.description}</p>
+            {relatedDevices.map(desc => (
+              <a href={`/devices/${desc.device?.slug}`} class="block bg-white border border-gray-200 rounded-lg p-4 no-underline text-gray-800 transition-all duration-200 hover:border-blue-600 hover:-translate-y-0.5">
+                <h4 class="m-0 mb-2 text-blue-600 text-base">{desc.device?.data.title}</h4>
+                <p class="m-0 text-gray-500 text-sm">{desc.device?.data.description}</p>
+                {desc.description && (
+                <p class="m-0 text-gray-500 text-sm border-t border-accent mt-2 pt-1">{desc.description}</p>
+                )}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {relatedProjects.length > 0 && (
+        <div id="related-projects" class="my-8">
+          <h2 class="text-2xl font-semibold mb-4">Related Projects</h2>
+          <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
+            {relatedProjects.filter(desc => desc.project).map(desc => (
+              <a href={`/projects/${desc.project?.slug}`} class="block bg-white border border-gray-200 rounded-lg p-4 no-underline text-gray-800 transition-all duration-200 hover:border-blue-600 hover:-translate-y-0.5">
+                <h4 class="m-0 mb-2 text-blue-600 text-base">{desc.project?.data.title}</h4>
+                <p class="m-0 text-gray-500 text-sm">{desc.project?.data.description}</p>
+                {desc.description && (
+                <p class="m-0 text-gray-500 text-sm border-t border-accent mt-2 pt-1">{desc.description}</p>
+                )}
               </a>
             ))}
           </div>
