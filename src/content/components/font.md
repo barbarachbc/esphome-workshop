@@ -115,6 +115,11 @@ fonts:
       "\U000F032A", # leaf (eco)
       "\U000F04B9", # sofa (comfort)
       "\U000F14DE", # rocket-launch (boost)
+
+      "\U000F0C52", # checkbox-outline (confirm)
+      "\U000F0158", # close-box-outline (cancel)
+      "\U000F0704", # plus-box-outline (increase)
+      "\U000F06F2", # minus-box-outline (decrease)
 ```
 
 ### Using The Glyphs
