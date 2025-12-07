@@ -67,6 +67,7 @@ Setup guides, notes, recepies, and lessons learned.
 - ✅ Copy buttons on all code blocks
 - ✅ Dark mode with system preference + manual toggle
 - ✅ Fully responsive design
+- ✅ Automatic `lastModified` date updates via pre-commit hook
 
 ---
 

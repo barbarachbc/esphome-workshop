@@ -25,6 +25,38 @@ npm run preview
 
 ---
 
+## Git Hooks
+
+### Pre-Commit Hook: Auto-Update `lastModified`
+
+The project uses a pre-commit hook (`.husky/update-last-modified.js`) that automatically updates the `lastModified` field in frontmatter for all staged markdown files.
+
+**Implementation details:**
+- **Language:** ES modules (Node.js with `import` syntax)
+- **Trigger:** Runs automatically before each commit via Husky
+- **Scope:** Only processes staged `.md` files in `src/content/`
+- **Logic:**
+  1. Gets staged files with `git diff --cached --name-only --diff-filter=ACM`
+  2. Filters for `src/content/**/*.md` files that exist
+  3. Reads each file and checks if it starts with `---` (frontmatter)
+  4. Finds the closing `---` to locate frontmatter boundaries
+  5. If `lastModified:` line exists → replaces entire line with `lastModified: "YYYY-MM-DD"`
+  6. If missing → inserts `lastModified: "YYYY-MM-DD"` before closing `---`
+  7. Writes updated content and re-stages the file with `git add`
+
+**Cross-platform:** Handles both Unix (`\n`) and Windows (`\r\n`) line endings using `/\r?\n/` regex
+
+**Error handling:**
+- Catches git command errors (e.g., not in a git repo)
+- Continues processing other files if one file fails
+- Silent exit if no staged content files found
+
+**Testing the hook manually:**
+```bash
+node .husky/update-last-modified.js
+```
+---
+
 ## Essential Context for AI Assistants
 
 ### Before Starting Any Task
