@@ -11,7 +11,7 @@ relatedProjects:
     - id: bedroom-climate-controller-touch
       description: Great example how to use Material Design Icons and different fonts with a monochromatic and smaller display
 tags: ["display", "text", "typography", "font"]
-lastModified: "2025-12-06"
+lastModified: "2025-12-07"
 ---
 
 ## Overview
@@ -56,6 +56,7 @@ For icons, I usualy have 3 sizes and I give them IDs like: mdi_small, mdi_med an
 | Display | Color | mdi_small | mdi_med | mdi_large | bpp |
 |---------|-------|-----------|---------|-----------|-----|
 | 320x240 | ✅   | 24        | 64      | 96        | 4   |
+| 240x240 | ✅   | 24        | 64      | 96        | 4   |
 | 128x128 | 🚫   | 24        | 32      | 48        | 1   |
 
 For bigger and color screens it makes sense to use more bit depth (say 4) but for smaller screens it might make sense to go with 1. For _monochromatic_ screens it does not even make sense to go beyond 1 bpp because they show only two colors so using bpp greater than 1 is just a waste of flash space.
@@ -172,6 +173,15 @@ Some things are not as obvious, but default glyphset used is GF_Latin_Kernel, wh
 In all the examples below, I just use the default glyphset, but if your device is constraint by the size of the flash, you might need to go frugal and define only letters and symbols you use. Flash is limited and precious asset - if you run out of it you won't be even able to build your project.
 
 ### Examples
+
+Like for icons, I usualy have 3 sizes for text too, and I give them IDs like: value_small, value_med and value_large. I also sometimes add _title_ fonts if I want a bit of a different look. For different screen sizes I use different font sizes, but I could use different sizes, depending on the project. So for example:
+
+| Display | Color | value_small | value_med | value_large | bpp |
+|---------|-------|-----------|---------|-----------|-----|
+| 320x240 | ✅   | 10        | 16      | 28 (Bold) | 4   |
+| 240x240 | ✅   | 10        | 16      | 28 (Bold) | 4   |
+| 128x128 | 🚫   | 10        | 14      | 20        | 1   |
+
 
 ```yaml
 font:

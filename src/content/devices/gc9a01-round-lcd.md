@@ -6,15 +6,21 @@ manufacturer: "Generic"
 model: "GC9A01A"
 variants: ["1.28 TFT Square variant"]
 connectionTypes: ["spi"]
-components: ["spi", "display", "mipi_spi"]
+components: ["spi", "display", "mipi_spi", "display_color"]
 tags: ["display", "lcd", "tft", "rgb", "round", "gc9a01"]
+relatedDevices: ["esp32-devkit-v1"]
 productionStatus: "active"
 purchaseLinks:
   - vendor: "AliExpress"
     url: "https://www.aliexpress.com/item/1005006051175539.html"
-status: "pending"
+status: "ready"
 dateAcquired: "May 2024"
 count: 2
+lastModified: "2025-12-07"
+changelog:
+  - date: "2025-12-07"
+    type: "added"
+    description: "Complete first version of the document"
 ---
 
 ## Overview
@@ -25,7 +31,7 @@ TFT LCD displays offer bright, full-color visuals with excellent readability in 
 
 - 1.28" round RGB TFT LCD display (240x240 pixels)
 - Uses the GC9A01A driver chip
-- 4-wire SPI interface
+- 3 or 4-wire SPI interface
 - Full color display (RGB)
 - 3.3V compatible
 
@@ -34,15 +40,33 @@ TFT LCD displays offer bright, full-color visuals with excellent readability in 
 - Requires **SPI**, spi_id is optional, but spi component is required.
 - Platform: **mipi_spi** (also works with ili9xxx)
 - Model: **GC9A01A**
-- ⚠️ **buffer_size: 25%** - Important! Without this setting, the display may fail to initialize due to RAM constraints (especially with ESP8266 based boards).
-- **invert_colors: true** - May be needed depending on your specific display module.
+- ⚠️ **buffer_size: 25%** - Important! Without this setting, the display may fail to initialize due to RAM constraints (especially with ESP8266 based boards). Start with 25% and increase if needed
+- **invert_colors: true** - May be needed depending on your specific display module, it was required on mine.
 - **color_order: BGR** - Adjust if colors appear incorrect.
 - cs_pin, dc_pin, and reset_pin are required - can be any available GPIO
+- Connecting BLK pin on the device is not required
+- ⚠️ The screen is **round**, but the controller sees it as a 240x240 square - you need to be careful when trying to show something near the edges - for example: (0,0) coordinate is outside of the visible area of the screen.
+
+### Wiring
+
+Example here is for [esp32-devkit-v1](./esp32-devkit-v1)
+Adjust substitutions based on your board. For the examples below I used the following wiring:
+
+| gc9a01-round-lcd | esp32-devkit-v1 |  |
+| :---- | :---- | :---- |
+| BLK | TODO |  |
+| CS | GPIO05 |  |
+| DC | GPIO04 |  |
+| RES | GPIO16 |  |
+| SDA (SPI MOSI) | GPIO23 |  |
+| SCL (SPI CLK) | GPIO18 |  |
+| VCC | 3V3 |  |
+| GND | GND |  |
+
 
 ### Basic Configuration
 
-Example here is for [esp32-devkit-v1](./esp32-devkit-v1)
-Adjust based on your board.
+Show test card - ensures everything is correctly configured and wired up.
 
 TODO: photos of the examples
 
@@ -55,6 +79,9 @@ esp32:
   framework:
     type: esp-idf
 
+# Enable logging - always enable, for testing keep it at DEBUG level (default)
+logger:
+
 substitutions:
   clk_pin: GPIO18
   mosi_pin: GPIO23
@@ -62,9 +89,13 @@ substitutions:
   disp_dc_pin: GPIO04
   disp_reset_pin: GPIO16
 
+spi:
+  clk_pin: ${clk_pin}
+  mosi_pin: ${mosi_pin}
+
 display:
   - platform: mipi_spi
-    id: round_screen
+    id: my_display
     model: GC9A01A
     cs_pin: ${disp_cs_pin}
     dc_pin: ${disp_dc_pin}
@@ -74,15 +105,13 @@ display:
     color_order: BGR
     buffer_size: 25%
 
-spi:
-  clk_pin: ${clk_pin}
-  mosi_pin: ${mosi_pin}
-
 ```
 
-### Advanced Configuration with Graphics
+### Simple Graphics and Text Example
 
-To add text and graphics, uncomment the lambda section and define fonts:
+**NOTE**: remove or set `show_test_card: false` or you won't see anything.
+
+To add text and graphics, add the lambda section and define fonts to the [basic config](#basic-configuration):
 
 TODO: photos of the examples
 
@@ -94,7 +123,7 @@ font:
 
 display:
   - platform: mipi_spi
-    id: round_screen
+    id: my_display
     model: GC9A01A
     cs_pin: ${disp_cs_pin}
     dc_pin: ${disp_dc_pin}
@@ -103,12 +132,178 @@ display:
     color_order: BGR
     buffer_size: 25%
     lambda: |-
-      it.filled_circle(it.get_width()/2, it.get_height()/2, 100, red);
-      it.print(it.get_width()/2, it.get_height()/2, id(roboto), blue, TextAlign::CENTER, "Hello!");
+      it.filled_circle(it.get_width()/2, it.get_height()/2, 60, Color(0xFF0000));
+      it.print(it.get_width()/2, it.get_height()/2, id(roboto), Color(0x0000FF), TextAlign::CENTER, "Hello!");
+```
+
+### Icons, Text, Pretty
+
+Go wild 😉
+
+This example has 4 different pages and changes them every 5 seconds. The display is set not to update itself because updates are only done on timer. You might want to change `update_interval: never` to some other value (default is 1s = 1 second) unless you're using LVGL which handles display itself.
+
+I used random colors for display 1. Something weird is going on when you do that, I'm not sure if this is a bug of some kind, but it does look funky 🌈
+
+For displays 2 and 3 I used colors with corresponding hexcode and then for the last screen I just used COLOR_ON which gives monochromatic display.
+
+Look up more on using colors in [color component](/components/display-color).
+
+TODO: photos of the examples
+
+```yaml
+
+# https://esphome.io/components/interval/
+interval:
+  - interval: 5s
+    then:
+      - display.page.show_next: my_display
+      - component.update: my_display
+
+font:
+  #color screen, so good for anti-aliasing
+  - id: value_med
+    file:
+      type: gfonts
+      family: Montserrat
+    size: 14
+    bpp: 4
+  - id: value_small
+    file:
+      type: gfonts
+      family: Montserrat
+    size: 10
+    bpp: 2
+  - id: value_large
+    file:
+      type: gfonts
+      family: Montserrat
+      weight: bold
+    size: 20
+    bpp: 4
+  - id: mdi_small
+    file: assets/materialdesignicons-webfont.ttf
+    size: 24
+    bpp: 4
+    glyphs: [
+      "\U000F1A71", # snowflake-thermometer 
+      "\U000F032A", # leaf
+      "\U000F04B9", # sofa
+      "\U000F14DE", # rocket-launch
+      "\U000F0C52", # checkbox-outline
+      "\U000F0158", # close-box-outline
+      "\U000F0704", # plus-box-outline
+      "\U000F06F2", # minus-box-outline
+    ]
+  - id: mdi_med
+    file: assets/materialdesignicons-webfont.ttf
+    size: 64
+    bpp: 4
+    glyphs: [
+      "\U000F1807", # mdi-fire-circle
+      "\U000F0E1B", # mdi-car-back
+    ]
+  - id: mdi_large
+    file: assets/materialdesignicons-webfont.ttf
+    size: 96
+    bpp: 4
+    glyphs: [
+      "\U000F0593", # lightning
+      "\U000F1A71", # snowflake-thermometer 
+      "\U000F032A", # leaf
+      "\U000F04B9", # sofa
+      "\U000F14DE", # rocket-launch
+    ]
+
+display:
+  - platform: mipi_spi
+    id: my_display
+    model: GC9A01A
+    cs_pin: ${disp_cs_pin}
+    dc_pin: ${disp_dc_pin}
+    reset_pin: ${disp_reset_pin}
+    invert_colors: true
+    color_order: BGR
+    buffer_size: 25%
+    # only update on timer for this demo
+    update_interval: never
+    pages: 
+      - id: page_info
+        lambda: |-
+          //print time and date
+          it.print(it.get_width()/2, 32, id(value_large), Color::random_color(), TextAlign::CENTER, "07:45 AM");
+          it.print(it.get_width()/2, 194, id(value_med), Color::random_color(), TextAlign::CENTER, "Sun, 7 Dec");
+
+          it.print(24, 42, id(mdi_large), Color::random_color(), "\U000F0593");
+          it.print(160, 64, id(value_small), Color::random_color(), TextAlign::TOP_CENTER, "Lightning");
+          it.print(24, 144, id(value_large), Color::random_color(), "10.2°C");
+
+          it.print(180, 104, id(mdi_med), Color::random_color(), TextAlign::TOP_CENTER, "\U000F0E1B");
+          it.print(180, 164, id(value_med), Color::random_color(), TextAlign::TOP_CENTER, "68%");
+      
+      - id: page_heating
+        lambda: |-
+
+          const std::string presets[] = {
+            "frost", "eco", "comfort", "boost"
+          };
+
+          const std::string icons[] = {
+            "\U000F1A71", "\U000F032A", "\U000F04B9", "\U000F14DE"
+          };
+            
+          it.print(it.get_width() - 24, 42, id(value_med), Color(0x87CEEB), TextAlign::TOP_RIGHT, "07:45 AM");
+          it.print(24, 42, id(mdi_med), Color(0x228B22), "\U000F1807");
+
+          it.print(32, 102, id(value_large), Color(0xDC143C), "18.4°C");
+          it.print(32, 132, id(value_med), Color(0xDAA520), "52%");
+
+          it.print(it.get_width() - 48, 102, id(value_med), Color(0xBA55D3), TextAlign::CENTER, "18.0°C");
+          it.print(it.get_width() - 48, 76, id(mdi_small), Color(0x008080), TextAlign::CENTER, "\U000F04B9");
+
+          //show icons
+          const int icon_size = 24;
+          auto y = it.get_height() - 2*icon_size;
+
+          for(auto i = 0; i<4; i++){
+            auto is_selected = "comfort" == presets[i];
+            auto x = 48 + icon_size*i + 9*i; auto invert_icon = false;
+
+            if(is_selected){
+              invert_icon = true;
+              it.filled_rectangle(x, y-1, icon_size+1, icon_size+1);
+            }
+            it.print(x, y, id(mdi_small), invert_icon ? COLOR_OFF :  Color(0xF4A460), icons[i].c_str());
+          }
+      - id: page_change_preset
+        lambda: |-
+            it.print(it.get_width()/2, it.get_height()/2, id(mdi_large), Color(0xF4A460), TextAlign::BOTTOM_CENTER, "\U000F1A71");
+              
+            it.print(it.get_width()/2, it.get_height()-68, id(value_med), Color(0x000080), TextAlign::TOP_CENTER, "Set the mode to:");
+            it.print(it.get_width()/2, it.get_height()-44, id(value_med), Color(0xF08080), TextAlign::TOP_CENTER, "Frost ?");
+
+            //apply
+            it.print(48, it.get_height() - 48, id(mdi_small), Color(0x00FF00), TextAlign::TOP_LEFT, "\U000F0158");
+            //cancel
+            it.print(it.get_width()-48, it.get_height() - 48, id(mdi_small), Color(0xFF0000), TextAlign::TOP_RIGHT, "\U000F0C52");
+            
+      - id: page_change_temp
+        lambda: |-
+            it.print(it.get_width()/2, it.get_height()/2, id(mdi_large), COLOR_ON, TextAlign::BOTTOM_CENTER, "\U000F14DE");
+            it.print(it.get_width()/2, it.get_height()-96, id(value_large), COLOR_ON, TextAlign::TOP_CENTER, "12.5");
+            //apply
+            it.print(48, it.get_height() - 48, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F0158");
+            //cancel
+            it.print(it.get_width()-48, it.get_height() - 48, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0C52");
+            //minus
+            it.print(96, it.get_height() - 48, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F06F2");
+            //plus
+            it.print(it.get_width() - 96, it.get_height() - 48, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0704");
+
+
 ```
 
 ## Troubleshooting
 
-- **Display fails to initialize**: Make sure `buffer_size: 25%` is set. The default buffer size may be too large for some ESP32 modules.
+- **Display fails to initialize**: Make sure `buffer_size: 25%` is set. The default buffer size may be too large for some ESP32 modules. Dead givaway is an error in the logs.
 - **Wrong colors**: Try adjusting `color_order` between BGR and RGB, or toggle `invert_colors`.
-- **Blank display**: Verify SPI wiring and that the reset pin is correctly connected.
+- **Blank display**: Verify SPI wiring and that the reset pin is correctly connected. Check logs.
