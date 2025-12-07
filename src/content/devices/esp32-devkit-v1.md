@@ -24,6 +24,7 @@ purchaseLinks:
   - vendor: AliExpress
     url: https://www.aliexpress.com/item/1005006422498371.html
 #image: "/images/devices/"
+lastModified: "2025-12-06"
 ---
 
 ## Overview

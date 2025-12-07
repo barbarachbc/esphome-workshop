@@ -18,6 +18,7 @@ purchaseLinks:
     url: "https://www.mouser.ie/ProductDetail/356-ESP32C3WROOM02N4"
 #image: "/images/devices/"
 dateAcquired: "Dec 2024"
+lastModified: "2025-12-06"
 ---
 
 ## Overview

@@ -17,6 +17,7 @@ purchaseLinks:
 dateAcquired: "Oct 2024"
 count: 3
 #image: "/images/devices/"
+lastModified: "2025-12-06"
 ---
 
 ## Overview

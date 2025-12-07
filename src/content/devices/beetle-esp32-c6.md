@@ -23,6 +23,7 @@ purchaseLinks:
 dateAcquired: "Sept 2024"
 status: "ready"
 count: 2
+lastModified: "2025-12-06"
 ---
 
 ## Overview

@@ -23,6 +23,7 @@ purchaseLinks:
     url: https://www.amazon.co.uk/dp/B07Y8H2C1P?th=1
 #image: "/images/devices/"
 dateAcquired: "Sept 2024"
+lastModified: "2025-12-06"
 ---
 
 ## Overview
