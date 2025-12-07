@@ -33,25 +33,35 @@ lastModified: "2025-12-03"
 
 ## Project Overview
 
+TODO: add showcase photo
+
 This advanced project creates a compact bedroom climate controller with a monochrome OLED display and capacitive touch interface that provides:
 
 - 🕐 Real-time clock display with date
 - 🌤️ Weather information (current temperature, forecast icon, and description)
 - 🌡️ Indoor climate monitoring (temperature and humidity)
-- 🔥 Advanced thermostat control with multiple preset modes (frost, eco, comfort, boost)
+- 🔥 Thermostat control with multiple preset modes (frost, eco, comfort, boost)
 - 🎯 Fine-grained temperature adjustment for boost mode
 - 🚗 EV battery level monitoring
 - 💡 Interactive LED feedback on touch buttons
 - 📄 Multi-page interface with heating control page
 - 🎨 Context-aware heating status visualization
 
-The controller integrates seamlessly with Home Assistant to provide real-time monitoring and control of your bedroom climate and displays useful ambient information.
+This project is for a quick overview of important info on one page and then managing heating in the room. When you get up you can quickly see time/date, outside temperature, forecast and EV battery level (super important, right?).
+
+On the other page are details of the temperature and humidity in the room and control of heating presets. One of the presets can also be modified to set a different temperature.
+
+This is working, but it is still work in progress. All functionality is working, next steps are to assemble it and get a nice enclosure for it.
+
+### Future improvement ideas
+- Neopixel for mood light and notifications
+- Use LEDs on the touch screen for quick status
+- Adding more pages?
+- **NOTE**: running out of memory for additional features
 
 ### Reusability Note
 
-This is an advanced project that requires custom external components and specific hardware. While functional and well-documented, it's presented as a showcase/reference implementation. The project demonstrates sophisticated touch interaction patterns, multi-page OLED interfaces, and complex climate control logic that can be adapted for your specific needs. Understanding of ESPHome, I2C/SPI protocols, and custom components is recommended.
-
-**Note:** This project is currently in progress. The RGB LED (Neopixel) for ambient lighting and notifications will be added in a future update.
+Substitutions are put at the top of the config file, so replacing them for your own sensor entity IDs and climate IDs will get it working for you. Some extra work needed if not all the same component used. Some of the components are obsolete so a different options might be required.
 
 ## What You'll Need
 
@@ -60,10 +70,11 @@ This is an advanced project that requires custom external components and specifi
 - 1x [DFRobot Beetle ESP32-C6](/devices/beetle-esp32-c6) - Compact ESP32-C6 development board
 - 1x [SH1107 OLED Display (128x128, SPI)](/devices/sh1107-spi-oled) - Monochrome display breakout
 - 1x [Pimoroni Touch pHAT](/devices/touch-phat) - 6 capacitive touch buttons with RGB LEDs (I2C)
-- 1x [Adafruit NeoPixel](/devices/adafruit-neopixel) - RGB LED for ambient/notification (to be added)
-- Jumper wires for connections
+- 1x [Adafruit NeoPixel](/devices/adafruit-neopixel) - RGB LED for ambient/notification
+- Jumper wires for connections (for testing it)
 - USB-C cable (data capable)
 - Power supply (USB charger, 5V/1A minimum)
+- This will require soldering if you want it properly assembled
 - Optional: 3D printer for custom enclosure (design in progress)
 
 ### Wiring Connections

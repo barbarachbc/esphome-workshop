@@ -7,7 +7,7 @@ model: "NodeMCU"
 connectionTypes: ["gpio"]
 tags: ["wifi", "esp8266"]
 productionStatus: "NRND"
-status: "pending"
+status: "ready"
 references:
   - title: ESP8266 Pinout Reference
     url: https://randomnerdtutorials.com/esp8266-pinout-reference-gpios/
@@ -23,12 +23,25 @@ count: 3
 
 The DiyMore NodeMCU (similar to Wemos D1 Mini) is a compact ESP8266-based development board with built-in WiFi capabilities. It features the ESP8266MOD (ESP-12F) module.
 
+## Test Status
+
+- ✅ [Basic Config](#basic-configuration) + Internal LED
+- [ ] GPIO
+- [ ] UART
+- [ ] SPI
+- [ ] I2C
+- [ ] I2S
+- [ ] PWM
+- [ ] IR
+- [ ] ADC
+
 ## Hardware Features
 
 - **Module:** ESP8266MOD (ESP-12F)
-- **CPU:** ESP8266 single-core, 80MHz
+- **CPU:** ESP8266EX single-core, 80MHz
 - **RAM:** 80KB
 - **Flash:** 4MB
+  - W25Q32FV 32Mbit Serial Nor Flash (NRND)
 - **USB-to-UART:** CH340G
 - **GPIO Pins:** 17 available on the module, not on the board
 - **WiFi:** 802.11 b/g/n

@@ -24,6 +24,21 @@ dateAcquired: "Dec 2024"
 
 The ESP32-C3-WROOM-02 is a general-purpose WiFi and Bluetooth LE module based on the ESP32-C3 SoC. It features a 32-bit RISC-V single-core processor and is designed for low-power IoT applications.
 
+## Test Status
+- [ ] How to use Hardware? 👀
+- [ ] Basic Config
+- [ ] GPIO
+- [ ] UART
+- [ ] SPI
+- [ ] I2C
+- [ ] I2S
+- [ ] (LED) PWM
+- [ ] IR
+- [ ] ADC
+- [ ] Temperature Sensor
+- [ ] Bluetooth
+- [ ] CAN?
+
 ## Hardware Features
 
 - **Module:** ESP32-C3-WROOM-02
@@ -60,7 +75,7 @@ The ESP32-C3-WROOM-02 is a module that integrates:
 - PCB antenna
 - All necessary passive components
 
-This module is designed to be soldered onto a carrier board for complete functionality.
+**NOTE: ⚠️** This module is designed to be soldered onto a carrier board for complete functionality.
 
 ## GPIO Capabilities
 
@@ -122,26 +137,6 @@ This makes development easier and reduces the need for external components.
 ⚠️ **Single Core:** Unlike ESP32 (dual-core), the ESP32-C3 has a single core.
 
 ⚠️ **Power Consumption:** While optimized for low power, peak current during WiFi/BLE transmission can reach 350mA. Ensure adequate power supply.
-
-## Advantages over ESP8266
-
-- **More GPIOs:** 15 vs 17 (but ESP8266's are more limited)
-- **Better Performance:** 160 MHz RISC-V vs 80 MHz Xtensa
-- **More Memory:** 400 KB SRAM vs 80 KB
-- **Bluetooth LE:** ESP8266 has no Bluetooth
-- **USB Support:** Built-in USB Serial/JTAG
-- **Better ADC:** Higher resolution and more channels
-- **Modern Architecture:** RISC-V is an open standard
-
-## Advantages over ESP32 Classic
-
-- **Lower Cost:** More economical than dual-core ESP32
-- **Lower Power:** Single core consumes less power
-- **Built-in USB:** No need for external USB-to-UART
-- **Smaller Size:** More compact module
-- **Modern Architecture:** RISC-V vs older Xtensa
-
-Trade-off: Single core vs dual core for demanding applications.
 
 ## Development Boards
 

@@ -5,13 +5,17 @@ category: "board"
 manufacturer: "Generic"
 model: "esp-01s"
 variants: ["ESP-01"]
-connectionTypes: ["gpio"]
+connectionTypes: ["gpio", "uart"]
 tags: ["wifi", "esp8266"]
 productionStatus: "NRND"
 status: "pending"
 references:
   - title: ESP8266 Pinout Reference
     url: https://randomnerdtutorials.com/esp8266-pinout-reference-gpios/
+  - title: SPI Flash Datasheet
+    url: "https://uploadcdn.oneyac.com/upload/document/1676268194927_6539.pdf"
+  - title: USB-to-UART on Amazon
+    url: "https://www.amazon.co.uk/dp/B09Z2GZVZY"
 purchaseLinks:
   - vendor: The Pi Hut
     url: https://thepihut.com/products/esp-01-wifi-serial-transceiver-module-esp8266
@@ -25,12 +29,26 @@ dateAcquired: "Sept 2024"
 
 The ESP-01S is a bare-bones ESP8266 WiFi module with minimal hardware. It's one of the smallest and cheapest ESP8266 modules available but requires external components for programming and operation.
 
+## Test Status
+
+- 🧪 [Basic Config](#basic-configuration) + Internal LED
+- [ ] GPIO
+- [ ] UART
+- [ ] SPI
+- [ ] I2C
+- [ ] I2S
+- [ ] PWM
+- [ ] IR
+- [ ] ADC
+
 ## Hardware Features
 
-- **Module:** ESP8266
-- **CPU:** ESP8266 single-core, 80MHz
+- **Module:** ESP-01S
+- **CPU:** ESP8266EX single-core, 80MHz
 - **RAM:** 80KB
 - **Flash:** 1MB (typically)
+  - My board: GT25Q80A 8Mbit SPI Nor Flash
+  - Chip Marking: 580A-UGLI
 - **GPIO Pins:** 4 available (2 easily accessible)
 - **WiFi:** 802.11 b/g/n
 - **SPI:** Hardware SPI
@@ -41,6 +59,7 @@ The ESP-01S is a bare-bones ESP8266 WiFi module with minimal hardware. It's one 
 
 ## Additional Hardware Features
 
+- Built-in LED on GPIO01
 - No built-in USB-to-UART (requires external programmer with CH340G or similar)
 - No built-in voltage regulator (requires external 3.3V LDO)
 - No reset or boot buttons
@@ -72,7 +91,19 @@ esphome:
 
 esp8266:
   board: esp01_1m
+
+output:
+  - platform: gpio
+    pin: GPIO01
+    id: builtin_led
+
+light:
+  - platform: binary
+    name: "Built in LED"
+    output: builtin_led
+
 ```
+
 
 ## Programming Setup
 
@@ -95,7 +126,6 @@ The ESP-01S requires an external USB-to-UART adapter for programming:
    - RST should be HIGH (or floating with pull-up)
 
 ## Important Notes
-
 ⚠️ **Power Requirements:** 
 - Must use a stable 3.3V power supply
 - Can draw up to 300mA during WiFi transmission
@@ -109,6 +139,8 @@ The ESP-01S requires an external USB-to-UART adapter for programming:
 ⚠️ **Limited GPIOs:** With only 2 easily accessible GPIOs (GPIO0 and GPIO2), this module is best suited for simple WiFi-to-serial applications.
 
 ⚠️ **No Built-in Protection:** No reverse polarity protection, overvoltage protection, or current limiting. Handle with care.
+
+⚠️ **I2C:** I2C is implemented in software, so any GPIO can be used, but GPIO5 and GPIO4 are the default pins. They are not available on the board, so if used, SDA and SCL pins need to be specified.
 
 ## Use Cases
 

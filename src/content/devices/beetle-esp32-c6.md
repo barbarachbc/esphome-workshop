@@ -13,6 +13,8 @@ references:
     url: "https://wiki.dfrobot.com/SKU_DFR1117_Beetle_ESP32_C6"
   - title: Pinout
     url: "https://wiki.dfrobot.com/SKU_DFR1117_Beetle_ESP32_C6#Pin%20Diagram"
+  - title: ESP32-C6 Datasheet
+    url: "https://documentation.espressif.com/esp32-c6_datasheet_en.pdf"
 purchaseLinks:
   - vendor: "DFRobot"
     url: "https://www.dfrobot.com/product-2778.html"
@@ -30,6 +32,19 @@ The DFRobot Beetle ESP32-C6 is a compact development board based on the ESP32-C6
 ## Additonal Hardware features:
 - LED GPIO15
 - Boot Button GPIO9
+
+## Test Status
+- ✅ [Basic Config](#basic-configuration) + Internal LED & Boot Button
+- ✅ [GPIO](#basic-configuration) - output: Internal LED, input: Boot Button
+- [ ] UART
+- [ ] SPI
+- [ ] I2C
+- [ ] I2S
+- [ ] (LED) PWM
+- [ ] IR
+- [ ] ADC
+- [ ] Temperature Sensor
+- [ ] Parallel I/O
 
 
 ### Basic Configuration

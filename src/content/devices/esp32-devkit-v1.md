@@ -18,6 +18,8 @@ references:
     url: https://www.espboards.dev/esp32/esp32doit-devkit-v1/
   - title: Module Overview
     url: https://products.espressif.com/#/product-selector?names=ESP32-WROOM-32-N4&filter=%7B%22Series%22%3A%5B%22ESP32%22%5D%7D
+  - title: Datasheet
+    url: https://documentation.espressif.com/esp32-wroom-32_datasheet_en.html
 purchaseLinks:
   - vendor: AliExpress
     url: https://www.aliexpress.com/item/1005006422498371.html
@@ -31,6 +33,20 @@ Based on the ESP32-WROOM-32/ESP32-WROOM-32D module with built-in WiFi and Blueto
 ## Additonal Hardware features:
 - Boot & Reset buttons - Boot button can be used, inverted on GPIO00
 - LED on GPIO02
+
+## Test Status
+- ✅ [Basic Config](#basic-configuration) + Internal LED & Boot Button
+- ✅ [GPIO](#basic-configuration) - output: Internal LED, input: Boot Button
+- [ ] UART
+- [ ] SPI
+- [ ] I2C
+- [ ] I2S
+- [ ] (LED) PWM
+- [ ] IR
+- [ ] ADC
+- [ ] Touch Sensor
+- [ ] DAC
+- [ ] SD Card
 
 ### Basic Configuration
 

@@ -199,6 +199,20 @@
     @apply bg-transparent p-0;
     color: var(--text-code);
   }
+
+  ul, ol {
+      all: revert;
+      @apply pl-5;
+  }
+
+  nav ul, nav li {
+    @apply list-none;
+  }
+
+  /*
+  main ul > li {
+    list-style-type: inherit;
+  }*/
 }
 
 @layer components {
@@ -411,3 +425,4 @@ details summary::marker {
     background: var(--bg-card);
   }
 }
+
