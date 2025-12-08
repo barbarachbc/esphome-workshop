@@ -4,6 +4,7 @@ import ShowcaseCarousel from '../components/ShowcaseCarousel.astro';
 import { getEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
 import { getRecentChanges, formatChangelogDate, getChangeTypeEmoji } from '../utils/changelog';
+import Search from "astro-pagefind/components/Search";
 
 // Query all devices and projects
 const allDevices = await getCollection('devices');
@@ -125,6 +126,7 @@ const recentChanges = await getRecentChanges(7);
   </div>
 
   <ShowcaseCarousel items={showcaseItems.filter(Boolean)} />
+  <Search className="mb-8 pagefind-ui yellow" uiOptions={{ showImages: false }} />
 
   <div class="grid grid-cols-2 gap-6 mb-8">
     <a href="/devices" class="block rounded-lg p-5 no-underline transition-all duration-200 shadow-sm hover:-translate-y-0.5 hover:shadow-xl" style="background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-primary);">

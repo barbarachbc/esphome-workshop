@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Search from "astro-pagefind/components/Search";
+---
+
+<Layout title="Search">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-4xl font-semibold mt-0 mb-2" style="color: var(--text-heading);">Search</h1>
+    <p class="text-lg mb-8" style="color: var(--text-secondary);">
+      Search across all devices, components, projects, and notes
+    </p>
+    
+    <Search className="pagefind-ui yellow" uiOptions={{ showImages: false }} />
+    
+    <div class="mt-8 p-4 rounded-lg" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+      <h2 class="text-lg font-semibold mt-0 mb-2" style="color: var(--text-heading);">Search Tips</h2>
+      <ul class="text-sm space-y-1 mb-0" style="color: var(--text-secondary);">
+        <li>Search for device names, component types, or project descriptions</li>
+        <li>Results are filtered by content type (devices, projects, etc.)</li>
+        <li>Use specific terms for better results (e.g., "ESP32" instead of "board")</li>
+        <li>Search includes all page content, including markdown documentation</li>
+      </ul>
+    </div>
+  </div>
+</Layout>

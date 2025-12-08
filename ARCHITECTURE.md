@@ -487,11 +487,33 @@ Privacy-friendly, using self-hosted Umami analytics platform. Uses Partytown to 
 
 ---
 
+### Search Functionality
+
+**Implemented:** Pagefind static search (uses astro-pagefind integration)
+
+**Features:**
+- Full-text search across all content (devices, components, projects, notes)
+- Automatic indexing at build time (`npx pagefind --site dist`)
+- Built-in filters by content type (Type:Device, Type:Project, etc.)
+- Category and status filters via `data-pagefind-filter` attributes
+- ~1KB overhead per page
+- Zero-config, privacy-friendly (no external dependencies)
+- Highlighted search results with context
+- Dark mode support via CSS custom properties
+
+**Implementation details:**
+- Search box on the home page
+- Search page: `src/pages/search.astro`
+- Pagefind indexing runs after Astro build via `npm run build`
+- Content pages use `data-pagefind-body` and `data-pagefind-filter` attributes
+
+---
+
 ## Future Considerations
 
 ### Potential Enhancements
 
-1. **Search functionality** - Client-side search with Pagefind or Fuse.js
+1. **Enhanced filtering** - Multi-select filters with checkboxes for status, connection types, tags
 2. **RSS feeds** - Auto-generate from changelog
 3. **Image optimization** - Astro Image integration for automatic resizing/format conversion
 4. **Comment system** - Consider https://community.home-assistant.io/c/esphome/

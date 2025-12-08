@@ -99,7 +99,11 @@ if (projectsUsingDevice.length > 0) {
 ---
 
 <Layout title={`${device.data.title} - Devices`}>
-  <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 max-w-7xl mx-auto">
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 max-w-7xl mx-auto" 
+       data-pagefind-body
+       data-pagefind-filter="Type:Device"
+       data-pagefind-filter={`Category:${device.data.category}`}
+       data-pagefind-filter={`Status:${displayStatus}`}>
     {tocHeadings.length >= 3 && (
       <div class="lg:hidden mb-8">
         <TableOfContents headings={tocHeadings} />
@@ -108,7 +112,7 @@ if (projectsUsingDevice.length > 0) {
     
     <article class="min-w-0">
       <div id="page-info" class="flex justify-between items-center mb-4 flex-wrap gap-4">
-        <h1 class="text-4xl font-semibold m-0">{ device.data.title}</h1>
+        <h1 class="text-4xl font-semibold m-0" data-pagefind-meta="title">{ device.data.title}</h1>
         <div class="flex gap-2 items-center flex-wrap">
           {device.data.productionStatus && device.data.productionStatus !== 'unknown' && (
             <span class={`inline-block text-sm px-3 py-2 rounded-lg font-medium ${

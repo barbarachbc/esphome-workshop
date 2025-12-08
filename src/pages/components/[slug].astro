@@ -51,7 +51,10 @@ if (relatedProjects.length > 0) {
 ---
 
 <Layout title={`${component.data.title} - Components`}>
-  <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 max-w-7xl mx-auto px-4">
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 max-w-7xl mx-auto px-4"
+       data-pagefind-body
+       data-pagefind-filter="Type:Component"
+       data-pagefind-filter={`Category:${component.data.category}`}>
     {tocHeadings.length >= 3 && (
       <div class="lg:hidden mb-8">
         <TableOfContents headings={tocHeadings} />
@@ -60,7 +63,7 @@ if (relatedProjects.length > 0) {
     
     <article class="min-w-0">
       <div id="page-info" class="mb-8">
-        <h1 class="text-4xl font-semibold mb-4">{component.data.title}</h1>
+        <h1 data-pagefind-meta="title" class="text-4xl font-semibold mb-4">{component.data.title}</h1>
         <div class="flex items-center gap-4 flex-wrap">
           <span class="inline-block bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold">{component.data.category}</span>
           <code class="bg-gray-100 px-4 py-2 rounded text-sm text-pink-700">{component.data.esphomeComponent}</code>

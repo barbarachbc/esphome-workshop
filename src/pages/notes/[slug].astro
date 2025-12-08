@@ -18,7 +18,11 @@ const { Content, headings } = await note.render();
 ---
 
 <Layout title={`${note.data.title} - Notes`}>
-  <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 max-w-7xl mx-auto px-4">
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 max-w-7xl mx-auto px-4"
+       data-pagefind-body
+       data-pagefind-filter="Type:Note"
+       data-pagefind-filter={`Category:${note.data.category}`}
+       data-pagefind-filter={note.data.difficulty ? `Difficulty:${note.data.difficulty}` : undefined}>
     {headings.length >= 3 && (
       <div class="lg:hidden mb-8">
         <TableOfContents headings={headings} minDepth={1} />
@@ -27,7 +31,7 @@ const { Content, headings } = await note.render();
     
     <article class="min-w-0">
       <div class="mb-8">
-        <h1 class="text-4xl font-semibold mb-4">{note.data.title}</h1>
+        <h1 data-pagefind-meta="title" class="text-4xl font-semibold mb-4">{note.data.title}</h1>
         <div class="flex items-center gap-4 flex-wrap">
           <span class="inline-block bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold">{note.data.category}</span>
           {note.data.difficulty && (

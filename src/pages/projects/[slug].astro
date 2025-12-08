@@ -57,7 +57,11 @@ const difficultyLabels = {
 ---
 
 <Layout title={`${project.data.title} - Projects`}>
-  <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 max-w-7xl mx-auto">
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 max-w-7xl mx-auto"
+       data-pagefind-body
+       data-pagefind-filter="Type:Project"
+       data-pagefind-filter={`Status:${project.data.status}`}
+       data-pagefind-filter={`Difficulty:${project.data.difficulty}`}>
     {tocHeadings.length >= 3 && (
       <div class="lg:hidden mb-8">
         <TableOfContents headings={tocHeadings} />
@@ -66,7 +70,7 @@ const difficultyLabels = {
     
     <article class="min-w-0">
       <div id="page-info" class="flex justify-between items-center mb-4">
-        <h1 class="text-4xl font-semibold m-0">{project.data.title}</h1>
+        <h1 data-pagefind-meta="title" class="text-4xl font-semibold m-0">{project.data.title}</h1>
         <span class={`status-badge status-badge-${project.data.status}`}>
           {statusLabels[project.data.status]}
         </span>
