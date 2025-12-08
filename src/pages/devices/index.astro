@@ -54,15 +54,20 @@ const tags = [...allTags].sort();
   <p class="text-lg mb-8" style="color: var(--text-secondary);">Physical hardware components for ESPHome projects</p>
 
   <!-- Filter Panel -->
-  <div class="mb-8 p-6 rounded-lg" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-semibold m-0" style="color: var(--text-heading);">Filters</h2>
-      <button id="clearFilters" class="px-4 py-2 rounded text-sm font-medium transition-colors" style="background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-card);" onmouseover="this.style.borderColor='var(--accent-blue)'; this.style.color='var(--accent-blue)';" onmouseout="this.style.borderColor='var(--border-card)'; this.style.color='var(--text-secondary)';">
+  <details class="mb-8 p-6 rounded-lg" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+    <summary class="flex justify-between items-center cursor-pointer list-none mb-0">
+      <h2 class="text-xl font-semibold m-0 flex items-center gap-2" style="color: var(--text-heading);">
+        <svg class="w-5 h-5 transition-transform duration-200" style="transform: rotate(-90deg);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+        Filters
+      </h2>
+      <button id="clearFilters" class="px-4 py-2 rounded text-sm font-medium transition-colors" style="background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-card);" onmouseover="this.style.borderColor='var(--accent-blue)'; this.style.color='var(--accent-blue)';" onmouseout="this.style.borderColor='var(--border-card)'; this.style.color='var(--text-secondary)';" onclick="event.stopPropagation();">
         Clear All
       </button>
-    </div>
+    </summary>
     
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
       <!-- Category Filter -->
       <div>
         <label class="block mb-3 font-medium text-sm" style="color: var(--text-primary);">Category</label>
@@ -135,7 +140,7 @@ const tags = [...allTags].sort();
         Showing <span id="resultCount" class="font-semibold" style="color: var(--text-primary);">0</span> devices
       </p>
     </div>
-  </div>
+  </details>
 
   <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6" id="deviceGrid">
     {devicesWithStatus.map(device => (
@@ -154,6 +159,15 @@ const tags = [...allTags].sort();
     const tagSearchInput = document.getElementById('tagSearch') as HTMLInputElement;
     const grid = document.getElementById('deviceGrid');
     const resultCount = document.getElementById('resultCount');
+    const filterDetails = document.querySelector('details') as HTMLDetailsElement;
+
+    // Rotate arrow on toggle
+    filterDetails?.addEventListener('toggle', () => {
+      const arrow = filterDetails.querySelector('svg');
+      if (arrow) {
+        arrow.style.transform = filterDetails.open ? 'rotate(0deg)' : 'rotate(-90deg)';
+      }
+    });
 
     function applyFilters() {
       // Get all checked checkboxes
