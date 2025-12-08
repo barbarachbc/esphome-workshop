@@ -62,9 +62,6 @@ const tags = [...allTags].sort();
         </svg>
         Filters
       </h2>
-      <button id="clearFilters" class="px-4 py-2 rounded text-sm font-medium transition-colors" style="background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-card);" onmouseover="this.style.borderColor='var(--accent-blue)'; this.style.color='var(--accent-blue)';" onmouseout="this.style.borderColor='var(--border-card)'; this.style.color='var(--text-secondary)';" onclick="event.stopPropagation();">
-        Clear All
-      </button>
     </summary>
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
@@ -137,7 +134,10 @@ const tags = [...allTags].sort();
     <!-- Results Counter -->
     <div class="mt-4 pt-4" style="border-top: 1px solid var(--border-primary);">
       <p class="text-sm m-0" style="color: var(--text-secondary);">
-        Showing <span id="resultCount" class="font-semibold" style="color: var(--text-primary);">0</span> devices
+        <span>Showing <span id="resultCount" class="font-semibold" style="color: var(--text-primary);">0</span> devices</span>
+        <button id="clearFilters" class="ml-4 px-4 py-2 rounded text-sm font-medium transition-colors" style="background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-card);" onmouseover="this.style.borderColor='var(--accent-blue)'; this.style.color='var(--accent-blue)';" onmouseout="this.style.borderColor='var(--border-card)'; this.style.color='var(--text-secondary)';" onclick="event.stopPropagation();">
+        Clear All
+      </button>
       </p>
     </div>
   </details>
