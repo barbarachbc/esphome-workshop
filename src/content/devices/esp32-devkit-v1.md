@@ -23,13 +23,15 @@ references:
 purchaseLinks:
   - vendor: AliExpress
     url: https://www.aliexpress.com/item/1005006422498371.html
-#image: "/images/devices/"
-lastModified: "2025-12-06"
+image: "/images/devices/thumbnails/esp32-devkit-v1.jpg"
+lastModified: "2025-12-08"
 ---
 
 ## Overview
 
 Based on the ESP32-WROOM-32/ESP32-WROOM-32D module with built-in WiFi and Bluetooth capabilities. Has built-in antenna.
+
+![HW-394 version](./images/esp32-devkit-v1/hw-394.jpg)
 
 ## Additonal Hardware features:
 - Boot & Reset buttons - Boot button can be used, inverted on GPIO00
@@ -170,6 +172,11 @@ Other interfaces: SD card, UART, SDIO, I2C, I2S, IR, pulse counter, CAN
 - Add capacitors near power pins if using long wires
 - Avoid connecting high-current devices directly
 
-## Where to Buy
 
-Available from most electronics retailers including Amazon, AliExpress, and local electronics stores. Lots of different variants out there as with other ESP32/ESP8266 boards.
+## Other Images
+
+HW-463 version:
+![HW-463 version](./images/esp32-devkit-v1/hw-463.jpg)
+
+HW-463 version - back:
+![HW-463 back](./images/esp32-devkit-v1/hw-463-back.jpg)

@@ -460,5 +460,9 @@ details summary::marker {
   .dark tr:nth-child(odd) td {
     background: var(--bg-card);
   }
+
+  img {
+    max-width: 320px;
+  }
 }
 

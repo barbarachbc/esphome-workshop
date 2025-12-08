@@ -13,6 +13,8 @@ purchaseLinks:
     url: "https://www.amazon.co.uk/dp/B01N2K3BC9"
 status: "testing"
 dateAcquired: "2017"
+image: "/images/devices/thumbnails/ky34-by-oled.jpg"
+lastModified: "2025-12-08"
 ---
 
 ## Overview
@@ -20,6 +22,8 @@ dateAcquired: "2017"
 The KY34-BY OLED Display by Kuman is a monochrome blue OLED display module.
 
 OLED displays are self-illuminating (no backlight needed), have excellent contrast, wide viewing angles, and consume very little power. This module uses the SSD1306 driver chip.
+
+![KY34-BY OLED](./images/ky34-by-oled/ky34-by-oled.jpg)
 
 - 0.96" blue OLED display (128x64 pixels)
 - Uses the SSD1306 driver chip
@@ -33,3 +37,8 @@ OLED displays are self-illuminating (no backlight needed), have excellent contra
 Uses [SSD1306](https://esphome.io/components/display/ssd1306/) I2C (SSD1306 128x64).
 
 Similar to [grove-oled-ssd1315](./grove-oled-ssd1315), has the same addresses indicated.
+
+## Other Images
+
+Back of the display:
+![KY34-BY OLED Back](./images/ky34-by-oled/ky34-by-oled-back.jpg)

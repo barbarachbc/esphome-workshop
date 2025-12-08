@@ -21,14 +21,16 @@ purchaseLinks:
     url: https://thepihut.com/products/esp-01-wifi-serial-transceiver-module-esp8266
   - vendor: Amazon
     url: https://www.amazon.co.uk/dp/B07Y8H2C1P?th=1
-#image: "/images/devices/"
+image: "/images/devices/thumbnails/esp-01s.jpg"
 dateAcquired: "Sept 2024"
-lastModified: "2025-12-06"
+lastModified: "2025-12-08"
 ---
 
 ## Overview
 
 The ESP-01S is a bare-bones ESP8266 WiFi module with minimal hardware. It's one of the smallest and cheapest ESP8266 modules available but requires external components for programming and operation.
+
+![Generic ESP-01S](./images/esp-01s/esp-01s.jpg)
 
 ## Test Status
 
@@ -172,3 +174,13 @@ Not recommended for:
 - Almost always a power supply issue
 - Add 100µF capacitor near 3.3V pin
 - Use proper 3.3V regulator rated for 500mA+
+
+## Other Images
+
+Back of the module:
+![ESP-01S Back](./images/esp-01s/esp-01s-back.jpg)
+
+With the adapter:
+![ESP-01S with Adapter](./images/esp-01s/esp-01s-adapter.jpg)
+
+Note on this adapter - it requires GPIO0 (IO0) to be set to ground before plugging it in to enter boot mode. I got them with modules, but I have a separate programmer.

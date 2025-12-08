@@ -16,11 +16,12 @@ purchaseLinks:
 status: "ready"
 dateAcquired: "May 2024"
 count: 2
-lastModified: "2025-12-07"
+lastModified: "2025-12-08"
 changelog:
   - date: "2025-12-07"
     type: "added"
     description: "Complete first version of the document"
+image: "/images/devices/thumbnails/gc9a01-round-lcd.jpg"
 ---
 
 ## Overview
@@ -28,6 +29,8 @@ changelog:
 This is a beautiful round TFT LCD color display with 240x240 resolution.
 
 TFT LCD displays offer bright, full-color visuals with excellent readability in various lighting conditions. The round form factor makes it ideal for watch-style projects, gauges, and unique UI designs.
+
+![GC9A01 Round LCD](./images/gc9a01-round-lcd/gc9a01-round-lcd.jpg)
 
 - 1.28" round RGB TFT LCD display (240x240 pixels)
 - Uses the GC9A01A driver chip
@@ -307,3 +310,8 @@ display:
 - **Display fails to initialize**: Make sure `buffer_size: 25%` is set. The default buffer size may be too large for some ESP32 modules. Dead givaway is an error in the logs.
 - **Wrong colors**: Try adjusting `color_order` between BGR and RGB, or toggle `invert_colors`.
 - **Blank display**: Verify SPI wiring and that the reset pin is correctly connected. Check logs.
+
+## Other Images
+
+Back of the LCD:
+![GC9A01 Round LCD Back](./images/gc9a01-round-lcd/gc9a01-round-lcd-back.jpg)

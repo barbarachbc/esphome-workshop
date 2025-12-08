@@ -13,6 +13,8 @@ purchaseLinks:
     url: "https://shop.pimoroni.com/products/1-12-oled-breakout?variant=12628508704851"
 status: "ready"
 dateAcquired: "Jan 2022"
+image: "/images/devices/thumbnails/sh1107-spi-oled.jpg"
+lastModified: "2025-12-08"
 ---
 
 ## Overview
@@ -27,6 +29,8 @@ OLED displays are self-illuminating (no backlight needed), have excellent contra
 - SPI or I2C (address 0x3C/0x3D (cut trace)) interface
 - This version uses SPI
 - 3.3V or 5V compatible
+
+![Pimoroni 1.12" Mono OLED](images/sh1107-spi-oled/sh1107-spi-oled-action.jpg)
 
 ## Configuration Notes
 

@@ -15,11 +15,15 @@ purchaseLinks:
 status: "testing"
 count: 2
 dateAcquired: "Jan 2025"
+image: "/images/devices/thumbnails/sh1106-oled.jpg"
+lastModified: "2025-12-08"
 ---
 
 ## Overview
 
 The 1.3" OLED Display Module is a monochrome OLED display with white or blue pixels.
+
+![sh1106-oled](./images/sh1106-oled/sh1106-oled.jpg)
 
 OLED displays are self-illuminating (no backlight needed), have excellent contrast, wide viewing angles, and consume very little power. This module uses the SH1106 driver chip.
 
@@ -39,3 +43,8 @@ OLED displays are self-illuminating (no backlight needed), have excellent contra
 - Platform: [**ssd1306_i2c**](https://esphome.io/components/display/ssd1306/)
 - Model: **SH1106 128x64**
 - I2C address: **0x3C** or **0x3D** (check your module)
+
+## Other Images
+
+Back of the OLEDs:
+![sh1106-oled-back](./images/sh1106-oled/sh1106-oled-back.jpg)

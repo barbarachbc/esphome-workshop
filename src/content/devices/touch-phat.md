@@ -30,6 +30,7 @@ references:
     url: "https://github.com/barbarachbc/esphomecomponents"
 dateAcquired: "2017"
 status: "testing"
+lastModified: "2025-12-08"
 ---
 
 ## Overview
@@ -48,7 +49,7 @@ Not supported by ESPHome. The chip is nearly exactly the same as [CAP1188](https
 
 **NOTE** The LEDs are not linked to Touch Pads. LEDs are positioned under different pads so they have to be disconnected.
 
-✅ External component available (by me 🙂)
+✅ External component [available](github://barbarachbc/esphomecomponents) (by me 🙂)
 
 
 ### Basic Configuration
@@ -102,4 +103,4 @@ binary_sensor:
 
 ```
 
-TODO add notes on all the functionality
+**NEXT:** add notes on all the functionality of the external component
