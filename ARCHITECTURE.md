@@ -509,14 +509,48 @@ Privacy-friendly, using self-hosted Umami analytics platform. Uses Partytown to 
 
 ---
 
+### Enhanced Filtering
+
+**Implemented:** Multi-criteria filtering with checkboxes on devices listing page
+
+**Features:**
+- **Category filter** - Multi-select checkboxes to filter by device category (board, sensor, display, etc.)
+- **Status filter** - Multi-select checkboxes to filter by device status (ready, testing, deployed, retired, pending, unsupported)
+- **Tags filter** - Multi-select checkboxes to filter by device tags
+- **Clear all button** - Quick reset of all filters
+- **Results counter** - Shows number of matching devices
+- **Scrollable filter areas** - Max height with overflow for long lists
+
+**Implementation details:**
+- Location: `src/pages/devices/index.astro`
+- Uses data attributes on device cards (`data-category`, `data-status`, `data-tags`)
+- Client-side filtering via vanilla JavaScript
+- Filters work in combination (AND logic between categories, OR within each category)
+- Responsive 3-column grid layout for filter controls
+- Checkbox styling with accent color
+
+**Filter Logic:**
+- Multiple selections within same category = OR (e.g., select "sensor" OR "board")
+- Selections across categories = AND (e.g., must match category AND status AND tag)
+- Empty category = show all for that category
+
+**Future enhancements:**
+- Connection type filter with checkboxes
+- Has image filter
+- Production status filter
+- Sort options (alphabetical, recently added, etc.)
+- URL query parameters for shareable filter states
+- Select All / Deselect All per category
+
+---
+
 ## Future Considerations
 
 ### Potential Enhancements
 
-1. **Enhanced filtering** - Multi-select filters with checkboxes for status, connection types, tags
-2. **RSS feeds** - Auto-generate from changelog
-3. **Image optimization** - Astro Image integration for automatic resizing/format conversion
-4. **Comment system** - Consider https://community.home-assistant.io/c/esphome/
+1. **RSS feeds** - Auto-generate from changelog
+2. **Image optimization** - Astro Image integration for automatic resizing/format conversion
+3. **Comment system** - Consider https://community.home-assistant.io/c/esphome/
 
 ---
 

@@ -36,49 +36,167 @@ const devicesWithStatus = devices.map(device => {
   };
 });
 
-const categories = [...new Set(devices.map(d => d.data.category))];
+const categories = [...new Set(devices.map(d => d.data.category))].sort();
+const statuses = [...new Set(devicesWithStatus.map(d => d.displayStatus))].sort();
+
+// Collect all unique tags
+const allTags = new Set<string>();
+devices.forEach(d => {
+  if (d.data.tags) {
+    d.data.tags.forEach(tag => allTags.add(tag));
+  }
+});
+const tags = [...allTags].sort();
 ---
 
 <Layout title="Devices">
   <h1 class="text-4xl font-semibold mt-0 mb-6" style="color: var(--text-heading);">Devices</h1>
   <p class="text-lg mb-8" style="color: var(--text-secondary);">Physical hardware components for ESPHome projects</p>
 
-  <div class="mb-8 p-4 rounded-lg" style="background: var(--bg-secondary);">
-    <label class="flex items-center gap-2">
-      <span class="font-medium" style="color: var(--text-primary);">Filter by category:</span>
-      <select id="categoryFilter" class="px-3 py-2 rounded text-base" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-card);">
-        <option value="">All Categories</option>
-        {categories.map(cat => (
-          <option value={cat}>{cat}</option>
-        ))}
-      </select>
-    </label>
+  <!-- Filter Panel -->
+  <div class="mb-8 p-6 rounded-lg" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold m-0" style="color: var(--text-heading);">Filters</h2>
+      <button id="clearFilters" class="px-4 py-2 rounded text-sm font-medium transition-colors" style="background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-card);" onmouseover="this.style.borderColor='var(--accent-blue)'; this.style.color='var(--accent-blue)';" onmouseout="this.style.borderColor='var(--border-card)'; this.style.color='var(--text-secondary)';">
+        Clear All
+      </button>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Category Filter -->
+      <div>
+        <label class="block mb-3 font-medium text-sm" style="color: var(--text-primary);">Category</label>
+        <div class="space-y-2 max-h-48 overflow-y-auto p-3 rounded" style="background: var(--bg-card); border: 1px solid var(--border-card);">
+          {categories.map(cat => (
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-opacity-50 p-1 rounded transition-colors" style="color: var(--text-primary);">
+              <input 
+                type="checkbox" 
+                name="category" 
+                value={cat}
+                class="filter-checkbox w-4 h-4 rounded cursor-pointer"
+                style="accent-color: var(--accent-blue);"
+              />
+              <span class="text-sm">{cat}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <!-- Status Filter -->
+      <div>
+        <label class="block mb-3 font-medium text-sm" style="color: var(--text-primary);">Status</label>
+        <div class="space-y-2 max-h-48 overflow-y-auto p-3 rounded" style="background: var(--bg-card); border: 1px solid var(--border-card);">
+          {statuses.map(status => (
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-opacity-50 p-1 rounded transition-colors" style="color: var(--text-primary);">
+              <input 
+                type="checkbox" 
+                name="status" 
+                value={status}
+                class="filter-checkbox w-4 h-4 rounded cursor-pointer"
+                style="accent-color: var(--accent-blue);"
+              />
+              <span class="text-sm capitalize">{status}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <!-- Tags Filter -->
+      <div>
+        <label class="block mb-3 font-medium text-sm" style="color: var(--text-primary);">Tags</label>
+        <div class="space-y-2 max-h-48 overflow-y-auto p-3 rounded" style="background: var(--bg-card); border: 1px solid var(--border-card);">
+          {tags.map(tag => (
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-opacity-50 p-1 rounded transition-colors" style="color: var(--text-primary);">
+              <input 
+                type="checkbox" 
+                name="tag" 
+                value={tag}
+                class="filter-checkbox w-4 h-4 rounded cursor-pointer"
+                style="accent-color: var(--accent-blue);"
+              />
+              <span class="text-sm">{tag}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Counter -->
+    <div class="mt-4 pt-4" style="border-top: 1px solid var(--border-primary);">
+      <p class="text-sm m-0" style="color: var(--text-secondary);">
+        Showing <span id="resultCount" class="font-semibold" style="color: var(--text-primary);">0</span> devices
+      </p>
+    </div>
   </div>
 
   <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6" id="deviceGrid">
     {devicesWithStatus.map(device => (
-      <div data-category={device.data.category}>
+      <div 
+        data-category={device.data.category}
+        data-status={device.displayStatus}
+        data-tags={device.data.tags ? device.data.tags.join(',') : ''}
+      >
         <DeviceCard device={device} />
       </div>
     ))}
   </div>
 
   <script>
-    const filter = document.getElementById('categoryFilter') as HTMLSelectElement;
+    const clearButton = document.getElementById('clearFilters') as HTMLButtonElement;
     const grid = document.getElementById('deviceGrid');
-    
-    filter?.addEventListener('change', () => {
-      const value = filter.value;
+    const resultCount = document.getElementById('resultCount');
+
+    function applyFilters() {
+      // Get all checked checkboxes
+      const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
+        .map(cb => (cb as HTMLInputElement).value.toLowerCase());
+      const selectedStatuses = Array.from(document.querySelectorAll('input[name="status"]:checked'))
+        .map(cb => (cb as HTMLInputElement).value.toLowerCase());
+      const selectedTags = Array.from(document.querySelectorAll('input[name="tag"]:checked'))
+        .map(cb => (cb as HTMLInputElement).value.toLowerCase());
+      
       const cards = grid?.querySelectorAll('[data-category]');
+      let visibleCount = 0;
       
       cards?.forEach(card => {
-        const category = card.getAttribute('data-category');
-        if (!value || category === value) {
+        const category = card.getAttribute('data-category')?.toLowerCase() || '';
+        const status = card.getAttribute('data-status')?.toLowerCase() || '';
+        const tags = card.getAttribute('data-tags')?.toLowerCase().split(',').filter(t => t) || [];
+        
+        // If no filters selected in a category, show all for that category
+        const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(category);
+        const statusMatch = selectedStatuses.length === 0 || selectedStatuses.includes(status);
+        const tagMatch = selectedTags.length === 0 || selectedTags.some(tag => tags.includes(tag));
+        
+        if (categoryMatch && statusMatch && tagMatch) {
           (card as HTMLElement).style.display = 'block';
+          visibleCount++;
         } else {
           (card as HTMLElement).style.display = 'none';
         }
       });
+
+      if (resultCount) {
+        resultCount.textContent = visibleCount.toString();
+      }
+    }
+
+    function clearFilters() {
+      // Uncheck all checkboxes
+      document.querySelectorAll('.filter-checkbox').forEach(cb => {
+        (cb as HTMLInputElement).checked = false;
+      });
+      applyFilters();
+    }
+
+    // Event listeners for all checkboxes
+    document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', applyFilters);
     });
+
+    clearButton?.addEventListener('click', clearFilters);
+
+    // Initial count
+    applyFilters();
   </script>
 </Layout>
