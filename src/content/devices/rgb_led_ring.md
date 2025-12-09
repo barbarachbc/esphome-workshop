@@ -10,6 +10,7 @@ tags: ["led", "matrix", "rgb", "display", "sk6812"]
 productionStatus: "discontinued"
 dateAcquired: "2017"
 status: "testing"
+lastModified: "2025-12-09"
 ---
 
 ## Overview
@@ -40,10 +41,3 @@ light:
     id: my_ring
     pin: GPIO17
 ```
-TODO: try with ws2812
-
-TODO: try    
-    effects:
-      - random:
-      - strobe:
-      - addressable_rainbow:

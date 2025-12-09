@@ -16,7 +16,7 @@ changelog:
   - date: "2025-12-03"
     type: "added"
     description: "Created first version of the document"
-lastModified: "2025-12-05"
+lastModified: "2025-12-09"
 ---
 
 ## Project Overview
@@ -175,7 +175,8 @@ std::map<std::string, std::string> weather_desc_map
 
 ### Main Configuration File
 
-Create your ESPHome configuration file (e.g., `panel-info-28.yaml`):
+If you're using [ESPHome Device Builder](https://www.esphome.io/guides/getting_started_hassio/#installing-esphome-device-builder) create your _New Device_. Or if you're using [command line](https://www.esphome.io/guides/getting_started_command_line/) create your yaml file (e.g. `panel-info-28.yaml`)
+Then use the following file as a guide (details on how to customize it are below):
 
 ```yaml
 esphome:
@@ -1153,7 +1154,6 @@ Updates the time and date labels every minute and on time sync (when updated fro
 1. Modify the `substitutions` section with your Home Assistant entity IDs
 2. Update the API encryption key ([generate a new one for security](https://esphome.io/components/api/))
 3. Set OTA password and fallback hotspot password
-4. Adjust entity IDs in the substitutions section
 
 If you wish you can add the rest of the "secrets" to the secrets file and use them like this for example:
 
@@ -1423,7 +1423,7 @@ Display more information from Home Assistant:
 sensor:
   - platform: homeassistant
     id: energy_usage
-    entity_id: sensor.home_energy
+    entity_id: sensor.energy_home_grid_import_today
     on_value:
       then:
         - lvgl.label.update:

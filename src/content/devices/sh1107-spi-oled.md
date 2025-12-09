@@ -14,7 +14,7 @@ purchaseLinks:
 status: "ready"
 dateAcquired: "Jan 2022"
 image: "/images/devices/thumbnails/sh1107-spi-oled.jpg"
-lastModified: "2025-12-08"
+lastModified: "2025-12-09"
 ---
 
 ## Overview
@@ -78,6 +78,8 @@ spi:
 
 ```
 
+#### Using a Different Board
+
 For [beetle-esp32-c6](./beetle-esp32-c6) you can use for example:
 ```yaml
 substitutions:
@@ -87,5 +89,165 @@ substitutions:
   disp_dc_pin: GPIO07
 ```
 
-TODO: example with beautiful display pages that are cycling every 5 seconds
-TODO: use those examples for font
+### Example with Icons and Multiple Pages
+
+In this example I used [beetle-esp32-c6](./beetle-esp32-c6). 
+Every 5 seconds the pages cycle through:
+- info page with date/time, weather forecast, EV battery level
+- heating info page: current indoor temperature, current preset and temperature set for the preset and an indicator icon whether the heating is ON
+- preset selection page
+- preset temperature change page
+
+```yaml
+esphome:
+  name: display-test
+
+esp32:
+  variant: esp32c6
+
+substitutions:
+  clk_pin: GPIO23
+  mosi_pin: GPIO22
+  disp_cs_pin: GPIO05
+  disp_dc_pin: GPIO07
+
+interval:
+  - interval: 5s
+    then:
+      - display.page.show_next: my_display
+      - component.update: my_display
+
+font:
+  #mono screen, so no anti aliasing
+  - id: value_med
+    file:
+      type: gfonts
+      family: Montserrat
+    size: 14
+    bpp: 1
+  - id: value_small
+    file:
+      type: gfonts
+      family: Montserrat
+    size: 10
+    bpp: 1
+  - id: value_large
+    file:
+      type: gfonts
+      family: Montserrat
+      weight: bold
+    size: 20
+    bpp: 1
+  - id: mdi_small
+    file: assets/materialdesignicons-webfont.ttf
+    size: 24
+    bpp: 1
+    glyphs: [
+        "\U000F1A71", # snowflake-thermometer
+        "\U000F032A", # leaf
+        "\U000F04B9", # sofa
+        "\U000F14DE", # rocket-launch
+        "\U000F0C52", # checkbox-outline
+        "\U000F0158", # close-box-outline
+        "\U000F0704", # plus-box-outline
+        "\U000F06F2", # minus-box-outline
+      ]
+  - id: mdi_med
+    file: assets/materialdesignicons-webfont.ttf
+    size: 32
+    bpp: 1
+    glyphs: [
+        "\U000F1807", # mdi-fire-circle
+        "\U000F0E1B", # mdi-car-back
+      ]
+  - id: mdi_large
+    file: assets/materialdesignicons-webfont.ttf
+    size: 48
+    bpp: 1
+    glyphs: [
+        "\U000F0593", # lightning
+        "\U000F1A71", # snowflake-thermometer
+        "\U000F032A", # leaf
+        "\U000F04B9", # sofa
+        "\U000F14DE", # rocket-launch
+      ]
+
+display:
+  - platform: ssd1306_spi
+    model: "SH1107 128x128"
+    cs_pin: ${disp_cs_pin}
+    dc_pin: ${disp_dc_pin}
+    rotation: 180
+    update_interval: 1s
+    pages:
+      - id: page_info
+        lambda: |-
+          //print time and date
+          it.printf(it.get_width()/2, 14, id(value_large), COLOR_ON, TextAlign::CENTER, "07:45 AM");
+          it.printf(it.get_width()/2, 114, id(value_med), COLOR_ON, TextAlign::CENTER, "Sun, 7 Dec");
+
+          it.printf(4, 27, id(mdi_large), COLOR_ON, "\U000F0593");
+          it.printf(90, 27, id(value_small), COLOR_ON, TextAlign::TOP_CENTER, "Lightning");
+          it.printf(4, 76, id(value_large), COLOR_ON, "10.2°C");
+
+          it.printf(96, 42, id(mdi_med), COLOR_ON, TextAlign::TOP_CENTER, "\U000F0E1B");
+          it.printf(96, 76, id(value_med), COLOR_ON, TextAlign::TOP_CENTER, "68%%");
+
+      - id: page_heating
+        lambda: |-
+          const std::string presets[] = {
+            "frost", "eco", "comfort", "boost"
+          };
+
+          const std::string icons[] = {
+            "\U000F1A71", "\U000F032A", "\U000F04B9", "\U000F14DE"
+          };
+
+          it.printf(it.get_width() - 2, 2, id(value_med), COLOR_ON, TextAlign::TOP_RIGHT, "07:45 AM");
+          it.printf(4, 12, id(mdi_med), COLOR_ON, "\U000F1807");
+
+          it.printf(4, 52, id(value_large), COLOR_ON, "18.4°C");
+          it.printf(4, 76, id(value_med), COLOR_ON, "52%");
+
+          it.printf(it.get_width() - 4, 52, id(value_med), COLOR_ON, TextAlign::TOP_RIGHT, "18.0°C");
+          it.printf(it.get_width() - 4, 76, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F04B9");
+
+          //show icons
+          const int icon_size = 24;
+          auto y = it.get_height() - icon_size;
+
+          for(auto i = 0; i<4; i++){
+            auto is_selected = "comfort" == presets[i];
+            auto x = 2 + icon_size*i + 9*i; auto invert_icon = false;
+
+            if(is_selected){
+              invert_icon = true;
+              it.filled_rectangle(x, y-1, icon_size+1, icon_size+1);
+            }
+            it.printf(x, y, id(mdi_small), invert_icon ? COLOR_OFF : COLOR_ON, icons[i].c_str());
+          }
+      - id: page_change_preset
+        lambda: |-
+          it.printf(it.get_width()/2, it.get_height()/2, id(mdi_large), COLOR_ON, TextAlign::BOTTOM_CENTER, "\U000F1A71");
+
+          it.printf(it.get_width()/2, it.get_height()-48, id(value_med), COLOR_ON, TextAlign::TOP_CENTER, "Set the mode to:");
+          it.printf(it.get_width()/2, it.get_height()-24, id(value_med), COLOR_ON, TextAlign::TOP_CENTER, "Frost ?");
+
+          //apply
+          it.printf(0, it.get_height() - 28, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F0158");
+          //cancel
+          it.printf(it.get_width(), it.get_height() - 28, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0C52");
+
+      - id: page_change_temp
+        lambda: |-
+          it.printf(it.get_width()/2, it.get_height()/2, id(mdi_large), COLOR_ON, TextAlign::BOTTOM_CENTER, "\U000F14DE");
+          it.printf(it.get_width()/2, it.get_height()-48, id(value_large), COLOR_ON, TextAlign::TOP_CENTER, "12.5");
+          //apply
+          it.printf(0, it.get_height() - 48, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F0158");
+          //cancel
+          it.printf(it.get_width(), it.get_height() - 48, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0C52");
+          //minus
+          it.printf(24, it.get_height() - 28, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F06F2");
+          //plus
+          it.printf(it.get_width() - 24, it.get_height() - 28, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0704");
+```

@@ -34,7 +34,7 @@ if (devices.length > 0) {
   tocHeadings.push({ depth: 2, slug: 'required-devices', text: 'Required Devices' });
 }
 if (components.length > 0) {
-  tocHeadings.push({ depth: 2, slug: 'required-components', text: 'Required Components' });
+  tocHeadings.push({ depth: 2, slug: 'used-components', text: 'Used Components' });
 }
 
 tocHeadings.push(
@@ -128,13 +128,13 @@ const difficultyLabels = {
           </div>
         </div>
 
-        <div id="required-components" class="mb-8">
+        <div id="used-components" class="mb-8">
           <details class="group">
             <summary class="cursor-pointer list-none flex items-center gap-2 text-2xl font-semibold mb-4 hover:text-blue-600 transition-colors">
               <svg class="w-6 h-6 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
               </svg>
-              <span>Required Components ({components.length})</span>
+              <span>Used Components ({components.length})</span>
             </summary>
             <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 mt-4">
               {components.map(component => (
