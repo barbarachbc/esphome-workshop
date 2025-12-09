@@ -1,0 +1,84 @@
+---
+/**
+ * Reusable filter panel component for listing pages
+ * Provides collapsible filter UI with checkboxes, search, and pills
+ */
+
+interface Filter {
+  type: string;
+  value: string;
+  label: string;
+}
+
+interface Props {
+  filters: Filter[];
+  itemName: string; // 'components', 'projects', 'notes'
+  searchPlaceholder?: string;
+  getBadgeLabel?: (type: string) => string;
+}
+
+const { 
+  filters, 
+  itemName, 
+  searchPlaceholder = 'Search filters...',
+  getBadgeLabel = (type: string) => type
+} = Astro.props;
+---
+
+<details class="mb-8 p-6 rounded-lg" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+  <summary class="flex justify-between items-center cursor-pointer list-none mb-0">
+    <div class="flex items-center gap-4 flex-1">
+      <h2 class="text-xl font-semibold m-0 flex items-center gap-2" style="color: var(--text-heading);">
+        <svg class="w-5 h-5 transition-transform duration-200" style="transform: rotate(-90deg);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+        Filters
+      </h2>
+      <!-- Active Filters Pills (inline with heading) -->
+      <div id="activePills" class="flex flex-wrap gap-2" style="display: none;"></div>
+    </div>
+  </summary>
+  
+  <div class="mt-4">
+    <!-- Search Box -->
+    <input 
+      type="text" 
+      id="filterSearch" 
+      placeholder={searchPlaceholder}
+      class="w-full px-3 py-2 mb-3 rounded text-sm"
+      style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-card);"
+    />
+    
+    <!-- Combined Filter List -->
+    <div class="space-y-2 max-h-96 overflow-y-auto p-3 rounded" style="background: var(--bg-card); border: 1px solid var(--border-card);">
+      {filters.map(filter => (
+        <label class="filter-checkbox-label flex items-center gap-2 cursor-pointer hover:bg-opacity-50 p-1 rounded transition-colors" style="color: var(--text-primary);" data-filter-text={filter.label.toLowerCase()}>
+          <input 
+            type="checkbox" 
+            name="filter" 
+            data-type={filter.type}
+            value={filter.value}
+            class="filter-checkbox w-4 h-4 rounded cursor-pointer"
+            style="accent-color: var(--accent-blue);"
+          />
+          <span class="text-sm flex items-center gap-2">
+            {filter.label}
+            <span class="text-xs px-2 py-0.5 rounded" style={filter.type === 'tag' ? 'background: var(--accent-amber-light); color: var(--text-secondary);' : 'background: var(--accent-blue-light); color: var(--text-secondary);'}>
+              {getBadgeLabel(filter.type)}
+            </span>
+          </span>
+        </label>
+      ))}
+    </div>
+  </div>
+
+  <!-- Results Counter -->
+  <div class="mt-4 pt-4" style="border-top: 1px solid var(--border-primary);">
+    <p class="text-sm m-0" style="color: var(--text-secondary);">
+      <span>Showing <span id="resultCount" class="font-semibold" style="color: var(--text-primary);">0</span> {itemName}</span>
+      <button id="clearFilters" class="ml-4 px-4 py-2 rounded text-sm font-medium transition-colors" style="background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-card);" onmouseover="this.style.borderColor='var(--accent-blue)'; this.style.color='var(--accent-blue)';" onmouseout="this.style.borderColor='var(--border-card)'; this.style.color='var(--text-secondary)';" onclick="event.stopPropagation();">
+      Clear All
+    </button>
+    </p>
+  </div>
+</details>

@@ -58,6 +58,7 @@ esphome-docs/
     │   ├── ComponentCard.astro
     │   ├── ProjectCard.astro
     │   ├── NoteCard.astro
+    │   ├── FilterPanel.astro
     │   ├── TableOfContents.astro
     │   ├── IssueReportButton.astro
     │   ├── LastModified.astro
@@ -91,7 +92,7 @@ esphome-docs/
     │   └── global.css           # Global styles, theme variables
     └── utils/
         ├── changelog.ts         # Changelog aggregation utilities
-        └── filterPills.ts       # Shared filter pill utility
+        └── filterPills.ts       # Shared filtering utilities (pills + initializeFilters)
 ```
 
 ---
@@ -515,11 +516,57 @@ Privacy-friendly, using self-hosted Umami analytics platform. Uses Partytown to 
 
 **Implemented:** Multi-criteria filtering across all listing pages (devices, components, projects, notes)
 
-**Shared Utility:** `src/utils/filterPills.ts`
-- Reusable pill creation and management logic
-- Configurable filter types with custom colors
-- Event handling for pill removal
-- Arrow rotation animation for collapsible panels
+**Shared Components & Utilities:**
+
+1. **`src/components/FilterPanel.astro`** - Reusable filter UI component
+   - Generates collapsible filter panel with search box
+   - Renders filter checkboxes with badge labels
+   - Displays active filter pills inline with heading
+   - Shows results counter and clear button
+   - Fully configurable via props
+
+2. **`src/utils/filterPills.ts`** - Comprehensive filtering utilities
+   - `updateFilterPills()` - Creates and manages active filter pills
+   - `initFilterDetailsArrow()` - Handles collapsible arrow animation
+   - `initializeFilters()` - Complete filtering setup (event listeners, logic, pills)
+   - Supports both single-value and array-value attributes
+   - Configurable filter types with custom colors
+
+**FilterPanel Component Props:**
+```typescript
+interface Filter {
+  type: string;      // e.g., 'category', 'tag', 'age'
+  value: string;     // Filter value
+  label: string;     // Display label
+}
+
+interface Props {
+  filters: Filter[];                    // Array of all filter options
+  itemName: string;                     // e.g., 'components', 'projects', 'notes'
+  searchPlaceholder: string;            // Search box placeholder text
+  getBadgeLabel: (type: string) => string;  // Function to generate badge labels
+}
+```
+
+**initializeFilters() Configuration:**
+```typescript
+interface FilterControlConfig {
+  gridSelector: string;           // ID of grid containing cards
+  resultCountId: string;          // ID of result counter element
+  clearButtonId: string;          // ID of clear button
+  searchInputId: string;          // ID of search input
+  pillsContainerId: string;       // ID of pills container
+  filters: Array<{
+    name: string;                 // Filter name (e.g., 'category')
+    selector: string;             // CSS selector for checkboxes
+    attribute: {
+      name: string;               // data-* attribute name
+      isArray: boolean;           // true for comma-separated values
+    };
+    color: string;                // Pill background color
+  }>;
+}
+```
 
 **Common Features:**
 - **Collapsible filter panel** - Expandable details element with animated arrow
@@ -529,6 +576,7 @@ Privacy-friendly, using self-hosted Umami analytics platform. Uses Partytown to 
 - **Clear all button** - Quick reset of all filters
 - **Results counter** - Shows number of matching items
 - **Scrollable filter areas** - Max height with overflow for long lists
+- **DRY architecture** - Single component and utility reused across all pages
 
 ---
 
@@ -546,6 +594,8 @@ Privacy-friendly, using self-hosted Umami analytics platform. Uses Partytown to 
 - Selections across types = AND logic
 - Empty selection = show all
 
+**Note:** Devices page uses custom filter UI (not FilterPanel component) due to 3-column layout
+
 ---
 
 #### Components Page (`src/pages/components/index.astro`)
@@ -555,6 +605,11 @@ Privacy-friendly, using self-hosted Umami analytics platform. Uses Partytown to 
 - **Tags** (amber pills) - User-defined tags
 
 **Layout:** Single combined list (categories + tags)
+
+**Implementation:**
+- Uses `<FilterPanel>` component
+- Uses `initializeFilters()` from filterPills.ts
+- Configuration: category (non-array) + tags (array)
 
 **Filter Logic:**
 - Multiple selections within same type = OR logic
@@ -574,7 +629,11 @@ Privacy-friendly, using self-hosted Umami analytics platform. Uses Partytown to 
 
 **Layout:** Single combined list (age filters first, then tags alphabetically)
 
-**Age Calculation:** Based on `lastModified` field
+**Implementation:**
+- Uses `<FilterPanel>` component
+- Uses `initializeFilters()` from filterPills.ts
+- Configuration: age (non-array) + tags (array)
+- Age calculated client-side from `lastModified` field
 
 **Filter Logic:**
 - Age filters are mutually exclusive timeframes
@@ -595,7 +654,11 @@ Privacy-friendly, using self-hosted Umami analytics platform. Uses Partytown to 
 
 **Layout:** Single combined list (age filters first, then tags alphabetically)
 
-**Age Calculation:** Based on `lastUpdated` field
+**Implementation:**
+- Uses `<FilterPanel>` component
+- Uses `initializeFilters()` from filterPills.ts
+- Configuration: age (non-array) + tags (array)
+- Age calculated client-side from `lastUpdated` field
 
 **Filter Logic:** Same as projects page
 
@@ -604,12 +667,14 @@ Privacy-friendly, using self-hosted Umami analytics platform. Uses Partytown to 
 **Implementation Details:**
 - Uses data attributes on cards (`data-category`, `data-status`, `data-tags`, `data-age`)
 - Client-side filtering via vanilla JavaScript
-- All pages use shared `updateFilterPills()` utility
+- FilterPanel eliminates ~70 lines of duplicate HTML per page
+- initializeFilters() eliminates ~80 lines of duplicate JavaScript per page
 - Pills auto-update when filters change
 - Filter state resets on "Clear All" button click
 
 **Future Enhancements:**
 - URL query parameters for shareable filter states
+- Consider extracting devices page to use FilterPanel (requires multi-column layout support)
 
 ---
 

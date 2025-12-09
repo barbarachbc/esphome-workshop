@@ -14,6 +14,25 @@ export interface PillsConfig {
   onRemove: () => void;
 }
 
+export interface FilterAttribute {
+  name: string; // e.g., 'category', 'tags', 'age'
+  isArray?: boolean; // true for comma-separated values like tags
+}
+
+export interface FilterControlConfig {
+  gridSelector: string;
+  resultCountId: string;
+  clearButtonId: string;
+  searchInputId: string;
+  pillsContainerId: string;
+  filters: Array<{
+    name: string;
+    selector: string;
+    attribute: FilterAttribute;
+    color: string;
+  }>;
+}
+
 /**
  * Creates a single pill element
  */
@@ -110,4 +129,119 @@ export function initFilterDetailsArrow(detailsSelector: string = 'details'): voi
       arrow.style.transform = filterDetails.open ? 'rotate(0deg)' : 'rotate(-90deg)';
     }
   });
+}
+
+/**
+ * Comprehensive filter initialization for listing pages
+ * Sets up all filtering logic, event listeners, and pill management
+ */
+export function initializeFilters(config: FilterControlConfig): void {
+  const clearButton = document.getElementById(config.clearButtonId) as HTMLButtonElement;
+  const filterSearchInput = document.getElementById(config.searchInputId) as HTMLInputElement;
+  const grid = document.getElementById(config.gridSelector);
+  const resultCount = document.getElementById(config.resultCountId);
+
+  // Initialize arrow rotation
+  initFilterDetailsArrow();
+
+  function updateActivePills() {
+    updateFilterPills({
+      pillsContainerId: config.pillsContainerId,
+      filters: config.filters.map(f => ({
+        name: f.name,
+        selector: f.selector,
+        color: f.color
+      })),
+      onRemove: applyFilters
+    });
+  }
+
+  function applyFilters() {
+    // Build filter selections for each filter type
+    const selections: Record<string, string[]> = {};
+    
+    config.filters.forEach(filter => {
+      selections[filter.name] = Array.from(document.querySelectorAll(filter.selector))
+        .map(cb => (cb as HTMLInputElement).value.toLowerCase());
+    });
+    
+    const cards = grid?.querySelectorAll('[data-category], [data-tags], [data-age]');
+    let visibleCount = 0;
+    
+    cards?.forEach(card => {
+      let matches = true;
+      
+      // Check each filter type
+      config.filters.forEach(filter => {
+        const selectedValues = selections[filter.name];
+        if (selectedValues.length === 0) return; // No filter = match all
+        
+        const attrName = `data-${filter.attribute.name}`;
+        const cardValue = card.getAttribute(attrName)?.toLowerCase() || '';
+        
+        if (filter.attribute.isArray) {
+          // For array attributes (like tags), split and check if any match
+          const cardValues = cardValue.split(',').filter(v => v);
+          const hasMatch = selectedValues.some(selected => cardValues.includes(selected));
+          if (!hasMatch) matches = false;
+        } else {
+          // For single value attributes, check exact match
+          if (!selectedValues.includes(cardValue)) matches = false;
+        }
+      });
+      
+      if (matches) {
+        (card as HTMLElement).style.display = 'block';
+        visibleCount++;
+      } else {
+        (card as HTMLElement).style.display = 'none';
+      }
+    });
+
+    if (resultCount) {
+      resultCount.textContent = visibleCount.toString();
+    }
+    
+    updateActivePills();
+  }
+
+  function filterList() {
+    const searchTerm = filterSearchInput.value.toLowerCase();
+    const filterLabels = document.querySelectorAll('.filter-checkbox-label');
+    
+    filterLabels.forEach(label => {
+      const filterText = label.getAttribute('data-filter-text') || '';
+      if (filterText.includes(searchTerm)) {
+        (label as HTMLElement).style.display = 'flex';
+      } else {
+        (label as HTMLElement).style.display = 'none';
+      }
+    });
+  }
+
+  function clearFilters() {
+    // Uncheck all checkboxes
+    document.querySelectorAll('.filter-checkbox').forEach(cb => {
+      (cb as HTMLInputElement).checked = false;
+    });
+    // Clear search
+    if (filterSearchInput) {
+      filterSearchInput.value = '';
+      filterList();
+    }
+    applyFilters();
+  }
+
+  // Event listeners for all checkboxes
+  document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', applyFilters);
+  });
+
+  // Event listener for filter search
+  filterSearchInput?.addEventListener('input', filterList);
+
+  clearButton?.addEventListener('click', clearFilters);
+
+  // Initial count
+  applyFilters();
 }

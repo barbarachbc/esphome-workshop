@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import NoteCard from '../../components/NoteCard.astro';
+import FilterPanel from '../../components/FilterPanel.astro';
 
 const notes = await getCollection('notes');
 
@@ -48,66 +49,14 @@ const filters = [
   <h1 class="text-4xl font-semibold mt-0 mb-6" style="color: var(--text-heading);">Notes & Guides</h1>
   <p class="text-lg mb-8" style="color: var(--text-secondary);">Setup guides, networking tricks, and lessons learned along the way</p>
 
-  <!-- Filter Panel -->
-  <details class="mb-8 p-6 rounded-lg" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
-    <summary class="flex justify-between items-center cursor-pointer list-none mb-0">
-      <div class="flex items-center gap-4 flex-1">
-        <h2 class="text-xl font-semibold m-0 flex items-center gap-2" style="color: var(--text-heading);">
-          <svg class="w-5 h-5 transition-transform duration-200" style="transform: rotate(-90deg);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-          Filters
-        </h2>
-        <!-- Active Filters Pills (inline with heading) -->
-        <div id="activePills" class="flex flex-wrap gap-2" style="display: none;"></div>
-      </div>
-    </summary>
-    
-    <div class="mt-4">
-      <!-- Search Box -->
-      <input 
-        type="text" 
-        id="filterSearch" 
-        placeholder="Search tags and timeframes..."
-        class="w-full px-3 py-2 mb-3 rounded text-sm"
-        style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-card);"
-      />
-      
-      <!-- Combined Filter List -->
-      <div class="space-y-2 max-h-96 overflow-y-auto p-3 rounded" style="background: var(--bg-card); border: 1px solid var(--border-card);">
-        {filters.map(filter => (
-          <label class="filter-checkbox-label flex items-center gap-2 cursor-pointer hover:bg-opacity-50 p-1 rounded transition-colors" style="color: var(--text-primary);" data-filter-text={filter.label.toLowerCase()}>
-            <input 
-              type="checkbox" 
-              name="filter" 
-              data-type={filter.type}
-              value={filter.value}
-              class="filter-checkbox w-4 h-4 rounded cursor-pointer"
-              style="accent-color: var(--accent-blue);"
-            />
-            <span class="text-sm flex items-center gap-2">
-              {filter.label}
-              <span class="text-xs px-2 py-0.5 rounded" style={filter.type === 'tag' ? 'background: var(--accent-amber-light); color: var(--text-secondary);' : 'background: var(--accent-blue-light); color: var(--text-secondary);'}>
-                {filter.type === 'tag' ? 'tag' : 'updated'}
-              </span>
-            </span>
-          </label>
-        ))}
-      </div>
-    </div>
+  <FilterPanel 
+    filters={filters}
+    itemName="notes"
+    searchPlaceholder="Search tags and timeframes..."
+    getBadgeLabel={(type) => type === 'tag' ? 'tag' : 'updated'}
+  />
 
-    <!-- Results Counter -->
-    <div class="mt-4 pt-4" style="border-top: 1px solid var(--border-primary);">
-      <p class="text-sm m-0" style="color: var(--text-secondary);">
-        <span>Showing <span id="resultCount" class="font-semibold" style="color: var(--text-primary);">0</span> notes</span>
-        <button id="clearFilters" class="ml-4 px-4 py-2 rounded text-sm font-medium transition-colors" style="background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-card);" onmouseover="this.style.borderColor='var(--accent-blue)'; this.style.color='var(--accent-blue)';" onmouseout="this.style.borderColor='var(--border-card)'; this.style.color='var(--text-secondary)';" onclick="event.stopPropagation();">
-        Clear All
-      </button>
-      </p>
-    </div>
-  </details>
-
-  <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6" id="notesGrid">
+  <div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-6" id="noteGrid">
     {notesWithAge.map(note => (
       <div 
         data-tags={note.data.tags ? note.data.tags.join(',') : ''}
@@ -123,98 +72,28 @@ const filters = [
   )}
 
   <script>
-    import { updateFilterPills, initFilterDetailsArrow } from '../../utils/filterPills';
+    import { initializeFilters } from '../../utils/filterPills';
 
-    const clearButton = document.getElementById('clearFilters') as HTMLButtonElement;
-    const filterSearchInput = document.getElementById('filterSearch') as HTMLInputElement;
-    const grid = document.getElementById('notesGrid');
-    const resultCount = document.getElementById('resultCount');
-
-    // Initialize filter panel arrow rotation
-    initFilterDetailsArrow();
-
-    function updateActivePills() {
-      updateFilterPills({
-        pillsContainerId: 'activePills',
-        filters: [
-          { name: 'tag', selector: 'input[name="filter"][data-type="tag"]:checked', color: 'var(--accent-amber-light)' },
-          { name: 'age', selector: 'input[name="filter"][data-type="age"]:checked', color: 'var(--accent-blue-light)' }
-        ],
-        onRemove: applyFilters
-      });
-    }
-
-    function applyFilters() {
-      // Get all checked checkboxes separated by type
-      const selectedTags = Array.from(document.querySelectorAll('input[name="filter"][data-type="tag"]:checked'))
-        .map(cb => (cb as HTMLInputElement).value.toLowerCase());
-      const selectedAges = Array.from(document.querySelectorAll('input[name="filter"][data-type="age"]:checked'))
-        .map(cb => (cb as HTMLInputElement).value.toLowerCase());
-      
-      const cards = grid?.querySelectorAll('[data-tags]');
-      let visibleCount = 0;
-      
-      cards?.forEach(card => {
-        const tags = card.getAttribute('data-tags')?.toLowerCase().split(',').filter(t => t) || [];
-        const age = card.getAttribute('data-age')?.toLowerCase() || '';
-        
-        // If no filters selected, show all
-        const tagMatch = selectedTags.length === 0 || selectedTags.some(tag => tags.includes(tag));
-        const ageMatch = selectedAges.length === 0 || selectedAges.includes(age);
-        
-        if (tagMatch && ageMatch) {
-          (card as HTMLElement).style.display = 'block';
-          visibleCount++;
-        } else {
-          (card as HTMLElement).style.display = 'none';
+    initializeFilters({
+      gridSelector: 'noteGrid',
+      resultCountId: 'resultCount',
+      clearButtonId: 'clearFilters',
+      searchInputId: 'filterSearch',
+      pillsContainerId: 'activePills',
+      filters: [
+        {
+          name: 'tag',
+          selector: 'input[name="filter"][data-type="tag"]:checked',
+          attribute: { name: 'tags', isArray: true },
+          color: 'var(--accent-amber-light)'
+        },
+        {
+          name: 'age',
+          selector: 'input[name="filter"][data-type="age"]:checked',
+          attribute: { name: 'age', isArray: false },
+          color: 'var(--accent-blue-light)'
         }
-      });
-
-      if (resultCount) {
-        resultCount.textContent = visibleCount.toString();
-      }
-      
-      updateActivePills();
-    }
-
-    function filterList() {
-      const searchTerm = filterSearchInput.value.toLowerCase();
-      const filterLabels = document.querySelectorAll('.filter-checkbox-label');
-      
-      filterLabels.forEach(label => {
-        const filterText = label.getAttribute('data-filter-text') || '';
-        if (filterText.includes(searchTerm)) {
-          (label as HTMLElement).style.display = 'flex';
-        } else {
-          (label as HTMLElement).style.display = 'none';
-        }
-      });
-    }
-
-    function clearFilters() {
-      // Uncheck all checkboxes
-      document.querySelectorAll('.filter-checkbox').forEach(cb => {
-        (cb as HTMLInputElement).checked = false;
-      });
-      // Clear search
-      if (filterSearchInput) {
-        filterSearchInput.value = '';
-        filterList();
-      }
-      applyFilters();
-    }
-
-    // Event listeners for all checkboxes
-    document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
-      checkbox.addEventListener('change', applyFilters);
+      ]
     });
-
-    // Event listener for filter search
-    filterSearchInput?.addEventListener('input', filterList);
-
-    clearButton?.addEventListener('click', clearFilters);
-
-    // Initial count
-    applyFilters();
   </script>
 </Layout>
