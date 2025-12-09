@@ -4,49 +4,252 @@ import Layout from '../../layouts/Layout.astro';
 import ComponentCard from '../../components/ComponentCard.astro';
 
 const components = await getCollection('components');
-const categories = [...new Set(components.map(c => c.data.category))];
+const categories = [...new Set(components.map(c => c.data.category))].sort();
+
+// Collect all unique tags
+const allTags = new Set<string>();
+components.forEach(c => {
+  if (c.data.tags) {
+    c.data.tags.forEach(tag => allTags.add(tag));
+  }
+});
+const tags = [...allTags].sort();
+
+// Combine categories and tags into one list
+const filters = [
+  ...categories.map(cat => ({ type: 'category', value: cat, label: cat })),
+  ...tags.map(tag => ({ type: 'tag', value: tag, label: tag }))
+].sort((a, b) => a.label.localeCompare(b.label));
 ---
 
 <Layout title="Components">
   <h1 class="text-4xl font-semibold mt-0 mb-6" style="color: var(--text-heading);">Components</h1>
   <p class="text-lg mb-8" style="color: var(--text-secondary);">ESPHome software components and platforms</p>
 
-  <div class="mb-8 p-4 rounded-lg" style="background: var(--bg-secondary);">
-    <label class="flex items-center gap-2">
-      <span class="font-medium" style="color: var(--text-primary);">Filter by category:</span>
-      <select id="categoryFilter" class="px-3 py-2 rounded text-base" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-card);">
-        <option value="">All Categories</option>
-        {categories.map(cat => (
-          <option value={cat}>{cat}</option>
+  <!-- Filter Panel -->
+  <details class="mb-8 p-6 rounded-lg" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
+    <summary class="flex justify-between items-center cursor-pointer list-none mb-0">
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-xl font-semibold m-0 flex items-center gap-2" style="color: var(--text-heading);">
+          <svg class="w-5 h-5 transition-transform duration-200" style="transform: rotate(-90deg);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+          Filters
+        </h2>
+        <!-- Active Filters Pills (inline with heading) -->
+        <div id="activePills" class="flex flex-wrap gap-2" style="display: none;"></div>
+      </div>
+    </summary>
+    
+    <div class="mt-4">
+      <!-- Search Box -->
+      <input 
+        type="text" 
+        id="filterSearch" 
+        placeholder="Search categories and tags..."
+        class="w-full px-3 py-2 mb-3 rounded text-sm"
+        style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-card);"
+      />
+      
+      <!-- Combined Filter List -->
+      <div class="space-y-2 max-h-96 overflow-y-auto p-3 rounded" style="background: var(--bg-card); border: 1px solid var(--border-card);">
+        {filters.map(filter => (
+          <label class="filter-checkbox-label flex items-center gap-2 cursor-pointer hover:bg-opacity-50 p-1 rounded transition-colors" style="color: var(--text-primary);" data-filter-text={filter.label.toLowerCase()}>
+            <input 
+              type="checkbox" 
+              name="filter" 
+              data-type={filter.type}
+              value={filter.value}
+              class="filter-checkbox w-4 h-4 rounded cursor-pointer"
+              style="accent-color: var(--accent-blue);"
+            />
+            <span class="text-sm flex items-center gap-2">
+              {filter.label}
+              <span class="text-xs px-2 py-0.5 rounded" style={filter.type === 'category' ? 'background: var(--accent-blue-light); color: var(--text-secondary);' : 'background: var(--accent-amber-light); color: var(--text-secondary);'}>
+                {filter.type === 'category' ? 'category' : 'tag'}
+              </span>
+            </span>
+          </label>
         ))}
-      </select>
-    </label>
-  </div>
+      </div>
+    </div>
+
+    <!-- Results Counter -->
+    <div class="mt-4 pt-4" style="border-top: 1px solid var(--border-primary);">
+      <p class="text-sm m-0" style="color: var(--text-secondary);">
+        <span>Showing <span id="resultCount" class="font-semibold" style="color: var(--text-primary);">0</span> components</span>
+        <button id="clearFilters" class="ml-4 px-4 py-2 rounded text-sm font-medium transition-colors" style="background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-card);" onmouseover="this.style.borderColor='var(--accent-blue)'; this.style.color='var(--accent-blue)';" onmouseout="this.style.borderColor='var(--border-card)'; this.style.color='var(--text-secondary)';" onclick="event.stopPropagation();">
+        Clear All
+      </button>
+      </p>
+    </div>
+  </details>
 
   <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6" id="componentGrid">
     {components.map(component => (
-      <div data-category={component.data.category}>
+      <div 
+        data-category={component.data.category}
+        data-tags={component.data.tags ? component.data.tags.join(',') : ''}
+      >
         <ComponentCard component={component} />
       </div>
     ))}
   </div>
 
   <script>
-    const filter = document.getElementById('categoryFilter') as HTMLSelectElement;
+    const clearButton = document.getElementById('clearFilters') as HTMLButtonElement;
+    const filterSearchInput = document.getElementById('filterSearch') as HTMLInputElement;
     const grid = document.getElementById('componentGrid');
-    
-    filter?.addEventListener('change', () => {
-      const value = filter.value;
+    const resultCount = document.getElementById('resultCount');
+    const filterDetails = document.querySelector('details') as HTMLDetailsElement;
+    const activePills = document.getElementById('activePills') as HTMLDivElement;
+
+    // Rotate arrow on toggle
+    filterDetails?.addEventListener('toggle', () => {
+      const arrow = filterDetails.querySelector('svg');
+      if (arrow) {
+        arrow.style.transform = filterDetails.open ? 'rotate(0deg)' : 'rotate(-90deg)';
+      }
+    });
+
+    function updateActivePills() {
+      if (!activePills) return;
+      
+      // Clear existing pills
+      activePills.innerHTML = '';
+      
+      // Get all checked checkboxes
+      const checkedBoxes = document.querySelectorAll('input[name="filter"]:checked');
+      
+      if (checkedBoxes.length === 0) {
+        activePills.style.display = 'none';
+        return;
+      }
+      
+      activePills.style.display = 'flex';
+      
+      checkedBoxes.forEach(checkbox => {
+        const cb = checkbox as HTMLInputElement;
+        const type = cb.getAttribute('data-type');
+        const value = cb.value;
+        
+        const pill = document.createElement('span');
+        pill.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all';
+        
+        const bgColor = type === 'category' ? 'var(--accent-blue-light)' : 'var(--accent-amber-light)';
+        const textColor = 'var(--text-primary)';
+        pill.style.cssText = `background: ${bgColor}; color: ${textColor};`;
+        
+        pill.innerHTML = `
+          <span>${value}</span>
+          <button 
+            class="pill-remove hover:opacity-70 transition-opacity" 
+            data-type="${type}" 
+            data-value="${value}"
+            style="background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center;"
+            aria-label="Remove ${value} filter"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        `;
+        
+        activePills.appendChild(pill);
+      });
+      
+      // Add event listeners to remove buttons
+      document.querySelectorAll('.pill-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const button = e.currentTarget as HTMLButtonElement;
+          const type = button.getAttribute('data-type');
+          const value = button.getAttribute('data-value');
+          
+          // Find and uncheck the corresponding checkbox
+          const checkbox = document.querySelector(
+            `input[name="filter"][data-type="${type}"][value="${value}"]`
+          ) as HTMLInputElement;
+          
+          if (checkbox) {
+            checkbox.checked = false;
+            applyFilters();
+          }
+        });
+      });
+    }
+
+    function applyFilters() {
+      // Get all checked checkboxes separated by type
+      const selectedCategories = Array.from(document.querySelectorAll('input[name="filter"][data-type="category"]:checked'))
+        .map(cb => (cb as HTMLInputElement).value.toLowerCase());
+      const selectedTags = Array.from(document.querySelectorAll('input[name="filter"][data-type="tag"]:checked'))
+        .map(cb => (cb as HTMLInputElement).value.toLowerCase());
+      
       const cards = grid?.querySelectorAll('[data-category]');
+      let visibleCount = 0;
       
       cards?.forEach(card => {
-        const category = card.getAttribute('data-category');
-        if (!value || category === value) {
+        const category = card.getAttribute('data-category')?.toLowerCase() || '';
+        const tags = card.getAttribute('data-tags')?.toLowerCase().split(',').filter(t => t) || [];
+        
+        // If no filters selected, show all
+        const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(category);
+        const tagMatch = selectedTags.length === 0 || selectedTags.some(tag => tags.includes(tag));
+        
+        if (categoryMatch && tagMatch) {
           (card as HTMLElement).style.display = 'block';
+          visibleCount++;
         } else {
           (card as HTMLElement).style.display = 'none';
         }
       });
+
+      if (resultCount) {
+        resultCount.textContent = visibleCount.toString();
+      }
+      
+      updateActivePills();
+    }
+
+    function filterList() {
+      const searchTerm = filterSearchInput.value.toLowerCase();
+      const filterLabels = document.querySelectorAll('.filter-checkbox-label');
+      
+      filterLabels.forEach(label => {
+        const filterText = label.getAttribute('data-filter-text') || '';
+        if (filterText.includes(searchTerm)) {
+          (label as HTMLElement).style.display = 'flex';
+        } else {
+          (label as HTMLElement).style.display = 'none';
+        }
+      });
+    }
+
+    function clearFilters() {
+      // Uncheck all checkboxes
+      document.querySelectorAll('.filter-checkbox').forEach(cb => {
+        (cb as HTMLInputElement).checked = false;
+      });
+      // Clear search
+      if (filterSearchInput) {
+        filterSearchInput.value = '';
+        filterList();
+      }
+      applyFilters();
+    }
+
+    // Event listeners for all checkboxes
+    document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', applyFilters);
     });
+
+    // Event listener for filter search
+    filterSearchInput?.addEventListener('input', filterList);
+
+    clearButton?.addEventListener('click', clearFilters);
+
+    // Initial count
+    applyFilters();
   </script>
 </Layout>
