@@ -1,6 +1,6 @@
 # ESPHome Workshop - Architecture
 
-**Last Updated:** December 7, 2025
+**Last Updated:** December 9, 2025
 
 This document describes the project-specific architecture, design decisions, and organizational patterns for the ESPHome Workshop documentation site.
 
@@ -90,7 +90,8 @@ esphome-docs/
     ├── styles/
     │   └── global.css           # Global styles, theme variables
     └── utils/
-        └── changelog.ts         # Changelog aggregation utilities
+        ├── changelog.ts         # Changelog aggregation utilities
+        └── filterPills.ts       # Shared filter pill utility
 ```
 
 ---
@@ -510,38 +511,105 @@ Privacy-friendly, using self-hosted Umami analytics platform. Uses Partytown to 
 
 ---
 
-### Enhanced Filtering
+### Advanced Filtering System
 
-**Implemented:** Multi-criteria filtering with checkboxes on devices listing page
+**Implemented:** Multi-criteria filtering across all listing pages (devices, components, projects, notes)
 
-**Features:**
-- **Category filter** - Multi-select checkboxes to filter by device category (board, sensor, display, etc.)
-- **Status filter** - Multi-select checkboxes to filter by device status (ready, testing, deployed, retired, pending, unsupported)
-- **Tags filter** - Multi-select checkboxes to filter by device tags
+**Shared Utility:** `src/utils/filterPills.ts`
+- Reusable pill creation and management logic
+- Configurable filter types with custom colors
+- Event handling for pill removal
+- Arrow rotation animation for collapsible panels
+
+**Common Features:**
+- **Collapsible filter panel** - Expandable details element with animated arrow
+- **Active filter pills** - Visual indicators inline with "Filters" heading
+- **Pill removal** - Click "×" on any pill to remove that specific filter
+- **Search box** - Filter the filter list by typing
 - **Clear all button** - Quick reset of all filters
-- **Results counter** - Shows number of matching devices
+- **Results counter** - Shows number of matching items
 - **Scrollable filter areas** - Max height with overflow for long lists
 
-**Implementation details:**
-- Location: `src/pages/devices/index.astro`
-- Uses data attributes on device cards (`data-category`, `data-status`, `data-tags`)
-- Client-side filtering via vanilla JavaScript
-- Filters work in combination (AND logic between categories, OR within each category)
-- Responsive 3-column grid layout for filter controls
-- Checkbox styling with accent color
+---
+
+#### Devices Page (`src/pages/devices/index.astro`)
+
+**Filter Types:**
+- **Category** (blue pills) - board, sensor, display, actuator, etc.
+- **Status** (green pills) - ready, testing, active, deployed, retired, pending, unsupported
+- **Tags** (amber pills) - User-defined tags
+
+**Layout:** 3-column grid for filter controls
 
 **Filter Logic:**
-- Multiple selections within same category = OR (e.g., select "sensor" OR "board")
-- Selections across categories = AND (e.g., must match category AND status AND tag)
-- Empty category = show all for that category
+- Multiple selections within same type = OR logic
+- Selections across types = AND logic
+- Empty selection = show all
 
-**Future enhancements:**
-- Connection type filter with checkboxes
-- Has image filter
-- Production status filter
-- Sort options (alphabetical, recently added, etc.)
+---
+
+#### Components Page (`src/pages/components/index.astro`)
+
+**Filter Types:**
+- **Category** (blue pills) - core, i2c, spi, sensor, display, etc.
+- **Tags** (amber pills) - User-defined tags
+
+**Layout:** Single combined list (categories + tags)
+
+**Filter Logic:**
+- Multiple selections within same type = OR logic
+- Category AND tag filters work together (AND logic between types)
+
+---
+
+#### Projects Page (`src/pages/projects/index.astro`)
+
+**Filter Types:**
+- **Recently Updated** (blue pills):
+  - Recently updated (last 30 days)
+  - Updated 1-3 months ago (31-90 days)
+  - Updated 3-12 months ago (91-365 days)
+  - Not updated in over a year (365+ days)
+- **Tags** (amber pills) - User-defined tags
+
+**Layout:** Single combined list (age filters first, then tags alphabetically)
+
+**Age Calculation:** Based on `lastModified` field
+
+**Filter Logic:**
+- Age filters are mutually exclusive timeframes
+- Tags work with OR logic
+- Age AND tag filters work together (AND logic between types)
+
+---
+
+#### Notes Page (`src/pages/notes/index.astro`)
+
+**Filter Types:**
+- **Recently Updated** (blue pills):
+  - Recently updated (last 30 days)
+  - Updated 1-3 months ago (31-90 days)
+  - Updated 3-12 months ago (91-365 days)
+  - Not updated in over a year (365+ days)
+- **Tags** (amber pills) - User-defined tags
+
+**Layout:** Single combined list (age filters first, then tags alphabetically)
+
+**Age Calculation:** Based on `lastUpdated` field
+
+**Filter Logic:** Same as projects page
+
+---
+
+**Implementation Details:**
+- Uses data attributes on cards (`data-category`, `data-status`, `data-tags`, `data-age`)
+- Client-side filtering via vanilla JavaScript
+- All pages use shared `updateFilterPills()` utility
+- Pills auto-update when filters change
+- Filter state resets on "Clear All" button click
+
+**Future Enhancements:**
 - URL query parameters for shareable filter states
-- Select All / Deselect All per category
 
 ---
 
