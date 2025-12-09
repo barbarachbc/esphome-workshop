@@ -1,0 +1,414 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Theme Designer">
+  <div class="container mx-auto px-4 py-8">
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold mb-4">Theme Designer</h1>
+      <p class="text-lg mb-4">Customize your site's color scheme with real-time preview</p>
+      
+      <div class="flex gap-4 mb-6">
+        <button id="light-mode-btn" class="px-4 py-2 rounded font-medium transition-colors" style="background: var(--accent-blue); color: white;">
+          Light Mode
+        </button>
+        <button id="dark-mode-btn" class="px-4 py-2 rounded font-medium transition-colors" style="background: var(--bg-secondary); color: var(--text-primary);">
+          Dark Mode
+        </button>
+        <button id="reset-btn" class="px-4 py-2 rounded font-medium transition-colors ml-auto" style="background: var(--accent-red-light); color: var(--accent-red);">
+          Reset to Defaults
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Left Column: Preview -->
+      <div>
+        <h2 class="text-2xl font-semibold mb-4">Preview</h2>
+        
+        <!-- Background Preview -->
+        <div class="mb-6 p-6 rounded-lg border" style="background: var(--bg-primary); border-color: var(--border-primary);">
+          <h3 class="text-xl font-semibold mb-3">Backgrounds & Text</h3>
+          <div class="space-y-3">
+            <div class="p-4 rounded" style="background: var(--bg-secondary);">
+              <p style="color: var(--text-primary);">Primary text on secondary background</p>
+              <p style="color: var(--text-secondary);">Secondary text on secondary background</p>
+            </div>
+            <div class="p-4 rounded" style="background: var(--bg-card); border: 1px solid var(--border-card);">
+              <h4 style="color: var(--text-heading);">Card Heading</h4>
+              <p style="color: var(--text-primary);">Primary text in card</p>
+              <a href="#" style="color: var(--text-link);">Link text</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status Badges -->
+        <div class="mb-6 p-6 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
+          <h3 class="text-xl font-semibold mb-3">Status Badges</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="status-badge status-badge-ready">📦 Ready</span>
+            <span class="status-badge status-badge-testing">🧪 Testing</span>
+            <span class="status-badge status-badge-active">🔧 Active</span>
+            <span class="status-badge status-badge-deployed">✅ Deployed</span>
+            <span class="status-badge status-badge-retired">⏸️ Retired</span>
+            <span class="status-badge status-badge-pending">🔦 Pending</span>
+            <span class="status-badge status-badge-unsupported">🚫 Unsupported</span>
+          </div>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <span class="status-badge status-badge-idea">💭 Idea</span>
+            <span class="status-badge status-badge-in-progress">🛠️ In Progress</span>
+            <span class="status-badge status-badge-completed">✅ Completed</span>
+            <span class="status-badge status-badge-abandoned">⏸️ Abandoned</span>
+          </div>
+        </div>
+
+        <!-- Difficulty Badges -->
+        <div class="mb-6 p-6 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
+          <h3 class="text-xl font-semibold mb-3">Difficulty Badges</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="difficulty-badge difficulty-badge-beginner">Beginner</span>
+            <span class="difficulty-badge difficulty-badge-intermediate">Intermediate</span>
+            <span class="difficulty-badge difficulty-badge-advanced">Advanced</span>
+          </div>
+        </div>
+
+        <!-- Category Badges -->
+        <div class="mb-6 p-6 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
+          <h3 class="text-xl font-semibold mb-3">Category Badges</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="category-badge category-badge-purple">Notes</span>
+            <span class="category-badge category-badge-blue">Devices</span>
+            <span class="category-badge category-badge-emerald">Components</span>
+          </div>
+        </div>
+
+        <!-- Tag & Connection Badges -->
+        <div class="mb-6 p-6 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
+          <h3 class="text-xl font-semibold mb-3">Tag & Connection Badges</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="tag-badge">Tag Example</span>
+            <span class="connection-badge">I2C</span>
+            <span class="connection-badge">SPI</span>
+            <span class="connection-badge">GPIO</span>
+          </div>
+        </div>
+
+        <!-- Sample Card -->
+        <div class="mb-6 rounded-lg overflow-hidden transition-all duration-200" style="background: var(--bg-card); border: 1px solid var(--border-card);">
+          <div class="p-6">
+            <div class="flex justify-between items-center mb-2">
+              <span class="category-badge category-badge-blue">sensor</span>
+              <span class="status-badge status-badge-deployed">✅ Deployed</span>
+            </div>
+            <h3 class="my-2 text-xl" style="color: var(--text-heading);">Sample Device Card</h3>
+            <p class="my-3 leading-relaxed" style="color: var(--text-secondary);">This is a preview of how device cards look with your current theme settings.</p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 px-5 py-3 border-t" style="background: var(--bg-secondary); border-color: var(--border-primary);">
+            <span class="connection-badge">I2C</span>
+            <span class="connection-badge">GPIO</span>
+          </div>
+        </div>
+
+        <!-- Code Block -->
+        <div class="mb-6 p-6 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
+          <h3 class="text-xl font-semibold mb-3">Code Blocks</h3>
+          <p class="mb-2">Inline code: <code>esphome run config.yaml</code></p>
+          <pre style="background: var(--bg-code); color: var(--text-code); border: 1px solid var(--border-primary);" class="p-4 rounded-lg"><code>sensor:
+  - platform: dht
+    pin: GPIO4
+    temperature:
+      name: "Temperature"</code></pre>
+        </div>
+      </div>
+
+      <!-- Right Column: Color Controls -->
+      <div>
+        <h2 class="text-2xl font-semibold mb-4">Color Controls</h2>
+        
+        <div id="color-controls" class="space-y-6">
+          <!-- Background Colors -->
+          <div class="p-4 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
+            <h3 class="text-lg font-semibold mb-3">Background Colors</h3>
+            <div class="space-y-2" id="bg-colors"></div>
+          </div>
+
+          <!-- Text Colors -->
+          <div class="p-4 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
+            <h3 class="text-lg font-semibold mb-3">Text Colors</h3>
+            <div class="space-y-2" id="text-colors"></div>
+          </div>
+
+          <!-- Border Colors -->
+          <div class="p-4 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
+            <h3 class="text-lg font-semibold mb-3">Border Colors</h3>
+            <div class="space-y-2" id="border-colors"></div>
+          </div>
+
+          <!-- Accent Colors -->
+          <div class="p-4 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
+            <h3 class="text-lg font-semibold mb-3">Accent Colors</h3>
+            <div class="space-y-2" id="accent-colors"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generated CSS Output -->
+    <div class="mt-8 p-6 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-semibold">Generated CSS</h2>
+        <button id="copy-css-btn" class="px-4 py-2 rounded font-medium transition-colors" style="background: var(--accent-blue); color: white;">
+          Copy to Clipboard
+        </button>
+      </div>
+      <pre id="css-output" class="p-4 rounded-lg overflow-x-auto" style="background: var(--bg-code); color: var(--text-code); max-height: 500px; overflow-y: auto;"><code></code></pre>
+    </div>
+  </div>
+
+  <script>
+    // Theme configuration
+    const lightTheme = {
+      'bg-primary': '#ffffff',
+      'bg-secondary': '#f3f4f6',
+      'bg-tertiary': '#f9fafb',
+      'bg-card': '#ffffff',
+      'bg-card-hover': '#f9fafb',
+      'bg-header': '#2563eb',
+      'bg-nav': '#f3f4f6',
+      'bg-footer': '#f3f4f6',
+      'bg-code': '#1f2937',
+      'bg-code-inline': '#f3f4f6',
+      'bg-note': '#fef3c7',
+      'text-primary': '#1f2937',
+      'text-secondary': '#6b7280',
+      'text-tertiary': '#9ca3af',
+      'text-inverse': '#ffffff',
+      'text-heading': '#111827',
+      'text-link': '#2563eb',
+      'text-link-hover': '#1d4ed8',
+      'text-code': '#f3f4f6',
+      'text-hero': '#ffffff',
+      'border-primary': '#e5e7eb',
+      'border-secondary': '#d1d5db',
+      'border-accent': '#2563eb',
+      'border-card': '#e5e7eb',
+      'accent-blue': '#2563eb',
+      'accent-blue-light': '#dbeafe',
+      'accent-blue-dark': '#1e40af',
+      'accent-emerald': '#10b981',
+      'accent-emerald-light': '#d1fae5',
+      'accent-amber': '#f59e0b',
+      'accent-amber-light': '#fef3c7',
+      'accent-red': '#ef4444',
+      'accent-red-light': '#fee2e2',
+      'accent-purple': '#8b5cf6',
+      'accent-purple-light': '#ede9fe',
+      'accent-orange': '#f97316',
+      'accent-orange-light': '#ffedd5',
+      'accent-pink': '#ec4899',
+      'accent-pink-light': '#fce7f3',
+    };
+
+    const darkTheme = {
+      'bg-primary': '#181a1f',
+      'bg-secondary': '#22252b',
+      'bg-tertiary': '#2c3038',
+      'bg-card': '#22252b',
+      'bg-card-hover': '#2c3038',
+      'bg-header': '#1f2329',
+      'bg-nav': '#22252b',
+      'bg-footer': '#22252b',
+      'bg-code': '#2c3038',
+      'bg-code-inline': '#2c3038',
+      'bg-note': '#3b3520',
+      'text-primary': '#e0e0e0',
+      'text-secondary': '#b0b0b0',
+      'text-tertiary': '#8c8c8c',
+      'text-inverse': '#181a1f',
+      'text-heading': '#ffffff',
+      'text-link': '#64b5f6',
+      'text-link-hover': '#90caf9',
+      'text-code': '#f5f5f5',
+      'text-hero': '#ffffff',
+      'border-primary': '#383c45',
+      'border-secondary': '#2f333a',
+      'border-accent': '#64b5f6',
+      'border-card': '#383c45',
+      'accent-blue': '#64b5f6',
+      'accent-blue-light': '#bbdefb',
+      'accent-blue-dark': '#1976d2',
+      'accent-emerald': '#4caf50',
+      'accent-emerald-light': '#81c784',
+      'accent-amber': '#ffc107',
+      'accent-amber-light': '#ffe082',
+      'accent-red': '#f44336',
+      'accent-red-light': '#ef9a9a',
+      'accent-purple': '#ba68c8',
+      'accent-purple-light': '#ce93d8',
+      'accent-orange': '#ff9800',
+      'accent-orange-light': '#ffb74d',
+      'accent-pink': '#ec407a',
+      'accent-pink-light': '#f48fb1',
+    };
+
+    let currentTheme = {...lightTheme};
+    let isDarkMode = false;
+
+    // Initialize color controls
+    function initColorControls() {
+      const bgColors = document.getElementById('bg-colors');
+      const textColors = document.getElementById('text-colors');
+      const borderColors = document.getElementById('border-colors');
+      const accentColors = document.getElementById('accent-colors');
+
+      const bgVars = Object.keys(currentTheme).filter(k => k.startsWith('bg-'));
+      const textVars = Object.keys(currentTheme).filter(k => k.startsWith('text-'));
+      const borderVars = Object.keys(currentTheme).filter(k => k.startsWith('border-'));
+      const accentVars = Object.keys(currentTheme).filter(k => k.startsWith('accent-'));
+
+      bgColors.innerHTML = bgVars.map(v => createColorInput(v)).join('');
+      textColors.innerHTML = textVars.map(v => createColorInput(v)).join('');
+      borderColors.innerHTML = borderVars.map(v => createColorInput(v)).join('');
+      accentColors.innerHTML = accentVars.map(v => createColorInput(v)).join('');
+
+      // Add event listeners
+      document.querySelectorAll('.color-input').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const varName = e.target.dataset.var;
+          currentTheme[varName] = e.target.value;
+          applyTheme();
+          updateCSSOutput();
+        });
+      });
+    }
+
+    function createColorInput(varName) {
+      const displayName = varName.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      return `
+        <div class="flex items-center gap-3 mb-2">
+          <input type="color" 
+                 class="color-input w-12 h-8 rounded cursor-pointer" 
+                 data-var="${varName}" 
+                 value="${currentTheme[varName]}">
+          <div class="flex-1">
+            <label class="block text-sm font-medium" style="color: var(--text-primary);">${displayName}</label>
+            <input type="text" 
+                   class="color-text-input w-full px-2 py-1 rounded text-sm font-mono" 
+                   style="background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-primary);"
+                   data-var="${varName}" 
+                   value="${currentTheme[varName]}">
+          </div>
+        </div>
+      `;
+    }
+
+    function applyTheme() {
+      const root = document.documentElement;
+      Object.entries(currentTheme).forEach(([key, value]) => {
+        root.style.setProperty(`--${key}`, value);
+      });
+      
+      // Sync text inputs with color inputs
+      document.querySelectorAll('.color-text-input').forEach(input => {
+        input.value = currentTheme[input.dataset.var];
+      });
+      document.querySelectorAll('.color-input').forEach(input => {
+        input.value = currentTheme[input.dataset.var];
+      });
+    }
+
+    function updateCSSOutput() {
+      const mode = isDarkMode ? '.dark' : ':root';
+      const css = `${mode} {\n  /* Background Colors */\n${formatCSSVars('bg')}\n  \n  /* Text Colors */\n${formatCSSVars('text')}\n  \n  /* Border Colors */\n${formatCSSVars('border')}\n  \n  /* Accent Colors */\n${formatCSSVars('accent')}\n}`;
+      
+      document.querySelector('#css-output code').textContent = css;
+    }
+
+    function formatCSSVars(prefix) {
+      return Object.entries(currentTheme)
+        .filter(([key]) => key.startsWith(prefix + '-'))
+        .map(([key, value]) => `  --${key}: ${value};`)
+        .join('\n');
+    }
+
+    // Event listeners
+    document.getElementById('light-mode-btn').addEventListener('click', () => {
+      isDarkMode = false;
+      currentTheme = {...lightTheme};
+      document.documentElement.classList.remove('dark');
+      updateButtonStates();
+      initColorControls();
+      applyTheme();
+      updateCSSOutput();
+    });
+
+    document.getElementById('dark-mode-btn').addEventListener('click', () => {
+      isDarkMode = true;
+      currentTheme = {...darkTheme};
+      document.documentElement.classList.add('dark');
+      updateButtonStates();
+      initColorControls();
+      applyTheme();
+      updateCSSOutput();
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      if (confirm('Reset to default theme colors?')) {
+        currentTheme = isDarkMode ? {...darkTheme} : {...lightTheme};
+        initColorControls();
+        applyTheme();
+        updateCSSOutput();
+      }
+    });
+
+    document.getElementById('copy-css-btn').addEventListener('click', () => {
+      const css = document.querySelector('#css-output code').textContent;
+      navigator.clipboard.writeText(css).then(() => {
+        const btn = document.getElementById('copy-css-btn');
+        const originalText = btn.textContent;
+        btn.textContent = '✓ Copied!';
+        btn.style.background = 'var(--accent-emerald)';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = 'var(--accent-blue)';
+        }, 2000);
+      });
+    });
+
+    // Add text input listeners
+    document.addEventListener('input', (e) => {
+      if (e.target.classList.contains('color-text-input')) {
+        const varName = e.target.dataset.var;
+        const value = e.target.value;
+        if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+          currentTheme[varName] = value;
+          applyTheme();
+          updateCSSOutput();
+        }
+      }
+    });
+
+    function updateButtonStates() {
+      const lightBtn = document.getElementById('light-mode-btn');
+      const darkBtn = document.getElementById('dark-mode-btn');
+      
+      if (isDarkMode) {
+        darkBtn.style.background = 'var(--accent-blue)';
+        darkBtn.style.color = 'white';
+        lightBtn.style.background = 'var(--bg-secondary)';
+        lightBtn.style.color = 'var(--text-primary)';
+      } else {
+        lightBtn.style.background = 'var(--accent-blue)';
+        lightBtn.style.color = 'white';
+        darkBtn.style.background = 'var(--bg-secondary)';
+        darkBtn.style.color = 'var(--text-primary)';
+      }
+    }
+
+    // Initialize
+    initColorControls();
+    applyTheme();
+    updateCSSOutput();
+    updateButtonStates();
+  </script>
+</Layout>
