@@ -56,12 +56,16 @@ const tags = [...allTags].sort();
   <!-- Filter Panel -->
   <details class="mb-8 p-6 rounded-lg" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
     <summary class="flex justify-between items-center cursor-pointer list-none mb-0">
-      <h2 class="text-xl font-semibold m-0 flex items-center gap-2" style="color: var(--text-heading);">
-        <svg class="w-5 h-5 transition-transform duration-200" style="transform: rotate(-90deg);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-        </svg>
-        Filters
-      </h2>
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-xl font-semibold m-0 flex items-center gap-2" style="color: var(--text-heading);">
+          <svg class="w-5 h-5 transition-transform duration-200" style="transform: rotate(-90deg);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+          Filters
+        </h2>
+        <!-- Active Filters Pills (inline with heading) -->
+        <div id="activePills" class="flex flex-wrap gap-2" style="display: none;"></div>
+      </div>
     </summary>
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
@@ -160,6 +164,7 @@ const tags = [...allTags].sort();
     const grid = document.getElementById('deviceGrid');
     const resultCount = document.getElementById('resultCount');
     const filterDetails = document.querySelector('details') as HTMLDetailsElement;
+    const activePills = document.getElementById('activePills') as HTMLDivElement;
 
     // Rotate arrow on toggle
     filterDetails?.addEventListener('toggle', () => {
@@ -168,6 +173,86 @@ const tags = [...allTags].sort();
         arrow.style.transform = filterDetails.open ? 'rotate(0deg)' : 'rotate(-90deg)';
       }
     });
+
+    function updateActivePills() {
+      if (!activePills) return;
+      
+      // Clear existing pills
+      activePills.innerHTML = '';
+      
+      // Get all checked checkboxes from all filter types
+      const checkedCategories = document.querySelectorAll('input[name="category"]:checked');
+      const checkedStatuses = document.querySelectorAll('input[name="status"]:checked');
+      const checkedTags = document.querySelectorAll('input[name="tag"]:checked');
+      
+      const totalChecked = checkedCategories.length + checkedStatuses.length + checkedTags.length;
+      
+      if (totalChecked === 0) {
+        activePills.style.display = 'none';
+        return;
+      }
+      
+      activePills.style.display = 'flex';
+      
+      // Helper function to create pill
+      const createPill = (value: string, type: string, bgColor: string) => {
+        const pill = document.createElement('span');
+        pill.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all';
+        pill.style.cssText = `background: ${bgColor}; color: var(--text-primary);`;
+        
+        pill.innerHTML = `
+          <span>${value}</span>
+          <button 
+            class="pill-remove hover:opacity-70 transition-opacity" 
+            data-filter-type="${type}" 
+            data-value="${value}"
+            style="background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center;"
+            aria-label="Remove ${value} filter"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        `;
+        
+        activePills.appendChild(pill);
+      };
+      
+      // Add category pills (blue)
+      checkedCategories.forEach(cb => {
+        createPill((cb as HTMLInputElement).value, 'category', 'var(--accent-blue-light)');
+      });
+      
+      // Add status pills (green/emerald)
+      checkedStatuses.forEach(cb => {
+        createPill((cb as HTMLInputElement).value, 'status', 'var(--accent-emerald-light)');
+      });
+      
+      // Add tag pills (amber)
+      checkedTags.forEach(cb => {
+        createPill((cb as HTMLInputElement).value, 'tag', 'var(--accent-amber-light)');
+      });
+      
+      // Add event listeners to remove buttons
+      document.querySelectorAll('.pill-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const button = e.currentTarget as HTMLButtonElement;
+          const filterType = button.getAttribute('data-filter-type');
+          const value = button.getAttribute('data-value');
+          
+          // Find and uncheck the corresponding checkbox
+          const checkbox = document.querySelector(
+            `input[name="${filterType}"][value="${value}"]`
+          ) as HTMLInputElement;
+          
+          if (checkbox) {
+            checkbox.checked = false;
+            applyFilters();
+          }
+        });
+      });
+    }
 
     function applyFilters() {
       // Get all checked checkboxes
@@ -202,6 +287,8 @@ const tags = [...allTags].sort();
       if (resultCount) {
         resultCount.textContent = visibleCount.toString();
       }
+      
+      updateActivePills();
     }
 
     function filterTagList() {
