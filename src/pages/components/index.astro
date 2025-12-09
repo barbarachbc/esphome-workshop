@@ -97,85 +97,24 @@ const filters = [
   </div>
 
   <script>
+    import { updateFilterPills, initFilterDetailsArrow } from '../../utils/filterPills';
+
     const clearButton = document.getElementById('clearFilters') as HTMLButtonElement;
     const filterSearchInput = document.getElementById('filterSearch') as HTMLInputElement;
     const grid = document.getElementById('componentGrid');
     const resultCount = document.getElementById('resultCount');
-    const filterDetails = document.querySelector('details') as HTMLDetailsElement;
-    const activePills = document.getElementById('activePills') as HTMLDivElement;
 
-    // Rotate arrow on toggle
-    filterDetails?.addEventListener('toggle', () => {
-      const arrow = filterDetails.querySelector('svg');
-      if (arrow) {
-        arrow.style.transform = filterDetails.open ? 'rotate(0deg)' : 'rotate(-90deg)';
-      }
-    });
+    // Initialize filter panel arrow rotation
+    initFilterDetailsArrow();
 
     function updateActivePills() {
-      if (!activePills) return;
-      
-      // Clear existing pills
-      activePills.innerHTML = '';
-      
-      // Get all checked checkboxes
-      const checkedBoxes = document.querySelectorAll('input[name="filter"]:checked');
-      
-      if (checkedBoxes.length === 0) {
-        activePills.style.display = 'none';
-        return;
-      }
-      
-      activePills.style.display = 'flex';
-      
-      checkedBoxes.forEach(checkbox => {
-        const cb = checkbox as HTMLInputElement;
-        const type = cb.getAttribute('data-type');
-        const value = cb.value;
-        
-        const pill = document.createElement('span');
-        pill.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all';
-        
-        const bgColor = type === 'category' ? 'var(--accent-blue-light)' : 'var(--accent-amber-light)';
-        const textColor = 'var(--text-primary)';
-        pill.style.cssText = `background: ${bgColor}; color: ${textColor};`;
-        
-        pill.innerHTML = `
-          <span>${value}</span>
-          <button 
-            class="pill-remove hover:opacity-70 transition-opacity" 
-            data-type="${type}" 
-            data-value="${value}"
-            style="background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center;"
-            aria-label="Remove ${value} filter"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
-        `;
-        
-        activePills.appendChild(pill);
-      });
-      
-      // Add event listeners to remove buttons
-      document.querySelectorAll('.pill-remove').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const button = e.currentTarget as HTMLButtonElement;
-          const type = button.getAttribute('data-type');
-          const value = button.getAttribute('data-value');
-          
-          // Find and uncheck the corresponding checkbox
-          const checkbox = document.querySelector(
-            `input[name="filter"][data-type="${type}"][value="${value}"]`
-          ) as HTMLInputElement;
-          
-          if (checkbox) {
-            checkbox.checked = false;
-            applyFilters();
-          }
-        });
+      updateFilterPills({
+        pillsContainerId: 'activePills',
+        filters: [
+          { name: 'category', selector: 'input[name="filter"][data-type="category"]:checked', color: 'var(--accent-blue-light)' },
+          { name: 'tag', selector: 'input[name="filter"][data-type="tag"]:checked', color: 'var(--accent-amber-light)' }
+        ],
+        onRemove: applyFilters
       });
     }
 

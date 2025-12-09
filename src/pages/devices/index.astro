@@ -159,98 +159,25 @@ const tags = [...allTags].sort();
   </div>
 
   <script>
+    import { updateFilterPills, initFilterDetailsArrow } from '../../utils/filterPills';
+
     const clearButton = document.getElementById('clearFilters') as HTMLButtonElement;
     const tagSearchInput = document.getElementById('tagSearch') as HTMLInputElement;
     const grid = document.getElementById('deviceGrid');
     const resultCount = document.getElementById('resultCount');
-    const filterDetails = document.querySelector('details') as HTMLDetailsElement;
-    const activePills = document.getElementById('activePills') as HTMLDivElement;
 
-    // Rotate arrow on toggle
-    filterDetails?.addEventListener('toggle', () => {
-      const arrow = filterDetails.querySelector('svg');
-      if (arrow) {
-        arrow.style.transform = filterDetails.open ? 'rotate(0deg)' : 'rotate(-90deg)';
-      }
-    });
+    // Initialize filter panel arrow rotation
+    initFilterDetailsArrow();
 
     function updateActivePills() {
-      if (!activePills) return;
-      
-      // Clear existing pills
-      activePills.innerHTML = '';
-      
-      // Get all checked checkboxes from all filter types
-      const checkedCategories = document.querySelectorAll('input[name="category"]:checked');
-      const checkedStatuses = document.querySelectorAll('input[name="status"]:checked');
-      const checkedTags = document.querySelectorAll('input[name="tag"]:checked');
-      
-      const totalChecked = checkedCategories.length + checkedStatuses.length + checkedTags.length;
-      
-      if (totalChecked === 0) {
-        activePills.style.display = 'none';
-        return;
-      }
-      
-      activePills.style.display = 'flex';
-      
-      // Helper function to create pill
-      const createPill = (value: string, type: string, bgColor: string) => {
-        const pill = document.createElement('span');
-        pill.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all';
-        pill.style.cssText = `background: ${bgColor}; color: var(--text-primary);`;
-        
-        pill.innerHTML = `
-          <span>${value}</span>
-          <button 
-            class="pill-remove hover:opacity-70 transition-opacity" 
-            data-filter-type="${type}" 
-            data-value="${value}"
-            style="background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center;"
-            aria-label="Remove ${value} filter"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
-        `;
-        
-        activePills.appendChild(pill);
-      };
-      
-      // Add category pills (blue)
-      checkedCategories.forEach(cb => {
-        createPill((cb as HTMLInputElement).value, 'category', 'var(--accent-blue-light)');
-      });
-      
-      // Add status pills (green/emerald)
-      checkedStatuses.forEach(cb => {
-        createPill((cb as HTMLInputElement).value, 'status', 'var(--accent-emerald-light)');
-      });
-      
-      // Add tag pills (amber)
-      checkedTags.forEach(cb => {
-        createPill((cb as HTMLInputElement).value, 'tag', 'var(--accent-amber-light)');
-      });
-      
-      // Add event listeners to remove buttons
-      document.querySelectorAll('.pill-remove').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const button = e.currentTarget as HTMLButtonElement;
-          const filterType = button.getAttribute('data-filter-type');
-          const value = button.getAttribute('data-value');
-          
-          // Find and uncheck the corresponding checkbox
-          const checkbox = document.querySelector(
-            `input[name="${filterType}"][value="${value}"]`
-          ) as HTMLInputElement;
-          
-          if (checkbox) {
-            checkbox.checked = false;
-            applyFilters();
-          }
-        });
+      updateFilterPills({
+        pillsContainerId: 'activePills',
+        filters: [
+          { name: 'category', selector: 'input[name="category"]:checked', color: 'var(--accent-blue-light)' },
+          { name: 'status', selector: 'input[name="status"]:checked', color: 'var(--accent-emerald-light)' },
+          { name: 'tag', selector: 'input[name="tag"]:checked', color: 'var(--accent-amber-light)' }
+        ],
+        onRemove: applyFilters
       });
     }
 
