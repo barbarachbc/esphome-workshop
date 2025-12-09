@@ -21,13 +21,18 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Synchronized scrolling containers -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="text-center font-semibold text-lg mb-2" style="color: var(--text-heading);">Preview</div>
+      <div class="text-center font-semibold text-lg mb-2" style="color: var(--text-heading);">Color Controls</div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <!-- Left Column: Preview -->
-      <div>
-        <h2 class="text-2xl font-semibold mb-4">Preview</h2>
+      <div id="preview-scroll" class="overflow-y-auto pr-2" style="max-height: 70vh; border-right: 2px solid var(--border-primary);">
         
-        <!-- Background Preview -->
-        <div class="mb-6 p-6 rounded-lg border" style="background: var(--bg-primary); border-color: var(--border-primary);">
+        <!-- Section 1: Background Preview -->
+        <div class="mb-6 p-6 rounded-lg border scroll-section" data-section="bg" style="background: var(--bg-primary); border-color: var(--border-primary);">
           <h3 class="text-xl font-semibold mb-3">Backgrounds & Text</h3>
           <div class="space-y-3">
             <div class="p-4 rounded" style="background: var(--bg-secondary);">
@@ -42,65 +47,15 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </div>
 
-        <!-- Status Badges -->
-        <div class="mb-6 p-6 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
-          <h3 class="text-xl font-semibold mb-3">Status Badges</h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="status-badge status-badge-ready">📦 Ready</span>
-            <span class="status-badge status-badge-testing">🧪 Testing</span>
-            <span class="status-badge status-badge-active">🔧 Active</span>
-            <span class="status-badge status-badge-deployed">✅ Deployed</span>
-            <span class="status-badge status-badge-retired">⏸️ Retired</span>
-            <span class="status-badge status-badge-pending">🔦 Pending</span>
-            <span class="status-badge status-badge-unsupported">🚫 Unsupported</span>
-          </div>
-          <div class="flex flex-wrap gap-2 mt-3">
-            <span class="status-badge status-badge-idea">💭 Idea</span>
-            <span class="status-badge status-badge-in-progress">🛠️ In Progress</span>
-            <span class="status-badge status-badge-completed">✅ Completed</span>
-            <span class="status-badge status-badge-abandoned">⏸️ Abandoned</span>
-          </div>
-        </div>
-
-        <!-- Difficulty Badges -->
-        <div class="mb-6 p-6 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
-          <h3 class="text-xl font-semibold mb-3">Difficulty Badges</h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="difficulty-badge difficulty-badge-beginner">Beginner</span>
-            <span class="difficulty-badge difficulty-badge-intermediate">Intermediate</span>
-            <span class="difficulty-badge difficulty-badge-advanced">Advanced</span>
-          </div>
-        </div>
-
-        <!-- Category Badges -->
-        <div class="mb-6 p-6 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
-          <h3 class="text-xl font-semibold mb-3">Category Badges</h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="category-badge category-badge-purple">Notes</span>
-            <span class="category-badge category-badge-blue">Devices</span>
-            <span class="category-badge category-badge-emerald">Components</span>
-          </div>
-        </div>
-
-        <!-- Tag & Connection Badges -->
-        <div class="mb-6 p-6 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
-          <h3 class="text-xl font-semibold mb-3">Tag & Connection Badges</h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="tag-badge">Tag Example</span>
-            <span class="connection-badge">I2C</span>
-            <span class="connection-badge">SPI</span>
-            <span class="connection-badge">GPIO</span>
-          </div>
-        </div>
-
-        <!-- Sample Card -->
-        <div class="mb-6 rounded-lg overflow-hidden transition-all duration-200" style="background: var(--bg-card); border: 1px solid var(--border-card);">
+        <!-- Section 2: Sample Card -->
+        <div class="mb-6 rounded-lg overflow-hidden transition-all duration-200 scroll-section" data-section="card" style="background: var(--bg-card); border: 1px solid var(--border-card);">
           <div class="p-6">
+            <h3 class="text-xl font-semibold mb-3">Sample Device Card</h3>
             <div class="flex justify-between items-center mb-2">
               <span class="category-badge category-badge-blue">sensor</span>
               <span class="status-badge status-badge-deployed">✅ Deployed</span>
             </div>
-            <h3 class="my-2 text-xl" style="color: var(--text-heading);">Sample Device Card</h3>
+            <h4 class="my-2 text-lg" style="color: var(--text-heading);">BME280 Temperature Sensor</h4>
             <p class="my-3 leading-relaxed" style="color: var(--text-secondary);">This is a preview of how device cards look with your current theme settings.</p>
           </div>
           <div class="flex flex-wrap gap-1.5 px-5 py-3 border-t" style="background: var(--bg-secondary); border-color: var(--border-primary);">
@@ -109,8 +64,8 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </div>
 
-        <!-- Code Block -->
-        <div class="mb-6 p-6 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
+        <!-- Section 3: Code Block -->
+        <div class="mb-6 p-6 rounded-lg border scroll-section" data-section="code" style="background: var(--bg-card); border-color: var(--border-card);">
           <h3 class="text-xl font-semibold mb-3">Code Blocks</h3>
           <p class="mb-2">Inline code: <code>esphome run config.yaml</code></p>
           <pre style="background: var(--bg-code); color: var(--text-code); border: 1px solid var(--border-primary);" class="p-4 rounded-lg"><code>sensor:
@@ -119,37 +74,87 @@ import Layout from '../layouts/Layout.astro';
     temperature:
       name: "Temperature"</code></pre>
         </div>
+
+        <!-- Section 4: All Badges -->
+        <div class="mb-6 p-6 rounded-lg border scroll-section" data-section="badges" style="background: var(--bg-card); border-color: var(--border-card);">
+          <h3 class="text-xl font-semibold mb-4">All Badges</h3>
+          
+          <h4 class="text-lg font-semibold mb-2 mt-4">Status Badges</h4>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="status-badge status-badge-ready">📦 Ready</span>
+            <span class="status-badge status-badge-testing">🧪 Testing</span>
+            <span class="status-badge status-badge-active">🔧 Active</span>
+            <span class="status-badge status-badge-deployed">✅ Deployed</span>
+            <span class="status-badge status-badge-retired">⏸️ Retired</span>
+            <span class="status-badge status-badge-pending">🔦 Pending</span>
+            <span class="status-badge status-badge-unsupported">🚫 Unsupported</span>
+          </div>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="status-badge status-badge-idea">💭 Idea</span>
+            <span class="status-badge status-badge-in-progress">🛠️ In Progress</span>
+            <span class="status-badge status-badge-completed">✅ Completed</span>
+            <span class="status-badge status-badge-abandoned">⏸️ Abandoned</span>
+          </div>
+
+          <h4 class="text-lg font-semibold mb-2 mt-4">Difficulty Badges</h4>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="difficulty-badge difficulty-badge-beginner">Beginner</span>
+            <span class="difficulty-badge difficulty-badge-intermediate">Intermediate</span>
+            <span class="difficulty-badge difficulty-badge-advanced">Advanced</span>
+          </div>
+
+          <h4 class="text-lg font-semibold mb-2 mt-4">Category Badges</h4>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="category-badge category-badge-purple">Notes</span>
+            <span class="category-badge category-badge-blue">Devices</span>
+            <span class="category-badge category-badge-emerald">Components</span>
+          </div>
+
+          <h4 class="text-lg font-semibold mb-2 mt-4">Tag & Connection Badges</h4>
+          <div class="flex flex-wrap gap-2">
+            <span class="tag-badge">Tag Example</span>
+            <span class="connection-badge">I2C</span>
+            <span class="connection-badge">SPI</span>
+            <span class="connection-badge">GPIO</span>
+          </div>
+        </div>
+
       </div>
 
       <!-- Right Column: Color Controls -->
-      <div>
-        <h2 class="text-2xl font-semibold mb-4">Color Controls</h2>
+      <div id="controls-scroll" class="overflow-y-auto pl-2" style="max-height: 70vh;">
         
-        <div id="color-controls" class="space-y-6">
-          <!-- Background Colors -->
-          <div class="p-4 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
-            <h3 class="text-lg font-semibold mb-3">Background Colors</h3>
-            <div class="space-y-2" id="bg-colors"></div>
-          </div>
+        <!-- Section 1: Background & Text Colors -->
+        <div class="p-4 rounded-lg border mb-6 scroll-section" data-section="bg" style="background: var(--bg-card); border-color: var(--border-card);">
+          <h3 class="text-lg font-semibold mb-3">Background Colors</h3>
+          <div class="space-y-2" id="bg-colors"></div>
+          
+          <h3 class="text-lg font-semibold mb-3 mt-6">Text Colors</h3>
+          <div class="space-y-2" id="text-colors"></div>
+          
+          <h3 class="text-lg font-semibold mb-3 mt-6">Border Colors</h3>
+          <div class="space-y-2" id="border-colors"></div>
+        </div>
 
-          <!-- Text Colors -->
+        <!-- Section 2: Card-specific colors (empty spacer to align with card preview) -->
+        <div class="mb-6" style="min-height: 280px;">
           <div class="p-4 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
-            <h3 class="text-lg font-semibold mb-3">Text Colors</h3>
-            <div class="space-y-2" id="text-colors"></div>
-          </div>
-
-          <!-- Border Colors -->
-          <div class="p-4 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
-            <h3 class="text-lg font-semibold mb-3">Border Colors</h3>
-            <div class="space-y-2" id="border-colors"></div>
-          </div>
-
-          <!-- Accent Colors -->
-          <div class="p-4 rounded-lg border" style="background: var(--bg-card); border-color: var(--border-card);">
-            <h3 class="text-lg font-semibold mb-3">Accent Colors</h3>
-            <div class="space-y-2" id="accent-colors"></div>
+            <p class="text-sm" style="color: var(--text-secondary);">← Card uses Background, Text, and Border colors above</p>
           </div>
         </div>
+
+        <!-- Section 3: Code Colors -->
+        <div class="p-4 rounded-lg border mb-6 scroll-section" data-section="code" style="background: var(--bg-card); border-color: var(--border-card);">
+          <h3 class="text-lg font-semibold mb-3">Code Colors</h3>
+          <div class="space-y-2" id="code-colors"></div>
+        </div>
+
+        <!-- Section 4: Accent Colors (for badges) -->
+        <div class="p-4 rounded-lg border mb-6 scroll-section" data-section="badges" style="background: var(--bg-card); border-color: var(--border-card);">
+          <h3 class="text-lg font-semibold mb-3">Accent Colors (Badges)</h3>
+          <div class="space-y-2" id="accent-colors"></div>
+        </div>
+
       </div>
     </div>
 
@@ -259,25 +264,31 @@ import Layout from '../layouts/Layout.astro';
       const bgColors = document.getElementById('bg-colors');
       const textColors = document.getElementById('text-colors');
       const borderColors = document.getElementById('border-colors');
+      const codeColors = document.getElementById('code-colors');
       const accentColors = document.getElementById('accent-colors');
 
-      const bgVars = Object.keys(currentTheme).filter(k => k.startsWith('bg-'));
-      const textVars = Object.keys(currentTheme).filter(k => k.startsWith('text-'));
+      const bgVars = Object.keys(currentTheme).filter(k => k.startsWith('bg-') && !k.includes('code'));
+      const textVars = Object.keys(currentTheme).filter(k => k.startsWith('text-') && !k.includes('code'));
       const borderVars = Object.keys(currentTheme).filter(k => k.startsWith('border-'));
+      const codeVars = Object.keys(currentTheme).filter(k => k.includes('code'));
       const accentVars = Object.keys(currentTheme).filter(k => k.startsWith('accent-'));
 
-      bgColors.innerHTML = bgVars.map(v => createColorInput(v)).join('');
-      textColors.innerHTML = textVars.map(v => createColorInput(v)).join('');
-      borderColors.innerHTML = borderVars.map(v => createColorInput(v)).join('');
-      accentColors.innerHTML = accentVars.map(v => createColorInput(v)).join('');
+      if (bgColors) bgColors.innerHTML = bgVars.map(v => createColorInput(v)).join('');
+      if (textColors) textColors.innerHTML = textVars.map(v => createColorInput(v)).join('');
+      if (borderColors) borderColors.innerHTML = borderVars.map(v => createColorInput(v)).join('');
+      if (codeColors) codeColors.innerHTML = codeVars.map(v => createColorInput(v)).join('');
+      if (accentColors) accentColors.innerHTML = accentVars.map(v => createColorInput(v)).join('');
 
       // Add event listeners
       document.querySelectorAll('.color-input').forEach(input => {
         input.addEventListener('input', (e) => {
-          const varName = e.target.dataset.var;
-          currentTheme[varName] = e.target.value;
-          applyTheme();
-          updateCSSOutput();
+          const target = e.target as HTMLInputElement;
+          const varName = target.dataset.var;
+          if (varName) {
+            currentTheme[varName as keyof typeof currentTheme] = target.value;
+            applyTheme();
+            updateCSSOutput();
+          }
         });
       });
     }
@@ -361,10 +372,12 @@ import Layout from '../layouts/Layout.astro';
       }
     });
 
-    document.getElementById('copy-css-btn').addEventListener('click', () => {
-      const css = document.querySelector('#css-output code').textContent;
+    document.getElementById('copy-css-btn')?.addEventListener('click', () => {
+      const cssElement = document.querySelector('#css-output code');
+      const css = cssElement?.textContent || '';
       navigator.clipboard.writeText(css).then(() => {
         const btn = document.getElementById('copy-css-btn');
+        if (!btn) return;
         const originalText = btn.textContent;
         btn.textContent = '✓ Copied!';
         btn.style.background = 'var(--accent-emerald)';
@@ -377,11 +390,13 @@ import Layout from '../layouts/Layout.astro';
 
     // Add text input listeners
     document.addEventListener('input', (e) => {
-      if (e.target.classList.contains('color-text-input')) {
-        const varName = e.target.dataset.var;
-        const value = e.target.value;
-        if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
-          currentTheme[varName] = value;
+      const target = e.target as HTMLElement;
+      if (target && target.classList.contains('color-text-input')) {
+        const inputTarget = target as HTMLInputElement;
+        const varName = inputTarget.dataset.var;
+        const value = inputTarget.value;
+        if (varName && /^#[0-9A-Fa-f]{6}$/.test(value)) {
+          currentTheme[varName as keyof typeof currentTheme] = value;
           applyTheme();
           updateCSSOutput();
         }
@@ -391,6 +406,8 @@ import Layout from '../layouts/Layout.astro';
     function updateButtonStates() {
       const lightBtn = document.getElementById('light-mode-btn');
       const darkBtn = document.getElementById('dark-mode-btn');
+      
+      if (!lightBtn || !darkBtn) return;
       
       if (isDarkMode) {
         darkBtn.style.background = 'var(--accent-blue)';
@@ -403,6 +420,29 @@ import Layout from '../layouts/Layout.astro';
         darkBtn.style.background = 'var(--bg-secondary)';
         darkBtn.style.color = 'var(--text-primary)';
       }
+    }
+
+    // Synchronized scrolling
+    let isScrolling = false;
+    const previewScroll = document.getElementById('preview-scroll');
+    const controlsScroll = document.getElementById('controls-scroll');
+
+    if (previewScroll && controlsScroll) {
+      previewScroll.addEventListener('scroll', () => {
+        if (!isScrolling) {
+          isScrolling = true;
+          controlsScroll.scrollTop = previewScroll.scrollTop;
+          setTimeout(() => { isScrolling = false; }, 10);
+        }
+      });
+
+      controlsScroll.addEventListener('scroll', () => {
+        if (!isScrolling) {
+          isScrolling = true;
+          previewScroll.scrollTop = controlsScroll.scrollTop;
+          setTimeout(() => { isScrolling = false; }, 10);
+        }
+      });
     }
 
     // Initialize
