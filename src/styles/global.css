@@ -370,6 +370,73 @@
     background: var(--bg-secondary);
     color: var(--text-secondary);
   }
+
+  /* ========================================
+     DIFFICULTY BADGE VARIANTS
+     ======================================== */
+  
+  .difficulty-badge {
+    @apply inline-block text-sm px-3 py-1 rounded font-medium capitalize;
+  }
+  
+  .difficulty-badge-beginner {
+    background: var(--accent-emerald-light);
+    color: var(--accent-emerald);
+  }
+  
+  .difficulty-badge-intermediate {
+    background: var(--accent-amber-light);
+    color: var(--accent-amber);
+  }
+  
+  .difficulty-badge-advanced {
+    background: var(--accent-red-light);
+    color: var(--accent-red);
+  }
+
+  /* ========================================
+     CATEGORY BADGE VARIANTS
+     ======================================== */
+  
+  .category-badge {
+    @apply inline-block text-sm px-3 py-1 rounded font-medium;
+  }
+  
+  .category-badge-purple {
+    background: var(--accent-purple-light);
+    color: var(--accent-purple);
+  }
+  
+  .category-badge-blue {
+    background: var(--accent-blue-light);
+    color: var(--accent-blue);
+  }
+  
+  .category-badge-emerald {
+    background: var(--accent-emerald-light);
+    color: var(--accent-emerald);
+  }
+
+  /* ========================================
+     TAG AND CONNECTION BADGES
+     ======================================== */
+  
+  .tag-badge {
+    @apply inline-block text-xs px-2 py-1 rounded font-medium;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+  
+  .connection-badge {
+    @apply inline-block text-xs px-2 py-1 rounded-md font-medium uppercase;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+  
+  .connection-badge:hover {
+    background: var(--accent-blue);
+    color: white;
+  }
 }
 /* ========================================
    COLLAPSIBLE SECTIONS
