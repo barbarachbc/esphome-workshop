@@ -179,6 +179,7 @@ border: 1px solid var(--border-primary);
 
 **Status Badge Classes:**
 - `.status-badge-deployed` (green)
+- `.status-badge-active` (orange)
 - `.status-badge-testing` (amber)
 - `.status-badge-ready` (gray)
 - `.status-badge-retired` (muted)
@@ -203,8 +204,8 @@ components: ['i2c', 'sensor']
 
 **Rules:**
 - Device with `status: 'ready'` + used in completed project → shows as `'deployed'`
-- Device with `status: 'ready'` + used in in-progress project → shows as `'testing'`
-- Manual status (`'testing'`, `'deployed'`, `'retired'`) is **never auto-changed**
+- Device with `status: 'ready'` + used in in-progress project → shows as `'active'`
+- Manual status (`'testing'`, `'deployed'`, `'active'`, `'retired'`) is **never auto-changed**
 
 **See [ARCHITECTURE.md § Status Computation Logic](./ARCHITECTURE.md#status-computation-logic) for details.**
 

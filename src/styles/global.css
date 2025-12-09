@@ -326,6 +326,11 @@
     color: var(--text-primary);
   }
   
+  .status-badge-active {
+    background: var(--accent-orange-light);
+    color: var(--text-primary);
+  }
+  
   .status-badge-deployed {
     background: var(--accent-emerald-light);
     color: var(--text-primary);

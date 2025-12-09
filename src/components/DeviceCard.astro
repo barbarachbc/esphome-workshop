@@ -9,10 +9,10 @@ interface Props {
       manufacturer?: string;
       connectionTypes: string[];
       image?: string;
-      status: 'ready' | 'testing' | 'deployed' | 'retired' | 'pending' | 'unsupported';
+      status: 'ready' | 'testing' | 'deployed' | 'retired' | 'pending' | 'unsupported' | 'active';
       productionStatus?: 'active' | 'NRND' | 'discontinued' | 'unknown' | 'obsolete';
     };
-    displayStatus?: 'ready' | 'testing' | 'deployed' | 'retired' | 'pending' | 'unsupported';
+    displayStatus?: 'ready' | 'testing' | 'deployed' | 'retired' | 'pending' | 'unsupported' | 'active';
   };
 }
 
@@ -24,6 +24,7 @@ const effectiveStatus = device.displayStatus || device.data.status;
 const statusLabels = {
   ready: '📦 Ready',
   testing: '🧪 Testing',
+  active: '🔧 Active',
   deployed: '✅ Deployed',
   retired: '⏸️ Retired',
   unsupported: '🚫 Unsupported',

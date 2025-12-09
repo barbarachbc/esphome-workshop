@@ -16,7 +16,7 @@ const devices = defineCollection({
     })).optional(),
     tags: z.array(z.string()).optional(),
     // Personal tracking fields
-    status: z.enum(['ready', 'testing', 'deployed', 'retired', 'pending', 'unsupported']),
+    status: z.enum(['ready', 'testing', 'deployed', 'retired', 'pending', 'unsupported', 'active']),
     notes: z.string().optional(),
     dateAcquired: z.string().optional(),
     // New fields

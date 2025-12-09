@@ -16,7 +16,7 @@ const devicesWithStatus = devices.map(device => {
     return project.data.devices.some(d => d.toLowerCase() === deviceSlugLower);
   });
 
-  let displayStatus = device.data.status;
+  let displayStatus: 'ready' | 'testing' | 'active' | 'deployed' | 'retired' | 'pending' | 'unsupported' = device.data.status;
   
   // Only override if device is currently marked as 'ready'
   if (projectsUsingDevice.length > 0 && device.data.status === 'ready') {
@@ -26,7 +26,7 @@ const devicesWithStatus = devices.map(device => {
     if (hasDeployedProject) {
       displayStatus = 'deployed';
     } else if (hasInProgressProject) {
-      displayStatus = 'testing';
+      displayStatus = 'active';
     }
   }
 

@@ -147,9 +147,9 @@ Device status is **computed dynamically** at build time based on project usage:
 
 **Rules:**
 1. If device status is `'ready'` and used in a `'completed'` project → show as `'deployed'`
-2. If device status is `'ready'` and used in an `'in-progress'` project → show as `'testing'`
-3. If device status is manually set to `'testing'`, `'deployed'`, or `'retired'` → **never override**
-4. Devices not in any projects remain `'ready'`
+2. If device status is `'ready'` and used in an `'in-progress'` project → show as `'active'`
+3. If device status is manually set to `'testing'`, `'deployed'`, `'active'`, or `'retired'` → **never override**
+4. Devices not in any projects remain at their manual status
 
 ---
 
@@ -190,7 +190,7 @@ interface Props {
     slug: string;
     data: DeviceSchema;
   };
-  displayStatus?: 'ready' | 'testing' | 'deployed' | 'retired' | 'pending' | 'unsupported';
+  displayStatus?: 'ready' | 'testing' | 'active' | 'deployed' | 'retired' | 'pending' | 'unsupported';
 }
 ```
 
@@ -462,6 +462,7 @@ Status badges use consistent color coding across the site:
 **Device Statuses:**
 - `ready` (📦) - Gray/red-light background
 - `testing` (🧪) - Amber-light background
+- `active` (🔧) - Orange-light background
 - `deployed` (✅) - Emerald-light background
 - `retired` (⏸️) - Gray background
 - `pending` (🔦) - Purple-light background

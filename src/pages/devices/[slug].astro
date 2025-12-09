@@ -46,6 +46,7 @@ const projectsUsingDevice = allProjects.filter(project => {
 const statusLabels = {
   ready: '📦 Ready',
   testing: '🧪 Testing',
+  active: '🔧 Active',
   deployed: '✅ Deployed',
   pending: '🔦 Pending',
   unsupported: '🚫 Unsupported',
@@ -80,7 +81,7 @@ const connectionTypeMap: Record<string, string> = {
 };
 
 // Automatically determine device status based on project usage
-let displayStatus = device.data.status;
+let displayStatus: 'ready' | 'testing' | 'active' | 'deployed' | 'retired' | 'pending' | 'unsupported' = device.data.status;
 if (projectsUsingDevice.length > 0) {
   // Only override if device is currently marked as 'ready'
   // This allows manual 'testing', 'deployed', or 'retired' status to be preserved
@@ -92,7 +93,7 @@ if (projectsUsingDevice.length > 0) {
     if (hasDeployedProject) {
       displayStatus = 'deployed';
     } else if (hasInProgressProject) {
-      displayStatus = 'testing';
+      displayStatus = 'active';
     }
   }
 }
