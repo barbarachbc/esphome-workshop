@@ -65,13 +65,13 @@ if (relatedProjects.length > 0) {
       <div id="page-info" class="mb-8">
         <h1 data-pagefind-meta="title" class="text-4xl font-semibold mb-4">{component.data.title}</h1>
         <div class="flex items-center gap-4 flex-wrap">
-          <span class="inline-block bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold">{component.data.category}</span>
-          <code class="bg-gray-100 px-4 py-2 rounded text-sm text-pink-700">{component.data.esphomeComponent}</code>
+          <span class="category-badge category-badge-blue">{component.data.category}</span>
+          <code class="px-4 py-2 rounded text-sm" style="background: var(--bg-code-inline); color: var(--text-primary);">{component.data.esphomeComponent}</code>
         </div>
       </div>
 
-      <div class="bg-gray-100 p-6 rounded-lg mb-8">
-        <p class="m-0 text-lg"><strong>{component.data.description}</strong></p>
+      <div class="p-6 rounded-lg mb-8" style="background: var(--bg-secondary);">
+        <p class="m-0 text-lg" style="color: var(--text-primary);"><strong>{component.data.description}</strong></p>
       </div>
 
       <LastModified 
@@ -83,7 +83,7 @@ if (relatedProjects.length > 0) {
       {component.data.documentation && (
         <div id="official-docs" class="my-8">
           <h2 class="text-2xl font-semibold mb-4">Official Documentation</h2>
-          <a href={component.data.documentation} target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg no-underline font-medium transition-colors duration-200 hover:bg-blue-700">
+          <a href={component.data.documentation} target="_blank" rel="noopener noreferrer" class="inline-block px-6 py-3 rounded-lg no-underline font-medium transition-colors duration-200" style="background: var(--accent-blue); color: white;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
             📚 ESPHome Documentation →
           </a>
         </div>
@@ -98,11 +98,11 @@ if (relatedProjects.length > 0) {
           <h2 class="text-2xl font-semibold mb-4">Related Devices</h2>
           <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
             {relatedDevices.map(desc => (
-              <a href={`/devices/${desc.device?.slug}`} class="block bg-white border border-gray-200 rounded-lg p-4 no-underline text-gray-800 transition-all duration-200 hover:border-blue-600 hover:-translate-y-0.5">
-                <h4 class="m-0 mb-2 text-blue-600 text-base">{desc.device?.data.title}</h4>
-                <p class="m-0 text-gray-500 text-sm">{desc.device?.data.description}</p>
+              <a href={`/devices/${desc.device?.slug}`} class="block rounded-lg p-4 no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md" style="background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-primary);" onmouseover="this.style.borderColor='var(--accent-blue)'" onmouseout="this.style.borderColor='var(--border-card)'">
+                <h4 class="m-0 mb-2 text-base" style="color: var(--text-link);">{desc.device?.data.title}</h4>
+                <p class="m-0 text-sm" style="color: var(--text-secondary);">{desc.device?.data.description}</p>
                 {desc.description && (
-                <p class="m-0 text-gray-500 text-sm border-t border-accent mt-2 pt-1">{desc.description}</p>
+                <p class="m-0 text-sm mt-2 pt-1" style="color: var(--text-secondary); border-top: 1px solid var(--border-primary);">{desc.description}</p>
                 )}
               </a>
             ))}
@@ -115,11 +115,11 @@ if (relatedProjects.length > 0) {
           <h2 class="text-2xl font-semibold mb-4">Related Projects</h2>
           <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
             {relatedProjects.filter(desc => desc.project).map(desc => (
-              <a href={`/projects/${desc.project?.slug}`} class="block bg-white border border-gray-200 rounded-lg p-4 no-underline text-gray-800 transition-all duration-200 hover:border-blue-600 hover:-translate-y-0.5">
-                <h4 class="m-0 mb-2 text-blue-600 text-base">{desc.project?.data.title}</h4>
-                <p class="m-0 text-gray-500 text-sm">{desc.project?.data.description}</p>
+              <a href={`/projects/${desc.project?.slug}`} class="block rounded-lg p-4 no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md" style="background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-primary);" onmouseover="this.style.borderColor='var(--accent-blue)'" onmouseout="this.style.borderColor='var(--border-card)'">
+                <h4 class="m-0 mb-2 text-base" style="color: var(--text-link);">{desc.project?.data.title}</h4>
+                <p class="m-0 text-sm" style="color: var(--text-secondary);">{desc.project?.data.description}</p>
                 {desc.description && (
-                <p class="m-0 text-gray-500 text-sm border-t border-accent mt-2 pt-1">{desc.description}</p>
+                <p class="m-0 text-sm mt-2 pt-1" style="color: var(--text-secondary); border-top: 1px solid var(--border-primary);">{desc.description}</p>
                 )}
               </a>
             ))}
@@ -127,7 +127,7 @@ if (relatedProjects.length > 0) {
         </div>
       )}
 
-      <a href="/components" class="inline-block mt-8 text-blue-600 no-underline font-medium hover:underline">← Back to all components</a>
+      <a href="/components" class="inline-block mt-8 no-underline font-medium hover:underline" style="color: var(--text-link);">← Back to all components</a>
 
       <IssueReportButton 
         pageType="component"
