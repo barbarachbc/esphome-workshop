@@ -58,7 +58,7 @@
   --accent-blue-dark: #1e40af;
   --accent-emerald: #10b981;
   --accent-emerald-light: #d1fae5;
-  --accent-amber: #f59e0b;
+  --accent-amber: #c67e09;
   --accent-amber-light: #fef3c7;
   --accent-yellow-light: #fef3c7;
   --accent-red: #ef4444;
@@ -318,22 +318,22 @@
   
   .status-badge-ready {
     background: var(--accent-red-light);
-    color: var(--text-primary);
+    color: var(--accent-red);
   }
   
   .status-badge-testing {
     background: var(--accent-amber-light);
-    color: var(--text-primary);
+    color: var(--accent-amber);
   }
   
   .status-badge-active {
     background: var(--accent-orange-light);
-    color: var(--text-primary);
+    color: var(--accent-orange);
   }
   
   .status-badge-deployed {
     background: var(--accent-emerald-light);
-    color: var(--text-primary);
+    color: var(--accent-emerald);
   }
   
   .status-badge-retired {
@@ -343,27 +343,27 @@
   
   .status-badge-pending {
     background: var(--accent-purple-light);
-    color: var(--text-primary);
+    color: var(--accent-purple);
   }
   
   .status-badge-unsupported {
     background: var(--accent-pink-light);
-    color: var(--text-primary);
+    color: var(--accent-pink);
   }
   
   .status-badge-idea {
     background: var(--accent-blue-light);
-    color: var(--text-primary);
+    color: var(--accent-blue);
   }
   
   .status-badge-in-progress {
     background: var(--accent-orange-light);
-    color: var(--text-primary);
+    color: var(--accent-orange);
   }
   
   .status-badge-completed {
     background: var(--accent-emerald-light);
-    color: var(--text-primary);
+    color: var(--accent-emerald);
   }
   
   .status-badge-abandoned {
