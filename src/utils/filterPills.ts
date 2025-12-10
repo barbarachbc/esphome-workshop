@@ -38,16 +38,23 @@ export interface FilterControlConfig {
  */
 function createPillElement(value: string, filterName: string, bgColor: string): HTMLSpanElement {
   const pill = document.createElement('span');
-  pill.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all';
-  pill.style.cssText = `background: ${bgColor}; color: var(--text-primary);`;
+  
+  // Map color to class names
+  let colorClass = 'filter-pill-blue'; // default
+  if (bgColor.includes('emerald') || bgColor.includes('d1fae5') || bgColor.includes('81c784')) {
+    colorClass = 'filter-pill-emerald';
+  } else if (bgColor.includes('amber') || bgColor.includes('fef3c7') || bgColor.includes('ffe082')) {
+    colorClass = 'filter-pill-amber';
+  }
+  
+  pill.className = `filter-pill ${colorClass}`;
   
   pill.innerHTML = `
     <span>${value}</span>
     <button 
-      class="pill-remove hover:opacity-70 transition-opacity" 
+      class="pill-remove" 
       data-filter-name="${filterName}" 
       data-value="${value}"
-      style="background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center;"
       aria-label="Remove ${value} filter"
     >
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

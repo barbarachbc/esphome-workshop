@@ -438,6 +438,40 @@
     background: var(--accent-blue);
     color: white;
   }
+
+  /* ========================================
+     FILTER PILL VARIANTS
+     ======================================== */
+  
+  .filter-pill {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all;
+    color: var(--text-primary);
+  }
+  
+  .filter-pill-blue {
+    background: var(--accent-blue-light);
+  }
+  
+  .filter-pill-emerald {
+    background: var(--accent-emerald-light);
+  }
+  
+  .filter-pill-amber {
+    background: var(--accent-amber-light);
+  }
+  
+  .pill-remove {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .pill-remove:hover {
+    opacity: 0.7;
+  }
 }
 /* ========================================
    COLLAPSIBLE SECTIONS
