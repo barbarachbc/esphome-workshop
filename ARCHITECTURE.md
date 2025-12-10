@@ -237,5 +237,34 @@ All badges use reusable CSS classes with theme-aware colors:
 
 ---
 
+## Configuration & Deployment
+
+### Environment Variables
+
+The site uses environment variables for sensitive configuration. See `.env.example` for all available options.
+
+**Required for deployment:**
+- `PUBLIC_SITE_URL` - Your site's public URL
+- `PUBLIC_GITHUB_REPO` - GitHub repository (username/repo)
+
+**Optional analytics:**
+- `PUBLIC_UMAMI_URL` - Umami analytics script URL
+- `PUBLIC_UMAMI_WEBSITE_ID` - Umami website identifier
+
+**Local development:**
+```bash
+# Copy template and fill in your values
+cp .env.example .env
+```
+
+**Deployment platforms:**
+- **GitHub Actions:** Set in repository secrets
+- **Vercel/Netlify:** Set in project settings > Environment Variables
+- **Cloudflare Pages:** Set in project settings > Variables
+
+All `PUBLIC_*` variables are accessible in both server and client code. The analytics scripts only load if their respective environment variables are configured.
+
+---
+
 **For implementation guidelines, see [CONTRIBUTING.md](./CONTRIBUTING.md)**  
 **For project vision, see [PROJECT.md](./PROJECT.md)**

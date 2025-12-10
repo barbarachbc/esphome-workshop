@@ -19,7 +19,15 @@ const { title } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} | My ESPHome Workshop</title>
-    <script type="text/partytown" src="https://umami-xi-ten.vercel.app/script.js" data-website-id="53c1bb7b-6c4e-4ad2-954d-011a1e1216a4"></script>
+    
+    <!-- Analytics: Umami (only loads if configured) -->
+    {siteConfig.analytics.umami.enabled && (
+      <script 
+        type="text/partytown" 
+        src={siteConfig.analytics.umami.url} 
+        data-website-id={siteConfig.analytics.umami.websiteId}>
+      </script>
+    )}
   </head>
   <body>
     <header class="px-8 py-4 shadow-md flex justify-between items-center" style="background: var(--bg-header); color: var(--text-inverse);">
