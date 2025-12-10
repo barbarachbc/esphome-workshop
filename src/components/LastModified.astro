@@ -55,29 +55,29 @@ if (modifiedAge !== null || verifiedAge !== null) {
 ---
 
 {hasDate && (
-  <div class={`flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 py-3 px-4 rounded text-sm my-4 ${
-    freshnessBadge === 'fresh' ? 'bg-emerald-50 dark:bg-emerald-900/20 border-l-4 border-emerald-500 dark:border-emerald-400' :
-    freshnessBadge === 'recent' ? 'bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 dark:border-amber-400' :
-    freshnessBadge === 'old' ? 'bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 dark:border-red-400' :
-    'bg-gray-50 dark:bg-slate-800 border-l-4 border-gray-300 dark:border-slate-600'
+  <div class={`freshness-badge ${
+    freshnessBadge === 'fresh' ? 'freshness-badge-fresh' :
+    freshnessBadge === 'recent' ? 'freshness-badge-recent' :
+    freshnessBadge === 'old' ? 'freshness-badge-old' :
+    'freshness-badge-default'
   }`}>
     {date && (
-      <div class="flex items-center gap-2 text-gray-500 dark:text-slate-400">
+      <div class="flex items-center gap-2 freshness-date-label">
         <span class="text-base">📅</span>
-        <span class="font-medium text-gray-800 dark:text-slate-200">Last updated:</span>
-        <span class="text-gray-800 dark:text-slate-200">{formatDate(date)}</span>
+        <span class="font-medium freshness-date-value">Last updated:</span>
+        <span class="freshness-date-value">{formatDate(date)}</span>
         {showAge && modifiedAge !== null && (
-          <span class="text-gray-500 dark:text-slate-400 italic">({formatAge(modifiedAge)})</span>
+          <span class="italic">({formatAge(modifiedAge)})</span>
         )}
       </div>
     )}
     {verified && (
-      <div class="flex items-center gap-2 text-gray-500 dark:text-slate-400">
+      <div class="flex items-center gap-2 freshness-date-label">
         <span class="text-base">✓</span>
-        <span class="font-medium text-gray-800 dark:text-slate-200">Last verified:</span>
-        <span class="text-gray-800 dark:text-slate-200">{formatDate(verified)}</span>
+        <span class="font-medium freshness-date-value">Last verified:</span>
+        <span class="freshness-date-value">{formatDate(verified)}</span>
         {showAge && verifiedAge !== null && (
-          <span class={`italic ${freshnessBadge === 'old' ? 'text-red-500 dark:text-red-400 font-medium' : 'text-gray-500 dark:text-slate-400'}`}>({formatAge(verifiedAge)})</span>
+          <span class={`italic ${freshnessBadge === 'old' ? 'freshness-age-warning' : ''}`}>({formatAge(verifiedAge)})</span>
         )}
       </div>
     )}
