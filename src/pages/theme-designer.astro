@@ -171,92 +171,49 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <script>
-    // Theme configuration
-    const lightTheme = {
-      'bg-primary': '#ffffff',
-      'bg-secondary': '#f3f4f6',
-      'bg-tertiary': '#f9fafb',
-      'bg-card': '#ffffff',
-      'bg-card-hover': '#f9fafb',
-      'bg-header': '#2563eb',
-      'bg-nav': '#f3f4f6',
-      'bg-footer': '#f3f4f6',
-      'bg-code': '#1f2937',
-      'bg-code-inline': '#f3f4f6',
-      'bg-note': '#fef3c7',
-      'text-primary': '#1f2937',
-      'text-secondary': '#6b7280',
-      'text-tertiary': '#9ca3af',
-      'text-inverse': '#ffffff',
-      'text-heading': '#111827',
-      'text-link': '#2563eb',
-      'text-link-hover': '#1d4ed8',
-      'text-code': '#f3f4f6',
-      'text-hero': '#ffffff',
-      'border-primary': '#e5e7eb',
-      'border-secondary': '#d1d5db',
-      'border-accent': '#2563eb',
-      'border-card': '#e5e7eb',
-      'accent-blue': '#2563eb',
-      'accent-blue-light': '#dbeafe',
-      'accent-blue-dark': '#1e40af',
-      'accent-emerald': '#10b981',
-      'accent-emerald-light': '#d1fae5',
-      'accent-amber': '#f59e0b',
-      'accent-amber-light': '#fef3c7',
-      'accent-yellow-light': '#fef3c7',
-      'accent-red': '#ef4444',
-      'accent-red-light': '#fee2e2',
-      'accent-purple': '#8b5cf6',
-      'accent-purple-light': '#ede9fe',
-      'accent-orange': '#f97316',
-      'accent-orange-light': '#ffedd5',
-      'accent-pink': '#ec4899',
-      'accent-pink-light': '#fce7f3',
-    };
+    // Read theme values directly from computed CSS variables
+    function readThemeFromCSS(isDark: boolean = false): Record<string, string> {
+      // Create a temporary element to read CSS variables
+      const testElement = document.createElement('div');
+      if (isDark) {
+        testElement.className = 'dark';
+      }
+      testElement.style.display = 'none';
+      document.body.appendChild(testElement);
+      
+      const computedStyle = getComputedStyle(testElement);
+      
+      // List of all CSS variables we want to read
+      const cssVars = [
+        'bg-primary', 'bg-secondary', 'bg-tertiary', 'bg-card', 'bg-card-hover',
+        'bg-header', 'bg-nav', 'bg-footer', 'bg-code', 'bg-code-inline', 'bg-note',
+        'text-primary', 'text-secondary', 'text-tertiary', 'text-inverse', 'text-heading',
+        'text-link', 'text-link-hover', 'text-code', 'text-hero',
+        'border-primary', 'border-secondary', 'border-accent', 'border-card',
+        'accent-blue', 'accent-blue-light', 'accent-blue-dark',
+        'accent-emerald', 'accent-emerald-light',
+        'accent-amber', 'accent-amber-light', 'accent-yellow-light',
+        'accent-red', 'accent-red-light',
+        'accent-purple', 'accent-purple-light',
+        'accent-orange', 'accent-orange-light',
+        'accent-pink', 'accent-pink-light',
+      ];
+      
+      const theme: Record<string, string> = {};
+      cssVars.forEach(varName => {
+        const value = computedStyle.getPropertyValue(`--${varName}`).trim();
+        if (value) {
+          theme[varName] = value;
+        }
+      });
+      
+      document.body.removeChild(testElement);
+      return theme;
+    }
 
-    const darkTheme = {
-      'bg-primary': '#181a1f',
-      'bg-secondary': '#22252b',
-      'bg-tertiary': '#2c3038',
-      'bg-card': '#22252b',
-      'bg-card-hover': '#2c3038',
-      'bg-header': '#1f2329',
-      'bg-nav': '#22252b',
-      'bg-footer': '#22252b',
-      'bg-code': '#2c3038',
-      'bg-code-inline': '#2c3038',
-      'bg-note': '#3b3520',
-      'text-primary': '#e0e0e0',
-      'text-secondary': '#b0b0b0',
-      'text-tertiary': '#8c8c8c',
-      'text-inverse': '#181a1f',
-      'text-heading': '#ffffff',
-      'text-link': '#64b5f6',
-      'text-link-hover': '#90caf9',
-      'text-code': '#f5f5f5',
-      'text-hero': '#ffffff',
-      'border-primary': '#383c45',
-      'border-secondary': '#2f333a',
-      'border-accent': '#64b5f6',
-      'border-card': '#383c45',
-      'accent-blue': '#64b5f6',
-      'accent-blue-light': '#bbdefb',
-      'accent-blue-dark': '#1976d2',
-      'accent-emerald': '#4caf50',
-      'accent-emerald-light': '#81c784',
-      'accent-amber': '#ffc107',
-      'accent-amber-light': '#ffe082',
-      'accent-yellow-light': '#fff59d',
-      'accent-red': '#f44336',
-      'accent-red-light': '#ef9a9a',
-      'accent-purple': '#ba68c8',
-      'accent-purple-light': '#ce93d8',
-      'accent-orange': '#ff9800',
-      'accent-orange-light': '#ffb74d',
-      'accent-pink': '#ec407a',
-      'accent-pink-light': '#f48fb1',
-    };
+    // Read themes from CSS on page load
+    const lightTheme = readThemeFromCSS(false);
+    const darkTheme = readThemeFromCSS(true);
 
     let currentTheme = {...lightTheme};
     let isDarkMode = false;
