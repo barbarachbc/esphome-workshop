@@ -1,0 +1,621 @@
+---
+/**
+ * ImageMap Component
+ * 
+ * Displays a large image with interactive hotspot areas that show device information
+ * on hover and link to device detail pages on click.
+ * 
+ * Features:
+ * - SVG-based hotspots that scale with image
+ * - Hover tooltips with device info
+ * - Click to navigate to device page
+ * - Supports rect, circle, and polygon shapes
+ * - Fully responsive
+ * - Accessible with ARIA labels
+ */
+
+import { getEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+type Shape = 'rect' | 'circle' | 'polygon';
+
+interface RectCoords {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+interface CircleCoords {
+  cx: number;
+  cy: number;
+  r: number;
+}
+
+interface PolygonCoords {
+  points: string; // SVG points format: "x1,y1 x2,y2 x3,y3"
+}
+
+interface Hotspot {
+  deviceSlug: string;
+  shape: Shape;
+  coords: RectCoords | CircleCoords | PolygonCoords;
+  label?: string; // Override device title
+}
+
+interface Props {
+  image: string;
+  alt: string;
+  hotspots: Hotspot[];
+  imageWidth?: number; // Original image width for aspect ratio
+  imageHeight?: number; // Original image height
+  showLabels?: boolean; // Always show labels vs hover-only
+}
+
+const { image, alt, hotspots, imageWidth = 1200, imageHeight = 800, showLabels = false } = Astro.props;
+
+// Fetch device data for all hotspots
+const enrichedHotspots = await Promise.all(
+  hotspots.map(async (spot) => {
+    const device = await getEntry('devices', spot.deviceSlug);
+    if (!device) {
+      console.warn(`Device not found: ${spot.deviceSlug}`);
+      return null;
+    }
+    
+    return {
+      ...spot,
+      device: device.data,
+      deviceSlug: spot.deviceSlug,
+      url: `/devices/${spot.deviceSlug}`,
+    };
+  })
+);
+
+// Filter out any failed lookups
+const validHotspots = enrichedHotspots.filter((spot): spot is NonNullable<typeof spot> => spot !== null);
+
+// Generate unique ID for this instance
+const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div class="image-map-container">
+  <div class="image-map-wrapper" style={`aspect-ratio: ${imageWidth}/${imageHeight}`}>
+    <img src={image} alt={alt} class="image-map-image" />
+    
+    <svg 
+      class="image-map-svg" 
+      viewBox={`0 0 ${imageWidth} ${imageHeight}`}
+      xmlns="http://www.w3.org/2000/svg"
+      aria-label="Interactive device map"
+    >
+      {validHotspots.map((hotspot, index) => {
+        const { shape, coords, device, deviceSlug, url, label } = hotspot;
+        const hotspotId = `${mapId}-hotspot-${index}`;
+        const title = label || device.title;
+        
+        return (
+          <a href={url} class="hotspot-link" data-hotspot-id={hotspotId}>
+            {shape === 'rect' && (
+              <rect
+                x={(coords as RectCoords).x}
+                y={(coords as RectCoords).y}
+                width={(coords as RectCoords).width}
+                height={(coords as RectCoords).height}
+                class="hotspot-area"
+                aria-label={title}
+              />
+            )}
+            
+            {shape === 'circle' && (
+              <circle
+                cx={(coords as CircleCoords).cx}
+                cy={(coords as CircleCoords).cy}
+                r={(coords as CircleCoords).r}
+                class="hotspot-area"
+                aria-label={title}
+              />
+            )}
+            
+            {shape === 'polygon' && (
+              <polygon
+                points={(coords as PolygonCoords).points}
+                class="hotspot-area"
+                aria-label={title}
+              />
+            )}
+          </a>
+        );
+      })}
+    </svg>
+    
+    <!-- Tooltips -->
+    {validHotspots.map((hotspot, index) => {
+      const { device, deviceSlug, url, label } = hotspot;
+      const hotspotId = `${mapId}-hotspot-${index}`;
+      const title = label || device.title;
+      
+      // Extract dimensions from description if present
+      const dimensionMatch = device.description?.match(/(\d+\.?\d*)[""]|(\d+x\d+)/i);
+      const hasColor = device.description?.toLowerCase().includes('rgb') || 
+                       device.description?.toLowerCase().includes('color') ||
+                       device.tags?.some(tag => tag.toLowerCase() === 'rgb');
+      const isMono = device.description?.toLowerCase().includes('monochrome') ||
+                     device.description?.toLowerCase().includes('oled');
+      
+      return (
+        <div class="hotspot-tooltip" data-tooltip-for={hotspotId}>
+          <button class="tooltip-close" data-close-tooltip={hotspotId} aria-label="Close">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+          <div class="tooltip-header">
+            <h4>{title}</h4>
+            {device.category && (
+              <span class="category-badge-purple">{device.category}</span>
+            )}
+          </div>
+          
+          <p class="tooltip-description">{device.description}</p>
+          
+          <div class="tooltip-specs">
+            {dimensionMatch && (
+              <div class="spec-item">
+                <span class="spec-label">Size:</span>
+                <span class="spec-value">{dimensionMatch[0]}</span>
+              </div>
+            )}
+            
+            {(hasColor || isMono) && (
+              <div class="spec-item">
+                <span class="spec-label">Type:</span>
+                <span class="spec-value">{hasColor ? 'Color' : 'Monochrome'}</span>
+              </div>
+            )}
+            
+            {device.connectionTypes && device.connectionTypes.length > 0 && (
+              <div class="spec-item">
+                <span class="spec-label">Interface:</span>
+                <div class="connection-badges">
+                  {device.connectionTypes.map(conn => (
+                    <span class="connection-badge">{conn.toUpperCase()}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <div class="tooltip-footer">
+            <a href={url} class="view-details-button">
+              View Details →
+            </a>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+  
+  {showLabels && (
+    <div class="image-map-labels">
+      {validHotspots.map((hotspot) => {
+        const { device, deviceSlug, url, label } = hotspot;
+        const title = label || device.title;
+        return (
+          <a href={url} class="device-label-link">
+            {title}
+          </a>
+        );
+      })}
+    </div>
+  )}
+</div>
+
+<style>
+  .image-map-container {
+    width: 100%;
+    margin: 2rem 0;
+  }
+  
+  .image-map-wrapper {
+    position: relative;
+    width: 100%;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .image-map-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  
+  .image-map-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  
+  .hotspot-link {
+    pointer-events: all;
+    cursor: pointer;
+  }
+  
+  .hotspot-area {
+    fill: transparent;
+    stroke: var(--accent-blue);
+    stroke-width: 3;
+    stroke-opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .hotspot-link:hover .hotspot-area,
+  .hotspot-link:focus .hotspot-area {
+    stroke-opacity: 1;
+    fill: var(--accent-blue);
+    fill-opacity: 0.15;
+  }
+  
+  .hotspot-link:focus {
+    outline: none;
+  }
+  
+  /* Tooltips */
+  .hotspot-tooltip {
+    position: absolute;
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: var(--shadow-xl);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 1000;
+    max-width: 300px;
+    left: 50%;
+    top: 50%;
+  }
+  
+  .hotspot-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+  
+  /* Close button - only visible on mobile */
+  .tooltip-close {
+    display: none;
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+    z-index: 10;
+  }
+  
+  .tooltip-close:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+  
+  /* Mobile: Position in center of screen */
+  @media (hover: none) and (pointer: coarse) {
+    .hotspot-tooltip {
+      position: fixed;
+      left: 50% !important;
+      top: 50% !important;
+      transform: translate(-50%, -50%) scale(0.9);
+      max-width: 90%;
+      width: min(400px, 90vw);
+      border-radius: 0.75rem;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 1.5rem 1rem 1rem;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+    
+    .hotspot-tooltip.visible {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+    
+    .tooltip-close {
+      display: block;
+    }
+    
+    /* Make hotspot areas always slightly visible on mobile */
+    .hotspot-area {
+      stroke-opacity: 0.3;
+      stroke-width: 2;
+    }
+  }
+  
+  .tooltip-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .tooltip-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-heading);
+  }
+  
+  .tooltip-description {
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+  
+  .tooltip-specs {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-primary);
+  }
+  
+  .spec-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .spec-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .spec-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    min-width: 4rem;
+  }
+  
+  .spec-value {
+    color: var(--text-primary);
+  }
+  
+  .connection-badges {
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+  }
+  
+  .tooltip-footer {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-primary);
+    display: none;
+  }
+  
+  .view-details-button {
+    display: inline-block;
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--accent-blue);
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    transition: background 0.2s ease;
+  }
+  
+  .view-details-button:hover {
+    background: var(--accent-blue-dark);
+  }
+  
+  /* Show footer only on mobile */
+  @media (hover: none) and (pointer: coarse) {
+    .tooltip-footer {
+      display: block;
+    }
+  }
+  
+  /* Labels list (optional) */
+  .image-map-labels {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .device-label-link {
+    padding: 0.375rem 0.75rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    color: var(--text-link);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  
+  .device-label-link:hover {
+    background: var(--accent-blue-light);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue-dark);
+  }
+</style>
+
+<script>
+  class ImageMapManager {
+    private hotspotLinks: NodeListOf<Element>;
+    private tooltips: Map<string, HTMLElement> = new Map();
+    private activeTooltip: string | null = null;
+    private isTouchDevice: boolean = false;
+    
+    constructor() {
+      this.hotspotLinks = document.querySelectorAll('.hotspot-link');
+      this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      this.init();
+    }
+    
+    init() {
+      // Build tooltip map
+      document.querySelectorAll<HTMLElement>('.hotspot-tooltip').forEach(tooltip => {
+        const forId = tooltip.getAttribute('data-tooltip-for');
+        if (forId) {
+          this.tooltips.set(forId, tooltip);
+        }
+      });
+      
+      // Add event listeners
+      this.hotspotLinks.forEach(link => {
+        const hotspotId = link.getAttribute('data-hotspot-id');
+        if (!hotspotId) return;
+        
+        if (this.isTouchDevice) {
+          // Mobile/Touch: First tap shows tooltip, second tap navigates
+          link.addEventListener('click', (e) => this.handleTouch(hotspotId, e as MouseEvent));
+        } else {
+          // Desktop: Hover shows tooltip, click navigates
+          link.addEventListener('mouseenter', (e) => this.showTooltip(hotspotId, e as MouseEvent));
+          link.addEventListener('mouseleave', () => this.hideTooltip(hotspotId));
+          link.addEventListener('mousemove', (e) => this.updateTooltipPosition(hotspotId, e as MouseEvent));
+        }
+        
+        // Keyboard accessibility
+        link.addEventListener('focus', (e) => this.showTooltip(hotspotId, e as FocusEvent));
+        link.addEventListener('blur', () => this.hideTooltip(hotspotId));
+      });
+      
+      // Add close button listeners
+      document.querySelectorAll<HTMLElement>('.tooltip-close').forEach(closeBtn => {
+        const hotspotId = closeBtn.getAttribute('data-close-tooltip');
+        if (hotspotId) {
+          closeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.hideTooltip(hotspotId);
+          });
+        }
+      });
+      
+      // Close tooltip when tapping outside on mobile
+      if (this.isTouchDevice) {
+        document.addEventListener('click', (e) => this.handleOutsideClick(e));
+      }
+    }
+    
+    handleTouch(hotspotId: string, event: MouseEvent) {
+      event.preventDefault();
+      event.stopPropagation();
+      
+      // Hide any other active tooltip first
+      if (this.activeTooltip && this.activeTooltip !== hotspotId) {
+        this.hideTooltip(this.activeTooltip);
+      }
+      
+      // Show this tooltip
+      this.activeTooltip = hotspotId;
+      this.showTooltipCentered(hotspotId, event);
+    }
+    
+    handleOutsideClick(event: Event) {
+      const target = event.target as HTMLElement;
+      
+      // Don't close if clicking on a tooltip, hotspot link, or the view details button
+      if (target.closest('.hotspot-tooltip') || 
+          target.closest('.hotspot-link') ||
+          target.closest('.view-details-button')) {
+        return;
+      }
+      
+      // Close active tooltip
+      if (this.activeTooltip) {
+        this.hideTooltip(this.activeTooltip);
+        this.activeTooltip = null;
+      }
+    }
+    
+    showTooltip(hotspotId: string, event: MouseEvent | FocusEvent) {
+      const tooltip = this.tooltips.get(hotspotId);
+      if (!tooltip) return;
+      
+      tooltip.classList.add('visible');
+      
+      if (event instanceof MouseEvent) {
+        this.updateTooltipPosition(hotspotId, event);
+      }
+    }
+    
+    showTooltipCentered(hotspotId: string, event: MouseEvent) {
+      const tooltip = this.tooltips.get(hotspotId);
+      if (!tooltip) return;
+      
+      tooltip.classList.add('visible');
+      
+      // On mobile, tooltip is positioned fixed at bottom via CSS
+      // No need to set position here - it's handled by the stylesheet
+    }
+    
+    hideTooltip(hotspotId: string) {
+      const tooltip = this.tooltips.get(hotspotId);
+      if (!tooltip) return;
+      
+      tooltip.classList.remove('visible');
+      
+      if (this.activeTooltip === hotspotId) {
+        this.activeTooltip = null;
+      }
+    }
+    
+    updateTooltipPosition(hotspotId: string, event: MouseEvent) {
+      const tooltip = this.tooltips.get(hotspotId);
+      if (!tooltip) return;
+      
+      const wrapper = tooltip.closest('.image-map-wrapper');
+      if (!wrapper) return;
+      
+      const rect = wrapper.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      
+      // Position tooltip offset from cursor
+      const offsetX = 20;
+      const offsetY = 20;
+      
+      // Check if tooltip would go off right edge
+      const tooltipRect = tooltip.getBoundingClientRect();
+      const wouldOverflowRight = x + tooltipRect.width + offsetX > rect.width;
+      const wouldOverflowBottom = y + tooltipRect.height + offsetY > rect.height;
+      
+      const finalX = wouldOverflowRight ? x - tooltipRect.width - offsetX : x + offsetX;
+      const finalY = wouldOverflowBottom ? y - tooltipRect.height - offsetY : y + offsetY;
+      
+      tooltip.style.left = `${finalX}px`;
+      tooltip.style.top = `${finalY}px`;
+    }
+  }
+  
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ImageMapManager());
+  } else {
+    new ImageMapManager();
+  }
+  
+  // Reinitialize after Astro view transitions (if enabled)
+  document.addEventListener('astro:page-load', () => new ImageMapManager());
+</script>
