@@ -1,7 +1,7 @@
 ---
 title: '12 RGB LED Ring'
 description: '12 RGB LED Ring'
-category: "display"
+category: "light"
 manufacturer: "Unknown"
 model: "Unknown"
 connectionTypes: ["gpio"]
@@ -10,7 +10,7 @@ tags: ["led", "matrix", "rgb", "display", "sk6812"]
 productionStatus: "discontinued"
 dateAcquired: "2017"
 status: "testing"
-lastModified: "2025-12-09"
+lastModified: "2025-12-11"
 ---
 
 ## Overview
