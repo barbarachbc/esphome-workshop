@@ -109,7 +109,6 @@ const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
   
   <div class="image-map-wrapper" data-panzoom-target style={`aspect-ratio: ${imageWidth}/${imageHeight}`}>
     <img src={image} alt={alt} style="max-width: 100%;" class="image-map-image" />
-    
     <svg 
       class="image-map-svg" 
       viewBox={`0 0 ${imageWidth} ${imageHeight}`}
@@ -120,7 +119,6 @@ const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
         const { shape, coords, device, deviceSlug, url, label } = hotspot;
         const hotspotId = `${mapId}-hotspot-${index}`;
         const title = label || device.title;
-        
         return (
           <a href={url} class="hotspot-link" data-hotspot-id={hotspotId}>
             {shape === 'rect' && (
@@ -133,7 +131,6 @@ const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
                 aria-label={title}
               />
             )}
-            
             {shape === 'circle' && (
               <circle
                 cx={(coords as CircleCoords).cx}
@@ -143,7 +140,6 @@ const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
                 aria-label={title}
               />
             )}
-            
             {shape === 'polygon' && (
               <polygon
                 points={(coords as PolygonCoords).points}
@@ -155,76 +151,71 @@ const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
         );
       })}
     </svg>
-    
-    <!-- Tooltips -->
-    {validHotspots.map((hotspot, index) => {
-      const { device, deviceSlug, url, label } = hotspot;
-      const hotspotId = `${mapId}-hotspot-${index}`;
-      const title = label || device.title;
-      
-      // Extract dimensions from description if present
-      const dimensionMatch = device.description?.match(/(\d+\.?\d*)[""]|(\d+x\d+)/i);
-      const hasColor = device.description?.toLowerCase().includes('rgb') || 
-                       device.description?.toLowerCase().includes('color') ||
-                       device.tags?.some(tag => tag.toLowerCase() === 'rgb');
-      const isMono = device.description?.toLowerCase().includes('monochrome') ||
-                     device.description?.toLowerCase().includes('oled');
-      
-      return (
-        <div class="hotspot-tooltip" data-tooltip-for={hotspotId}>
-          <button class="tooltip-close" data-close-tooltip={hotspotId} aria-label="Close">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-          <div class="tooltip-header">
-            <h4>{title}</h4>
-            {device.category && (
-              <span class="category-badge-purple">{device.category}</span>
-            )}
-          </div>
-          <div class="tooltip-body">
-            <a href={url} class="tooltip-body-link no-underline">
-                <p class="tooltip-description">{device.description}</p>
-                
-                <div class="tooltip-specs">
-                {dimensionMatch && (
-                    <div class="spec-item">
-                    <span class="spec-label">Size:</span>
-                    <span class="spec-value">{dimensionMatch[0]}</span>
-                    </div>
-                )}
-                
-                {(hasColor || isMono) && (
-                    <div class="spec-item">
-                    <span class="spec-label">Type:</span>
-                    <span class="spec-value">{hasColor ? 'Color' : 'Monochrome'}</span>
-                    </div>
-                )}
-                
-                {device.connectionTypes && device.connectionTypes.length > 0 && (
-                    <div class="spec-item">
-                    <span class="spec-label">Interface:</span>
-                    <div class="connection-badges">
-                        {device.connectionTypes.map(conn => (
-                        <span class="connection-badge">{conn.toUpperCase()}</span>
-                        ))}
-                    </div>
-                    </div>
-                )}
-                </div>
-            </a>
-          </div>
-          <div class="tooltip-footer">
-            <a href={url} class="view-details-button">
-              View Details →
-            </a>
-          </div>
-        </div>
-      );
-    })}
   </div>
+
+  {/* Tooltips rendered outside the zoomed wrapper to avoid scaling */}
+  {validHotspots.map((hotspot, index) => {
+    const { device, deviceSlug, url, label } = hotspot;
+    const hotspotId = `${mapId}-hotspot-${index}`;
+    const title = label || device.title;
+    // Extract dimensions from description if present
+    const dimensionMatch = device.description?.match(/(\d+\.?\d*)[""]|(\d+x\d+)/i);
+    const hasColor = device.description?.toLowerCase().includes('rgb') || 
+                     device.description?.toLowerCase().includes('color') ||
+                     device.tags?.some(tag => tag.toLowerCase() === 'rgb');
+    const isMono = device.description?.toLowerCase().includes('monochrome') ||
+                   device.description?.toLowerCase().includes('oled');
+    return (
+      <div class="hotspot-tooltip" data-tooltip-for={hotspotId} style="position: absolute;">
+        <button class="tooltip-close" data-close-tooltip={hotspotId} aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <div class="tooltip-header">
+          <h4>{title}</h4>
+          {device.category && (
+            <span class="category-badge-purple">{device.category}</span>
+          )}
+        </div>
+        <div class="tooltip-body">
+          <a href={url} class="tooltip-body-link no-underline">
+              <p class="tooltip-description">{device.description}</p>
+              <div class="tooltip-specs">
+              {dimensionMatch && (
+                  <div class="spec-item">
+                  <span class="spec-label">Size:</span>
+                  <span class="spec-value">{dimensionMatch[0]}</span>
+                  </div>
+              )}
+              {(hasColor || isMono) && (
+                  <div class="spec-item">
+                  <span class="spec-label">Type:</span>
+                  <span class="spec-value">{hasColor ? 'Color' : 'Monochrome'}</span>
+                  </div>
+              )}
+              {device.connectionTypes && device.connectionTypes.length > 0 && (
+                  <div class="spec-item">
+                  <span class="spec-label">Interface:</span>
+                  <div class="connection-badges">
+                      {device.connectionTypes.map(conn => (
+                      <span class="connection-badge">{conn.toUpperCase()}</span>
+                      ))}
+                  </div>
+                  </div>
+              )}
+              </div>
+          </a>
+        </div>
+        <div class="tooltip-footer">
+          <a href={url} class="view-details-button">
+            View Details →
+          </a>
+        </div>
+      </div>
+    );
+  })}
   
   {showLabels && (
     <div class="image-map-labels">
@@ -749,24 +740,50 @@ const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
       const tooltip = this.tooltips.get(hotspotId);
       if (!tooltip) return;
 
-      const wrapper = tooltip.closest('.image-map-wrapper');
+      // Find the container (tooltips are now direct children of container, not wrapper)
+      const container = tooltip.closest('.image-map-container');
+      if (!container) return;
+
+      const wrapper = container.querySelector('.image-map-wrapper');
       if (!wrapper) return;
 
-      const rect = wrapper.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
+      // Find the Panzoom instance for this wrapper
+      const panzoom = this.panzoomInstances.get(wrapper);
+      let scale = 1, panX = 0, panY = 0;
+      if (panzoom) {
+        scale = typeof panzoom.getScale === 'function' ? panzoom.getScale() : 1;
+        const pan = typeof panzoom.getPan === 'function' ? panzoom.getPan() : { x: 0, y: 0 };
+        panX = pan.x;
+        panY = pan.y;
+      }
+
+      const containerRect = container.getBoundingClientRect();
+      const wrapperRect = wrapper.getBoundingClientRect();
+      
+      // Mouse position relative to wrapper
+      let x = event.clientX - wrapperRect.left;
+      let y = event.clientY - wrapperRect.top;
+
+      // Adjust for pan/zoom (convert screen coords to image coords)
+      x = (x - panX) / scale;
+      y = (y - panY) / scale;
+
+      // Now convert to container coordinates (for absolute positioning relative to container)
+      let screenX = x * scale + panX + (wrapperRect.left - containerRect.left);
+      let screenY = y * scale + panY + (wrapperRect.top - containerRect.top);
 
       // Position tooltip offset from cursor
       const offsetX = 20;
       const offsetY = 20;
 
-      // Check if tooltip would go off right edge
       const tooltipRect = tooltip.getBoundingClientRect();
-      const wouldOverflowRight = x + tooltipRect.width + offsetX > rect.width;
-      const wouldOverflowBottom = y + tooltipRect.height + offsetY > rect.height;
+      const containerWidth = containerRect.width;
+      const containerHeight = containerRect.height;
+      const wouldOverflowRight = screenX + tooltipRect.width + offsetX > containerWidth;
+      const wouldOverflowBottom = screenY + tooltipRect.height + offsetY > containerHeight;
 
-      const finalX = wouldOverflowRight ? x - tooltipRect.width - offsetX : x + offsetX;
-      const finalY = wouldOverflowBottom ? y - tooltipRect.height - offsetY : y + offsetY;
+      const finalX = wouldOverflowRight ? screenX - tooltipRect.width - offsetX : screenX + offsetX;
+      const finalY = wouldOverflowBottom ? screenY - tooltipRect.height - offsetY : screenY + offsetY;
 
       tooltip.style.left = `${finalX}px`;
       tooltip.style.top = `${finalY}px`;
