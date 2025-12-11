@@ -1,23 +1,23 @@
 ---
 /**
- * LCD Display Comparison Page
+ * Display Size Comparison Page
  * 
- * Example page demonstrating the ImageMap component with an interactive
- * comparison of various LCD displays showing their relative sizes and specs.
+ * Interactive comparison of various displays showing their relative sizes,
+ * specifications, and capabilities. Visitors can hover (desktop) or tap (mobile)
+ * on each display to see details and navigate to the full device page.
  */
 
-import Layout from '../layouts/Layout.astro';
-import ImageMap from '../components/ImageMap.astro';
-import comparisonImage from '../content/devices/images/all_displays.jpg';
+import Layout from '../../layouts/Layout.astro';
+import ImageMap from '../../components/ImageMap.astro';
+import comparisonImage from '../../content/devices/images/all_displays.jpg';
 
-const title = 'LCD Display Size Comparison';
-const description = 'Interactive comparison of various LCD displays showing relative sizes, specifications, and capabilities';
+const title = 'Display Size Comparison';
+const description = 'Interactive comparison of various displays showing relative sizes, specifications, and capabilities';
 
 // Define the comparison image and hotspots
-// Note: You'll need to create the actual comparison image and place it in public/images/comparisons/
-const displayComparison = {
+export const displayComparison = {
   image: comparisonImage.src,
-  alt: 'Size comparison of LCD displays lined up from smallest to largest',
+  alt: 'Size comparison of displays lined up showing their relative sizes',
   imageWidth: 1873,
   imageHeight: 1048,
   hotspots: [
@@ -111,34 +111,9 @@ const displayComparison = {
   }
 ]
 };
-
-// You can define multiple comparison images
-const oledComparison = {
-  image: '/images/comparisons/oled-display-lineup.jpg',
-  alt: 'Size comparison of OLED displays',
-  imageWidth: 1200,
-  imageHeight: 600,
-  hotspots: [
-    {
-      deviceSlug: 'sh1106-oled',
-      shape: 'rect' as const,
-      coords: { x: 100, y: 200, width: 250, height: 150 }
-    },
-    {
-      deviceSlug: 'sh1107-spi-oled',
-      shape: 'rect' as const,
-      coords: { x: 400, y: 200, width: 250, height: 150 }
-    },
-    {
-      deviceSlug: 'grove-oled-ssd1315',
-      shape: 'rect' as const,
-      coords: { x: 700, y: 200, width: 250, height: 150 }
-    },
-  ]
-};
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title}>
   <div class="max-w-6xl mx-auto px-4 py-8">
     <!-- Page Header -->
     <header class="mb-8">
@@ -163,6 +138,7 @@ const oledComparison = {
           <li>👆 <strong>Click</strong> on a display to navigate to its detailed page</li>
           <li>📏 All displays are shown at their relative actual sizes</li>
           <li>🎨 Color-coded outlines appear on hover to highlight each device</li>
+          <li>🔍 Use zoom controls in the top-right to zoom in/out and pan around</li>
         </ul>
       </div>
       
@@ -173,96 +149,22 @@ const oledComparison = {
           <li>🔘 <strong>Tap "View Details"</strong> button to navigate to the device page</li>
           <li>✕ <strong>Close button or tap outside</strong> to dismiss the panel</li>
           <li>📏 All displays are shown at their relative actual sizes</li>
+          <li>🔍 Pinch to zoom and drag to pan around the image</li>
         </ul>
       </div>
     </div>
 
-    <!-- LCD Display Comparison -->
+    <!-- Display Comparison -->
     <section class="mb-12">
       <h2 class="text-2xl font-bold mb-4" style="color: var(--text-heading)">
-        LCD Displays
+        All Displays
       </h2>
       <p class="mb-6" style="color: var(--text-secondary)">
-        Color TFT LCD displays ranging from 0.96" to 2.8" diagonal. These displays
-        typically use SPI communication and require more power than OLEDs but offer
-        vibrant colors and better sunlight visibility.
+        This comparison includes LCD displays, OLED displays, LED matrices, and RGB LED rings.
+        Hover or tap on any display to see detailed specifications and connection types.
       </p>
-      
-      <div class="comparison-note mb-4 p-4 rounded-lg" style="background: var(--accent-blue-light); border-left: 4px solid var(--accent-blue)">
-        <p style="color: var(--text-primary); margin: 0;">
-          <strong>Note:</strong> This is a demonstration page. To use this with actual images:
-        </p>
-        <ol class="mt-2 ml-6" style="color: var(--text-primary)">
-          <li>Take a photo of your displays lined up side-by-side</li>
-          <li>Save it to <code style="background: var(--bg-code-inline); padding: 0.125rem 0.375rem; border-radius: 0.25rem;">/public/images/comparisons/lcd-display-lineup.jpg</code></li>
-          <li>Measure pixel coordinates for each display in the image</li>
-          <li>Update the hotspot coordinates in this file</li>
-        </ol>
-      </div>
       
       <ImageMap {...displayComparison} />
-    </section>
-
-    <!-- OLED Display Comparison -->
-    <section class="mb-12">
-      <h2 class="text-2xl font-bold mb-4" style="color: var(--text-heading)">
-        OLED Displays
-      </h2>
-      <p class="mb-6" style="color: var(--text-secondary)">
-        Monochrome OLED displays with excellent contrast and low power consumption.
-        Perfect for battery-powered projects where you need good visibility without
-        backlighting.
-      </p>
-      
-      <div class="comparison-note mb-4 p-4 rounded-lg" style="background: var(--accent-emerald-light); border-left: 4px solid var(--accent-emerald)">
-        <p style="color: var(--text-primary); margin: 0;">
-          <strong>Coming Soon:</strong> OLED display comparison image with SH1106, SH1107, and SSD1315 displays.
-        </p>
-      </div>
-      
-      <!-- Uncomment when you have the OLED comparison image -->
-      <!-- <ImageMap {...oledComparison} /> -->
-    </section>
-
-    <!-- Additional Info -->
-    <section class="mt-12 p-6 rounded-lg" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary)">
-      <h2 class="text-xl font-semibold mb-4" style="color: var(--text-heading)">
-        Creating Your Own Comparison Images
-      </h2>
-      
-      <div class="space-y-4" style="color: var(--text-secondary)">
-        <div>
-          <h3 class="font-semibold mb-2" style="color: var(--text-primary)">1. Photography Tips</h3>
-          <ul class="ml-6 space-y-1">
-            <li>Use a plain, contrasting background</li>
-            <li>Ensure even lighting without harsh shadows</li>
-            <li>Take the photo from directly above (bird's eye view)</li>
-            <li>Line up displays in a visually clear arrangement</li>
-            <li>Include a ruler or reference object for scale</li>
-          </ul>
-        </div>
-        
-        <div>
-          <h3 class="font-semibold mb-2" style="color: var(--text-primary)">2. Finding Hotspot Coordinates</h3>
-          <ul class="ml-6 space-y-1">
-            <li>Open your image in an image editor (GIMP, Photoshop, etc.)</li>
-            <li>Note the total image dimensions (e.g., 1200x800)</li>
-            <li>Use the selection tool to measure each display's position</li>
-            <li>Record x, y, width, height for rectangles</li>
-            <li>For circles: center x, center y, radius</li>
-          </ul>
-        </div>
-        
-        <div>
-          <h3 class="font-semibold mb-2" style="color: var(--text-primary)">3. Updating the Component</h3>
-          <p>Edit the hotspots array in this file with your measured coordinates:</p>
-          <pre class="mt-2 p-3 rounded overflow-x-auto" style="background: var(--bg-code); color: var(--text-code)"><code>{`{
-  deviceSlug: 'your-device-slug',
-  shape: 'rect',
-  coords: { x: 100, y: 200, width: 300, height: 240 }
-}`}</code></pre>
-        </div>
-      </div>
     </section>
 
     <!-- Related Links -->

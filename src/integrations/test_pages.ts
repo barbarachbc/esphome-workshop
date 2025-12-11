@@ -13,10 +13,6 @@ export default function integration() : AstroIntegration{
                         pattern: '/theme-designer',
                         entrypoint: 'src/pages/_theme-designer.astro',
                     });
-                    params.injectRoute({
-                        pattern: '/display-comparison',
-                        entrypoint: 'src/pages/_display-comparison.astro',
-                    });
                 } else {
                     console.log('[test_pages] Not injecting routes (not in dev mode)');
                 }

@@ -5,6 +5,9 @@ import IssueReportButton from '../../components/IssueReportButton.astro';
 import LastModified from '../../components/LastModified.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 
+// Import the function to get devices in the display comparison
+import { displayComparison } from './all-displays.astro';
+
 export async function getStaticPaths() {
   const devices = await getCollection('devices');
   return devices.map(device => ({
@@ -80,6 +83,9 @@ const connectionTypeMap: Record<string, string> = {
   'built-in': 'builtin',
 };
 
+// Check if this device is in the display comparison
+const isInDisplayComparison = displayComparison.hotspots.some(x => x.deviceSlug === device.slug);
+console.log(isInDisplayComparison);
 // Automatically determine device status based on project usage
 let displayStatus: 'ready' | 'testing' | 'active' | 'deployed' | 'retired' | 'pending' | 'unsupported' = device.data.status;
 if (projectsUsingDevice.length > 0) {
@@ -200,6 +206,29 @@ if (projectsUsingDevice.length > 0) {
                 <span class="inline-block px-4 py-2 rounded text-base font-medium" style="background: var(--bg-secondary); color: var(--text-primary);">{conn}</span>
               );
             })}
+          </div>
+        </div>
+      )}
+
+      {isInDisplayComparison && (
+        <div class="my-8 p-6 rounded-lg border-2" style="background: var(--accent-blue-light); border-color: var(--accent-blue);">
+          <div class="flex items-center gap-3">
+            <svg class="w-6 h-6 shrink-0" style="color: var(--accent-blue);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
+            </svg>
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold m-0 mb-1" style="color: var(--accent-blue-dark);">📐 See This Display in Action</h3>
+              <p class="m-0 text-sm" style="color: var(--text-primary);">
+                This display is featured in our interactive size comparison.
+              </p>
+            </div>
+            <a 
+              href="/devices/all-displays" 
+              class="px-4 py-2 rounded-lg font-semibold text-white no-underline transition-all hover:shadow-lg hover:-translate-y-0.5"
+              style="background: var(--accent-blue);"
+            >
+              View Comparison →
+            </a>
           </div>
         </div>
       )}
