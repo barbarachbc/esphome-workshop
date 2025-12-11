@@ -261,7 +261,14 @@ const enableCollapsible = headingSections.filter(s => s.children.length > 0).len
     if (backToTopButton) {
       // Show/hide button based on scroll position
       const toggleBackToTopButton = () => {
-        if (window.scrollY > 300) {
+        const lightbox = document.getElementById('lightbox');
+        const isLightboxActive = lightbox?.classList.contains('active');
+        
+        // Hide if lightbox is active, otherwise show/hide based on scroll
+        if (isLightboxActive) {
+          backToTopButton.style.opacity = '0';
+          backToTopButton.style.pointerEvents = 'none';
+        } else if (window.scrollY > 300) {
           backToTopButton.style.opacity = '1';
           backToTopButton.style.pointerEvents = 'auto';
         } else {
@@ -275,6 +282,16 @@ const enableCollapsible = headingSections.filter(s => s.children.length > 0).len
 
       // Check on scroll - call directly (passive event, minimal perf impact)
       window.addEventListener('scroll', toggleBackToTopButton, { passive: true });
+      
+      // Also check when lightbox opens/closes
+      const observer = new MutationObserver(() => {
+        toggleBackToTopButton();
+      });
+      
+      const lightbox = document.getElementById('lightbox');
+      if (lightbox) {
+        observer.observe(lightbox, { attributes: true, attributeFilter: ['class'] });
+      }
 
       backToTopButton.addEventListener('click', () => {
         // Prevent observer from setting hash during scroll
