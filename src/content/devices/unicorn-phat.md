@@ -20,12 +20,15 @@ references:
     url: "https://github.com/adafruit/Adafruit_NeoPixel"
 dateAcquired: "2017"
 status: "ready"
-lastModified: "2025-12-09"
+lastModified: "2025-12-11"
+image: "/images/devices/thumbnails/unicorn.jpg"
 ---
 
 ## Overview
 
 The Unicorn pHAT is a compact 4x8 RGB LED matrix designed as a HAT for Raspberry Pi Zero. It features 32 individually addressable RGB LEDs (SK6812 compatible) in a 3.5mm x 3.5mm package, providing vibrant color display capabilities in a small form factor.
+
+![Unicorn pHat](./images/unicorn-phat/unicorn.jpg)
 
 The board features:
 - 4x8 (32 total) RGB LEDs
@@ -76,6 +79,8 @@ light:
 ### Using With Addressable Light Display
 
 This example uses an example from [addressable light](https://esphome.io/components/display/addressable_light/) and draws bulls-eye pattern on 8x4 display (original example on 8x8 ... well, it's kind of bulls-eye pattern).
+
+![Unicorn pHat Bulls-eye](./images/unicorn-phat/unicorn-bullseye.jpg)
 
 Example uses 8266 based [D1 mini](./esp8266-d1-mini).
 

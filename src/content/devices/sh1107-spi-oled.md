@@ -14,7 +14,7 @@ purchaseLinks:
 status: "ready"
 dateAcquired: "Jan 2022"
 image: "/images/devices/thumbnails/sh1107-spi-oled.jpg"
-lastModified: "2025-12-09"
+lastModified: "2025-12-11"
 ---
 
 ## Overview
@@ -23,14 +23,14 @@ This OLED is a beautiful monochrome display.
 
 OLED displays are self-illuminating (no backlight needed), have excellent contrast, wide viewing angles, and consume very little power.
 
+![Pimoroni 1.12" Mono OLED](images/sh1107-spi-oled/sh1107-spi-oled-action.jpg)
+
 - 1.12" white/black OLED display (128x128 pixels)
 - Uses the SH1107 driver chip
 - 20x20mm active area
 - SPI or I2C (address 0x3C/0x3D (cut trace)) interface
 - This version uses SPI
 - 3.3V or 5V compatible
-
-![Pimoroni 1.12" Mono OLED](images/sh1107-spi-oled/sh1107-spi-oled-action.jpg)
 
 ## Configuration Notes
 

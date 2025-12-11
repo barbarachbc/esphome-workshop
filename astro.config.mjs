@@ -4,9 +4,11 @@ import tailwindcss from "@tailwindcss/vite";
 import pagefind from "astro-pagefind";
 
 import partytown from '@astrojs/partytown';
+import { siteConfig } from './src/config';
 
 // https://astro.build/config
 export default defineConfig({
+  site: siteConfig.siteUrl,
   integrations: [mdx(), partytown(), pagefind()],
   markdown: {
     shikiConfig: {
