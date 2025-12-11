@@ -1,7 +1,7 @@
 # Contributing to ESPHome Workshop
 
 **Primary Audience:** AI coding assistants (GitHub Copilot, etc.)  
-**Last Updated:** December 4, 2025
+**Last Updated:** December 11, 2025
 
 This guide helps AI assistants contribute code improvements, bug fixes, and new features to the ESPHome Workshop documentation site. For content creation (adding devices, projects, notes), see [README.md](./README.md).
 
@@ -22,6 +22,20 @@ npm run build
 # Preview production build
 npm run preview
 ```
+
+---
+
+## Dev-Only Test Pages
+
+Create experimental pages that only exist in dev mode using the test pages integration:
+
+**Creating a test page:**
+1. Create file in `src/pages/` with leading underscore: `src/pages/_yourpage.astro`
+2. Update `test_pages.ts` to inject route for it.
+3. The integration injects it during `npm run dev`
+4. Access at `/yourpage` (without the underscore in the URL)
+5. Page is never deployed with production builds
+
 
 ---
 

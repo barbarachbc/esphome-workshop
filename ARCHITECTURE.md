@@ -1,6 +1,6 @@
 # ESPHome Workshop - Architecture
 
-**Last Updated:** December 10, 2025
+**Last Updated:** December 11, 2025
 
 This document describes the architecture, design decisions, and implementation patterns for the ESPHome Workshop documentation site.
 
@@ -29,6 +29,8 @@ This document describes the architecture, design decisions, and implementation p
 - **Static generation** - Pre-rendered at build time for performance
 
 **Technology:** Static site built with Astro 5.x, TypeScript, Tailwind CSS v4, and Zod schemas.
+
+**Dev Mode:** Custom Astro integration injects dev-only test pages that don't get deployed in production builds.
 
 ---
 
@@ -63,6 +65,8 @@ esphome-docs/
     │   ├── ThemeToggle.astro
     │   └── Footer.astro
     ├── config.ts                # Site configuration (GitHub repo, etc.)
+    ├── integrations/
+    │   └── test_pages.ts        # Dev-mode test page injection
     ├── content/
     │   ├── config.ts            # Content collection schemas (Zod)
     │   ├── devices/             # Device markdown files
@@ -224,6 +228,26 @@ All badges use reusable CSS classes with theme-aware colors:
 - Results counter and clear all button
 - Client-side filtering via data attributes
 - OR logic within filter type, AND logic between types
+
+---
+
+## Integrations
+
+### Test Pages Integration (`src/integrations/test_pages.ts`)
+
+Custom Astro integration that injects dev-only pages during development, excluded from production builds:
+
+- **Dev Mode:** Routes injected when running `npm run dev`
+- **Build Mode:** Routes excluded when building for production
+- **Example:** Theme designer at `/theme-designer`
+
+**How it works:**
+1. Test page files start with underscore: `src/pages/_theme-designer.astro` so astro will ignore them for build.
+2. Integration checks if `params.command === 'dev'`
+3. Routes are injected using `injectRoute()`
+4. Production build ignores this integration entirely
+
+Use for UI experimentation and design testing without affecting the published site.
 
 ---
 
