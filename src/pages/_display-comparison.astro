@@ -21,32 +21,95 @@ const displayComparison = {
   imageWidth: 1873,
   imageHeight: 1048,
   hotspots: [
-    // Example hotspot coordinates - these would need to match your actual image
-    // Adafruit MiniPiTFT 1.3" (240x240) - leftmost
-    {
-      deviceSlug: 'adafruit-minipitft-13',
-      shape: 'rect' as const,
-      coords: { x: 50, y: 300, width: 200, height: 200 }
-    },
-    // GC9A01 Round LCD 1.28" (240x240) - second from left
-    {
-      deviceSlug: 'rgb_led_ring',
-      shape: 'circle' as const,
-      coords: { cx: 1673, cy: 711, r: 339 }
-    },
-    // Elegoo TFT 2.8" (240x320) - third from left
-    {
-      deviceSlug: 'elegoo-tft-touchscreen',
-      shape: 'rect' as const,
-      coords: { x: 650, y: 250, width: 220, height: 300 }
-    },
-    // Pimoroni 0.96" SPI LCD - smallest
-    {
+  {
+    deviceSlug: 'elegoo-tft-touchscreen',
+    shape: 'rect' as const,
+    coords: { x: 1038, y: 22, width: 468, height: 303 }
+  },
+  {
+    deviceSlug: 'jc2432w328c',
+    shape: 'rect' as const,
+    coords: { x: 543, y: 35, width: 396, height: 282 }
+  },
+  
+  {
+    deviceSlug: 'unicorn-phat',
+    shape: 'rect' as const,
+    coords: { x: 1203, y: 355, width: 392, height: 173 }
+  },
+  {
       deviceSlug: 'pimoroni-096-spi-lcd',
       shape: 'rect' as const,
-      coords: { x: 950, y: 350, width: 150, height: 150 }
-    },
-  ]
+      coords: { x: 948, y: 341, width: 195, height: 153 }
+  },
+  {
+    deviceSlug: '5x5-rgb-matrix',
+    shape: 'rect' as const,
+    coords: { x: 1618, y: 313, width: 116, height: 171 }
+  },
+  {
+    deviceSlug: 'adafruit-minipitft-13',
+    shape: 'rect' as const,
+    coords: { x: 979, y: 516, width: 188, height: 226 }
+  },
+  {
+    deviceSlug: 'ky34-by-oled',
+    shape: 'rect' as const,
+    coords: { x: 777, y: 341, width: 158, height: 157 }
+  },
+  {
+    deviceSlug: 'grove-oled-ssd1315', 
+    shape: 'rect' as const,
+    coords: { x: 520, y: 354, width: 240, height: 125 }
+  },
+  
+  {
+    deviceSlug: 'hd44780-character-lcd',
+    shape: 'rect' as const,
+    coords: { x: 20, y: 281, width: 469, height: 210 }
+  },
+  {
+    deviceSlug: 'sh1107-spi-oled',
+    shape: 'rect' as const,
+    coords: { x: 537, y: 523, width: 166, height: 244 }
+  },
+  {
+    deviceSlug: 'sh1106-oled',
+    shape: 'rect' as const,
+    coords: { x: 720, y: 530, width: 205, height: 194 }
+  },
+  {
+    deviceSlug: 'gc9a01-round-lcd',
+    shape: 'rect' as const,
+    coords: { x: 278, y: 489, width: 210, height: 257 }
+  },
+  {
+    deviceSlug: 'adafruit-neopixel',
+    shape: 'rect' as const,
+    coords: { x: 415, y: 800, width: 250, height: 90 }
+  },  
+  {
+    deviceSlug: 'piglow',
+    shape: 'rect' as const,
+    coords: { x: 746, y: 752, width: 189, height: 235 }
+  },
+  {
+    deviceSlug: '8x8-led-matrix',
+    shape: 'rect' as const,
+    coords: { x: 1275, y: 585, width: 212, height: 202 }
+  },
+  {
+    deviceSlug: '11x7-led-matrix',
+    shape: 'rect' as const,
+    coords: { x: 1310, y: 847, width: 151, height: 169 }
+  },
+  
+  {
+    deviceSlug: 'rgb_led_ring',
+    shape: 'circle' as const,
+    coords: { cx: 1678, cy: 711, r: 178 }
+  }
+]
 };
 
 // You can define multiple comparison images
