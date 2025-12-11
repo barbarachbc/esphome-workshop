@@ -157,36 +157,38 @@ const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
               <span class="category-badge-purple">{device.category}</span>
             )}
           </div>
-          
-          <p class="tooltip-description">{device.description}</p>
-          
-          <div class="tooltip-specs">
-            {dimensionMatch && (
-              <div class="spec-item">
-                <span class="spec-label">Size:</span>
-                <span class="spec-value">{dimensionMatch[0]}</span>
-              </div>
-            )}
-            
-            {(hasColor || isMono) && (
-              <div class="spec-item">
-                <span class="spec-label">Type:</span>
-                <span class="spec-value">{hasColor ? 'Color' : 'Monochrome'}</span>
-              </div>
-            )}
-            
-            {device.connectionTypes && device.connectionTypes.length > 0 && (
-              <div class="spec-item">
-                <span class="spec-label">Interface:</span>
-                <div class="connection-badges">
-                  {device.connectionTypes.map(conn => (
-                    <span class="connection-badge">{conn.toUpperCase()}</span>
-                  ))}
+          <div class="tooltip-body">
+            <a href={url} class="tooltip-body-link no-underline">
+                <p class="tooltip-description">{device.description}</p>
+                
+                <div class="tooltip-specs">
+                {dimensionMatch && (
+                    <div class="spec-item">
+                    <span class="spec-label">Size:</span>
+                    <span class="spec-value">{dimensionMatch[0]}</span>
+                    </div>
+                )}
+                
+                {(hasColor || isMono) && (
+                    <div class="spec-item">
+                    <span class="spec-label">Type:</span>
+                    <span class="spec-value">{hasColor ? 'Color' : 'Monochrome'}</span>
+                    </div>
+                )}
+                
+                {device.connectionTypes && device.connectionTypes.length > 0 && (
+                    <div class="spec-item">
+                    <span class="spec-label">Interface:</span>
+                    <div class="connection-badges">
+                        {device.connectionTypes.map(conn => (
+                        <span class="connection-badge">{conn.toUpperCase()}</span>
+                        ))}
+                    </div>
+                    </div>
+                )}
                 </div>
-              </div>
-            )}
+            </a>
           </div>
-          
           <div class="tooltip-footer">
             <a href={url} class="view-details-button">
               View Details →
@@ -463,15 +465,19 @@ const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
     private hotspotLinks: NodeListOf<Element>;
     private tooltips: Map<string, HTMLElement> = new Map();
     private activeTooltip: string | null = null;
-    private isTouchDevice: boolean = false;
+    private lastInteraction: 'mouse' | 'touch' = 'mouse';
     
     constructor() {
       this.hotspotLinks = document.querySelectorAll('.hotspot-link');
-      this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
       this.init();
     }
     
     init() {
+      // Track interaction type (mouse vs touch)
+      document.addEventListener('pointerdown', (e) => {
+        this.lastInteraction = e.pointerType === 'touch' ? 'touch' : 'mouse';
+      });
+      
       // Build tooltip map
       document.querySelectorAll<HTMLElement>('.hotspot-tooltip').forEach(tooltip => {
         const forId = tooltip.getAttribute('data-tooltip-for');
@@ -484,20 +490,44 @@ const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
       this.hotspotLinks.forEach(link => {
         const hotspotId = link.getAttribute('data-hotspot-id');
         if (!hotspotId) return;
-        
-        if (this.isTouchDevice) {
-          // Mobile/Touch: First tap shows tooltip, second tap navigates
-          link.addEventListener('click', (e) => this.handleTouch(hotspotId, e as MouseEvent));
-        } else {
-          // Desktop: Hover shows tooltip, click navigates
-          link.addEventListener('mouseenter', (e) => this.showTooltip(hotspotId, e as MouseEvent));
-          link.addEventListener('mouseleave', () => this.hideTooltip(hotspotId));
-          link.addEventListener('mousemove', (e) => this.updateTooltipPosition(hotspotId, e as MouseEvent));
-        }
-        
+
+        // Mouse hover behavior
+        link.addEventListener('mouseenter', (e) => {
+          if (this.lastInteraction === 'mouse') {
+            this.showTooltip(hotspotId, e as MouseEvent);
+          }
+        });
+
+        link.addEventListener('mouseleave', (e) => {
+          if (this.lastInteraction === 'mouse') {
+            this.hideTooltip(hotspotId);
+          }
+        });
+
+        link.addEventListener('mousemove', (e) => {
+          if (this.lastInteraction === 'mouse') {
+            this.updateTooltipPosition(hotspotId, e as MouseEvent);
+          }
+        });
+
+        // Unified click handler - behavior depends on interaction type
+        link.addEventListener('click', (e) => {
+          if (this.lastInteraction === 'touch') {
+            this.handleTouch(hotspotId, e as MouseEvent);
+          }
+          // For mouse clicks, let default link navigation happen
+        });
+
         // Keyboard accessibility
-        link.addEventListener('focus', (e) => this.showTooltip(hotspotId, e as FocusEvent));
-        link.addEventListener('blur', () => this.hideTooltip(hotspotId));
+        link.addEventListener('focus', (e) => {
+          this.showTooltip(hotspotId, e as FocusEvent);
+        });
+        link.addEventListener('blur', (e) => {
+          // Only hide on blur for mouse/keyboard, not touch (touch uses handleOutsideClick)
+          if (this.lastInteraction === 'mouse') {
+            this.hideTooltip(hotspotId);
+          }
+        });
       });
       
       // Add close button listeners
@@ -512,21 +542,33 @@ const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
         }
       });
       
-      // Close tooltip when tapping outside on mobile
-      if (this.isTouchDevice) {
-        document.addEventListener('click', (e) => this.handleOutsideClick(e));
-      }
+      // Close tooltip when tapping outside (touch only)
+      document.addEventListener('click', (e) => {
+        if (this.lastInteraction === 'touch') {
+          this.handleOutsideClick(e);
+        }
+      });
     }
     
     handleTouch(hotspotId: string, event: MouseEvent) {
+      const target = event.target as HTMLElement;
+
+      // Allow navigation if clicking the View Details button
+      if (target.closest('.view-details-button')) {
+        return; // Let the link navigate
+      }
+
+      if(target.closest('.tooltip-body')){
+      }
+
       event.preventDefault();
       event.stopPropagation();
-      
+
       // Hide any other active tooltip first
       if (this.activeTooltip && this.activeTooltip !== hotspotId) {
         this.hideTooltip(this.activeTooltip);
       }
-      
+
       // Show this tooltip
       this.activeTooltip = hotspotId;
       this.showTooltipCentered(hotspotId, event);
@@ -534,14 +576,15 @@ const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
     
     handleOutsideClick(event: Event) {
       const target = event.target as HTMLElement;
-      
+
       // Don't close if clicking on a tooltip, hotspot link, or the view details button
       if (target.closest('.hotspot-tooltip') || 
           target.closest('.hotspot-link') ||
-          target.closest('.view-details-button')) {
+          target.closest('.view-details-button')
+        ) {
         return;
       }
-      
+
       // Close active tooltip
       if (this.activeTooltip) {
         this.hideTooltip(this.activeTooltip);
@@ -552,9 +595,16 @@ const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
     showTooltip(hotspotId: string, event: MouseEvent | FocusEvent) {
       const tooltip = this.tooltips.get(hotspotId);
       if (!tooltip) return;
-      
+
       tooltip.classList.add('visible');
-      
+
+      // On touch interactions, always center the tooltip (even for keyboard focus)
+      if (this.lastInteraction === 'touch') {
+        // CSS handles centering, no positioning needed
+        return;
+      }
+
+      // On mouse interactions, position tooltip near cursor on mouse events
       if (event instanceof MouseEvent) {
         this.updateTooltipPosition(hotspotId, event);
       }
@@ -563,19 +613,17 @@ const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
     showTooltipCentered(hotspotId: string, event: MouseEvent) {
       const tooltip = this.tooltips.get(hotspotId);
       if (!tooltip) return;
-      
+
       tooltip.classList.add('visible');
-      
-      // On mobile, tooltip is positioned fixed at bottom via CSS
+      // On mobile, tooltip is positioned fixed at center via CSS
       // No need to set position here - it's handled by the stylesheet
     }
     
     hideTooltip(hotspotId: string) {
       const tooltip = this.tooltips.get(hotspotId);
       if (!tooltip) return;
-      
+
       tooltip.classList.remove('visible');
-      
       if (this.activeTooltip === hotspotId) {
         this.activeTooltip = null;
       }
@@ -584,26 +632,26 @@ const mapId = `image-map-${Math.random().toString(36).substr(2, 9)}`;
     updateTooltipPosition(hotspotId: string, event: MouseEvent) {
       const tooltip = this.tooltips.get(hotspotId);
       if (!tooltip) return;
-      
+
       const wrapper = tooltip.closest('.image-map-wrapper');
       if (!wrapper) return;
-      
+
       const rect = wrapper.getBoundingClientRect();
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
-      
+
       // Position tooltip offset from cursor
       const offsetX = 20;
       const offsetY = 20;
-      
+
       // Check if tooltip would go off right edge
       const tooltipRect = tooltip.getBoundingClientRect();
       const wouldOverflowRight = x + tooltipRect.width + offsetX > rect.width;
       const wouldOverflowBottom = y + tooltipRect.height + offsetY > rect.height;
-      
+
       const finalX = wouldOverflowRight ? x - tooltipRect.width - offsetX : x + offsetX;
       const finalY = wouldOverflowBottom ? y - tooltipRect.height - offsetY : y + offsetY;
-      
+
       tooltip.style.left = `${finalX}px`;
       tooltip.style.top = `${finalY}px`;
     }
