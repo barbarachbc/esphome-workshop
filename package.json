@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/mdx": "^4.3.12",
     "@astrojs/partytown": "^2.1.4",
+    "@panzoom/panzoom": "^4.6.1",
     "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.16.0",
     "astro-pagefind": "^1.8.5",

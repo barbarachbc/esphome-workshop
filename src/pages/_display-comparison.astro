@@ -8,6 +8,7 @@
 
 import Layout from '../layouts/Layout.astro';
 import ImageMap from '../components/ImageMap.astro';
+import comparisonImage from '../content/devices/images/all_displays.jpg';
 
 const title = 'LCD Display Size Comparison';
 const description = 'Interactive comparison of various LCD displays showing relative sizes, specifications, and capabilities';
@@ -15,10 +16,10 @@ const description = 'Interactive comparison of various LCD displays showing rela
 // Define the comparison image and hotspots
 // Note: You'll need to create the actual comparison image and place it in public/images/comparisons/
 const displayComparison = {
-  image: '/images/comparisons/lcd-display-lineup.jpg',
+  image: comparisonImage.src,
   alt: 'Size comparison of LCD displays lined up from smallest to largest',
-  imageWidth: 1200,
-  imageHeight: 800,
+  imageWidth: 1873,
+  imageHeight: 1048,
   hotspots: [
     // Example hotspot coordinates - these would need to match your actual image
     // Adafruit MiniPiTFT 1.3" (240x240) - leftmost
@@ -29,9 +30,9 @@ const displayComparison = {
     },
     // GC9A01 Round LCD 1.28" (240x240) - second from left
     {
-      deviceSlug: 'gc9a01-round-lcd',
+      deviceSlug: 'rgb_led_ring',
       shape: 'circle' as const,
-      coords: { cx: 450, cy: 400, r: 120 }
+      coords: { cx: 1673, cy: 711, r: 339 }
     },
     // Elegoo TFT 2.8" (240x320) - third from left
     {
