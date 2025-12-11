@@ -63,6 +63,7 @@ esphome-docs/
     │   ├── IssueReportButton.astro
     │   ├── LastModified.astro
     │   ├── ThemeToggle.astro
+    │   ├── Lightbox.astro
     │   └── Footer.astro
     ├── config.ts                # Site configuration (GitHub repo, etc.)
     ├── integrations/
@@ -146,10 +147,12 @@ Device status is computed dynamically at build time based on project usage:
 - `IssueReportButton.astro` - Pre-filled GitHub issue reporting
 - `ThemeToggle.astro` - Dark/light mode switcher with localStorage persistence
 - `FilterPanel.astro` - Reusable filter UI with search box and active filter pills
+- `Lightbox.astro` - Image viewer modal with navigation and keyboard controls
 - `Footer.astro` - Site-wide footer with links and build date
 
-**Code Block Enhancement:**
-Client-side copy button added to all code blocks via JavaScript in `Layout.astro` - hover to reveal, click to copy with visual feedback.
+**Interactive Enhancements:**
+- **Code Block Enhancement:** Client-side copy button added to all code blocks via JavaScript in `Layout.astro` - hover to reveal, click to copy with visual feedback
+- **Image Lightbox:** Click any markdown image to view fullscreen with navigation controls (arrows/keyboard), automatic image cycling
 
 ---
 
@@ -251,13 +254,46 @@ Use for UI experimentation and design testing without affecting the published si
 
 ---
 
+## Lightbox Implementation
+
+### Image Viewer Component
+
+**Component:** `src/components/Lightbox.astro`  
+**Styles:** `src/styles/global.css` (`.lightbox-*` classes)
+
+The lightbox provides an interactive image viewing experience for all markdown images:
+
+**Features:**
+- 🖱️ **Click to view** - Click any markdown image to open in fullscreen modal
+- ⌨️ **Keyboard navigation** - Arrow keys (prev/next), Escape (close)
+- 🔄 **Image cycling** - Navigate through all images on the page
+- 🎯 **Click outside to close** - Click overlay background to dismiss
+- ♿ **Accessibility** - ARIA labels, focus management, focus trap
+- 📱 **Responsive** - 90vw × 90vh container with proper sizing
+
+**How it works:**
+1. Automatically detects all Astro-optimized images (`data-image-component="true"`)
+2. Makes images clickable with cursor and keyboard support
+3. Opens modal overlay when clicked
+4. Copies image's `srcset` and `sizes` attributes to lightbox
+5. Browser automatically selects optimal resolution for large container
+6. Allows navigation between all images on the page
+
+**Browser-native optimization:**
+The lightbox leverages the browser's built-in responsive image selection by copying the original image's `srcset` attribute. When displayed in the 90vw × 90vh container, the browser automatically requests the highest appropriate resolution from Astro's generated image variants.
+
+**Styling:**
+All lightbox styles are centralized in `global.css` under the `LIGHTBOX STYLES` section, making them easy to customize and maintain. Dark mode is fully supported with enhanced background opacity.
+
+---
+
 ## Future Considerations
 
 ### Potential Enhancements
 
 1. **RSS feeds** - Auto-generate from changelog
-2. **Image optimization** - Astro Image integration for automatic resizing/format conversion
-3. **Comment system** - Consider https://community.home-assistant.io/c/esphome/
+2. **Comment system** - Consider https://community.home-assistant.io/c/esphome/
+3. **Lightbox enhancements** - Touch swipe gestures, pinch-to-zoom, loading indicators
 
 ---
 
