@@ -1,1 +1,21 @@
+#!/bin/sh
+
+# Auto-update lastModified dates
 node .husky/update-last-modified.js
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
+# Validate content references
+node .husky/validate-content.js
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
+# Lint markdown
+node .husky/lint-markdown.js
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
+echo "✅ All pre-commit checks passed!"

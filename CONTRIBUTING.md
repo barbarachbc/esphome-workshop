@@ -3,7 +3,9 @@
 **Primary Audience:** AI coding assistants (GitHub Copilot, etc.)  
 **Last Updated:** December 11, 2025
 
-This guide helps AI assistants contribute code improvements, bug fixes, and new features to the ESPHome Workshop documentation site. For content creation (adding devices, projects, notes), see [README.md](./README.md).
+This guide helps AI assistants contribute code improvements, bug fixes, and new features to
+the ESPHome Workshop documentation site.
+For content creation (adding devices, projects, notes), see [README.md](./README.md).
 
 ---
 
@@ -30,52 +32,203 @@ npm run preview
 Create experimental pages that only exist in dev mode using the test pages integration:
 
 **Creating a test page:**
+
 1. Create file in `src/pages/` with leading underscore: `src/pages/_yourpage.astro`
 2. Update `test_pages.ts` to inject route for it.
 3. The integration injects it during `npm run dev`
 4. Access at `/yourpage` (without the underscore in the URL)
 5. Page is never deployed with production builds
 
-
 ---
 
 ## Git Hooks
 
-### Pre-Commit Hook: Auto-Update `lastModified`
+### Pre-Commit Hook: Validation System
 
-The project uses a pre-commit hook (`.husky/update-last-modified.js`) that automatically updates the `lastModified` field in frontmatter for all staged markdown files.
+The project uses Husky pre-commit hooks to validate content quality, consistency, and formatting before commits.
+All checks run automatically and **prevent commits if validation fails**.
 
-**Implementation details:**
-- **Language:** ES modules (Node.js with `import` syntax)
-- **Trigger:** Runs automatically before each commit via Husky
-- **Scope:** Only processes staged `.md` files in `src/content/`
-- **Logic:**
-  1. Gets staged files with `git diff --cached --name-only --diff-filter=ACM`
-  2. Filters for `src/content/**/*.md` files that exist
-  3. Reads each file and checks if it starts with `---` (frontmatter)
-  4. Finds the closing `---` to locate frontmatter boundaries
-  5. If `lastModified:` line exists → replaces entire line with `lastModified: "YYYY-MM-DD"`
-  6. If missing → inserts `lastModified: "YYYY-MM-DD"` before closing `---`
-  7. Writes updated content and re-stages the file with `git add`
+#### Hook Sequence
 
-**Cross-platform:** Handles both Unix (`\n`) and Windows (`\r\n`) line endings using `/\r?\n/` regex
+The pre-commit hook runs three validators in order:
+
+1. **Auto-Update `lastModified`** (`.husky/update-last-modified.js`)
+2. **Validate Content References** (`.husky/validate-content.js`)
+3. **Lint Markdown** (`.husky/lint-markdown.js`)
+
+Each hook must pass before the next runs. If any fails, the commit is blocked.
+
+---
+
+### 1. Auto-Update `lastModified`
+
+**File:** `.husky/update-last-modified.js`
+
+Automatically updates the `lastModified` field in frontmatter for all staged markdown files.
+
+**What it does:**
+
+- Gets staged files with `git diff --cached --name-only`
+- Filters for `src/content/**/*.md` files
+- Reads each file's YAML frontmatter
+- If `lastModified:` exists → replaces with current date `"YYYY-MM-DD"`
+- If missing → inserts `lastModified: "YYYY-MM-DD"` before closing `---`
+- Re-stages the file with `git add`
 
 **Error handling:**
-- Catches git command errors (e.g., not in a git repo)
-- Continues processing other files if one file fails
-- Silent exit if no staged content files found
 
-**Testing the hook manually:**
+- Continues processing if one file fails
+- Silent exit if no content files staged
+
+**Test manually:**
+
 ```bash
 node .husky/update-last-modified.js
 ```
+
+---
+
+### 2. Validate Content References
+
+**File:** `.husky/validate-content.js`
+
+Validates cross-reference integrity between content collections.
+
+**What it checks:**
+
+- ❌ **Invalid component slugs** - Devices/projects can only reference existing components
+- ❌ **Invalid device slugs** - Projects can only reference existing devices
+
+**How it works:**
+
+1. Scans all collections to build reference map (devices, components, projects, notes)
+2. For each staged markdown file, reads frontmatter
+3. Validates all `components:` array entries exist in `src/content/components/`
+4. Validates all `devices:` array entries exist in `src/content/devices/`
+
+**Example error:**
+
+```
+❌ Content validation failed:
+
+src/content/devices/my-device.md:
+  ❌ Unknown component slug: "nonexistent-component"
+```
+
+**Test manually:**
+
+```bash
+npm run validate:content
+```
+
+---
+
+### 3. Lint Markdown
+
+**File:** `.husky/lint-markdown.js`
+
+Enforces consistent markdown formatting via `markdownlint-cli2`.
+
+**What it checks:**
+
+- Markdown syntax correctness
+- Consistent heading styles
+- Max line length (120 characters)
+- Proper spacing and indentation
+- Rules defined in `.markdownlintrc.json`
+
+**Configuration:** `.markdownlintrc.json`
+
+- Line length: 120 chars (code blocks: 120)
+- Allows duplicate headings (MD024: false)
+- Allows missing first heading (MD025: false)
+- Allows HTML in markdown (MD033: false)
+
+**Example error:**
+
+```
+❌ Markdown linting failed
+
+src/content/devices/my-device.md:10: MD013/line-too-long
+```
+
+**Fix linting errors:**
+
+```bash
+npm run lint:md:fix
+```
+
+**Test manually:**
+
+```bash
+npm run lint:md
+```
+
+---
+
+### Bypassing Pre-Commit Hooks (Not Recommended)
+
+If you absolutely must skip validation:
+
+```bash
+git commit --no-verify
+```
+
+⚠️ **Warning:** This bypasses all checks and may introduce invalid content.
+
+---
+
+## Resolving Validation Failures
+
+### Content Reference Errors
+
+**Problem:** `Unknown component slug: "my-component"`
+
+**Solution:**
+
+1. Check the component exists in `src/content/components/`
+2. Verify the slug in your device/project file matches the filename (without `.md`)
+3. Component and device slugs must be exact matches (kebab-case)
+
+**Example:**
+
+```yaml
+# ❌ Wrong
+components: ['my component']  # Has space, won't match
+
+# ✅ Correct
+components: ['my-component']  # Matches src/content/components/my-component.md
+```
+
+### Duplicate Slug Errors
+
+**Problem:** `Duplicate slug: "my-device" in collection "devices"`
+
+**Solution:**
+
+1. Check `src/content/devices/` for multiple files with similar names
+2. Rename one file to have a unique slug
+3. Update all references to the old slug
+
+### Markdown Linting Errors
+
+**Problem:** `MD013/line-too-long` or other markdown errors
+
+**Solution:**
+
+1. Run `npm run lint:md` to see all errors
+2. Run `npm run lint:md:fix` to auto-fix most issues
+3. Manually fix remaining errors (excessive line length, etc.)
+4. Re-stage and commit
+
 ---
 
 ## Essential Context for AI Assistants
 
 ### Before Starting Any Task
 
-1. **Read ARCHITECTURE.md** - Understand project-specific design decisions (status computation, slug-based references, component patterns)
+1. **Read ARCHITECTURE.md** - Understand project-specific design decisions (status computation, slug-based
+references, component patterns)
 2. **Review `src/content/config.ts`** - Understand content collection schemas (Zod validation)
 3. **Read this file completely** - Follow conventions and avoid common pitfalls
 
@@ -144,6 +297,7 @@ src/
 ### TypeScript Conventions
 
 **Component Props:**
+
 ```typescript
 // Always define Props interface
 interface Props {
@@ -158,6 +312,7 @@ const { device, displayStatus } = Astro.props;
 ```
 
 **Cross-Collection References:**
+
 ```typescript
 // Use getEntry() for slug-based lookups
 import { getEntry } from 'astro:content';
@@ -166,6 +321,7 @@ const relatedDevice = await getEntry('devices', deviceSlug);
 ```
 
 **Conditional Rendering:**
+
 ```astro
 {device.data.image && (
   <img src={device.data.image} alt={device.data.title} />
@@ -177,6 +333,7 @@ const relatedDevice = await getEntry('devices', deviceSlug);
 **NO inline styles** - Use `<style>` blocks or global CSS
 
 **CSS Custom Properties for theming:**
+
 ```css
 /* Use variables from src/styles/global.css */
 background: var(--bg-primary);
@@ -185,6 +342,7 @@ border: 1px solid var(--border-primary);
 ```
 
 **Tailwind for layout:**
+
 ```astro
 <div class="px-4 py-2 rounded-lg border">
   Content
@@ -192,6 +350,7 @@ border: 1px solid var(--border-primary);
 ```
 
 **Status Badge Classes:**
+
 - `.status-badge-deployed` (green)
 - `.status-badge-active` (orange)
 - `.status-badge-testing` (amber)
@@ -217,6 +376,7 @@ components: ['i2c', 'sensor']
 **Critical:** Device status is computed on homepage based on project usage.
 
 **Rules:**
+
 - Device with `status: 'ready'` + used in completed project → shows as `'deployed'`
 - Device with `status: 'ready'` + used in in-progress project → shows as `'active'`
 - Manual status (`'testing'`, `'deployed'`, `'active'`, `'retired'`) is **never auto-changed**
@@ -254,6 +414,7 @@ npm run build
 ```
 
 **Common errors:**
+
 - Missing required field → Add to frontmatter
 - Invalid enum value → Check schema in `src/content/config.ts`
 - Type mismatch → Ensure correct data type
@@ -325,6 +486,7 @@ Before committing code changes:
 ### Common Pitfalls to Avoid
 
 ❌ **Don't:**
+
 - Bypass schema validation
 - Add inline styles
 - Use framework-specific details in user-facing docs
@@ -332,6 +494,7 @@ Before committing code changes:
 - Create overly complex solutions
 
 ✅ **Do:**
+
 - Follow existing patterns
 - Keep it simple
 - Use semantic HTML
