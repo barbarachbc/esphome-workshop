@@ -1,6 +1,6 @@
 ---
 title: 'Unicorn pHAT'
-description: '4x8 RGB LED matrix HAT for Raspberry Pi Zero by Pimoroni'
+description: '8x4 RGB LED matrix HAT for Raspberry Pi Zero by Pimoroni'
 category: "display"
 manufacturer: "Pimoroni"
 model: "PIM168"
@@ -20,18 +20,21 @@ references:
     url: "https://github.com/adafruit/Adafruit_NeoPixel"
 dateAcquired: "2017"
 status: "ready"
-lastModified: "2025-12-11"
+lastModified: "2025-12-12"
 image: "/images/devices/thumbnails/unicorn.jpg"
 ---
 
 ## Overview
 
-The Unicorn pHAT is a compact 4x8 RGB LED matrix designed as a HAT for Raspberry Pi Zero. It features 32 individually addressable RGB LEDs (SK6812 compatible) in a 3.5mm x 3.5mm package, providing vibrant color display capabilities in a small form factor.
+The Unicorn pHAT is a compact 8x4 RGB LED matrix designed as a HAT for Raspberry Pi Zero.
+It features 32 individually addressable RGB LEDs (SK6812 compatible) in a 3.5mm x 3.5mm package,
+providing vibrant color display capabilities in a small form factor.
 
 ![Unicorn pHat](./images/unicorn-phat/unicorn.jpg)
 
 The board features:
-- 4x8 (32 total) RGB LEDs
+
+- 8x4 (32 total) RGB LEDs
 - SK6812 individually addressable LEDs (similar to WS2812B)
 - 3.5mm x 3.5mm LED package
 - Raspberry Pi HAT form factor
@@ -39,15 +42,19 @@ The board features:
 
 ## Configuration Notes
 
-Requires only single GPIO. Other connection is 5V and GND. 5V is expected so LEDs can show the full spectrum of light, but 3.3V will do just fine.
+Requires only single GPIO. Other connection is 5V and GND.
+5V is expected so LEDs can show the full spectrum of light, but 3.3V will do just fine.
 
-Supported via ESPHome's [NeoPixelBus Light component](https://esphome.io/components/light/neopixelbus/). Note that NeoPixelBus only works with the Arduino framework.
+Supported via ESPHome's [NeoPixelBus Light component](https://esphome.io/components/light/neopixelbus/).
+Note that NeoPixelBus only works with the Arduino framework.
 
 For ESP-IDF use [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip/)
 
 **ℹ️ ESP8266**: When using ESP8266 based board you'll need to use neopixelbus and it is recommended to use GPIO03
 
-**🚨 NOTE**: When using RGB lights, brightness will affect how they appear, especially when using effects. Some effects depend on brightness of each color so some effects might not be in full display if brightness is not at 100%. On the other hand, you might go blind(ed) at 100%, so 🤷🏻.
+**🚨 NOTE**: When using RGB lights, brightness will affect how they appear, especially when using effects.
+Some effects depend on brightness of each color so some effects might not be in full display
+if brightness is not at 100%. On the other hand, you might go blind(ed) at 100%, so 🤷🏻.
 
 ### Basic Configuration
 
@@ -78,7 +85,8 @@ light:
 
 ### Using With Addressable Light Display
 
-This example uses an example from [addressable light](https://esphome.io/components/display/addressable_light/) and draws bulls-eye pattern on 8x4 display (original example on 8x8 ... well, it's kind of bulls-eye pattern).
+This example uses an example from [addressable light](https://esphome.io/components/display/addressable_light/) and
+draws bulls-eye pattern on 8x4 display (original example on 8x8 ... well, it's kind of bulls-eye pattern).
 
 ![Unicorn pHat Bulls-eye](./images/unicorn-phat/unicorn-bullseye.jpg)
 
@@ -124,13 +132,14 @@ display:
 
 ### Addressable Effects
 
-In this example we cover [addressable effects](https://esphome.io/components/light/#light-effects). Every 25 seconds (`interval`), we display a new effect for 20 seconds and then turn off the display. Setting the effect is by name, so I chose names e1-e7 because of this. Defining num_executions as static ensures the value is preserved across lambda calls.
+In this example we cover [addressable effects](https://esphome.io/components/light/#light-effects).
+Every 25 seconds (`interval`), we display a new effect for 20 seconds and then turn off the display.
+Setting the effect is by name, so I chose names e1-e7 because of this.
+Defining num_executions as static ensures the value is preserved across lambda calls.
 
 Note that 60% is still bright, so if you don't have a diffuser - get one!
 
 Example uses 8266 based [D1 mini](./esp8266-d1-mini).
-
-
 
 ```yaml
 esphome:
@@ -185,11 +194,13 @@ light:
 
 ### Light Effects
 
-Can we use this with ["normal" effects](https://esphome.io/components/light/#light-effects) I hear you asking? Well, there's 4 and I added addressable rainbow to the end of the list.
+Can we use this with ["normal" effects](https://esphome.io/components/light/#light-effects) I hear you asking?
+Well, there's 4 and I added addressable rainbow to the end of the list.
 
 I'm not actually sure that "normal" effects follow 60% brightness settings. My eyes hurt 🥹.
 
-Interesting thing though - Random Effect sets random color for all LEDs, so your next effect (Strobe) uses that color for strobing.
+Interesting thing though - Random Effect sets random color for all LEDs, so your next effect (Strobe)
+uses that color for strobing.
 
 ```yaml
 esphome:
@@ -251,7 +262,11 @@ esp8266:
 
 api:
   encryption:
-    key: !secret my_unicorn_key
+    key: !secret my_unicorn_api
+
+ota:
+  - platform: esphome
+    password: !secret my_unicorn_ota
 
 wifi:
   ssid: !secret wifi_ssid
