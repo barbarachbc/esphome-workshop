@@ -137,6 +137,8 @@ Every 25 seconds (`interval`), we display a new effect for 20 seconds and then t
 Setting the effect is by name, so I chose names e1-e7 because of this.
 Defining num_executions as static ensures the value is preserved across lambda calls.
 
+![Unicorn Rainbow](./images/unicorn-phat/rainbow.gif)
+
 Note that 60% is still bright, so if you don't have a diffuser - get one!
 
 Example uses 8266 based [D1 mini](./esp8266-d1-mini).
@@ -197,6 +199,8 @@ light:
 Can we use this with ["normal" effects](https://esphome.io/components/light/#light-effects) I hear you asking?
 Well, there's 4 and I added addressable rainbow to the end of the list.
 
+![Unicorn Pulse](./images/unicorn-phat/pulse.gif)
+
 I'm not actually sure that "normal" effects follow 60% brightness settings. My eyes hurt 🥹.
 
 Interesting thing though - Random Effect sets random color for all LEDs, so your next effect (Strobe)
@@ -253,6 +257,8 @@ light:
 
 You can use this with home assistant. You'll need wifi and api components. Names of the effects will appear in the UI.
 
+![Home Assistant Controlling Unicorn - Rainbow Effect](./images/unicorn-phat/home-assistant-rainbow.jpg)
+
 ```yaml
 esphome:
   name: my-unicorn
@@ -296,3 +302,5 @@ light:
           name: "Rainbow"
 
 ```
+
+![Home Assistant Controlling Unicorn - Color Pink](./images/unicorn-phat/home-assistant-pink.jpg)

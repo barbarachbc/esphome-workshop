@@ -5,7 +5,7 @@ category: "display"
 manufacturer: "Pimoroni"
 model: "PIM473"
 connectionTypes: ["spi"]
-components: ["spi", "display", "ssd1306_spi"]
+components: ["spi", "display-ssd1306-spi"]
 tags: ["display", "oled", "monochrome", "sh1107"]
 productionStatus: "active"
 purchaseLinks:
@@ -14,14 +14,15 @@ purchaseLinks:
 status: "ready"
 dateAcquired: "Jan 2022"
 image: "/images/devices/thumbnails/sh1107-spi-oled.jpg"
-lastModified: "2025-12-11"
+lastModified: "2025-12-12"
 ---
 
 ## Overview
 
 This OLED is a beautiful monochrome display.
 
-OLED displays are self-illuminating (no backlight needed), have excellent contrast, wide viewing angles, and consume very little power.
+OLED displays are self-illuminating (no backlight needed), have excellent contrast, wide viewing angles,
+and consume very little power.
 
 ![Pimoroni 1.12" Mono OLED](images/sh1107-spi-oled/sh1107-spi-oled-action.jpg)
 
@@ -37,7 +38,8 @@ OLED displays are self-illuminating (no backlight needed), have excellent contra
 - Requires **SPI**, spi_id is optional, but spi component is required.
 - ⚠️ **show_test_card** - cannot be used, does not show anything.
 - model: "SH1107 128x128"
-- rotation: 180 ... well, depends on how you want to position it I suppose 🙂, but because of how the board is oriented 180 makes sense
+- rotation: 180 ... well, depends on how you want to position it I suppose 🙂,
+but because of how the board is oriented 180 makes sense
 - cs_pin and dc_pin are required - can be any available GPIO
 
 ### Basic Configuration
@@ -81,6 +83,7 @@ spi:
 #### Using a Different Board
 
 For [beetle-esp32-c6](./beetle-esp32-c6) you can use for example:
+
 ```yaml
 substitutions:
   clk_pin: GPIO23
@@ -91,10 +94,12 @@ substitutions:
 
 ### Example with Icons and Multiple Pages
 
-In this example I used [beetle-esp32-c6](./beetle-esp32-c6). 
+In this example I used [beetle-esp32-c6](./beetle-esp32-c6).
 Every 5 seconds the pages cycle through:
+
 - info page with date/time, weather forecast, EV battery level
-- heating info page: current indoor temperature, current preset and temperature set for the preset and an indicator icon whether the heating is ON
+- heating info page: current indoor temperature, current preset and temperature set for the preset
+and an indicator icon whether the heating is ON
 - preset selection page
 - preset temperature change page
 
@@ -230,7 +235,8 @@ display:
         lambda: |-
           it.printf(it.get_width()/2, it.get_height()/2, id(mdi_large), COLOR_ON, TextAlign::BOTTOM_CENTER, "\U000F1A71");
 
-          it.printf(it.get_width()/2, it.get_height()-48, id(value_med), COLOR_ON, TextAlign::TOP_CENTER, "Set the mode to:");
+          it.printf(it.get_width()/2, it.get_height()-48, id(value_med), COLOR_ON, TextAlign::TOP_CENTER,
+          "Set the mode to:");
           it.printf(it.get_width()/2, it.get_height()-24, id(value_med), COLOR_ON, TextAlign::TOP_CENTER, "Frost ?");
 
           //apply
@@ -251,3 +257,11 @@ display:
           //plus
           it.printf(it.get_width() - 24, it.get_height() - 28, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0704");
 ```
+
+## Other Images
+
+Pimoroni 1.12" Mono OLED Breakout:
+![Pimoroni 1.12" Mono OLED Breakout Photo](./images/sh1107-spi-oled/pimoroni-112-oled-breakout.jpg)
+
+Pimoroni 1.12" Mono OLED Breakout Back:
+![Pimoroni 1.12" Mono OLED Breakout Back Photo](./images/sh1107-spi-oled/pimoroni-112-oled-breakout-back.jpg)
