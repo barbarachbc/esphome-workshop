@@ -1,5 +1,5 @@
 {
-  "name": "esphome-docs",
+  "name": "esphome-workshop",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -9,6 +9,7 @@
     "astro": "astro",
     "lint:md": "markdownlint-cli2 src/content/**/*.md",
     "lint:md:fix": "markdownlint-cli2 --fix src/content/**/*.md",
+    "lint:md:fix:one": "markdownlint-cli2 --fix $npm_config_argv",
     "validate:content": "node .husky/validate-content.js",
     "prepare": "husky"
   },
