@@ -16,7 +16,7 @@ purchaseLinks:
 status: "ready"
 dateAcquired: "May 2024"
 count: 2
-lastModified: "2025-12-08"
+lastModified: "2025-12-13"
 changelog:
   - date: "2025-12-07"
     type: "added"
@@ -28,7 +28,8 @@ image: "/images/devices/thumbnails/gc9a01-round-lcd.jpg"
 
 This is a beautiful round TFT LCD color display with 240x240 resolution.
 
-TFT LCD displays offer bright, full-color visuals with excellent readability in various lighting conditions. The round form factor makes it ideal for watch-style projects, gauges, and unique UI designs.
+TFT LCD displays offer bright, full-color visuals with excellent readability in various lighting conditions.
+The round form factor makes it ideal for watch-style projects, gauges, and unique UI designs.
 
 ![GC9A01 Round LCD](./images/gc9a01-round-lcd/gc9a01-round-lcd.jpg)
 
@@ -38,40 +39,54 @@ TFT LCD displays offer bright, full-color visuals with excellent readability in 
 - Full color display (RGB)
 - 3.3V compatible
 
+## Testing Status
+
+- ✅ [Basic Config](#basic-configuration) - Wiring up & Test Card in Color
+- ✅ [Backlight](#adding-backlight-support)
+- ✅ [Simple Graphics and Text](#simple-graphics-and-text-example)
+- ✅ [Multipage Icons and Text](#icons-text-pretty) 🌈🦾
+- ✅ Tested with ESP32
+- [ ] Tested with ESP8266
+
 ## Configuration Notes
 
 - Requires **SPI**, spi_id is optional, but spi component is required.
 - Platform: **mipi_spi** (also works with ili9xxx)
 - Model: **GC9A01A**
-- ⚠️ **buffer_size: 25%** - Important! Without this setting, the display may fail to initialize due to RAM constraints (especially with ESP8266 based boards). Start with 25% and increase if needed
+- ⚠️ **buffer_size: 25%** - Important! Without this setting, the display may fail to initialize due to
+RAM constraints (especially with ESP8266 based boards). Start with 25% and increase if needed
 - **invert_colors: true** - May be needed depending on your specific display module, it was required on mine.
 - **color_order: BGR** - Adjust if colors appear incorrect.
 - cs_pin, dc_pin, and reset_pin are required - can be any available GPIO
 - Connecting BLK pin on the device is not required
-- ⚠️ The screen is **round**, but the controller sees it as a 240x240 square - you need to be careful when trying to show something near the edges - for example: (0,0) coordinate is outside of the visible area of the screen.
+- ⚠️ The screen is **round**, but the controller sees it as a 240x240 square - you need to be careful when
+trying to show something near the edges - for example: (0,0) coordinate is outside of the visible area of the screen.
+- It supports [backlight dimming](#adding-backlight-support)
+using [ESP32 LEDC Output](https://esphome.io/components/output/ledc/)
+or [ESP8266 Software PWM Output](https://esphome.io/components/output/esp8266_pwm/) and
+[Monochromatic Light](https://esphome.io/components/light/monochromatic/)
 
 ### Wiring
 
 Example here is for [esp32-devkit-v1](./esp32-devkit-v1)
 Adjust substitutions based on your board. For the examples below I used the following wiring:
 
-| gc9a01-round-lcd | esp32-devkit-v1 |  |
+| gc9a01-round-lcd | esp32-devkit-v1 | |
 | :---- | :---- | :---- |
-| BLK | TODO |  |
-| CS | GPIO05 |  |
-| DC | GPIO04 |  |
-| RES | GPIO16 |  |
-| SDA (SPI MOSI) | GPIO23 |  |
-| SCL (SPI CLK) | GPIO18 |  |
-| VCC | 3V3 |  |
-| GND | GND |  |
-
+| BLK | GPIO25 | |
+| CS | GPIO05 | |
+| DC | GPIO04 | |
+| RES | GPIO16 | |
+| SDA (SPI MOSI) | GPIO23 | |
+| SCL (SPI CLK) | GPIO18 | |
+| VCC | 3V3 | |
+| GND | GND | |
 
 ### Basic Configuration
 
 Show test card - ensures everything is correctly configured and wired up.
 
-TODO: photos of the examples
+![Round Screen Showing Test Card](./images/gc9a01-round-lcd/test-card.jpg)
 
 ```yaml
 esphome:
@@ -110,13 +125,55 @@ display:
 
 ```
 
-### Simple Graphics and Text Example
+### Adding Backlight Support
 
-**NOTE**: remove or set `show_test_card: false` or you won't see anything.
+The following example increases backlight brightness from 10%-100% by 10% every 5 seconds.
+**NOTE**: Doesn't work if the backlight is not turned on 🙂
+
+```yaml
+interval:
+  - interval: 5s
+    then:
+      - light.turn_on: backlight
+      - light.control:
+          id: backlight
+          brightness: !lambda |-
+            static int num_executions = 0;
+            num_executions = (num_executions % 10) + 1;
+            //go from 10%-100%
+            return num_executions * 0.1;
+
+output:
+  - platform: ledc
+    pin: GPIO25
+    id: backlight_pwm
+
+light:
+  - platform: monochromatic
+    output: backlight_pwm
+    name: "Display Backlight"
+    id: backlight
+
+
+display:
+  - platform: mipi_spi
+    id: my_display
+    model: GC9A01A
+    cs_pin: ${disp_cs_pin}
+    dc_pin: ${disp_dc_pin}
+    reset_pin: ${disp_reset_pin}
+    show_test_card: true
+    invert_colors: true
+    color_order: BGR
+    buffer_size: 25%
+```
+
+### Simple Graphics and Text Example
 
 To add text and graphics, add the lambda section and define fonts to the [basic config](#basic-configuration):
 
-TODO: photos of the examples
+In the real life, the circle is full red, this is weird refreshing that camera caught.
+![Round Screen Showing Red Circle and Hello](./images/gc9a01-round-lcd/red-circle-hello.jpg)
 
 ```yaml
 font:
@@ -143,15 +200,19 @@ display:
 
 Go wild 😉
 
-This example has 4 different pages and changes them every 5 seconds. The display is set not to update itself because updates are only done on timer. You might want to change `update_interval: never` to some other value (default is 1s = 1 second) unless you're using LVGL which handles display itself.
+This example has 4 different pages and changes them every 5 seconds. The display is set not to update itself
+because updates are only done on timer. You might want to change `update_interval: never` to some
+other value (default is 1s = 1 second) unless you're using LVGL which handles display itself.
 
-I used random colors for display 1. Something weird is going on when you do that, I'm not sure if this is a bug of some kind, but it does look funky 🌈
+I used random colors for page 1. Something weird is going on when you do that, I'm not sure if this is
+a bug of some kind, but it does look funky 🌈
 
-For displays 2 and 3 I used colors with corresponding hexcode and then for the last screen I just used COLOR_ON which gives monochromatic display.
+For pages 2 and 3 I used colors with corresponding hexcode and then for the last page I just
+used COLOR_ON which gives monochromatic display.
 
 Look up more on using colors in [color component](/components/display-color).
 
-TODO: photos of the examples
+![Screen in action](./images/gc9a01-round-lcd/pages-anim.gif)
 
 ```yaml
 
@@ -281,8 +342,10 @@ display:
         lambda: |-
             it.print(it.get_width()/2, it.get_height()/2, id(mdi_large), Color(0xF4A460), TextAlign::BOTTOM_CENTER, "\U000F1A71");
               
-            it.print(it.get_width()/2, it.get_height()-68, id(value_med), Color(0x000080), TextAlign::TOP_CENTER, "Set the mode to:");
-            it.print(it.get_width()/2, it.get_height()-44, id(value_med), Color(0xF08080), TextAlign::TOP_CENTER, "Frost ?");
+            it.print(it.get_width()/2, it.get_height()-68, id(value_med), Color(0x000080),
+            TextAlign::TOP_CENTER, "Set the mode to:");
+            it.print(it.get_width()/2, it.get_height()-44, id(value_med), Color(0xF08080),
+            TextAlign::TOP_CENTER, "Frost ?");
 
             //apply
             it.print(48, it.get_height() - 48, id(mdi_small), Color(0x00FF00), TextAlign::TOP_LEFT, "\U000F0158");
@@ -307,7 +370,8 @@ display:
 
 ## Troubleshooting
 
-- **Display fails to initialize**: Make sure `buffer_size: 25%` is set. The default buffer size may be too large for some ESP32 modules. Dead givaway is an error in the logs.
+- **Display fails to initialize**: Make sure `buffer_size: 25%` is set. The default buffer size may
+be too large for some ESP32 modules. Dead givaway is an error in the logs.
 - **Wrong colors**: Try adjusting `color_order` between BGR and RGB, or toggle `invert_colors`.
 - **Blank display**: Verify SPI wiring and that the reset pin is correctly connected. Check logs.
 
@@ -315,3 +379,16 @@ display:
 
 Back of the LCD:
 ![GC9A01 Round LCD Back](./images/gc9a01-round-lcd/gc9a01-round-lcd-back.jpg)
+
+Shots from the most [complicated example](#icons-text-pretty):
+
+- Page 1 - Info Screen
+![Page 1](./images/gc9a01-round-lcd/page1-info.jpg)
+- Page 1 - Info Screen (configured for random colors so another shot)
+![Page 1 alt version](./images/gc9a01-round-lcd/page1-info-rand.jpg)
+- Page 2 - Heating Screen
+![Page 2](./images/gc9a01-round-lcd/page2-heating.jpg)
+- Page 3 - Set Heating Preset
+![Page 3](./images/gc9a01-round-lcd/page3-preset.jpg)
+- Page 4 - Set Boost Temperature
+![Page 4](./images/gc9a01-round-lcd/page4-rocket.jpg)
