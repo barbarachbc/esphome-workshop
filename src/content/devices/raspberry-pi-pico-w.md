@@ -24,11 +24,32 @@ purchaseLinks:
   - vendor: "Raspberry Pi"
     url: "https://www.raspberrypi.com/products/raspberry-pi-pico/"
 dateAcquired: "Oct 2024"
+image: "/images/devices/thumbnails/raspberry-pi-pico-w.jpg"
+lastModified: "2025-12-13"
 ---
 
 ## Overview
 
-The Raspberry Pi Pico W is a low-cost, high-performance microcontroller board with wireless connectivity. It adds WiFi and Bluetooth to the original Raspberry Pi Pico, making it ideal for IoT and connected projects. The board is based on the custom RP2040 microcontroller chip designed by Raspberry Pi.
+The Raspberry Pi Pico W is a low-cost, high-performance microcontroller board with wireless connectivity.
+It adds WiFi and Bluetooth to the original Raspberry Pi Pico, making it ideal for IoT and connected projects.
+The board is based on the custom RP2040 microcontroller chip designed by Raspberry Pi.
+
+![Raspberry Pi Pico W photo](./images/raspberry-pi-pico-w/raspberry-pi-pico-w.jpg)
+
+## Test Status
+
+- [ ] Basic Config
+- [ ] GPIO
+- [ ] UART
+- [ ] SPI
+- [ ] I2C
+- [ ] I2S
+- [ ] (LED) PWM
+- [ ] ADC
+- [ ] Temperature Sensor
+- [ ] PIO
+- [ ] Bluetooth
+- [ ] USB 1.1 Host
 
 ## Hardware Features
 
@@ -58,11 +79,11 @@ The Raspberry Pi Pico W is a low-cost, high-performance microcontroller board wi
 - **Debug:** 3-pin Serial Wire Debug (SWD) header
 - **Operating Voltage:** 1.8V - 5.5V (input voltage via USB or VSYS)
 - **Board Dimensions:** 51mm × 21mm
-- **Form Factor:** Castellated module allowing soldering to carrier boards
 
 ## Wireless Module Details
 
 The **Infineon CYW43439** provides wireless connectivity:
+
 - Connected to RP2040 via SPI (typically 33MHz)
 - On-board antenna (licensed from ABRACON/ProAnt)
 - Some pins shared due to pin limitations:
@@ -78,7 +99,8 @@ The Raspberry Pi Pico W is officially supported by ESPHome with the RP2040 platf
 
 ### Important Notes
 
-⚠️ **Board Compatibility:** Only the **original Raspberry Pi Pico W** with the Infineon CYW43439 chip is supported. Boards with ESP8285 or similar modules (labeled "RP2040 Pico W-2023") are **NOT** supported.
+⚠️ **Board Compatibility:** Only the **original Raspberry Pi Pico W** with the Infineon CYW43439 chip
+is supported. Boards with ESP8285 or similar modules (labeled "RP2040 Pico W-2023") are **NOT** supported.
 
 ⚠️ **Development Status:** RP2040 support in ESPHome is still maturing. Some features may have limitations.
 
@@ -109,7 +131,8 @@ rp2040:
 
 ## On-Board LED
 
-⚠️ **Important:** The on-board LED on the Pico W is **NOT** connected to GPIO25 like on the non-wireless Pico. It's controlled by the CYW43439 wireless chip and requires special handling.
+⚠️ **Important:** The on-board LED on the Pico W is **NOT** connected to GPIO25 like on the non-wireless Pico.
+It's controlled by the CYW43439 wireless chip and requires special handling.
 
 ## Temperature Sensor
 
@@ -122,3 +145,7 @@ sensor:
     update_interval: 60s
 ```
 
+## Other Images
+
+Pico W Back:
+![Pico W back photo](./images/raspberry-pi-pico-w/raspberry-pi-pico-w-back.jpg)
