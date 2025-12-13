@@ -612,6 +612,13 @@ details summary::marker {
   img {
     max-width: 320px;
   }
+
+  blockquote {
+    @apply p-4 my-4 border-l-[3px];
+    background: var(--bg-secondary);
+    border-color: var(--accent-blue);
+    color: var(--text-primary);
+  }
 }
 
 /* ========================================
