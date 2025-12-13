@@ -17,13 +17,19 @@ references:
 status: "pending"
 dateAcquired: "Jan 2025"
 count: 3
+image: "/images/devices/thumbnails/inmp441.jpg"
+lastModified: "2025-12-13"
 ---
 
 ## Overview
 
-The INMP441 is a high-performance, low power, digital-output omnidirectional MEMS microphone with a bottom port and I2S digital output interface.
+The INMP441 is a high-performance, low power, digital-output omnidirectional MEMS microphone with a bottom port
+and I2S digital output interface.
+
+![Photo of INMP441 module](./images/inmp441-microphone/inmp441.jpg)
 
 The module features:
+
 - Digital I2S interface
 - High signal-to-noise ratio: 61 dBA
 - High sensitivity: -26 dBFS
@@ -38,3 +44,8 @@ The module features:
 ## Remarks
 
 Should be supported by [I2S Audio Microphone](https://esphome.io/components/microphone/i2s_audio/) component.
+
+## Other Images
+
+INMP441 microphone back with bottom port:
+![INMP441 microphone back photo](./images/inmp441-microphone/inmp441-back.jpg)
