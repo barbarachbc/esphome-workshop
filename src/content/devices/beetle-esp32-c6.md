@@ -23,18 +23,24 @@ purchaseLinks:
 dateAcquired: "Sept 2024"
 status: "ready"
 count: 2
-lastModified: "2025-12-06"
+lastModified: "2025-12-13"
+image: "/images/devices/thumbnails/beetle-esp32-c6.jpg"
 ---
 
 ## Overview
 
-The DFRobot Beetle ESP32-C6 is a compact development board based on the ESP32-C6 chip, featuring WiFi 6 and Bluetooth 5.3 connectivity in a small form factor. It also features Zigbee 3.0 and Thread 1.3.
+The DFRobot Beetle ESP32-C6 is a compact development board based on the ESP32-C6 chip, featuring WiFi 6 and
+Bluetooth 5.3 connectivity in a small form factor. It also features Zigbee 3.0 and Thread 1.3.
 
-## Additonal Hardware features:
+![Beetle Photo](./images/beetle-esp32-c6/beetle-esp32-c6.jpg)
+
+## Additonal Hardware features
+
 - LED GPIO15
 - Boot Button GPIO9
 
 ## Test Status
+
 - ✅ [Basic Config](#basic-configuration) + Internal LED & Boot Button
 - ✅ [GPIO](#basic-configuration) - output: Internal LED, input: Boot Button
 - [ ] UART
@@ -46,7 +52,6 @@ The DFRobot Beetle ESP32-C6 is a compact development board based on the ESP32-C6
 - [ ] ADC
 - [ ] Temperature Sensor
 - [ ] Parallel I/O
-
 
 ### Basic Configuration
 
@@ -90,16 +95,15 @@ binary_sensor:
 - **USB-C Interface**: Easy programming and power via USB Type-C
 - **Low Power**: Excellent power efficiency with multiple sleep modes
 - **Peripherals**:
-   - Digital I/O x13
-   - LED PWM 6 Channel
-   - SPI x1
-   - UART x3 (LP UART x1)
-   - I2C x2 (LP I2C x1)
-   - I2S x1
-   - IR Transceiver: transmit channel x2, receive channel x2
-   - 1 × 12-bit SAR ADC, 7 Channel
-   - DMA Controller: transmit channel x3, receive channel x3
-
+  - Digital I/O x13
+  - LED PWM 6 Channel
+  - SPI x1
+  - UART x3 (LP UART x1)
+  - I2C x2 (LP I2C x1)
+  - I2S x1
+  - IR Transceiver: transmit channel x2, receive channel x2
+  - 1 × 12-bit SAR ADC, 7 Channel
+  - DMA Controller: transmit channel x3, receive channel x3
 
 ## Pin Reference
 
@@ -109,7 +113,6 @@ The Beetle ESP32-C6 provides access to various GPIO pins. Refer to the board's p
 
 - **I2C**: GPI19 (SDA), GPI20 (SCL)
 - **SPI**: GPIO22 (MOSI), GPIO21 (MISO), GPIO23 (SCK)
-
 
 ## Power Considerations
 
@@ -125,3 +128,8 @@ The Beetle ESP32-C6 can be powered via:
 - ESP-IDF framework is recommended for ESP32-C6 support
 - WiFi 6 features provide improved performance and efficiency
 - Lower power consumption compared to older ESP32 variants
+
+## Other Images
+
+Beetle ESP32-C6 back:
+![Beetle ESP32-C6 back photo](./images/beetle-esp32-c6/beetle-esp32-c6-back.jpg)
