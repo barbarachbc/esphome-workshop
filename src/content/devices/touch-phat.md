@@ -29,15 +29,21 @@ references:
   - title: External component
     url: "https://github.com/barbarachbc/esphomecomponents"
 dateAcquired: "2017"
-status: "testing"
-lastModified: "2025-12-08"
+status: "ready"
+lastModified: "2025-12-13"
+image: "/images/devices/thumbnails/touch-phat.jpg"
 ---
 
 ## Overview
 
-Six touch-sensitive buttons with added LEDs. It uses the CAP1166 capacitive touch and LED driver chip. The LEDs have been under-mounted and shine through exposed sections of the PCB to give a pleasing yellow-green glow and a completely smooth top surface!
+Six touch-sensitive buttons with added LEDs. It uses the CAP1166 capacitive touch and LED driver chip.
+The LEDs have been under-mounted and shine through exposed sections of the PCB to give
+a pleasing yellow-green glow and a completely smooth top surface!
+
+![Touch pHat photo](./images/touch-phat/touch-phat.jpg)
 
 The board features:
+
 - Six capacitive touch buttons
 - Six bright white under-mounted LEDs
 - Microchip CAP1166 capacitive touch and LED driver chip
@@ -45,12 +51,14 @@ The board features:
 
 ## Configuration Notes
 
-Not supported by ESPHome. The chip is nearly exactly the same as [CAP1188](https://esphome.io/components/binary_sensor/cap1188/). The only difference is that CAP1188 supports 8, and CAP1166 supports 6 touch sensors and LEDs. Addresses and functionalities are all the same.
+Not supported by ESPHome. The chip is nearly exactly the same as
+[CAP1188](https://esphome.io/components/binary_sensor/cap1188/).
+The only difference is that CAP1188 supports 8, and CAP1166 supports 6 touch sensors and LEDs.
+Addresses and functionalities are all the same.
 
 **NOTE** The LEDs are not linked to Touch Pads. LEDs are positioned under different pads so they have to be disconnected.
 
 ✅ External component [available](github://barbarachbc/esphomecomponents) (by me 🙂)
-
 
 ### Basic Configuration
 
@@ -104,3 +112,8 @@ binary_sensor:
 ```
 
 **NEXT:** add notes on all the functionality of the external component
+
+## Other Images
+
+Touch pHat back:
+![Touch pHat back](./images/touch-phat/touch-phat-back.jpg)
