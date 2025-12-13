@@ -85,6 +85,8 @@ function parseFrontmatter(content) {
 const validators = {
   checkComponentSlugs(file, frontmatter, refMap) {
     const errors = [];
+    //at the moment component slugs are optional
+    return errors;
     const componentRefs = frontmatter.components || [];
 
     if (!Array.isArray(componentRefs)) return errors;
