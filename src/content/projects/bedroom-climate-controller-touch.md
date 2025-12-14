@@ -20,14 +20,15 @@ changelog:
   - date: "2025-12-03"
     type: "added"
     description: "Created first version of the document"
-lastModified: "2025-12-09"
+lastModified: "2025-12-14"
 ---
 
 ## Project Overview
 
-TODO: add showcase photo
+![Bedroom Controller in-progress Photo](./images/bedroom-controller/bedroom-controller.jpg)
 
-This advanced project creates a compact bedroom climate controller with a monochrome OLED display and capacitive touch interface that provides:
+This advanced project creates a compact bedroom climate controller with a monochrome OLED display and
+capacitive touch interface that provides:
 
 - 🕐 Real-time clock display with date
 - 🌤️ Weather information (current temperature, forecast icon, and description)
@@ -39,13 +40,18 @@ This advanced project creates a compact bedroom climate controller with a monoch
 - 📄 Multi-page interface with heating control page
 - 🎨 Context-aware heating status visualization
 
-This project is for a quick overview of important info on one page and then managing heating in the room. When you get up you can quickly see time/date, outside temperature, forecast and EV battery level (super important, right?).
+This project is for a quick overview of important info on one page and then managing heating in the room.
+When you get up you can quickly see time/date, outside temperature, forecast and EV battery level
+(super important, right?).
 
-On the other page are details of the temperature and humidity in the room and control of heating presets. One of the presets can also be modified to set a different temperature.
+On the other page are details of the temperature and humidity in the room and control of heating presets.
+One of the presets can also be modified to set a different temperature.
 
-This is working, but it is still a work in progress. All functionality is working, next steps are to assemble it and get a nice enclosure for it.
+This is working, but it is still a work in progress. All functionality is working, next steps are to
+assemble it and get a nice enclosure for it.
 
 ### Future improvement ideas
+
 - Neopixel for mood light and notifications
 - Use LEDs on the touch screen for quick status
 - Adding more pages?
@@ -53,7 +59,9 @@ This is working, but it is still a work in progress. All functionality is workin
 
 ### Reusability Note
 
-Substitutions are put at the top of the config file, so replacing them for your own sensor entity IDs and climate IDs will get it working for you. Some extra work needed if not all the same component used. Some of the components are obsolete so a different options might be required.
+Substitutions are put at the top of the config file, so replacing them for your own sensor entity IDs and
+climate IDs will get it working for you. Some extra work needed if not all the same component used. Some of
+the components are obsolete so a different options might be required.
 
 ## What You'll Need
 
@@ -74,7 +82,7 @@ Substitutions are put at the top of the config file, so replacing them for your 
 The OLED display uses SPI bus, Touch breakout uses I2C and Neopixel uses GPIO.
 
 | Component | ESP32-C6 GPIO | Notes |
-|-----------|---------------|-------|
+| --------- | ------------- | ----- |
 | **SPI Display (SH1107)** |
 | SCK | GPIO23 (SCK) | SPI Clock |
 | MOSI | GPIO22 (MOSI) | SPI Master Out |
@@ -90,16 +98,22 @@ The OLED display uses SPI bus, Touch breakout uses I2C and Neopixel uses GPIO.
 | DIN | (TBD) | To be determined |
 
 **Power Notes:**
+
 - All components use 3.3V logic level
-- Touch pHAT requires both 3.3V and 5V pins to be connected to power supply. It does not provide power supply it requires power supply
+- Touch pHAT requires both 3.3V and 5V pins to be connected to power supply. It does not provide power supply
+it requires power supply
   - 3.3V power input is for power supply for the CAP1166 controller and logic
-  - 5V power input is for powering LEDs. It works with 3.3V and I connected it to 3.3V. Since this is for driving LEDs it will not affect overal functionality. LEDs might not be as bright. If you are using some other input device, make sure you check documentation for it. Connecting 5V supply to 3.3V device might ☠️ kill it.
+  - 5V power input is for powering LEDs. It works with 3.3V and I connected it to 3.3V. Since this is for
+  driving LEDs it will not affect overal functionality. LEDs might not be as bright. If you are using some
+  other input device, make sure you check documentation for it. Connecting 5V supply to 3.3V device
+  might ☠️ kill it.
 
 ### Software
 
 - [ESPHome installed](https://esphome.io/guides/getting_started_hassio/)
 - Home Assistant with configured [weather integration](https://www.home-assistant.io/integrations/weather/)
-  - [Met.no](https://www.home-assistant.io/integrations/met/) used, which is used by 82.4% of all users so this should work out of the box.
+  - [Met.no](https://www.home-assistant.io/integrations/met/) used, which is used by 82.4% of all users so
+  this should work out of the box.
 - Home Assistant entities:
   - Indoor temperature sensor
   - Indoor humidity sensor
@@ -109,7 +123,8 @@ The OLED display uses SPI bus, Touch breakout uses I2C and Neopixel uses GPIO.
 
 ### Required Home Assistant Entities
 
-This project requires the following entities in Home Assistant. You'll need to update the substitutions with your own entity IDs:
+This project requires the following entities in Home Assistant. You'll need to update the substitutions
+with your own entity IDs:
 
 - **Climate Entity**: Thermostat/TRV with preset modes (frost, eco, comfort, boost)
   - Example: `climate.bedroom_heater` (using Versatile Thermostat integration)
@@ -127,14 +142,17 @@ This project requires the following entities in Home Assistant. You'll need to u
   - Example: `number.bedroom_heater_preset_boost_temp`
 
 ### Additional Files
-- Material Design Icons font file - see [font component](/components/font#material-design-icons) for more comprehensive explanation.
-- `weather_icon_map.h` header file see [Info Panel with ESP32 2.8" Display](./info-panel-28.md#weather-icon-map-header-file) project for details.
+
+- Material Design Icons font file - see [font component](/components/font#material-design-icons) for more
+comprehensive explanation.
+- `weather_icon_map.h` header file see
+[Info Panel with ESP32 2.8" Display](./info-panel-28.md#weather-icon-map-header-file) project for details.
 - CAP1166 custom component is pulled from github repository so no additional files for this are needed
 
 ## Project Photos
 
-<!-- TODO: Add photos of finished device -->
 _Photos of the completed climate controller will be added here once the enclosure is designed._
+Meanwhile have a look at some of the ![work-in-progress photos](#work-in-progress).
 
 <!-- TODO: Add wiring diagram -->
 _Detailed wiring diagram showing all connections will be added here._
@@ -145,6 +163,7 @@ _Detailed wiring diagram showing all connections will be added here._
 _3D printable enclosure design is in progress. STL files and assembly instructions will be provided here._
 
 The enclosure will house:
+
 - ESP32-C6 board
 - SH1107 OLED display (front-facing)
 - Touch pHAT buttons (front-facing)
@@ -179,7 +198,11 @@ For more information on using secrets in ESPHome, refer to the [ESPHome document
 
 ### Main Configuration File
 
-If you're using [ESPHome Device Builder](https://www.esphome.io/guides/getting_started_hassio/#installing-esphome-device-builder) create your _New Device_. Or if you're using [command line](https://www.esphome.io/guides/getting_started_command_line/) create your yaml file (e.g. `bedroom-controller.yaml`)
+If you're using
+[ESPHome Device Builder](https://www.esphome.io/guides/getting_started_hassio/#installing-esphome-device-builder)
+create your _New Device_. Or if you're using
+[command line](https://www.esphome.io/guides/getting_started_command_line/) create your yaml file
+(e.g. `bedroom-controller.yaml`)
 Then use the following file as a guide (details on how to customize it are below):
 
 ```yaml
@@ -815,7 +838,8 @@ display:
             it.printf(4, 52, id(value_large), COLOR_ON, "%.1f%s", id(indoor_temperature).state, id(outside_temperature_unit).state.c_str());
             it.printf(4, 76, id(value_med), COLOR_ON, "%.0f%%", id(indoor_humidity).state);
 
-            it.printf(it.get_width() - 4, 52, id(value_med), COLOR_ON, TextAlign::TOP_RIGHT, "%.1f%s", id(indoor_temp_setting).state, id(outside_temperature_unit).state.c_str());
+            it.printf(it.get_width() - 4, 52, id(value_med), COLOR_ON, TextAlign::TOP_RIGHT, "%.1f%s",
+              id(indoor_temp_setting).state, id(outside_temperature_unit).state.c_str());
             it.printf(it.get_width() - 4, 76, id(value_med), COLOR_ON, TextAlign::TOP_RIGHT, current_temp_preset.c_str());
 
             //show icons
@@ -846,8 +870,10 @@ display:
               
               it.printf(it.get_width()/2, it.get_height()/2, id(mdi_large), COLOR_ON, TextAlign::BOTTOM_CENTER, icons[i].c_str());
               
-              it.printf(it.get_width()/2, it.get_height()-48, id(value_med), COLOR_ON, TextAlign::TOP_CENTER, "Set the mode to:");
-              it.printf(it.get_width()/2, it.get_height()-24, id(value_med), COLOR_ON, TextAlign::TOP_CENTER, "%s ?", id(selecting_heating_preset).c_str());
+              it.printf(it.get_width()/2, it.get_height()-48, id(value_med), COLOR_ON, TextAlign::TOP_CENTER,
+              "Set the mode to:");
+              it.printf(it.get_width()/2, it.get_height()-24, id(value_med), COLOR_ON, TextAlign::TOP_CENTER,
+              "%s ?", id(selecting_heating_preset).c_str());
               break;
             }
 
@@ -868,14 +894,13 @@ display:
             it.printf(it.get_width()/2, it.get_height()-48, id(value_large), COLOR_ON, TextAlign::TOP_CENTER, "%.1f", id(changing_heating_temp));
 
             //apply
-            it.printf(0, it.get_height() - 28, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F0158");
+            it.printf(0, it.get_height() - 48, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F0158");
             //cancel
-            it.printf(it.get_width(), it.get_height() - 28, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0C52");
-
+            it.printf(it.get_width(), it.get_height() - 48, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0C52");
             //minus
-            it.printf(4, it.get_height() - 2, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F06F2");
+            it.printf(24, it.get_height() - 28, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F06F2");
             //plus
-            it.printf(it.get_width() - 4, it.get_height() - 2, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0704");
+            it.printf(it.get_width() - 24, it.get_height() - 28, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0704");
           }
 
 ```
@@ -884,7 +909,8 @@ display:
 
 ### Substitutions
 
-The configuration uses substitutions to make it easy to adapt to your Home Assistant setup. **Update these with your own entity IDs:**
+The configuration uses substitutions to make it easy to adapt to your Home Assistant setup.
+**Update these with your own entity IDs:**
 
 ```yaml
 substitutions:
@@ -897,35 +923,44 @@ substitutions:
 ### Boot Progress Tracking
 
 The `my_boot_in_progress` global variable tracks the device startup stages:
+
 - **3**: ESP32 starting up
 - **2**: Boot Finished
 - **1**: Wifi Connected
 - **0**: Connected to Home Assistant (Fully connected and ready)
 
-This is controlling boot display. If you look at the code I wasn't 100% sure of the ordering of events or whether there might be some racing conditions. The boot screen is shown all the way until device connects to Home Assistant.
+This is controlling boot display. If you look at the code I wasn't 100% sure of the ordering of events or
+whether there might be some racing conditions. The boot screen is shown all the way until device connects to
+Home Assistant.
 
 ### Climate Control Integration
 
-This configuration is designed to work with the [**Versatile Thermostat integration**](https://github.com/jmcollin78/versatile_thermostat) custom integration for Home Assistant. Versatile Thermostat provides:
+This configuration is designed to work with the
+[**Versatile Thermostat integration**](https://github.com/jmcollin78/versatile_thermostat)
+custom integration for Home Assistant. Versatile Thermostat provides:
+
 - Multiple preset modes (frost, eco, comfort, boost)
 - Individual temperature settings per preset
 - Advanced heating strategies
 - Comprehensive automation support
 
 **Important:** If you're using a different climate integration, you may need to adjust:
+
 - Preset mode names in scripts
 - The `indoor_temp_preset_boost` number entity reference
 - Preset mode icons
 
 ### Touch Button Functions
 
-#### Information Page (page_info):
+#### Information Page (page_info)
+
 - **FORWARD**: Navigates to the heating page
 - **BACK**: Navigates to the heating page (same as forward, only 2 pages)
 
-#### Heating Page (page_heating):
+#### Heating Page (page_heating)
 
 **Normal Mode:**
+
 - **FORWARD**: Navigate to info page
 - **BACK**: Navigate to info page (same as forward, only 2 pages)
 - **Button A**: Select "frost" preset
@@ -935,11 +970,13 @@ This configuration is designed to work with the [**Versatile Thermostat integrat
 - **Button D (long press)**: Enter temperature adjustment mode for boost
 
 **Preset Confirmation Mode:**
+
 - **FORWARD**: Confirm preset change
 - **BACK**: Cancel preset change
 - **Buttons A-D**: No function
 
 **Temperature Adjustment Mode:**
+
 - **FORWARD**: Confirm new temperature
 - **BACK**: Cancel temperature change
 - **Button A**: Decrease by 0.5°C (min 15°C)
@@ -949,6 +986,7 @@ This configuration is designed to work with the [**Versatile Thermostat integrat
 ### LED Feedback
 
 The Touch pHAT LEDs provide visual feedback:
+
 - **Normal mode**: LEDs off
 - **Preset confirmation**: Forward and Back LEDs pulsing
 - **Temperature adjustment**: Forward, Back, A, and D LEDs lit
@@ -958,6 +996,7 @@ LED brightness can be adjusted via the "LED Brightness" number entity (0-100%).
 ### Display Pages
 
 #### Page 1: Information Display
+
 - Current time (12-hour format with AM/PM)
 - Current date (day, date, month)
 - Weather icon and description
@@ -965,6 +1004,7 @@ LED brightness can be adjusted via the "LED Brightness" number entity (0-100%).
 - EV battery level with car icon
 
 #### Page 2: Heating Control
+
 - Current time (top-right)
 - Heating active indicator (top-left, only when heating)
 - Indoor temperature (large, left side)
@@ -975,7 +1015,9 @@ LED brightness can be adjusted via the "LED Brightness" number entity (0-100%).
 
 ### Weather Integration
 
-This project assumes you have a working weather integration in Home Assistant, typically configured as `weather.forecast_home`. The configuration retrieves:
+This project assumes you have a working weather integration in Home Assistant, typically configured as
+`weather.forecast_home`. The configuration retrieves:
+
 - Current temperature (from `temperature` attribute)
 - Temperature unit (C or F)
 - Weather condition (for icon mapping)
@@ -992,10 +1034,11 @@ This project assumes you have a working weather integration in Home Assistant, t
 ### Prepare Files
 
 1. Download the Material Design Icons - details in [font component](/components/font#material-design-icons).
-2. Create the `weather_icon_map.h` header file (content [here](./info-panel-28.md/#weather-icon-map-header-file))
+2. Create the `weather_icon_map.h` header file ([content here](./info-panel-28.md/#weather-icon-map-header-file))
 3. Create your `secrets.yaml` file with your WiFi credentials
 
-NOTE: no need to do anything for the external component, the [CAP1166](/components/cap1166) component code downloaded from github automatically.
+NOTE: no need to do anything for the external component, the [CAP1166](/components/cap1166) component code
+downloaded from github automatically.
 
 ### Update Configuration
 
@@ -1007,42 +1050,43 @@ NOTE: no need to do anything for the external component, the [CAP1166](/componen
 More info on [how to manage secrets](https://esphome.io/guides/security_best_practices/#secrets-management).
 
 ### Flash ESPHome
-Use [ESPHome Device Builder](https://esphome.io/guides/getting_started_hassio/#device-builder-interface), that's simplest. After the first flash, you can use OTA updates.
+
+Use [ESPHome Device Builder](https://esphome.io/guides/getting_started_hassio/#device-builder-interface),
+that's simplest. After the first flash, you can use OTA updates.
 
 ### Add to Home Assistant
 
 The device should be automatically discovered in Home Assistant:
 
-1. Go to **Settings → Devices & Services**
-2. Look for the discovered ESPHome device
-3. Click **Configure** and enter your API encryption key
-4. ⚠️ By default new ESPHome device is not allowed to perform any Home Assistant Actions
+- Go to **Settings → Devices & Services**
+- Look for the discovered ESPHome device
+- Click **Configure** and enter your API encryption key
+- ⚠️ By default new ESPHome device is not allowed to perform any Home Assistant Actions
   - In order to:
     - change heating presets
     - change "boost" preset configuration
   - You need to go to device settings in Home Assistant and select:
     - _Allow the device to perform Home Assistant actions_
 
-
 ### Verify Operation
 
 Check that:
+
 - Display shows boot screen then connects
 - Time and weather information appear on info page
 - Indoor temperature and humidity display on heating page
 - Page navigation works (forward/back buttons)
 - Preset icons show current heating mode
 
-
 ## Troubleshooting
-
-
 
 ### Stuck at Boot Screen
 
 If you're stuck at boot screen that usually means the device cannot connect to WiFi.
 
-Check your secrets.yaml that you have correct WiFi ssid and password. If this is correct, the best is to connect the device to your computer, open up [ESPHome Web](https://web.esphome.io/), connect to the device and open up logs. Reboot the device to see the logs from starting up and hopefully that will reveal any issues.
+Check your secrets.yaml that you have correct WiFi ssid and password. If this is correct, the best is to
+connect the device to your computer, open up [ESPHome Web](https://web.esphome.io/), connect to the device
+and open up logs. Reboot the device to see the logs from starting up and hopefully that will reveal any issues.
 
 If no issues show up change logging level:
 
@@ -1051,52 +1095,64 @@ logger:
   level: DEBUG
 ```
 
-Note that the boot screen will be on until connection is established with Home Assistant, so the issue might be that the device cannot connect to WiFi or it can connect to WiFi but not to Home Assistant afterwards.
+Note that the boot screen will be on until connection is established with Home Assistant, so the issue might
+be that the device cannot connect to WiFi or it can connect to WiFi but not to Home Assistant afterwards.
 
 ### Entity Status Not Updated
 
-Check substitutions making sure that you have entered correct entity ids. For temperature/humidity sensor this should work just fine and a typo or incorrect entity id is most likely issue. Any climate entity should work for controling heating but see below.
+Check substitutions making sure that you have entered correct entity ids. For temperature/humidity sensor
+this should work just fine and a typo or incorrect entity id is most likely issue. Any climate entity
+should work for controling heating but see below.
 
 ### Heating Control Not Working
 
 If the correct preset and temperature setting is not updated - verify that climate entity ID is correct.
 
-If the heater button doesn't control thermostat - did you: [_Allow the device to perform Home Assistant actions_](#add-to-home-assistant)?
+If the heater button doesn't control thermostat - did you:
+[_Allow the device to perform Home Assistant actions_](#add-to-home-assistant)?
 
-While this should work with any climate control, check that preset modes (frost, boost, eco) are supported. If they are not, you might need to change config slightly to support your settings. Maybe your setting doesn't have a boost preset - just replace `boost` in the configuration with what your desired setting is. The same goes for `frost`, `eco` and `comfort`.
+While this should work with any climate control, check that preset modes (frost, boost, eco)
+are supported. If they are not, you might need to change config slightly to support your
+settings. Maybe your setting doesn't have a boost preset - just replace `boost` in the
+configuration with what your desired setting is. The same goes for `frost`, `eco` and `comfort`.
 
 ### Random Reboots or Crashes
 
 **Problem:** Device restarts unexpectedly
 
 **Solutions:**
+
 1. Use adequate power supply (1A minimum)
 1. Reduce display buffer size if running out of memory
 1. Lower logger level to WARN or ERROR
 1. Disable unnecessary components temporarily
-
 
 ### Display Not Working
 
 **Problem:** Screen stays blank or shows no output
 
 **Solutions:**
+
 1. Verify SPI wiring (CLK, MOSI, CS, DC pins)
 1. Check display model is "SH1107 128x128" ... or if you're modifying this - whatever your model is
 1. Verify CS and DC pin assignments match your wiring
 1. Try different `rotation` values (0, 90, 180, 270)
 1. Check display power supply (3.3V)
-1. Test with simpler display code first - go to the list of [devices](/devices) and filter by `display` category. If your display is in the list it will have information how to set it up and will have simple display configuration.
+1. Test with simpler display code first - go to the list of [devices](/devices) and filter by `display`
+category. If your display is in the list it will have information how to set it up and will have simple
+display configuration.
 
 ### Touch Buttons Not Responding
 
 **Problem:** Touch pHAT doesn't register touches
 
 **Solutions:**
+
 1. Verify I2C wiring (SDA: GPIO19, SCL: GPIO20)
 1. Check Touch pHAT has 5V power
 1. Verify I2C address is 0x2C (check with I2C scanner)
-1. Adjust `touch_threshold` value (generally: 0x01 is most sensitive, 0x80 is least sensitive. My configuration is 0x40 - Medium. Try 0x20 first and see how it goes)
+1. Adjust `touch_threshold` value (generally: 0x01 is most sensitive, 0x80 is least sensitive.
+My configuration is 0x40 - Medium. Try 0x20 first and see how it goes)
 1. Look for I2C errors in ESPHome logs
 
 ### LEDs Not Lighting
@@ -1104,6 +1160,7 @@ While this should work with any climate control, check that preset modes (frost,
 **Problem:** Touch pHAT LEDs don't respond
 
 **Solutions:**
+
 1. Verify I2C communication is working (touch should work first)
 1. Check LED brightness setting (increase to 100% for testing)
 1. Test individual lights from Home Assistant
@@ -1113,9 +1170,11 @@ While this should work with any climate control, check that preset modes (frost,
 **Problem:** Long-press on Button D doesn't enter adjustment mode
 
 **Solutions:**
+
 1. Verify you're on the heating page (page 2)
 1. Are you pressing it not too short and not too long? Press should be between 350ms and 2000ms long 👀
-1. Check `number.${heater}_preset_boost_temp` number entity exists. You might not have this in Home Assistant if you're not using Versatile Thermostat - you might need to replace this with what you want to change.
+1. Check `number.${heater}_preset_boost_temp` number entity exists. You might not have this in Home Assistant
+if you're not using Versatile Thermostat - you might need to replace this with what you want to change.
 1. Ensure you're not already in selection mode
 1. Increase long-press duration threshold if needed
 1. Check lambda logic in `touch_d_long_click` script
@@ -1126,3 +1185,18 @@ This project documentation will be updated with:
 
 - **NeoPixel Integration** - Add RGB LED for ambient lighting and notifications
 - **3D Enclosure Design** - STL files and assembly instructions
+
+## Other Images
+
+### Work in Progress
+
+- Starting up
+![Starting up](./images/bedroom-controller/start-up.jpg)
+- Info
+![Info Page](./images/bedroom-controller/info-page.jpg)
+- Heating
+![Heating Page](./images/bedroom-controller/heating-page.jpg)
+- Set Heating Preset
+![Set Heating Preset Page](./images/bedroom-controller/preset-page.jpg)
+- Set Boost Temperature
+![Set Boost Temperature Page](./images/bedroom-controller/set-temperature-page.jpg)
