@@ -23,7 +23,7 @@ purchaseLinks:
 dateAcquired: "Sept 2024"
 status: "ready"
 count: 2
-lastModified: "2025-12-13"
+lastModified: "2025-12-14"
 image: "/images/devices/thumbnails/beetle-esp32-c6.jpg"
 ---
 
@@ -93,6 +93,7 @@ binary_sensor:
 - **Compact Design**: Ultra-small size perfect for space-constrained projects
 - **Modern Connectivity**: WiFi 6 (802.11ax) and Bluetooth 5.3 with LE support
 - **USB-C Interface**: Easy programming and power via USB Type-C
+- **Debugging**: JTAG & Serial Debugging over USB
 - **Low Power**: Excellent power efficiency with multiple sleep modes
 - **Peripherals**:
   - Digital I/O x13

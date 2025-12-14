@@ -11,19 +11,21 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Pimoroni"
     url: "https://shop.pimoroni.com/products/0-96-spi-colour-lcd-160x80-breakout?variant=21414301630547"
-status: "pending"
+status: "testing"
 dateAcquired: "Jan 2022"
 image: "/images/devices/thumbnails/pimoroni-096-spi-lcd.jpg"
-lastModified: "2025-12-08"
+lastModified: "2025-12-14"
 ---
 
 ## Overview
 
-The 0.96" SPI Colour LCD is a compact, high-quality color display from Pimoroni. Its small form factor makes it ideal for embedded projects, wearables, and space-constrained applications.
+The 0.96" SPI Colour LCD is a compact, high-quality color display from Pimoroni. Its small form factor makes it
+ideal for embedded projects, wearables, and space-constrained applications.
 
 ![Pimoroni 0.96" Color LCD](./images/pimoroni-096-spi-lcd/pimoroni-096-spi-lcd.jpg)
 
 Display specifications:
+
 - 160x80 pixels (~190 PPI)
 - 10.8x21.7mm active area
 - 400cd/m2 luminance
@@ -44,6 +46,7 @@ Display specifications:
 ## Pin Connections
 
 Typical Pimoroni breakout pinout:
+
 - **VCC** → 3.3V
 - **GND** → Ground
 - **CS** → Chip Select (any GPIO)
