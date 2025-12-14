@@ -95,8 +95,14 @@ comprehensive explanation.
 
 ## Project Photos
 
-<!-- TODO: Add photos of finished device in action -->
-TODO
+Some photos of the device in action:
+
+![Info Panel Close-up Photo](./images/info-panel-28/info-close-up2.jpg)
+![Another Info Panel Close-up Photo](./images/info-panel-28/info-close-up1.jpg)
+![Info Panel With Heating Boost On](./images/info-panel-28/info-boost.jpg)
+![Info Panel With Amp On](./images/info-panel-28/info-boost-amp.jpg)
+![Info Panel Side View](./images/info-panel-28/side-view.jpg)
+![Info Panel View for Scale](./images/info-panel-28/scale-and-notif.jpg)
 
 ## Hardware Setup
 
