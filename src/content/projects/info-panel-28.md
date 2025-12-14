@@ -36,14 +36,14 @@ Smart home control panel with a touchscreen interface that provides:
 - 🌈 RGB LED for status
 
 I did this project for my boy. We have a shed where he can play his guitar. For most of the time the heater
-is off. It just turns on so it keeps a reasonable tempeture for the gear during cold months. The panel gives
+is off. It just turns on so it keeps a reasonable temperature for the gear during cold months. The panel gives
 him information on outside temperature, weather forecast and inside temperature.
 
 He can remotely turn on heating if he wants the temperature to be more pleasant for playing, and he can
 remotely turn on lights, amp and the rest of the gear (hence the amp switch in the project). Actually, the
 main feature is that he can turn all of them off because he forgets to do it occasionally 😁.
 
-It is fully functional, lots of features, only one device used and it has 3D printed enclosure for it.
+It is fully functional, lots of features, only one device used and it has a 3D printed enclosure for it.
 
 While it has lots of coding, I consider it `intermediate` because you don't need to figure out anything
 hardware related. There's no wiring, only plug it in and copy code and with a bit of tweaking you should
@@ -103,6 +103,7 @@ Some photos of the device in action:
 ![Info Panel With Amp On](./images/info-panel-28/info-boost-amp.jpg)
 ![Info Panel Side View](./images/info-panel-28/side-view.jpg)
 ![Info Panel View for Scale](./images/info-panel-28/scale-and-notif.jpg)
+![Screenshot from Home Assistant](./images/info-panel-28/home-assistant-screenshot.jpg)
 
 ## Hardware Setup
 
@@ -1469,17 +1470,17 @@ Modify the color definitions to match your preferences:
 ```yaml
 color:
   - id: ha_blue
-    hex: 51C0F2        # Accent color
+    hex: 51C0F2        # Accent color for weather icons
   - id: main_bg
-    hex: 0A0A0A        # Main background (very dark)
+    hex: 0A0A0A        # Background color for the main screen (very dark)
   - id: widget_bg
-    hex: 1B1B1B        # Widget background (dark)
+    hex: 1B1B1B        # Background color for widgets (dark)
   - id: text_main
-    hex: F0F0F0        # Main text color (light)
+    hex: F0F0F0        # Default text color (light)
   - id: button_bg
-    hex: 4F4F4F        # Button background (medium gray)
+    hex: 4F4F4F        # Background color for buttons (medium gray)
   - id: widget_press_bg
-    hex: D3D3D3        # Button press feedback (light gray)
+    hex: D3D3D3        # Highlight color for pressed buttons (light gray)
 ```
 
 ### Add Additional Sensors
