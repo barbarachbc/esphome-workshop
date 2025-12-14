@@ -14,7 +14,7 @@ purchaseLinks:
 status: "ready"
 dateAcquired: "Jan 2022"
 image: "/images/devices/thumbnails/sh1107-spi-oled.jpg"
-lastModified: "2025-12-12"
+lastModified: "2025-12-14"
 ---
 
 ## Overview
@@ -33,20 +33,29 @@ and consume very little power.
 - This version uses SPI
 - 3.3V or 5V compatible
 
+## Testing Status
+
+- ✅ [Basic Config](#basic-configuration) - Wiring up & basic graphics
+- ✅ [Multipage Icons and Text](#example-with-icons-and-multiple-pages)
+- ✅ Tested with ESP32
+- [ ] Tested with ESP8266
+
 ## Configuration Notes
 
 - Requires **SPI**, spi_id is optional, but spi component is required.
-- ⚠️ **show_test_card** - cannot be used, does not show anything.
+- ⚠️ **show_test_card** - cannot be used, does not show anything, so careful there
 - model: "SH1107 128x128"
 - rotation: 180 ... well, depends on how you want to position it I suppose 🙂,
 but because of how the board is oriented 180 makes sense
 - cs_pin and dc_pin are required - can be any available GPIO
+- No backlight or contrast support
 
 ### Basic Configuration
 
 Example here is for [esp32-devkit-v1](./esp32-devkit-v1) I use substitutions in the example below.
 
-TODO: photos of the examples
+Very basic test - just two squares:
+![Two squares on the screen](./images/sh1107-spi-oled/basic-test.jpg)
 
 ```yaml
 esphome:
@@ -63,6 +72,10 @@ substitutions:
   disp_cs_pin: GPIO15
   disp_dc_pin: GPIO04
 
+spi:
+  clk_pin: ${clk_pin}
+  mosi_pin: ${mosi_pin}
+
 display:
   - platform: ssd1306_spi
     id: pimoroni1_12oled
@@ -73,10 +86,6 @@ display:
     lambda: |-
       it.filled_rectangle(0, 0, 48, 48);
       it.filled_rectangle(it.get_width()/2, it.get_height()/2, 12, 12);
-
-spi:
-  clk_pin: ${clk_pin}
-  mosi_pin: ${mosi_pin}
 
 ```
 
@@ -102,6 +111,8 @@ Every 5 seconds the pages cycle through:
 and an indicator icon whether the heating is ON
 - preset selection page
 - preset temperature change page
+
+![Animated Pages](./images/sh1107-spi-oled/pages-anim.gif)
 
 ```yaml
 esphome:
@@ -179,6 +190,7 @@ font:
 
 display:
   - platform: ssd1306_spi
+    id: my_display
     model: "SH1107 128x128"
     cs_pin: ${disp_cs_pin}
     dc_pin: ${disp_dc_pin}
@@ -212,7 +224,7 @@ display:
           it.printf(4, 12, id(mdi_med), COLOR_ON, "\U000F1807");
 
           it.printf(4, 52, id(value_large), COLOR_ON, "18.4°C");
-          it.printf(4, 76, id(value_med), COLOR_ON, "52%");
+          it.printf(4, 76, id(value_med), COLOR_ON, "52%%");
 
           it.printf(it.get_width() - 4, 52, id(value_med), COLOR_ON, TextAlign::TOP_RIGHT, "18.0°C");
           it.printf(it.get_width() - 4, 76, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F04B9");
@@ -265,3 +277,14 @@ Pimoroni 1.12" Mono OLED Breakout:
 
 Pimoroni 1.12" Mono OLED Breakout Back:
 ![Pimoroni 1.12" Mono OLED Breakout Back Photo](./images/sh1107-spi-oled/pimoroni-112-oled-breakout-back.jpg)
+
+Shots from the more [complicated example](#example-with-icons-and-multiple-pages):
+
+- Page 1 - Info Screen
+![Page 1](./images/sh1107-spi-oled/page1-info.jpg)
+- Page 2 - Heating Screen
+![Page 2](./images/sh1107-spi-oled/page2-heating.jpg)
+- Page 3 - Set Heating Preset
+![Page 3](./images/sh1107-spi-oled/page3-preset.jpg)
+- Page 4 - Set Boost Temperature
+![Page 4](./images/sh1107-spi-oled/page4-set-temp.jpg)
