@@ -49,8 +49,11 @@
     
     init() {
       // Find all Astro-optimized images in content areas
+      // NOTE: data-image-component is only working in dev mode for some reason.
+      // When building static website data-image-component is not emitted
       const contentImages = document.querySelectorAll<HTMLImageElement>(
-        'img[data-image-component="true"]'
+        //'img[data-image-component="true"]'
+        "div#_markdown_wrapper img"
       );
       
       this.images = Array.from(contentImages);

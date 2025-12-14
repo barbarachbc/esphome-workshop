@@ -272,7 +272,10 @@ The lightbox provides an interactive image viewing experience for all markdown i
 - 📱 **Responsive** - 90vw × 90vh container with proper sizing
 
 **How it works:**
-1. Automatically detects all Astro-optimized images (`data-image-component="true"`)
+1. Automatically detects all Astro-optimized images (`data-image-component="true"`) **This is not working**
+  1. `data-image-component` is not emitted when generating static website for deployment
+  1. changed slug templates to set id for the wrapper container around content: `_markdown_wrapper`
+  1. all images in this container are then used
 2. Makes images clickable with cursor and keyboard support
 3. Opens modal overlay when clicked
 4. Copies image's `srcset` and `sizes` attributes to lightbox
