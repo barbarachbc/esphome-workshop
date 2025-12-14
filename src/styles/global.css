@@ -750,3 +750,13 @@ details summary::marker {
 .dark .lightbox-overlay {
   background: rgba(0, 0, 0, 0.98);
 }
+
+.herolink {
+  color: var(--text-hero);
+  text-decoration: underline;
+}
+
+.herolink:visited {
+  color: var(--text-hero);
+  text-decoration: underline;
+}

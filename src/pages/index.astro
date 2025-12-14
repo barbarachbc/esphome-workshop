@@ -107,7 +107,8 @@ const heroDescriptions = [
   "This is my personal documentation as I turn all my junk into smart home devices.",
   "As they say - one man's garbage is another man's treasure, just in this case I'm that same man! 😂 Maybe the world just wasn't ready for me all these years!",
   "Let's Take the Power Back! ✊",
-  "My home my rules 🛖! ... well, as long as wife's approval rating is high 📈"
+  "My home my rules 🛖! ... well, as long as wife's approval rating is high 📈",
+  "Fight the e-waste ♻️"
 ];
 
 const randomHeroDescription = heroDescriptions[Math.floor(Math.random() * heroDescriptions.length)];
@@ -121,7 +122,9 @@ const recentChanges = await getRecentChanges(7);
     <h1 class="m-0 mb-4 text-4xl" style="color: var(--text-hero);">My ESPHome Workshop</h1>
     <p class="text-lg max-w-2xl mx-auto mb-4" style="color: var(--text-hero); opacity: 0.95;">
       After 15+ years collecting dev boards, sensors, and random gadgets, 
-      it's finally time to build something useful.
+      it's finally time to build something useful. This whole website is for using my existing
+      devices to create projects using <a href="https://esphome.io/" target="_blank"  class="herolink">ESPHome</a> and use them in 
+      <a href="https://www.home-assistant.io/"  target="_blank" class="herolink">Home Assistant</a> or on their own.
     </p>
     <p class="text-lg max-w-2xl mx-auto mb-0" style="color: var(--text-hero); opacity: 0.95;">{randomHeroDescription}</p>
   </div>
