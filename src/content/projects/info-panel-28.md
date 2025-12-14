@@ -1,7 +1,7 @@
 ---
 title: 'Info Panel with ESP32 2.8" Display'
 description: "Build a control panel using ESP32 2.8 inch Display to control heating, lights, switches and display time and temperature"
-difficulty: "advanced"
+difficulty: "intermediate"
 devices: ["jc2432w328c"]
 components: ["api", "ota", "wifi", "captive-portal", "substitutions", 
             "time-homeassistant", "script", "number-template",
@@ -16,14 +16,15 @@ changelog:
   - date: "2025-12-03"
     type: "added"
     description: "Created first version of the document"
-lastModified: "2025-12-09"
+lastModified: "2025-12-14"
 ---
 
 ## Project Overview
 
-TODO: add showcase photo
+![Info Panel](./images/info-panel-28/info-panel-28.jpg)
 
 Smart home control panel with a touchscreen interface that provides:
+
 - 🕐 Real-time clock display with date
 - 🌤️ Weather information (current conditions, temperature, forecast)
 - 🌡️ Indoor climate monitoring (temperature and humidity)
@@ -34,34 +35,51 @@ Smart home control panel with a touchscreen interface that provides:
 - 🛡️ Anti-burn-in protection for display longevity
 - 🌈 RGB LED for status
 
-I did this project for my boy. We have a shed where he can play his guitar. For most of the time the heater is off. It just turns on so it keeps a reasonable tempeture for the gear during cold months. The panel gives him information on outside temperature, weather forecast and inside temperature.
+I did this project for my boy. We have a shed where he can play his guitar. For most of the time the heater
+is off. It just turns on so it keeps a reasonable tempeture for the gear during cold months. The panel gives
+him information on outside temperature, weather forecast and inside temperature.
 
-He can remotely turn on heating if he wants the temperature to be more pleasant for playing, and he can remotely turn on lights, amp and the rest of the gear (hence the amp switch in the project). Actually, the main feature is that he can turn all of them off because he forgets to do it occasionally 😁.
+He can remotely turn on heating if he wants the temperature to be more pleasant for playing, and he can
+remotely turn on lights, amp and the rest of the gear (hence the amp switch in the project). Actually, the
+main feature is that he can turn all of them off because he forgets to do it occasionally 😁.
 
 It is fully functional, lots of features, only one device used and it has 3D printed enclosure for it.
 
+While it has lots of coding, I consider it `intermediate` because you don't need to figure out anything
+hardware related. There's no wiring, only plug it in and copy code and with a bit of tweaking you should
+have it going in no time.
+
 ### Future improvement ideas
-- RGB LED that is "breathing" red while the heating is on, maybe green when the amp is on, just to remind him to switch them off 😉
+
+- RGB LED that is "breathing" red while the heating is on, maybe green when the amp is on, just to remind him
+to switch them off 😉
 - Alarm - sound alarm when the windows are open and it is forecasted to rain 🤔
 
 ### Reusability Note
 
-The project is not as reusable as I would like it, but it offers a lot if you need any of the features described above. You can adapt it to your specific needs by modifying the substitutions and entity IDs. However, customizing the LVGL UI layout or adding/removing features will require a bit of understanding of LVGL and ESPHome.
+The project is not as reusable as I would like it, but it offers a lot if you need any of the features
+described above. You can adapt it to your specific needs by modifying the substitutions and entity IDs.
+However, customizing the LVGL UI layout or adding/removing features will require a bit of understanding of
+LVGL and ESPHome.
 
-I hope the config file is readable enough and the additional descriptions here are useful. I'll keep improving it as I go along.
+I hope the config file is readable enough and the additional descriptions here are useful. I'll keep
+improving it as I go along.
 
 ## What You'll Need
 
 ### Hardware
+
 - 1x [JC2432W328C ESP32 2.8" Display](/devices/jc2432w328c) - This project uses nearly all integrated features of the board.
 - 1x USB-C cable (data capable)
 - 1x Power supply (USB charger, 5V/1A minimum)
 - Optional: 3D printer for custom enclosure
 
 ### Software
+
 - ESPHome installed
 - Home Assistant with configured [weather integration](https://www.home-assistant.io/integrations/weather/)
-  - [Met.no](https://www.home-assistant.io/integrations/met/) used, which is used by 82.4% of all users so this should work out of the box
+  - [Met.no](https://www.home-assistant.io/integrations/met/) used, which is used by 82.4% of all users
+  so this should work out of the box
 - Home Assistant entities:
   - Indoor temperature sensor
   - Indoor humidity sensor
@@ -70,22 +88,23 @@ I hope the config file is readable enough and the additional descriptions here a
 - USB-to-Serial drivers (CH340C chip is used by the board, it was plug-and-play for me on Windows 11)
 
 ### Additional Files
-- Material Design Icons font file - see [font component](/components/font#material-design-icons) for more comprehensive explanation.
+
+- Material Design Icons font file - see [font component](/components/font#material-design-icons) for more
+comprehensive explanation.
 - `weather_icon_map.h` header file (provided below)
 
 ## Project Photos
 
-<!-- TODO: Add photos of finished device -->
-_Photos of the completed info panel will be added here_
-
-<!-- TODO: Add UI screenshots -->
-_Screenshots of the UI in action will be added here_
+<!-- TODO: Add photos of finished device in action -->
+TODO
 
 ## Hardware Setup
 
-The JC2432W328C is an integrated ESP32 development board with a 2.8" IPS touchscreen display. For detailed specifications and pinout information, see the [JC2432W328C device page](/devices/jc2432w328c).
+The JC2432W328C is an integrated ESP32 development board with a 2.8" IPS touchscreen display. For detailed
+specifications and pinout information, see the [JC2432W328C device page](/devices/jc2432w328c).
 
-No additional wiring is required as the display and touchscreen are pre-wired on the board. Simply connect via USB-C for programming and power.
+No additional wiring is required as the display and touchscreen are pre-wired on the board. Simply connect
+via USB-C for programming and power.
 
 ## 3D Printed Enclosure
 
@@ -101,13 +120,14 @@ I had to add some negative volume in my Prusa Slicer to get the holes in the rig
 ### Prerequisites
 
 Before using this configuration, ensure you have:
-1. A working Home Assistant installation with the following configured:
-   - Weather integration (e.g., `weather.forecast_home`)
-   - Indoor temperature and humidity sensors
-   - A climate entity for heating control
-   - Switch and light entities to control
-2. Material Design Icons font file saved in your ESPHome directory as `assets/materialdesignicons-webfont.ttf`
-3. The `weather_icon_map.h` header file (see below)
+
+- A working Home Assistant installation with the following configured:
+  - Weather integration (e.g., `weather.forecast_home`)
+  - Indoor temperature and humidity sensors
+  - A climate entity for heating control
+  - Switch and light entities to control
+- Material Design Icons font file saved in your ESPHome directory as `assets/materialdesignicons-webfont.ttf`
+- The `weather_icon_map.h` header file (see below)
 
 ### Secrets File Setup
 
@@ -175,7 +195,11 @@ std::map<std::string, std::string> weather_desc_map
 
 ### Main Configuration File
 
-If you're using [ESPHome Device Builder](https://www.esphome.io/guides/getting_started_hassio/#installing-esphome-device-builder) create your _New Device_. Or if you're using [command line](https://www.esphome.io/guides/getting_started_command_line/) create your yaml file (e.g. `panel-info-28.yaml`)
+If you're using
+[ESPHome Device Builder](https://www.esphome.io/guides/getting_started_hassio/#installing-esphome-device-builder)
+create your _New Device_. Or if you're using
+[command line](https://www.esphome.io/guides/getting_started_command_line/) create your yaml file
+(e.g. `panel-info-28.yaml`).
 Then use the following file as a guide (details on how to customize it are below):
 
 ```yaml
@@ -1061,7 +1085,8 @@ substitutions:
   light_switch: light.room_light            # Full entity ID for light control
 ```
 
-**Note:** The `amp_switch` and `light_switch` require the full entity ID including the domain prefix (e.g., `switch.` or `light.`) because they can be various entity types (switch, light, etc.) in Home Assistant.
+**Note:** The `amp_switch` and `light_switch` require the full entity ID including the domain prefix
+(e.g., `switch.` or `light.`) because they can be various entity types (switch, light, etc.) in Home Assistant.
 
 ### Weather Integration
 
@@ -1069,9 +1094,13 @@ This project assumes you have a working weather integration in Home Assistant, t
 
 ### Climate Control Integration
 
-This configuration was designed to work with the [Versatile Thermostat](https://github.com/jmcollin78/versatile_thermostat) custom integration for Home Assistant. Versatile Thermostat is a powerful climate integration that provides advanced thermostat features including multiple preset modes (frost, eco, boost), various heating strategies, and comprehensive automation support.
+This configuration was designed to work with the
+[Versatile Thermostat](https://github.com/jmcollin78/versatile_thermostat) custom integration for Home
+Assistant. Versatile Thermostat is a powerful climate integration that provides advanced thermostat features
+including multiple preset modes (frost, eco, boost), various heating strategies, and comprehensive automation support.
 
 If you're using a different climate integration, you may need to adjust:
+
 - The preset mode names in the `set_indoor_preset` script
 - The color coding logic in `update_indoor_setting` script
 - The available preset modes accessible via the heater button
@@ -1079,12 +1108,14 @@ If you're using a different climate integration, you may need to adjust:
 ### Display Features
 
 #### Auto-Sleep and Wake
+
 - The display automatically dims and pauses after a configurable timeout (default 45 seconds)
 - Tap anywhere on the screen to wake it up
 - Timeout can be adjusted via the "LVGL Screen timeout" number entity (10-180 seconds)
 - From [LVGL Cookbook](https://esphome.io/cookbook/lvgl/#turn-off-screen-when-idle)
 
 #### Anti-Burn-In Protection
+
 - Automatically activates during early morning hours (2-5 AM)
 - Runs for 30 minutes each hour
 - Shows a "snow" effect to prevent pixel burn-in
@@ -1092,6 +1123,7 @@ If you're using a different climate integration, you may need to adjust:
 - From [LVGL Cookbook](https://esphome.io/cookbook/lvgl/#prevent-burn-in-of-lcd)
 
 #### Boot Screen
+
 - Shows ESPHome logo with spinner during startup
 - Displays connection status
 - Automatically hides when WiFi connects
@@ -1124,21 +1156,26 @@ so it can be improved or reorganized.
 ### Scripts Explained
 
 #### Time Update
+
 Updates the time and date labels every minute and on time sync (when updated from Home Assistant).
 
 #### Weather Updates
+
 - `update_weather`: Updates weather icon and description using the weather icon map
 - `update_outside_temp`: Updates outside temperature display
 
 #### Indoor Climate Updates
+
 - `update_indoor_temp`: Updates indoor temperature reading
 - `update_indoor_setting`: Updates thermostat target temperature, preset mode, and heating status icon
 
 #### Switch Updates
+
 - `update_amp_switch`: Updates appliance switch icon and color
 - `update_light_switch`: Updates light switch icon and color
 
 #### Preset Control
+
 - `set_indoor_preset`: Toggles between "boost" and "frost" modes when heater button is pressed
 
 ## Installation Steps
@@ -1146,7 +1183,7 @@ Updates the time and date labels every minute and on time sync (when updated fro
 ### Prepare Your Files
 
 1. Download the Material Design Icons - details in [font component](/components/font#material-design-icons).
-2. Create the `weather_icon_map.h` header file (content [here](#weather-icon-map-header-file))
+2. Create the `weather_icon_map.h` header file ([content here](#weather-icon-map-header-file))
 3. Create your `secrets.yaml` file with your WiFi credentials
 
 ### Update Configuration
@@ -1194,29 +1231,29 @@ another_device_fallback_pwd: "unique-fallback-password-device2"
 
 More info on [how to manage secrets](https://esphome.io/guides/security_best_practices/#secrets-management).
 
-
 ### Flash ESPHome
 
-Use [ESPHome Device Builder](https://esphome.io/guides/getting_started_hassio/#device-builder-interface), that's simplest. After the first flash, you can use OTA updates.
+Use [ESPHome Device Builder](https://esphome.io/guides/getting_started_hassio/#device-builder-interface),
+that's simplest. After the first flash, you can use OTA updates.
 
 ### Add to Home Assistant
 
 The device should be automatically discovered in Home Assistant:
 
-1. Go to **Settings → Devices & Services**
-2. Look for the discovered ESPHome device
-3. Click **Configure** and enter your API encryption key
-4. ⚠️ By default new ESPHome device is not allowed to perform any Home Assistant Actions
+- Go to **Settings → Devices & Services**
+- Look for the discovered ESPHome device
+- Click **Configure** and enter your API encryption key
+- ⚠️ By default new ESPHome device is not allowed to perform any Home Assistant Actions
   - In order to:
     - be able to turn on/off devices
     - change heating presets
   - You need to go to device settings in Home Assistant and select:
     - _Allow the device to perform Home Assistant actions_
 
-
 ### Verify Operation
 
 Check that:
+
 - Time and date display correctly
 - Weather information updates
 - Indoor temperature and humidity show values
@@ -1225,14 +1262,17 @@ Check that:
 
 ## Troubleshooting
 
-There is only a few things that might go wrong as long as you don't change anything in the yaml file 😁. I'll list out some possible issues. Hardware should be correctly configured if you're 
+There is only a few things that might go wrong as long as you don't change anything in the yaml file 😁. I'll
+list out some possible issues. Hardware should be correctly configured if you're
 using the same device.
 
 ### Stuck at Boot Screen
 
 If you're stuck at boot screen that usually means the device cannot connect to WiFi.
 
-Check your secrets.yaml that you have correct WiFi ssid and password. If this is correct, the best is to connect the device to your computer, open up [ESPHome Web](https://web.esphome.io/), connect to the device and open up logs. Reboot the device to see the logs from starting up and hopefully that will reveal any issues.
+Check your secrets.yaml that you have correct WiFi ssid and password. If this is correct, the best is to
+connect the device to your computer, open up [ESPHome Web](https://web.esphome.io/), connect to the device
+and open up logs. Reboot the device to see the logs from starting up and hopefully that will reveal any issues.
 
 If no issues show up change logging level:
 
@@ -1243,15 +1283,20 @@ logger:
 
 ### Past the Boot Screen but Nothing is Updated
 
-Most likely issue connecting to Home Assistant. Ensure you have added your device to Home Assistant. If you have and still nothing happens, check the logs.
+Most likely issue connecting to Home Assistant. Ensure you have added your device to Home Assistant. If you
+have and still nothing happens, check the logs.
 
-If time/date is updated to the correct value - Home Assistant connection is established and the issue might be individual entities.
+If time/date is updated to the correct value - Home Assistant connection is established and the issue might
+be individual entities.
 
-If time/date is updated, outside temperature and weather information should also get updated since nearly everyone has weather forecast integration.
+If time/date is updated, outside temperature and weather information should also get updated since nearly
+everyone has weather forecast integration.
 
 ### Entity Status Not Updated
 
-Check substitutions making sure that you have entered correct entity ids. For temperature/humidity sensor, lights and switches this should work just fine and a typo or incorrect entity id is most likely issue. Any climate entity should work for controling heating but see below.
+Check substitutions making sure that you have entered correct entity ids. For temperature/humidity sensor,
+lights and switches this should work just fine and a typo or incorrect entity id is most likely issue. Any
+climate entity should work for controling heating but see below.
 
 ### Cannot Switch On/Off Lights/Appliance
 
@@ -1263,13 +1308,17 @@ If the correct preset and temperature setting is not updated - verify that clima
 
 If the heater button doesn't control thermostat see [above](#cannot-switch-onoff-lightsappliance).
 
-While this should work with any climate control, check that preset modes (frost, boost, eco) are supported. If they are not, you might need to change config slightly to support your settings. Maybe your setting doesn't have a boost preset - just replace `boost` in yaml with what your desired setting is. The same goes for `frost`.
+While this should work with any climate control, check that preset modes (frost, boost, eco) are supported.
+If they are not, you might need to change config slightly to support your settings. Maybe your setting
+doesn't have a boost preset - just replace `boost` in yaml with what your desired setting is. The same goes
+for `frost`.
 
 ### Random Reboots or Crashes
 
 **Problem:** Device restarts unexpectedly
 
 **Solutions:**
+
 1. Use adequate power supply (1A minimum)
 1. Reduce LVGL buffer size if running out of memory
 1. Lower logger level to WARN or ERROR
@@ -1277,13 +1326,18 @@ While this should work with any climate control, check that preset modes (frost,
 
 ### Touchscreen Not Working
 
-Are you using a resistive touchscreen? JC2432W328**C** is the device with capacitive touchscreen, but JC2432W328**R** has resistive touchscreen and it will have a different control chip and it needs to be calibrated differently.
+Are you using a resistive touchscreen? JC2432W328**C** is the device with capacitive touchscreen, but
+JC2432W328**R** has resistive touchscreen and it will have a different control chip and it needs to be
+calibrated differently.
 
 ### Touchscreen Calibration Off
 
-It would be unusual if touch coordinates don't match screen position ... for a capacitive touch screen, for resistive, all bets are off. This would mean that the chip is correct, but for whatever reason your device is working slightly differently than mine. Maybe you're holding it up-side-down? 🙂
+It would be unusual if touch coordinates don't match screen position ... for a capacitive touch screen, for
+resistive, all bets are off. This would mean that the chip is correct, but for whatever reason your device is
+working slightly differently than mine. Maybe you're holding it up-side-down? 🙂
 
 At any case things to try:
+
 1. Adjust `transform` settings (swap_xy, mirror_x, mirror_y)
 1. Use the commented-out `on_touch` lambda to log coordinates
 1. Test each corner of screen to determine correct transform
@@ -1297,7 +1351,8 @@ Adding new button is relatively straight forward, however there are couple of th
 
 #### UI Part
 
-The bottom row has an empty button (columns 4-5, rows 4-5), so that is easy to add, just paste this to the end of the config yaml file (minding the indentation):
+The bottom row has an empty button (columns 4-5, rows 4-5), so that is easy to add, just paste this to the
+end of the config yaml file (minding the indentation):
 
 ```yaml
 - obj:
@@ -1342,7 +1397,8 @@ The above will create a button that when pressed will "flip" `my_switch`, you ju
 
 #### Setting up My Switch
 
-You need to configure your switch (can be a light or a switch, anything you can toggle, or it will require some more work):
+You need to configure your switch (can be a light or a switch, anything you can toggle, or it will require
+some more work):
 
 ```yaml
 #switch:
@@ -1354,9 +1410,12 @@ You need to configure your switch (can be a light or a switch, anything you can 
       then:
         script.execute: update_my_switch
 ```
+
 **NOTE:** I commented out `#switch:`, this is just to tell you where to put the rest of the code.
 
-When the state of the switch changes our device gets notification from Home Assistant. This "triggers" `on_state` event. When this happens we want to execute `update_my_switch` script so we can update UI with the new state.
+When the state of the switch changes our device gets notification from Home Assistant. This "triggers"
+`on_state` event. When this happens we want to execute `update_my_switch` script so we can update UI with the
+new state.
 
 #### Update the Switch State on UI
 
@@ -1369,7 +1428,9 @@ When the state of the switch changes our device gets notification from Home Assi
           text_color: !lambda if(id(my_switch).state) {return lv_color_hex(0xFF4500);} else {return lv_color_hex(0x778899);}
 ```
 
-Keep in mind that our device is not "flipping" the switch, it only tells Home Assistant to flip it. Once Home Assistant has done that it will notify our device back with the updated state and the code above will change color to red-ish if the state is ON, or grey-ish if the state is OFF.
+Keep in mind that our device is not "flipping" the switch, it only tells Home Assistant to flip it. Once Home
+Assistant has done that it will notify our device back with the updated state and the code above will change
+color to red-ish if the state is ON, or grey-ish if the state is OFF.
 
 There you have it, a new button!
 
