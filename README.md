@@ -85,3 +85,7 @@ Setup guides, notes, recepies, and lessons learned.
 - RSS feed for updates
 - Global tag filtering
 - Print-friendly layouts
+
+## License
+
+All code is under the MIT License, while contents of `src/content` and `public` folders are licensed under CC BY-SA 4.0.
