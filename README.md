@@ -1,12 +1,14 @@
 # My ESPHome Workshop
 
 > A personal documentation and tracking site for my 15+ year collection of dev boards, sensors, and components as I finally build useful smart home projects with ESPHome.
+> This repository generates website: https://esphome.atmyworkshop.online/
 
 ---
 
 ## 🎯 What is This?
 
 This is my personal documentation site for tracking:
+
 - **Devices** - Physical hardware (boards, sensors, displays, etc.)
 - **Components** - ESPHome software components and platforms
 - **Projects** - Complete builds with wiring and configuration
