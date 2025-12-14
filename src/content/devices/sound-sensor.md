@@ -17,9 +17,13 @@ references:
   - title: "Interface Sound Sensor with Arduino and Control Devices With a Clap"
     url: "https://lastminuteengineers.com/sound-sensor-arduino-tutorial/"
 dateAcquired: "2016"
-status: "pending"
+status: "testing"
 image: "/images/devices/thumbnails/sound-sensor.jpg"
-lastModified: "2025-12-13"
+lastModified: "2025-12-14"
+changelog:
+  - date: "2025-12-14"
+    type: "updated"
+    description: "Started testing"
 ---
 
 ## Overview

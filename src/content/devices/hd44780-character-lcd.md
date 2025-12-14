@@ -7,7 +7,7 @@ model: "HD44780"
 variants: ["1602A"]
 connectionTypes: ["i2c", "gpio"]
 components: ["i2c", "display", "lcd_pcf8574", "lcd_gpio"]
-tags: ["display", "lcd", "character", "text", "hd44780", "i2c", "pcf8574"]
+tags: ["display", "lcd", "character", "text", "hd44780", "i2c", "pcf8574", "1602"]
 productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon UK"
@@ -29,7 +29,7 @@ references:
     url: "https://elm-chan.org/docs/lcd/lcd3v.html"
 status: "ready"
 image: "/images/devices/thumbnails/hd44780-1602a.jpg"
-lastModified: "2025-12-13"
+lastModified: "2025-12-14"
 ---
 
 ## Overview
@@ -53,6 +53,8 @@ Display features:
 - Common sizes: **16x2** (mine 1602A), 20x4, 8x2, 20x2, 40x2
 - HD44780 or compatible controller chip
 - Multiple character sets available
+  - HD44780UA00 English-Japanese is my version
+  - `it.print("\xAF");` prints `ツ` katakana character
 - 8 user-definable custom characters
 - Built-in backlight (usually blue or **green** (mine))
 - Operating voltage: 5V _but it's complicated_
