@@ -25,7 +25,7 @@ purchaseLinks:
     url: "https://www.raspberrypi.com/products/raspberry-pi-pico/"
 dateAcquired: "Oct 2024"
 image: "/images/devices/thumbnails/raspberry-pi-pico-w.jpg"
-lastModified: "2025-12-13"
+lastModified: "2025-12-15"
 ---
 
 ## Overview
@@ -136,13 +136,16 @@ It's controlled by the CYW43439 wireless chip and requires special handling.
 
 ## Temperature Sensor
 
-The RP2040 has a built-in temperature sensor:
+The RP2040 has a built-in temperature sensor. It is not exposed on any of the pins, so the below is how to use it:
 
 ```yaml
 sensor:
-  - platform: internal_temperature
-    name: "Internal Temperature"
-    update_interval: 60s
+  - platform: adc
+    pin: TEMPERATURE
+    name: "Core Temperature"
+    unit_of_measurement: "°C"
+    filters:
+      - lambda: return 27 - (x - 0.706f) / 0.001721f;
 ```
 
 ## Other Images
