@@ -9,10 +9,16 @@
  * - Vercel/Netlify/Cloudflare: Environment variables in project settings
  */
 
+import { loadEnv } from "vite";
+
+const my_env = loadEnv(process.env.NODE_ENV!, process.cwd(), "");
+
 // Helper function to get environment variable with fallback
 function getEnv(key: string, fallback: string = ''): string {
-  return import.meta.env[key] || fallback;
+  return my_env[key] || fallback;
 }
+
+console.log('DEBUG: PUBLIC_SITE_URL:', process.env.PUBLIC_SITE_URL);
 
 export const siteConfig = {
   siteName: 'My ESPHome Workshop',

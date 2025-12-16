@@ -7,10 +7,12 @@ import partytown from '@astrojs/partytown';
 import { siteConfig } from './src/config';
 import test_pages from './src/integrations/test_pages'
 
+import sitemap from '@astrojs/sitemap';
+
 // https://astro.build/config
 export default defineConfig({
   site: siteConfig.siteUrl,
-  integrations: [mdx(), partytown(), pagefind(), test_pages()],
+  integrations: [mdx(), partytown(), pagefind(), test_pages(), sitemap()],
   markdown: {
     shikiConfig: {
       theme: 'github-dark',

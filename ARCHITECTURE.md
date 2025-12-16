@@ -329,5 +329,23 @@ All `PUBLIC_*` variables are accessible in both server and client code. The anal
 
 ---
 
+## Sitemap and Robots.txt Integration
+
+#### Sitemap
+- The `@astrojs/sitemap` integration has been added to the project.
+- The sitemap is automatically generated during the build process and is available at `/sitemap-index.xml`.
+- Ensure the `PUBLIC_SITE_URL` environment variable is set correctly in the `.env` file to generate accurate URLs in the sitemap.
+
+#### Robots.txt
+- A dynamic `robots.txt` file is generated at `/robots.txt`.
+- The `robots.txt` file references the sitemap URL dynamically based on the `PUBLIC_SITE_URL` value.
+- The implementation can be found in `src/pages/robots.txt.ts`.
+
+#### Environment Variables
+- The `vite` `loadEnv` function is used to load environment variables early in the build process.
+- Ensure all required variables are defined in `.env` or the hosting platform's environment settings.
+
+----
+
 **For implementation guidelines, see [CONTRIBUTING.md](./CONTRIBUTING.md)**  
 **For project vision, see [PROJECT.md](./PROJECT.md)**
