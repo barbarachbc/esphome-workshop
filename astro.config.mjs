@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import tailwindcss from "@tailwindcss/vite";
 import pagefind from "astro-pagefind";
+import rehypeExternalLinks from 'rehype-external-links';
 
 import partytown from '@astrojs/partytown';
 import { siteConfig } from './src/config';
@@ -18,6 +19,15 @@ export default defineConfig({
       theme: 'github-dark',
       langs: ['yaml', 'python', 'cpp', 'javascript'],
     },
+    rehypePlugins: [
+      [
+        rehypeExternalLinks, 
+        { 
+          rel: ['nofollow', 'noopener', 'noreferrer'],
+          content: { type: 'text', value: ' 🔗' }
+        }
+      ]
+    ]
   },
   vite: {
     plugins: [tailwindcss()],

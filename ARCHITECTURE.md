@@ -290,6 +290,14 @@ All lightbox styles are centralized in `global.css` under the `LIGHTBOX STYLES` 
 
 ---
 
+## Markdown Processing
+
+#### External Links
+- The `rehype-external-links` plugin is used to process external links in Markdown files.
+- Configuration for this plugin can be found in `astro.config.mjs` under the `markdown.rehypePlugins` section.
+
+---
+
 ## Future Considerations
 
 ### Potential Enhancements
