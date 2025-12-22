@@ -16,7 +16,7 @@ changelog:
   - date: "2025-12-03"
     type: "added"
     description: "Created first version of the document"
-lastModified: "2025-12-14"
+lastModified: "2025-12-22"
 ---
 
 ## Project Overview
@@ -48,6 +48,13 @@ It is fully functional, lots of features, only one device used and it has a 3D p
 While it has lots of coding, I consider it `intermediate` because you don't need to figure out anything
 hardware related. There's no wiring, only plug it in and copy code and with a bit of tweaking you should
 have it going in no time.
+
+## Progress
+
+- ✅ [Main Configuration](#main-configuration-file) - fully functional
+- ✅ [3D Enclosure](#3d-printed-enclosure)
+- [ ] RGB LED Indicator
+- [ ] Alarm
 
 ### Future improvement ideas
 
@@ -120,7 +127,9 @@ I used couple of models to print mine. I could not find exact device so I used:
 - Case from this one: [CYD ESP32-2432S028 Case](https://www.printables.com/model/1337113-cyd-esp32-2432s028-case)
 - Just the stand from this one: [Enclosure for Sunton ESP32-2432S028R Cheap Yellow Display](https://www.printables.com/model/685845-enclosure-for-sunton-esp32-2432s028r-cheap-yellow-)
 
-I had to add some negative volume in my Prusa Slicer to get the holes in the right place. Once I figure out how to export this as STL I'll post a link, meanwhile, here's [Prusa Slicer Project](/files/cheap-yellow-display-stand.3mf).
+I had to add some negative volume in my Prusa Slicer to get the holes in the right place.
+Once I figure out how to export this as STL I'll post a link, meanwhile, here's
+[Prusa Slicer Project](/files/cheap-yellow-display-stand.3mf).
 
 ## ESPHome Configuration
 
@@ -1097,7 +1106,8 @@ substitutions:
 
 ### Weather Integration
 
-This project assumes you have a working weather integration in Home Assistant, typically configured as `weather.forecast_home`. The outside temperature is obtained from the `temperature` attribute of this entity.
+This project assumes you have a working weather integration in Home Assistant, typically configured as
+`weather.forecast_home`. The outside temperature is obtained from the `temperature` attribute of this entity.
 
 ### Climate Control Integration
 

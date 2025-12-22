@@ -15,7 +15,10 @@ changelog:
   - date: "2025-12-14"
     type: "added"
     description: "Initial working version"
-lastModified: "2025-12-14"
+  - date: "2025-12-22"
+    type: "updated"
+    description: "Added in-action photos"
+lastModified: "2025-12-22"
 ---
 
 ## Project Overview
@@ -25,12 +28,20 @@ This project aims to create a simple smart device that displays the currently pl
 [D1 Mini](/devices/esp8266-d1-mini) board for WiFi connectivity and communication with Spotify integration in
 Home Assistant. The LCD will show the song title and artist name in real-time.
 
+![Spotify Now Playing in Action](./images/spotify-now-playing/lcd-spotify.jpg)
+
 ### Features
 
 - 🎵 Display Spotify's currently playing song title and artist name
 - 📡 WiFi-enabled for real-time updates
 - 🖥️ Simple text-based interface using an HD44780 LCD
 - 🔌 Powered via USB
+
+## Progress
+
+- ✅ [Main Configuration](#main-configuration-file) - fully functional
+- [ ] Improve scrolling
+- [ ] Improve idle screen
 
 ### Reusability Note
 
@@ -317,3 +328,7 @@ It should handle better the scenario when there is no information.
 
 Slightly slow refresh. Investigate if there is a way to use all of the available memory on the display to
 make it smoother.
+
+## Other Photos
+
+![Spotify Now Playing in Action](./images/spotify-now-playing/lcd-spotify-2.jpg)

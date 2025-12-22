@@ -24,20 +24,23 @@ purchaseLinks:
   - vendor: AliExpress
     url: https://www.aliexpress.com/item/1005006422498371.html
 image: "/images/devices/thumbnails/esp32-devkit-v1.jpg"
-lastModified: "2025-12-08"
+lastModified: "2025-12-22"
 ---
 
 ## Overview
 
-Based on the ESP32-WROOM-32/ESP32-WROOM-32D module with built-in WiFi and Bluetooth capabilities. Has built-in antenna.
+Based on the ESP32-WROOM-32/ESP32-WROOM-32D module with built-in WiFi and Bluetooth capabilities.
+Has built-in antenna.
 
 ![HW-394 version](./images/esp32-devkit-v1/hw-394.jpg)
 
-## Additonal Hardware features:
+## Additonal Hardware features
+
 - Boot & Reset buttons - Boot button can be used, inverted on GPIO00
 - LED on GPIO02
 
 ## Test Status
+
 - ✅ [Basic Config](#basic-configuration) + Internal LED & Boot Button
 - ✅ [GPIO](#basic-configuration) - output: Internal LED, input: Boot Button
 - [ ] UART
@@ -65,9 +68,15 @@ esp32:
 #    type: arduino
     type: esp-idf
 
+logger:
+
+substitutions:
+  boot_btn_pin: GPIO00
+  builtin_led_pin: GPIO02
+
 output:
   - platform: gpio
-    pin: GPIO02
+    pin: ${builtin_led_pin}
     id: builtin_led
 
 light:
@@ -78,7 +87,7 @@ light:
 binary_sensor:
   - platform: gpio
     pin: 
-      number: GPIO00
+      number: ${boot_btn_pin}
       inverted: true
     id: boot_btn
     on_press:
@@ -89,14 +98,20 @@ binary_sensor:
         - output.turn_off: builtin_led
 ```
 
+#### Additional Notes
+
+I'm using substitutions so I can re-use this example with other boards. I'm using this example as starting
+point for everything. Logging section added since any time I'm doing something new, logging is needed 🙂
 
 ### HW-463 Variant
+
 - USB-to-UART: CP2102
 - Module: ESP32-WROOM-32
 - CPU: ESP32 (ESP32-D0WDQ6 - Dual Core)
 - USB: Micro-USB
 
 ### HW-394 Variant
+
 - USB-to-UART: CH340G
 - Module: ESP32-WROOM-32D - newer and slightly better than ESP32-WROOM-32
 - CPU: ESP32 (ESP32-D0WD - Dual Core)
@@ -127,12 +142,14 @@ binary_sensor:
 The ESP32 DevKit V1 has 30 pins in total:
 
 ### Power Pins
+
 - **3.3V** - 3.3V output (AMS1117 3.3)
 - **GND** - Ground pins (x2)
 - **VIN** - Input voltage (5-12V) or 5V output from USB (when powered via USB)
 - **EN** - Enable pin (reset when pulled low)
 
 ### GPIO Pins
+
 - **GPIO0-GPIO39** - General purpose I/O
   - GPIO34-39 are input-only
   - GPIO6-11 are connected to flash (don't use)
@@ -140,13 +157,15 @@ The ESP32 DevKit V1 has 30 pins in total:
 
 ### Special Function Pins
 
-Check out https://documentation.espressif.com/esp32_datasheet_en.pdf IO_MUX table for which pins can be used for what because a lot of them are multiplexed.
+Check out [ESP32 datasheet](https://documentation.espressif.com/esp32_datasheet_en.pdf) IO_MUX table for
+which pins can be used for what because a lot of them are multiplexed.
 
 - **Touch Sensors:** GPIO0, GPIO2, GPIO4, GPIO12-15, GPIO27, GPIO32-33
 - **I2C:** By default GPIO21=SDA, GPIO22=SCL
 - **SPI:** By default GPIO23=MOSI, GPIO19=MISO, GPIO18=SCK, GPIO05=CS
 - **DAC:** Dual 8-bit DAC outputs: GPIO25 and GPIO26
-- **Analog & Touch**: see pinout, many GPIOs can be used as ADC1 and ADC2 input, capacitive-touch sensors and LED/Motor PWM signals
+- **Analog & Touch**: see pinout, many GPIOs can be used as ADC1 and ADC2 input, capacitive-touch sensors
+and LED/Motor PWM signals
 
 Other interfaces: SD card, UART, SDIO, I2C, I2S, IR, pulse counter, CAN
 
@@ -163,15 +182,16 @@ Other interfaces: SD card, UART, SDIO, I2C, I2S, IR, pulse counter, CAN
 ## Troubleshooting
 
 **Board won't flash:**
+
 - Hold the BOOT button while connecting USB (I had this issue with CP2102 variant, I had to hold BOOT button)
 - Try a different USB cable (must support data)
 - Check that CH340/CP2102 drivers are installed
 
 **Random resets:**
+
 - Check power supply (needs stable 5V, 500mA+)
 - Add capacitors near power pins if using long wires
 - Avoid connecting high-current devices directly
-
 
 ## Other Images
 

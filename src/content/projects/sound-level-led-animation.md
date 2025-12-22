@@ -10,7 +10,7 @@ changelog:
   - date: "2025-12-14"
     type: "added"
     description: "Started as an idea"
-lastModified: "2025-12-14"
+lastModified: "2025-12-22"
 ---
 
 ## Project Overview
@@ -25,6 +25,10 @@ that change based on the detected sound intensity.
 - 🌈 Display dynamic animations on an RGB LED matrix
 - 📡 WiFi-enabled for remote monitoring and control
 - 🔌 Powered via USB
+
+## Progress
+
+- [ ] Investigating how to efficiently sound sensor and ADC
 
 ### Reusability Note
 

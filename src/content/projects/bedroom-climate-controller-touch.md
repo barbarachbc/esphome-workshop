@@ -20,7 +20,7 @@ changelog:
   - date: "2025-12-03"
     type: "added"
     description: "Created first version of the document"
-lastModified: "2025-12-14"
+lastModified: "2025-12-22"
 ---
 
 ## Project Overview
@@ -49,6 +49,13 @@ One of the presets can also be modified to set a different temperature.
 
 This is working, but it is still a work in progress. All functionality is working, next steps are to
 assemble it and get a nice enclosure for it.
+
+## Progress
+
+- ✅ [Main Configuration](#main-configuration-file) - fully functional
+- [ ] 3D Enclosure
+- [ ] Neopixel
+- [ ] Further improvements
 
 ### Future improvement ideas
 
