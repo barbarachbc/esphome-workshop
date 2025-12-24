@@ -5,7 +5,7 @@ category: "sensor"
 manufacturer: "Generic"
 model: "Sound Sensor"
 connectionTypes: ["gpio", "analog"]
-components: ["binary_sensor", "adc"]
+components: ["binary-sensor", "sensor-adc", "sensor", "sensor-sound-level", "microphone", "i2s-audio"]
 tags: ["sensor", "sound", "microphone", "audio", "noise"]
 productionStatus: "active"
 purchaseLinks:
@@ -27,7 +27,7 @@ references:
 dateAcquired: "2016"
 status: "testing"
 image: "/images/devices/thumbnails/sound-sensor.jpg"
-lastModified: "2025-12-22"
+lastModified: "2025-12-24"
 changelog:
   - date: "2025-12-14"
     type: "updated"
@@ -59,8 +59,7 @@ The module features:
 
 - ✅ [Basic Config](#basic-configuration) - wiring up the module for digital and analog processing
 - ✅ [Better Analog](#better-analog-circuit) - improved circuit for analog processing
-- [ ] Continuous ADC
-- [ ] Microphone Input
+- ✅ [Microphone Input](#as-a-microphone)
 
 ## Configuration Notes
 
@@ -153,7 +152,7 @@ sensor:
 
 The module as-is, only really works with digital output, analog output is just not good enough for any use.
 I'll try to compe up with a better circuit here. The goal is to reuse this module for some audio processing
-if at all possible. This is currently work in progress.
+if at all possible.
 
 Drawing inspiration from MAX4465-MAX4469 datasheet (see references):
 ![MAX4466 Typical application circuit](./images/sound-sensor/max4466-typical-app-circuit.png)
@@ -215,6 +214,102 @@ since it requires at least 4V for power supply.
 **NOTE:** I could have used 5V to supply my op-amp circuit - however, 1.5V is maximum offset from the
 positive rail which would make 3.5V max output voltage which is too close to the max voltage of our
 ESP32 GPIO.
+
+## As a Microphone
+
+An example of using the ["better analog circuit"](#better-analog-circuit) is with
+[Sound Level Component](https://esphome.io/components/sensor/sound_level/). This example is showing sound
+level in the log, but you can show it in Home Assistant.
+
+```yaml
+esphome:
+  name: my-sound-sensor
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+logger:
+
+substitutions:
+  sensor_dpin: GPIO18
+  sensor_apin: GPIO33
+  builtin_led_pin: GPIO02
+  dummy_clk_pin: GPIO15
+
+output:
+  - platform: gpio
+    pin: ${builtin_led_pin}
+    id: builtin_led
+
+sensor:
+  - platform: sound_level
+    microphone: adc_mic
+    passive: false
+    measurement_duration: 500ms
+    peak:
+      id: peak_loudness
+      name: "Peak Loudness"
+      on_value_range:
+        - below: -30.0
+          then:
+            - output.turn_off: builtin_led
+        - above: -30.0
+          then:
+            - output.turn_on: builtin_led
+    rms:
+      id: average_loudness
+      name: "Average Loudness"
+
+i2s_audio:
+  i2s_lrclk_pin: ${dummy_clk_pin}
+  use_legacy: true
+
+microphone:
+  - platform: i2s_audio
+    id: adc_mic
+    adc_type: internal
+    adc_pin: ${sensor_apin}
+    correct_dc_offset: true
+```
+
+Open up logs in [ESPHome Web](https://web.esphome.io/) and see the sound level sensor showing average and
+peak loudness. Turn on some music on your phone and bring it closer to the mic and pull it further away and
+see how the levels change.
+
+### Microphone
+
+Microphone above is using [I2S Audio Microphone](https://esphome.io/components/microphone/i2s_audio/)
+component. In order to use our microphone attached to ADC we need to use `adc_type: internal` and select
+`adc_pin`. Make sure you set `correct_dc_offset: true` since we have DC offset.
+
+**NOTE ⚠️**: This only works with ESP32, it does not work with other platforms like ESP8266 for example.
+For this, it requires use of "legacy" drivers.
+
+In order for our microphone to work, [I2S Audio](https://esphome.io/components/i2s_audio/) component needs
+to be defined. It requires `i2s_lrclk_pin` to be defined even though it's not used, and `use_legacy` needs
+to be _true_.
+
+**INFO ℹ️/Question ❓**: Based on
+[Espressif's ADC FAQ](https://docs.espressif.com/projects/esp-faq/en/latest/software-framework/peripherals/adc.html)
+this should not work very well with WiFi turned on:
+`sampling rate can reach 1000 times per second with Wi-Fi`
+which is not great but maybe it's good enough for getting loudness measurements, however I'm not 100% sure
+why would this be the case when I2S uses it's own DMA. Anyway, as usual: YMMV 🚗.
+
+### Sensor
+
+I setup [Sound Level Component](https://esphome.io/components/sensor/sound_level/) that supports peak and
+average loudness measurement. Let's go through the settings:
+
+- `microphone: adc_mic` is our mic sensor connected to ADC
+- `passive: false` turns on measurements, if set to _true_ it will need to be either started manually
+or when some other component is using the microphone
+- `measurement_duration: 500ms` - measures every half a second
+- `peak` and `rms` are sensors, and they supports all [sensor component](https://esphome.io/components/sensor/) settings
+- `on_value_range` - [this automation](https://esphome.io/components/sensor/#on_value_range) turns on/off
+builtin_led - try clapping and it will turn on/off
 
 ## Other Images
 

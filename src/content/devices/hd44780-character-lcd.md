@@ -6,7 +6,7 @@ manufacturer: "Generic"
 model: "HD44780"
 variants: ["1602A"]
 connectionTypes: ["i2c", "gpio"]
-components: ["i2c", "display", "lcd_pcf8574", "lcd_gpio"]
+components: ["i2c", "display", "lcd_pcf8574", "lcd_gpio", "otput-ledc", "esp8266-pwm"]
 tags: ["display", "lcd", "character", "text", "hd44780", "i2c", "pcf8574", "1602"]
 productionStatus: "active"
 purchaseLinks:
@@ -29,7 +29,7 @@ references:
     url: "https://elm-chan.org/docs/lcd/lcd3v.html"
 status: "ready"
 image: "/images/devices/thumbnails/hd44780-1602a.jpg"
-lastModified: "2025-12-14"
+lastModified: "2025-12-24"
 ---
 
 ## Overview
@@ -268,6 +268,22 @@ light:
     name: "Backlight"
 
 ```
+
+## Using ESP32
+
+When using EPS32 use [LEDC component](/components/output-ledc):
+
+```yaml
+output:
+  - platform: ledc
+    pin: ${bl_pin}
+    frequency: 1220 Hz
+    id: pwm_output
+```
+
+**TIP 💡:** I used 1220 Hz for frequency - as per
+[recommended frequencies](https://esphome.io/components/output/ledc/#recommended-frequencies).
+When I used 1000Hz I was getting flickering.
 
 ## Other Images
 
