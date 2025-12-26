@@ -29,7 +29,7 @@ references:
     url: "https://elm-chan.org/docs/lcd/lcd3v.html"
 status: "ready"
 image: "/images/devices/thumbnails/hd44780-1602a.jpg"
-lastModified: "2025-12-24"
+lastModified: "2025-12-26"
 ---
 
 ## Overview
@@ -234,20 +234,20 @@ logger:
 substitutions:
   pin_enable: D1
   pin_rs: D2
-  pin_data0: D8
-  pin_data1: D7
-  pin_data2: D6
-  pin_data3: D5
+  pin_data4: D8
+  pin_data5: D7
+  pin_data6: D6
+  pin_data7: D5
 
 # Example configuration entry
 display:
   - platform: lcd_gpio
     dimensions: 16x2
     data_pins:
-      - ${pin_data0}
-      - ${pin_data1}
-      - ${pin_data2}
-      - ${pin_data3}
+      - ${pin_data4}
+      - ${pin_data5}
+      - ${pin_data6}
+      - ${pin_data7}
     enable_pin: ${pin_enable}
     rs_pin: ${pin_rs}
     #optional

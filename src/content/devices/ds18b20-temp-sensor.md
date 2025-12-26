@@ -18,15 +18,18 @@ references:
       url: "https://esphome.io/components/one_wire/"
     - title: "ESPHome Dallas Temperature Sensor"
       url: "https://esphome.io/components/sensor/dallas_temp/"
-status: "pending"
+status: "ready"
+image: "/images/devices/thumbnails/ds18b20.jpg"
 dateAcquired: "2021"
-lastModified: "2025-12-24"
+lastModified: "2025-12-26"
 ---
 
 ## Overview
 
 The DS18B20 is a popular digital temperature sensor that communicates over a 1-Wire bus that has a very good
 accuracy (±0.5°C). I got this as a 3 pin THT component, so not a module.
+
+![Photo of DS18B20 with 4.7K resistor next to it](./images/ds18b20-temp-sensor/ds18b20.jpg)
 
 Features:
 
@@ -39,7 +42,7 @@ Features:
 
 ## Test Status
 
-- [ ] Basic Configuration
+- ✅ [Basic Configuration](#basic-configuration)
 
 ## Wire-up
 
@@ -53,3 +56,38 @@ Features:
 ![DS18B20 pinout diagram](./images/ds18b20-temp-sensor/pinout.png)
 - Wiring Up With MCU
 ![DS18B20 wiring up with MCU diagram](./images/ds18b20-temp-sensor/wiring-up-1-wire.png)
+
+### Basic Configuration
+
+This is the basic configuration. Pretty simple, I'm using GPIO13 as my 1-wire pin. Just make sure
+it has 4.7K pull-up resistor connected to 3.3V on it. If connected to Home Assistant this will
+show temperature there, and the temperature is updated every 2 minutes. Have a look in the log for
+the temperature.
+
+![ESPHome Log when using DS18B20 temp sensor](./images/ds18b20-temp-sensor/example-log-output.png)
+
+```yaml
+esphome:
+  name: my-ds18b20-sensor
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+logger:
+
+substitutions:
+  one_wire_pin: GPIO13
+
+one_wire:
+  - platform: gpio
+    pin: ${one_wire_pin}
+
+sensor:
+  - platform: dallas_temp
+    name: temperature
+    update_interval: 120s
+```
+
+![Wired up DS18B20 to ESP32 DevKit board](./images/ds18b20-temp-sensor/ds18b20-wired-up.jpg)
