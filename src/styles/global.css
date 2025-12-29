@@ -760,3 +760,12 @@ details summary::marker {
   color: var(--text-hero);
   text-decoration: underline;
 }
+
+svg.external-icon {
+  display:inline;
+  color: inherit;
+  width:1em;
+  height:1em;
+  vertical-align:-0.15em;
+  margin-left:0.2em;
+}

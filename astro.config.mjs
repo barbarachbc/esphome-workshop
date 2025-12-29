@@ -24,7 +24,11 @@ export default defineConfig({
         rehypeExternalLinks, 
         { 
           rel: ['nofollow', 'noopener', 'noreferrer'],
-          content: { type: 'text', value: ' 🔗' }
+          target: '_blank',
+          content: { 
+            type: 'raw', 
+            value: `<svg version="2.0" class="external-icon"><use href="#external-arrow"/></svg>`
+          }
         }
       ]
     ]

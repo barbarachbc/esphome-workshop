@@ -32,6 +32,14 @@ const { title } = Astro.props;
     )}
   </head>
   <body>
+    <svg style="display: none" version="2.0">
+      <defs>
+        <symbol id="external-arrow" viewBox="0 0 24 24">
+          <title>Open in new</title>
+          <path stroke="currentColor" fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"/>
+        </symbol>
+      </defs>
+    </svg>
     <header class="px-8 py-4 shadow-md flex justify-between items-center" style="background: var(--bg-header); color: var(--text-inverse);">
       <h1 class="text-2xl font-semibold m-0" style="color: var(--text-hero);">My ESPHome Workshop</h1>
       <div class="flex gap-4 items-center">

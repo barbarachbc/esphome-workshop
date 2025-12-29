@@ -18,8 +18,6 @@ function getEnv(key: string, fallback: string = ''): string {
   return my_env[key] || fallback;
 }
 
-console.log('DEBUG: PUBLIC_SITE_URL:', process.env.PUBLIC_SITE_URL);
-
 export const siteConfig = {
   siteName: 'My ESPHome Workshop',
   siteUrl: getEnv('PUBLIC_SITE_URL', 'https://yourdomain.com'),

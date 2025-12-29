@@ -244,7 +244,7 @@ if (projectsUsingDevice.length > 0) {
             {device.data.references.map(ref => (
               <li class="mb-2">
                 <a href={ref.url} target="_blank" rel="noopener noreferrer" class="text-link no-underline font-medium hover:underline">
-                  {ref.title} 🔗
+                  {ref.title} <span><svg version="2.0" class="external-icon"><use href="#external-arrow"/></svg></span>
                 </a>
               </li>
             ))}
@@ -259,7 +259,7 @@ if (projectsUsingDevice.length > 0) {
             {device.data.purchaseLinks.map(link => (
               <li class="mb-2">
                 <a href={link.url} target="_blank" rel="noopener noreferrer" class="text-link no-underline font-medium hover:underline">
-                  {link.vendor} 🔗
+                  {link.vendor} <span><svg version="2.0" class="external-icon"><use href="#external-arrow"/></svg></span>
                 </a>
               </li>
             ))}
