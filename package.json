@@ -11,7 +11,9 @@
     "lint:md:fix": "markdownlint-cli2 --fix src/content/**/*.md",
     "lint:md:fix:one": "markdownlint-cli2 --fix $npm_config_argv",
     "validate:content": "node .husky/validate-content.js",
-    "prepare": "husky"
+    "prepare": "husky",
+    "extract-components": "node scripts/extract-components.ts",
+    "compare-components": "node scripts/compare-components.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.12",
