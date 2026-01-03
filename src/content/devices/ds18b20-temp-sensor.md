@@ -21,7 +21,7 @@ references:
 status: "ready"
 image: "/images/devices/thumbnails/ds18b20.jpg"
 dateAcquired: "2021"
-lastModified: "2025-12-26"
+lastModified: "2026-01-03"
 ---
 
 ## Overview
@@ -87,7 +87,16 @@ one_wire:
 sensor:
   - platform: dallas_temp
     name: temperature
+    device_class: temperature
+    state_class: measurement
+    icon: mdi:thermometer
+    unit_of_measurement: °C
     update_interval: 120s
 ```
 
 ![Wired up DS18B20 to ESP32 DevKit board](./images/ds18b20-temp-sensor/ds18b20-wired-up.jpg)
+
+It is good idea to use correct/meaningful icon, unit of measurement, device and state class as in the
+example above. This ensures data is displayed nicely in Home Assistant:
+
+![Screenshot of sensor information in Home Assistant](./images/ds18b20-temp-sensor/sensor-in-ha.png)
