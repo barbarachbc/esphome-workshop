@@ -79,53 +79,53 @@
 
 .dark {
   /* Background Colors */
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --bg-card: #1e293b;
-  --bg-card-hover: #334155;
-  --bg-header: #1e293b;
-  --bg-nav: #1e293b;
-  --bg-footer: #1e293b;
-  --bg-code: #020617;
-  --bg-code-inline: #334155;
-  --bg-note: #451a03;
-  --bg-hero: linear-gradient(to bottom right, #1e293b, #0f172a);
+  --bg-primary: #121212;
+  --bg-secondary: #1c1c1c;
+  --bg-tertiary: #2c2c2c;
+  --bg-card: #1c1c1c;
+  --bg-card-hover: #2c2c2c;
+  --bg-header: #1c1c1c;
+  --bg-nav: #1c1c1c;
+  --bg-footer: #1c1c1c;
+  --bg-code: #0d0d0d;
+  --bg-code-inline: #2c2c2c;
+  --bg-note: #3d2817;
+  --bg-hero: linear-gradient(to bottom right, #1c1c1c, #121212);
   
   /* Text Colors */
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-tertiary: #64748b;
-  --text-inverse: #0f172a;
-  --text-heading: #f8fafc;
-  --text-link: #60a5fa;
-  --text-link-hover: #93c5fd;
-  --text-code: #f1f5f9;
-  --text-hero: #f1f5f9;
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --text-tertiary: #888888;
+  --text-inverse: #121212;
+  --text-heading: #f0f0f0;
+  --text-link: #5b9ff5;
+  --text-link-hover: #7bb4f7;
+  --text-code: #e0e0e0;
+  --text-hero: #e0e0e0;
   
   /* Border Colors */
-  --border-primary: #334155;
-  --border-secondary: #475569;
-  --border-accent: #3b82f6;
-  --border-card: #334155;
+  --border-primary: #2c2c2c;
+  --border-secondary: #3d3d3d;
+  --border-accent: #5b9ff5;
+  --border-card: #2c2c2c;
   
   /* Accent Colors */
-  --accent-blue: #3b82f6;
-  --accent-blue-light: #1e3a5f;
-  --accent-blue-dark: #60a5fa;
-  --accent-emerald: #1beba7;
-  --accent-emerald-light: #04392b;
-  --accent-amber: #fbd79b;
-  --accent-amber-light: #f25b0b;
+  --accent-blue: #5b9ff5;
+  --accent-blue-light: #1a3a52;
+  --accent-blue-dark: #7bb4f7;
+  --accent-emerald: #34d399;
+  --accent-emerald-light: #064e3b;
+  --accent-amber: #fbbf24;
+  --accent-amber-light: #92400e;
   --accent-yellow-light: #fef3c7;
-  --accent-red: #f48c8c;
-  --accent-red-light: #9f1717;
-  --accent-purple: #a581f8;
+  --accent-red: #f87171;
+  --accent-red-light: #7f1d1d;
+  --accent-purple: #a78bfa;
   --accent-purple-light: #3b0764;
-  --accent-orange: #fb9a59;
-  --accent-orange-light: #894f1b;
-  --accent-pink: #f86bb5;
-  --accent-pink-light: #7d0b47;
+  --accent-orange: #fb923c;
+  --accent-orange-light: #7c2d12;
+  --accent-pink: #f472b6;
+  --accent-pink-light: #831843;
   
   /* Shadow */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
