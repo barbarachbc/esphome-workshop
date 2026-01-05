@@ -45,7 +45,8 @@ const components = defineCollection({
       // Core components
       'core',
       // Communication & networking
-      'spi', 'i2c', 'uart', 'ethernet', 'bluetooth', 'wifi',
+      'spi', 'i2c', 'uart', 'ethernet', 'bluetooth', 'wifi', 'one-wire',
+      'bus',
       // Sensors
       'sensor', 'binary-sensor', 'text-sensor',
       // Outputs & controls

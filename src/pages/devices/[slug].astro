@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import IssueReportButton from '../../components/IssueReportButton.astro';
 import LastModified from '../../components/LastModified.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
+import {connectionTypeMap} from '../../utils/connectionType';
 
 // Import the function to get devices in the display comparison
 import { displayComparison } from './all-displays.astro';
@@ -69,18 +70,6 @@ const productionStatusLabels = {
   discontinued: '❌ Discontinued',
   obsolete: '❌ Obsolete',
   unknown: '❓ Unknown',
-};
-
-// Map connection types to component slugs
-const connectionTypeMap: Record<string, string> = {
-  'i2c': 'i2c',
-  'spi': 'spi',
-  'uart': 'uart',
-  'gpio': 'gpio',
-  'onewire': 'onewire',
-  'analog': 'analog',
-  'pwm': 'pwm',
-  'built-in': 'builtin',
 };
 
 // Check if this device is in the display comparison

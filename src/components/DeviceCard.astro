@@ -1,4 +1,5 @@
 ---
+import {connectionTypeMap} from '../utils/connectionType';
 interface Props {
   device: {
     slug: string;
@@ -37,18 +38,6 @@ const productionStatusLabels = {
   obsolete: '❌ Obsolete',
   discontinued: '❌ Discontinued',
   unknown: '',
-};
-
-// Map connection types to component slugs
-const connectionTypeMap: Record<string, string> = {
-  'i2c': 'i2c',
-  'spi': 'spi',
-  'uart': 'uart',
-  'gpio': 'gpio',
-  'onewire': 'onewire',
-  'analog': 'analog',
-  'pwm': 'pwm',
-  'built-in': 'builtin',
 };
 ---
 <div class="block rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5" style="background: var(--bg-card); border: 1px solid var(--border-card);">
