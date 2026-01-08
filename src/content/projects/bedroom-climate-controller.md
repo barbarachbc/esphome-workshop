@@ -1,42 +1,34 @@
 ---
-title: 'Bedroom Climate Controller with Touch Interface'
-description: "A compact climate controller with OLED display and capacitive touch buttons for monitoring weather, controlling heating, and displaying indoor conditions"
+title: 'Bedroom Climate Controller'
+description: "A compact climate controller with round LCD display and capacitive touch buttons for monitoring weather, controlling heating, and displaying indoor conditions"
 difficulty: "advanced"
-devices: ["beetle-esp32-c6", "sh1107-spi-oled", "touch-phat", "adafruit-neopixel"]
+devices: ["beetle-esp32-c6", "gc9a01-round-lcd", "touch-phat", "adafruit-neopixel"]
 components: [
-  "api", "ota", "wifi", "captive-portal", "logger",
+  "api", "ota", "wifi", "logger",
   "substitutions", "globals", "script",
-  "time-sntp", "number-template", "sensor-homeassistant",
-  "text-sensor-homeassistant", "binary-sensor",
-  "display-ssd1306-spi", "font", "image", "i2c", "spi", "cap1166", "external-components"
+  "time-sntp", "number-template", "number-homeassistant", "sensor-homeassistant",
+  "text-sensor-homeassistant", "binary-sensor", "output-ledc",
+  "display-mipi-spi", "font", "image", "i2c", "spi", "cap1166", "external-components",
+  "light-esp32-rmt-led-strip", "light-monochromatic"
 ]
 tags: [
   "monitoring", "control", "heating", "weather", "temperature", "humidity",
-  "touch", "oled", "capacitive-touch", "climate", "thermostat",
+  "touch", "lcd", "capacitive-touch", "climate", "thermostat",
   "multi-page", "dashboard"
 ]
-status: "abandoned"
+status: "completed"
 changelog:
-  - date: "2025-12-03"
-    type: "added"
-    description: "Created first version of the document"
   - date: "2026-01-08"
-    type: "updated"
-    description: "Abandoned, I broke the OLED 😔."
+    type: "added"
+    description: "Copied the old project and updated"
 lastModified: "2026-01-08"
 ---
 
 ## Project Overview
 
-![Bedroom Controller in-progress Photo](./images/bedroom-controller/bedroom-controller.jpg)
+![Bedroom Controller in-progress Photo](./images/bedroom-controller-new/bedroom-controller.jpg)
 
-**ABANDONED 😢**: I broke ☠️ the OLED. I'll keep the document here for historical purposes,
-but I continued project with the [round screen](/devices/gc9a01-round-lcd). The new version is here:
-[Bedroom Controller](./bedroom-climate-controller)
-
-![Broken OLED Display](../devices/images/sh1107-spi-oled/broken.jpg)
-
-This advanced project creates a compact bedroom climate controller with a monochrome OLED display and
+This advanced project creates a compact bedroom climate controller with a round color display and
 capacitive touch interface that provides:
 
 - 🕐 Real-time clock display with date
@@ -48,6 +40,7 @@ capacitive touch interface that provides:
 - 💡 Interactive LED feedback on touch buttons
 - 📄 Multi-page interface with heating control page
 - 🎨 Context-aware heating status visualization
+- 🌈 Status indicator (and mood light?) with NeoPixel LED
 
 This project is for a quick overview of important info on one page and then managing heating in the room.
 When you get up you can quickly see time/date, outside temperature, forecast and EV battery level
@@ -56,42 +49,43 @@ When you get up you can quickly see time/date, outside temperature, forecast and
 On the other page are details of the temperature and humidity in the room and control of heating presets.
 One of the presets can also be modified to set a different temperature.
 
-This is working, but it is still a work in progress. All functionality is working, next steps are to
-assemble it and get a nice enclosure for it.
+The project is complete in terms of hardware. The rest are software improvements.
 
 ## Progress
 
 - ✅ [Main Configuration](#main-configuration-file) - fully functional
-- [ ] 3D Enclosure
-- [ ] Neopixel
+- ✅ [3D Enclosure](#3d-printed-enclosure)
 - [ ] Further improvements
 
 ### Future improvement ideas
 
-- Neopixel for mood light and notifications
+- Add display auto sleep mode
+- Add Colors
+  - This was ported from Mono OLED so everything is monochromatic - it looks pretty but why not add some
+  colors to our lives 😉
+- Use NeoPixel for actual notifications
 - Use LEDs on the touch screen for quick status
 - Adding more pages?
-- **NOTE**: I'm running close to the memory limit for additional features
 
 ### Reusability Note
 
 Substitutions are put at the top of the config file, so replacing them for your own sensor entity IDs and
 climate IDs will get it working for you. Some extra work needed if not all the same component used. Some of
-the components are obsolete so a different options might be required.
+the parts are obsolete (Touch Phat) so a different options might be required.
 
 ## What You'll Need
 
 ### Hardware
 
 - 1x [DFRobot Beetle ESP32-C6](/devices/beetle-esp32-c6) - Compact ESP32-C6 development board
-- 1x [SH1107 OLED Display (128x128, SPI)](/devices/sh1107-spi-oled) - Monochrome display breakout
+- 1x [GC9A01 based Round LCD](/devices/sh1107-spi-oled) - SPI Color Round Display breakout
 - 1x [Pimoroni Touch pHAT](/devices/touch-phat) - 6 capacitive touch buttons with RGB LEDs (I2C)
 - 1x [Adafruit NeoPixel](/devices/adafruit-neopixel) - RGB LED for ambient/notification
 - Jumper wires for connections (for testing it)
 - USB-C cable (data capable)
 - Power supply (USB charger, 5V/1A minimum)
 - This will require soldering if you want it properly assembled
-- Optional: 3D printer for custom enclosure (design in progress)
+- Optional: 3D printer for custom enclosure
 
 #### Wiring Connections
 
@@ -99,19 +93,21 @@ The OLED display uses SPI bus, Touch breakout uses I2C and Neopixel uses GPIO.
 
 | Component | ESP32-C6 GPIO | Notes |
 | --------- | ------------- | ----- |
-| **SPI Display (SH1107)** |
+| **SPI Display (GC9A01)** |
 | SCK | GPIO23 (SCK) | SPI Clock |
 | MOSI | GPIO22 (MOSI) | SPI Master Out |
-| CS | GPIO05 | Chip Select |
-| DC | GPIO07 | Data/Command |
+| CS | GPIO16 | Chip Select |
+| DC | GPIO05 | Data/Command |
+| RESET | GPIO04 | Display Reset Pin |
+| BL | GPIO17 | Backlight - it can be used to set brightness |
 | **I2C Touch pHAT (CAP1166)** |
-| 3 (GPIO 2) | GPIO19 (SDA) | I2C Data |
-| 5 (GPIO 3) | GPIO20 (SCL) | I2C Clock |
+| 3 (GPIO 2) | GPIO06 (SDA) | I2C Data |
+| 5 (GPIO 3) | GPIO07 (SCL) | I2C Clock |
 | **ESP32-C6 Built-in** |
 | LED | GPIO15 | Built-in LED - not used |
 | BOOT | GPIO09 | Boot button - not used |
 | **NeoPixel (Future)** |
-| DIN | (TBD) | To be determined |
+| DIN | GPIO21 | Data pin for the LED driver |
 
 **Power Notes:**
 
@@ -123,6 +119,7 @@ it requires power supply
   driving LEDs it will not affect overal functionality. LEDs might not be as bright. If you are using some
   other input device, make sure you check documentation for it. Connecting 5V supply to 3.3V device
   might ☠️ kill it.
+- NeoPixel uses 5V supply, but it supports 3.3V logic level for communication
 
 ### Software
 
@@ -167,8 +164,33 @@ comprehensive explanation.
 
 ## Project Photos
 
-_Photos of the completed climate controller will be added here once the enclosure is designed._
-Meanwhile have a look at some of the ![work-in-progress photos](#work-in-progress).
+- Info
+![Info Page](./images/bedroom-controller-new/bedroom-controller.jpg)
+![Side View](./images/bedroom-controller-new/bedroom-controller-side.jpg)
+- Starting up
+![Starting up](./images/bedroom-controller-new/start-up.jpg)
+- Heating
+![Heating Page](./images/bedroom-controller-new/heating-page.jpg)
+- Set Heating Preset
+![Set Heating Preset Page](./images/bedroom-controller-new/preset-page.jpg)
+- Set Boost Temperature
+![Set Boost Temperature Page](./images/bedroom-controller-new/set-temperature-page.jpg)
+
+<!-- TODO: Add wiring diagram -->
+_Detailed wiring diagram showing all connections will be added here._
+
+## 3D Printed Enclosure
+
+<!-- TODO: Add 3D model files and assembly instructions -->
+_3D printable enclosure design is in progress. STL files and assembly instructions will be provided here._
+
+The enclosure houses:
+
+- ESP32-C6 board
+- Round LCD display (front-facing)
+- Touch pHAT buttons (front-facing)
+- NeoPixel LED (for ambient/notification lighting)
+- USB-C access for programming and power
 
 ## ESPHome Configuration
 
@@ -192,6 +214,9 @@ Create a `secrets.yaml` file in your ESPHome directory with your credentials:
 ```yaml
 wifi_ssid: "Your_WiFi_SSID"
 wifi_password: "Your_WiFi_Password"
+
+bedroom2_controller_api: "your generated api key"
+bedroom2_controller_ota: "your ota password"
 ```
 
 For more information on using secrets in ESPHome, refer to the [ESPHome documentation](https://esphome.io/guides/yaml/#secrets-and-the-secretsyaml-file).
@@ -207,8 +232,8 @@ Then use the following file as a guide (details on how to customize it are below
 
 ```yaml
 esphome:
-  name: bedroom-controller
-  friendly_name: bedroom-controller
+  name: bedroom2-controller
+  friendly_name: bedroom2-controller
   includes:
     - weather_icon_map.h
   on_boot:
@@ -226,25 +251,20 @@ esp32:
 
 # Enable logging
 logger:
-  #level: WARN
+  level: WARN
 
 # Enable Home Assistant API
 api:
   encryption:
-    key: "<<generate your encription key>>"
+    key: !secret bedroom2_controller_api
 
 ota:
   - platform: esphome
-    password: "<<your ota pwd>>"
+    password: !secret bedroom2_controller_ota
 
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "Bedroom-Controller"
-    password: "<<your pwd>>"
   
   on_connect:
     - delay: 5s
@@ -253,8 +273,6 @@ wifi:
           value: !lambda |-
             return id(my_boot_in_progress) >= 1 ? 1 : 0;
 
-captive_portal:
-
 substitutions:
   heater: bedroom_heater                # Climate entity (without climate. prefix)
   car_battery_level: ev_battery_level   # EV battery sensor (without sensor. prefix)
@@ -262,10 +280,14 @@ substitutions:
   indoor_humid: bedroom_humidity        # Indoor humidity sensor (without sensor. prefix)
   clk_pin: GPIO23
   mosi_pin: GPIO22
-  sda_pin: GPIO19
-  scl_pin: GPIO20
-  disp_cs_pin: GPIO05
-  disp_dc_pin: GPIO07
+  #low power i2c
+  sda_pin: GPIO06
+  scl_pin: GPIO07
+  disp_cs_pin: GPIO16
+  disp_dc_pin: GPIO05
+  disp_bl_pin: GPIO17
+  disp_reset_pin: GPIO04
+  neopixel_pin: GPIO21
 
 external_components:
     - source: github://barbarachbc/esphomecomponents
@@ -661,7 +683,24 @@ binary_sensor:
         - script.execute:
             id: accept_button_click
 
+output:
+  - platform: ledc
+    pin: ${disp_bl_pin}
+    id: backlight_pwm
+
 light:
+  - platform: esp32_rmt_led_strip
+    id: my_unicorn_phat
+    chipset: ws2812
+    num_leds: 1
+    rgb_order: GRB
+    name: "Notification Light"
+    pin: ${neopixel_pin}
+  - platform: monochromatic
+    output: backlight_pwm
+    name: "Display Backlight"
+    id: backlight
+    restore_mode: ALWAYS_ON
   #NOTE: touch phat has them connected inversly
   - id: my_light_forward
     platform: cap1166
@@ -695,30 +734,29 @@ light:
     led_behavior: PULSE2
 
 font:
-  #mono screen, so no anti aliasing
   - id: value_med
     file:
       type: gfonts
       family: Montserrat
-    size: 14
-    bpp: 1
+    size: 20
+    bpp: 4
   - id: value_small
     file:
       type: gfonts
       family: Montserrat
-    size: 10
-    bpp: 1
+    size: 14
+    bpp: 2
   - id: value_large
     file:
       type: gfonts
       family: Montserrat
       weight: bold
-    size: 20
-    bpp: 1
+    size: 28
+    bpp: 4
   - id: mdi_small
     file: assets/materialdesignicons-webfont.ttf
-    size: 24
-    bpp: 1
+    size: 32
+    bpp: 4
     glyphs: [
       "\U000F1A71", # snowflake-thermometer 
       "\U000F032A", # leaf
@@ -731,16 +769,16 @@ font:
     ]
   - id: mdi_med
     file: assets/materialdesignicons-webfont.ttf
-    size: 32
-    bpp: 1
+    size: 64
+    bpp: 4
     glyphs: [
       "\U000F1807", # mdi-fire-circle
       "\U000F0E1B", # mdi-car-back
     ]
   - id: mdi_large
     file: assets/materialdesignicons-webfont.ttf
-    size: 48
-    bpp: 1
+    size: 96
+    bpp: 4
     glyphs: [
       "\U000F0594", # clear-night
       "\U000F0590", # cloudy
@@ -773,13 +811,24 @@ image:
 
 
 display:
-  - platform: ssd1306_spi
+#  - platform: ssd1306_spi
+#    id: my_display
+#    model: "SH1107 128x128"
+#    cs_pin: ${disp_cs_pin}
+#    dc_pin: ${disp_dc_pin}
+#    rotation: 180
+  - platform: mipi_spi
     id: my_display
-    model: "SH1107 128x128"
+    model: GC9A01A
     cs_pin: ${disp_cs_pin}
     dc_pin: ${disp_dc_pin}
-    rotation: 180
+    reset_pin: ${disp_reset_pin}
+    show_test_card: true
+    invert_colors: true
+    color_order: BGR
+    buffer_size: 25%
     update_interval: 1s
+    rotation: 180
     pages: 
       - id: page_info
         lambda: |-
@@ -796,16 +845,16 @@ display:
 
           //print time and date
           if (id(my_time).now().is_valid()) {
-            it.strftime(it.get_width()/2, 14, id(value_large), COLOR_ON, TextAlign::CENTER, "%I:%M %p", id(my_time).now());
-            it.strftime(it.get_width()/2, 114, id(value_med), COLOR_ON, TextAlign::CENTER, "%a, %e %b", id(my_time).now());
+            it.strftime(it.get_width()/2, 32, id(value_large), COLOR_ON, TextAlign::CENTER, "%I:%M %p", id(my_time).now());
+            it.strftime(it.get_width()/2, 194, id(value_med), COLOR_ON, TextAlign::CENTER, "%a, %e %b", id(my_time).now());
           }
 
-          it.printf(4, 27, id(mdi_large), COLOR_ON, id(my_forecast_icon).c_str());
-          it.printf(90, 27, id(value_small), COLOR_ON, TextAlign::TOP_CENTER, id(my_forecast_desc).c_str());
-          it.printf(4, 76, id(value_large), COLOR_ON, id(my_outside_temp).c_str());
+          it.printf(24, 42, id(mdi_large), COLOR_ON, id(my_forecast_icon).c_str());
+          it.printf(160, 64, id(value_small), COLOR_ON, TextAlign::TOP_CENTER, id(my_forecast_desc).c_str());
+          it.printf(24, 144, id(value_large), COLOR_ON, id(my_outside_temp).c_str());
 
-          it.printf(96, 42, id(mdi_med), COLOR_ON, TextAlign::TOP_CENTER, "\U000F0E1B");
-          it.printf(96, 76, id(value_med), COLOR_ON, TextAlign::TOP_CENTER, "%.0f%%", id(battery_level).state);
+          it.printf(180, 92, id(mdi_med), COLOR_ON, TextAlign::TOP_CENTER, "\U000F0E1B");
+          it.printf(180, 152, id(value_med), COLOR_ON, TextAlign::TOP_CENTER, "%.0f%%", id(battery_level).state);
       
       - id: page_heating
         lambda: |-
@@ -828,27 +877,26 @@ display:
           if(id(selecting_heating_preset) == "" && id(changing_heating_temp) <= 0){
             //print time and date
             if (id(my_time).now().is_valid()) {
-              it.strftime(it.get_width() - 2, 2, id(value_med), COLOR_ON, TextAlign::TOP_RIGHT, "%I:%M %p", id(my_time).now());
+              it.strftime(it.get_width()/2, 32, id(value_large), COLOR_ON, TextAlign::CENTER, "%I:%M %p", id(my_time).now());
             }
             auto heating_is_on = id(indoor_hvac_action).state == "heating";
             auto current_temp_preset = id(indoor_temp_preset).state;
             if(heating_is_on){
-              it.printf(4, 12, id(mdi_med), COLOR_ON, "\U000F1807");
+              it.printf(24, 42, id(mdi_med), COLOR_ON, "\U000F1807");
             }
-            it.printf(4, 52, id(value_large), COLOR_ON, "%.1f%s", id(indoor_temperature).state, id(outside_temperature_unit).state.c_str());
-            it.printf(4, 76, id(value_med), COLOR_ON, "%.0f%%", id(indoor_humidity).state);
+            it.printf(32, 104, id(value_large), COLOR_ON, "%.1f%s", id(indoor_temperature).state, id(outside_temperature_unit).state.c_str());
+            it.printf(32, 136, id(value_med), COLOR_ON, "%.0f%%", id(indoor_humidity).state);
 
-            it.printf(it.get_width() - 4, 52, id(value_med), COLOR_ON, TextAlign::TOP_RIGHT, "%.1f%s",
-              id(indoor_temp_setting).state, id(outside_temperature_unit).state.c_str());
-            it.printf(it.get_width() - 4, 76, id(value_med), COLOR_ON, TextAlign::TOP_RIGHT, current_temp_preset.c_str());
+            it.printf(it.get_width() - 48, 110, id(value_med), COLOR_ON, TextAlign::CENTER, "%.1f%s", id(indoor_temp_setting).state, id(outside_temperature_unit).state.c_str());
+            it.printf(it.get_width() - 48, 80, id(value_med), COLOR_ON, TextAlign::CENTER, current_temp_preset.c_str());
 
             //show icons
-            const int icon_size = 24;
-            auto y = it.get_height() - icon_size;
+            const int icon_size = 32;
+            auto y = it.get_height() - 2*icon_size;
 
             for(auto i = 0; i<4; i++){
               auto is_selected = current_temp_preset == presets[i];
-              auto x = 2 + icon_size*i + 9*i; auto invert_icon = false;
+              auto x = 48 + icon_size*i + 9*i; auto invert_icon = false;
 
               if(is_selected){
                 if(heating_is_on){
@@ -862,6 +910,8 @@ display:
             }
           } else if(id(selecting_heating_preset) != ""){
             bool is_selected = false;
+            auto y_last_line = it.get_height()/2 + 44;
+
             for(auto i = 0; i<4; i++){
               if(id(selecting_heating_preset) != presets[i]){
                 continue;
@@ -870,18 +920,16 @@ display:
               
               it.printf(it.get_width()/2, it.get_height()/2, id(mdi_large), COLOR_ON, TextAlign::BOTTOM_CENTER, icons[i].c_str());
               
-              it.printf(it.get_width()/2, it.get_height()-48, id(value_med), COLOR_ON, TextAlign::TOP_CENTER,
-              "Set the mode to:");
-              it.printf(it.get_width()/2, it.get_height()-24, id(value_med), COLOR_ON, TextAlign::TOP_CENTER,
-              "%s ?", id(selecting_heating_preset).c_str());
+              it.printf(it.get_width()/2, it.get_height()/2 + 20, id(value_med), COLOR_ON, TextAlign::TOP_CENTER, "Set the mode to:");
+              it.printf(it.get_width()/2, y_last_line, id(value_med), COLOR_ON, TextAlign::TOP_CENTER, "%s ?", id(selecting_heating_preset).c_str());
               break;
             }
 
             if(is_selected){
               //apply
-              it.printf(0, it.get_height() - 28, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F0158");
+              it.printf(32, y_last_line, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F0158");
               //cancel
-              it.printf(it.get_width(), it.get_height() - 28, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0C52");
+              it.printf(it.get_width()-32, y_last_line, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0C52");
             }
 
             if(!is_selected){
@@ -891,16 +939,17 @@ display:
             
               
             it.printf(it.get_width()/2, it.get_height()/2, id(mdi_large), COLOR_ON, TextAlign::BOTTOM_CENTER, "\U000F14DE");
-            it.printf(it.get_width()/2, it.get_height()-48, id(value_large), COLOR_ON, TextAlign::TOP_CENTER, "%.1f", id(changing_heating_temp));
-
+            it.printf(it.get_width()/2, it.get_height()/2+12, id(value_large), COLOR_ON, TextAlign::TOP_CENTER, "%.1f", id(changing_heating_temp));
+            
+            auto y_last_line = it.get_height()/2 + 44;
             //apply
-            it.printf(0, it.get_height() - 48, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F0158");
+            it.printf(32, y_last_line, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F0158");
             //cancel
-            it.printf(it.get_width(), it.get_height() - 48, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0C52");
+            it.printf(it.get_width()-32, y_last_line, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0C52");
             //minus
-            it.printf(24, it.get_height() - 28, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F06F2");
+            it.printf(80, y_last_line, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F06F2");
             //plus
-            it.printf(it.get_width() - 24, it.get_height() - 28, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0704");
+            it.printf(it.get_width() - 80, y_last_line, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0704");
           }
 
 ```
@@ -1030,12 +1079,16 @@ This project assumes you have a working weather integration in Home Assistant, t
 2. Double-check all connections before powering on
 3. NOTE: Touch pHAT - I connected both 5V and 3.3V pins to the 3.3V power suppy pin on the board
 4. Ensure all I2C and SPI connections are correct
+5. Make sure all the other pins for the display are correct. If any of them is incorrect the display won't show
+6. NeoPixel - connect VCC to 5V (3.3V will work but some of the colors won't show well)
 
 ### Prepare Files
 
 1. Download the Material Design Icons - details in [font component](/components/font#material-design-icons).
 2. Create the `weather_icon_map.h` header file ([content here](./info-panel-28.md/#weather-icon-map-header-file))
 3. Create your `secrets.yaml` file with your WiFi credentials
+4. Update the API encryption key ([generate a new one for security](https://esphome.io/components/api/))
+5. Set secure OTA passwords (I did not configure fallback WiFi endpoint but I did configure OTA)
 
 NOTE: no need to do anything for the external component, the [CAP1166](/components/cap1166) component code
 downloaded from github automatically.
@@ -1043,9 +1096,7 @@ downloaded from github automatically.
 ### Update Configuration
 
 1. Modify the `substitutions` section with your Home Assistant entity IDs
-2. Update the API encryption key ([generate a new one for security](https://esphome.io/components/api/))
-3. Set secure OTA and fallback hotspot passwords
-4. Adjust timezone in `time` component if not in Europe/Dublin
+2. Adjust timezone in `time` component if not in Europe/Dublin
 
 More info on [how to manage secrets](https://esphome.io/guides/security_best_practices/#secrets-management).
 
@@ -1072,7 +1123,7 @@ The device should be automatically discovered in Home Assistant:
 
 Check that:
 
-- Display shows boot screen then connects
+- Display shows boot screen and then connects
 - Time and weather information appear on info page
 - Indoor temperature and humidity display on heating page
 - Page navigation works (forward/back buttons)
@@ -1133,11 +1184,14 @@ configuration with what your desired setting is. The same goes for `frost`, `eco
 
 **Solutions:**
 
-1. Verify SPI wiring (CLK, MOSI, CS, DC pins)
-1. Check display model is "SH1107 128x128" ... or if you're modifying this - whatever your model is
-1. Verify CS and DC pin assignments match your wiring
+1. Verify SPI wiring (CLK, MOSI, CS pins)
+1. Check display is using mipi_spi and model GC9A01A ... or if you're modifying this - whatever your model is
+1. Verify CS, DC and RESET pin assignments match your wiring - note that not all displays have RESET, but if yours
+have it you should connect and configure it correctly
 1. Try different `rotation` values (0, 90, 180, 270)
 1. Check display power supply (3.3V)
+1. Make sure that you have buffer configured to 25% - ESP32C6 board I have has limited memory. Unless your board
+has external PSRAM go with 25%
 1. Test with simpler display code first - go to the list of [devices](/devices) and filter by `display`
 category. If your display is in the list it will have information how to set it up and will have simple
 display configuration.
@@ -1183,20 +1237,20 @@ if you're not using Versatile Thermostat - you might need to replace this with w
 
 This project documentation will be updated with:
 
-- **NeoPixel Integration** - Add RGB LED for ambient lighting and notifications
-- **3D Enclosure Design** - STL files and assembly instructions
+- **NeoPixel Integration** - RGB LED for ambient lighting and notifications is there and can be used from Home
+Assistant but it does nothing else at the moment. An option is to configure it to light up with automation.
 
 ## Other Images
 
-### Work in Progress
+- Home Assistant Control
+![Device Page in Home Assistant](./images/bedroom-controller-new/home-assistant-page.png)
 
-- Starting up
-![Starting up](./images/bedroom-controller/start-up.jpg)
-- Info
-![Info Page](./images/bedroom-controller/info-page.jpg)
-- Heating
-![Heating Page](./images/bedroom-controller/heating-page.jpg)
-- Set Heating Preset
-![Set Heating Preset Page](./images/bedroom-controller/preset-page.jpg)
-- Set Boost Temperature
-![Set Boost Temperature Page](./images/bedroom-controller/set-temperature-page.jpg)
+You can actually turn on and off LEDs behind buttons A-D.
+
+- NeoPixel
+![NeoPixel Light Control in Home Assistant](./images/bedroom-controller-new/neopixel-control.png)
+
+And you can play with the NeoPixel.
+
+![NeoPixel turned on](./images/bedroom-controller-new/neopixel.jpg)
+![NeoPixel turned on in the dark](./images/bedroom-controller-new/neopixel-dark.jpg)

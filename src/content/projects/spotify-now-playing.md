@@ -18,7 +18,7 @@ changelog:
   - date: "2025-12-22"
     type: "updated"
     description: "Added in-action photos"
-lastModified: "2025-12-22"
+lastModified: "2026-01-08"
 ---
 
 ## Project Overview
@@ -71,6 +71,20 @@ with your own entity IDs:
 
 - **Media Player**: I'm using Spotify but others might work. Example: `media_player.your_spotify`
 
+### Secrets File Setup
+
+Create a `secrets.yaml` file in your ESPHome directory with your credentials:
+
+```yaml
+wifi_ssid: "Your_WiFi_SSID"
+wifi_password: "Your_WiFi_Password"
+
+my_spotify_lcd_ota: "your ota password"
+my_spotify_lcd_api: "your generated api key"
+```
+
+For more information on using secrets in ESPHome, refer to the [ESPHome documentation](https://esphome.io/guides/yaml/#secrets-and-the-secretsyaml-file).
+
 ## Main Configuration File
 
 Check out [HD44780 Character LCD](/devices/hd44780-character-lcd) for wiring, in examples overthere,
@@ -93,7 +107,7 @@ api:
 
 ota:
   - platform: esphome
-    password: !secret my_spotify_lcd_api
+    password: !secret my_spotify_lcd_ota
 
 wifi:
   ssid: !secret wifi_ssid

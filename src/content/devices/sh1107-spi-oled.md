@@ -11,10 +11,14 @@ productionStatus: "active"
 purchaseLinks:
   - vendor: "Pimoroni"
     url: "https://shop.pimoroni.com/products/1-12-oled-breakout?variant=12628508704851"
-status: "ready"
+status: "retired"
 dateAcquired: "Jan 2022"
 image: "/images/devices/thumbnails/sh1107-spi-oled.jpg"
-lastModified: "2025-12-14"
+lastModified: "2026-01-08"
+changelog:
+  - date: "2026-01-08"
+    type: "updated"
+    description: "Marked as retired because broken 😢"
 ---
 
 ## Overview
@@ -288,3 +292,6 @@ Shots from the more [complicated example](#example-with-icons-and-multiple-pages
 ![Page 3](./images/sh1107-spi-oled/page3-preset.jpg)
 - Page 4 - Set Boost Temperature
 ![Page 4](./images/sh1107-spi-oled/page4-set-temp.jpg)
+
+Broken 😭:
+![Photo of the broken display](./images/sh1107-spi-oled/broken.jpg)
