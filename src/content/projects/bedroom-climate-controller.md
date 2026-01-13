@@ -21,7 +21,7 @@ changelog:
   - date: "2026-01-08"
     type: "added"
     description: "Copied the old project and updated"
-lastModified: "2026-01-08"
+lastModified: "2026-01-13"
 ---
 
 ## Project Overview
@@ -56,15 +56,22 @@ The project is complete in terms of hardware. The rest are software improvements
 - ✅ [Main Configuration](#main-configuration-file) - fully functional
 - ✅ [3D Enclosure](#3d-printed-enclosure)
 - [ ] Further improvements
+  - [ ] Display Auto Sleep
+  - [ ] Add Colors
+  - [ ] Use NeoPixel for notifications
+  - [ ] Use LEDs on the touch board for quick status
 
 ### Future improvement ideas
 
 - Add display auto sleep mode
+  - It's good to dim the display at night time for example 🌙😴
 - Add Colors
   - This was ported from Mono OLED so everything is monochromatic - it looks pretty but why not add some
   colors to our lives 😉
 - Use NeoPixel for actual notifications
-- Use LEDs on the touch screen for quick status
+  - Red flashing light if there's imminent rain and windows are open?
+- Use LEDs on the touch board for quick status
+  - EV Battery level? Or something else? Just throwing out ideas
 - Adding more pages?
 
 ### Reusability Note
@@ -175,14 +182,22 @@ comprehensive explanation.
 ![Set Heating Preset Page](./images/bedroom-controller-new/preset-page.jpg)
 - Set Boost Temperature
 ![Set Boost Temperature Page](./images/bedroom-controller-new/set-temperature-page.jpg)
+- Neopixel Blue
+![Neopixel in Blue Color](./images/bedroom-controller-new/neopixel-blue.jpg)
 
 <!-- TODO: Add wiring diagram -->
 _Detailed wiring diagram showing all connections will be added here._
 
+- Soldered controller - front
+![Front photo of the assembled controller](./images/bedroom-controller-new/assembly-front.jpg)
+
+- Soldered controller - back
+![Back photo of the assembled controller](./images/bedroom-controller-new/assembly-back.jpg)
+
 ## 3D Printed Enclosure
 
-<!-- TODO: Add 3D model files and assembly instructions -->
-_3D printable enclosure design is in progress. STL files and assembly instructions will be provided here._
+Ready to assemble:
+![Photo of ready to assemble parts for the bedroom controller](./images/bedroom-controller-new/assembly-ready.jpg)
 
 The enclosure houses:
 
@@ -191,6 +206,15 @@ The enclosure houses:
 - Touch pHAT buttons (front-facing)
 - NeoPixel LED (for ambient/notification lighting)
 - USB-C access for programming and power
+
+Ready to print STLs:
+![Screenshot of enclosure ready for slicing in 3D printing softwar](./images/bedroom-controller-new/print-ready.png)
+
+Download STL files:
+
+- [BedroomControllerBox.stl](/files/bedroom-controller/BedroomControllerBox.stl)
+- [BedroomControllerLid.stl](/files/bedroom-controller/BedroomControllerLid.stl)
+- [BedroomControllerStand.stl](/files/bedroom-controller/BedroomControllerStand.stl)
 
 ## ESPHome Configuration
 
