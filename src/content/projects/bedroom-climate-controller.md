@@ -21,7 +21,12 @@ changelog:
   - date: "2026-01-08"
     type: "added"
     description: "Copied the old project and updated"
-lastModified: "2026-01-13"
+  - date: "2026-01-14"
+    type: "updated"
+    description: |-
+      Added 3D files and new photos of the device.
+      Added turning off screen on idle.
+lastModified: "2026-01-14"
 ---
 
 ## Project Overview
@@ -56,7 +61,7 @@ The project is complete in terms of hardware. The rest are software improvements
 - ✅ [Main Configuration](#main-configuration-file) - fully functional
 - ✅ [3D Enclosure](#3d-printed-enclosure)
 - [ ] Further improvements
-  - [ ] Display Auto Sleep
+  - ✅ Display Auto Sleep
   - [ ] Add Colors
   - [ ] Use NeoPixel for notifications
   - [ ] Use LEDs on the touch board for quick status
@@ -521,6 +526,20 @@ script:
               - light.turn_on: my_light_back
               - light.turn_on: my_light_a
               - light.turn_on: my_light_d
+  - id: idle_screen_reset
+    mode: restart
+    then:
+      - if: 
+          condition:
+            number.in_range:
+              id: display_timeout
+              below: 1
+          then:
+            - light.turn_on: backlight
+          else:
+            - light.turn_on: backlight
+            - delay: !lambda return id(display_timeout).state * 1000;
+            - light.turn_off: backlight
 
 text_sensor:
   - platform: homeassistant
@@ -560,10 +579,13 @@ number:
     unit_of_measurement: "s"
     initial_value: 45
     restore_value: true
-    min_value: 10
-    max_value: 180
+    min_value: 0
+    max_value: 7200
     step: 5
     mode: box
+    on_value:
+      then:
+        script.execute: idle_screen_reset
   - platform: template
     name: LED Brightness
     optimistic: true
@@ -654,6 +676,9 @@ binary_sensor:
       then:
         - script.execute:
             id: cancel_button_click
+    on_release:
+      then:
+        script.execute: idle_screen_reset
   - platform: cap1166
     id: touch_A
     channel: 1
@@ -663,6 +688,9 @@ binary_sensor:
         then:
           - script.execute:
               id: a_button_click
+    on_release:
+      then:
+        script.execute: idle_screen_reset
   - platform: cap1166
     id: touch_B
     channel: 2
@@ -673,6 +701,9 @@ binary_sensor:
         - script.execute:
             id: change_preset
             preset: "eco"
+    on_release:
+      then:
+        script.execute: idle_screen_reset
   - platform: cap1166
     id: touch_C
     channel: 3
@@ -683,6 +714,9 @@ binary_sensor:
         - script.execute:
             id: change_preset
             preset: "comfort"
+    on_release:
+      then:
+        script.execute: idle_screen_reset
   - platform: cap1166
     id: touch_D
     channel: 4
@@ -697,6 +731,9 @@ binary_sensor:
         then:
           - script.execute:
               id: touch_d_long_click
+    on_release:
+      then:
+        script.execute: idle_screen_reset
   - platform: cap1166
     id: touch_forward
     channel: 5
@@ -706,6 +743,9 @@ binary_sensor:
       then:
         - script.execute:
             id: accept_button_click
+    on_release:
+      then:
+        script.execute: idle_screen_reset
 
 output:
   - platform: ledc
@@ -725,6 +765,10 @@ light:
     name: "Display Backlight"
     id: backlight
     restore_mode: ALWAYS_ON
+    # if it's done through Home Assistant (manually or through automation)
+    on_turn_on:
+      then:
+        script.execute: idle_screen_reset
   #NOTE: touch phat has them connected inversly
   - id: my_light_forward
     platform: cap1166
@@ -1094,6 +1138,31 @@ This project assumes you have a working weather integration in Home Assistant, t
 - Current temperature (from `temperature` attribute)
 - Temperature unit (C or F)
 - Weather condition (for icon mapping)
+
+### Idle Screen Timeout
+
+Screen will be turned off if the device is idle for more than configured timeout - `Screen Timeout - display_timeout`. By default it
+is configured to 45s but it can go from 0 - 7200 (2hrs). If set to 0, the screen won't go to sleep. The configuration is in seconds.
+
+#### Implementation Details
+
+The script used is: `idle_screen_reset` and it resets the timer when called. It is a very simple script:
+
+- it is configured in `restart` mode so previus execution is cancelled when called and the new one is initiated
+- it checks if `display_timeout` is turned off and just keeps the backlight on in that case
+- otherwise
+  - it turns on the backlight (making sure it's ON)
+  - waits for the configured timeout. Lambda needs to returns value in ms - hence multiplying the configuration by 1000
+  - and it turnes off the backlight
+  - note that if the script is called before it finishes this, the current execution will be cancelled and the new will be started
+
+**NOTE**: The `delay` operation is _smart_ and it is async so it does not block anything
+
+The script is executed in the following cases:
+
+- when `dispay_timeout` is set - either the timeout is changed or, on restart, when display timeout is set from Home Assistant
+- when any of the touch buttons is pressed (`on_release`)
+- when the `Display Backlight` is manually (or through automation) turned on from Home Assistant
 
 ## Installation Steps
 
