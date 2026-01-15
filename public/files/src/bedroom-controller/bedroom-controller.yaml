@@ -1,0 +1,759 @@
+esphome:
+  name: bedroom2-controller
+  friendly_name: bedroom2-controller
+  includes:
+    - weather_icon_map.h
+  on_boot:
+    - priority: 1
+      then:
+      - delay: 5s
+      - globals.set:
+          id: my_boot_in_progress
+          value: !lambda |-
+            return id(my_boot_in_progress) >= 2 ? 2 : id(my_boot_in_progress);
+
+
+esp32:
+  variant: esp32c6
+
+# Enable logging
+logger:
+  level: WARN
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret bedroom2_controller_api
+
+ota:
+  - platform: esphome
+    password: !secret bedroom2_controller_ota
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  
+  on_connect:
+    - delay: 5s
+    - globals.set:
+          id: my_boot_in_progress
+          value: !lambda |-
+            return id(my_boot_in_progress) >= 1 ? 1 : 0;
+
+substitutions:
+  heater: bedroom_heater                # Climate entity (without climate. prefix)
+  car_battery_level: ev_battery_level   # EV battery sensor (without sensor. prefix)
+  indoor_temp: bedroom_temperature      # Indoor temp sensor (without sensor. prefix)
+  indoor_humid: bedroom_humidity        # Indoor humidity sensor (without sensor. prefix)
+  clk_pin: GPIO23
+  mosi_pin: GPIO22
+  #low power i2c
+  sda_pin: GPIO06
+  scl_pin: GPIO07
+  disp_cs_pin: GPIO16
+  disp_dc_pin: GPIO05
+  disp_bl_pin: GPIO17
+  disp_reset_pin: GPIO04
+  neopixel_pin: GPIO21
+
+external_components:
+    - source: github://barbarachbc/esphomecomponents
+      components: [ cap1166 ]
+      refresh: 5min
+
+globals:
+  - id: my_boot_in_progress
+    type: int
+    restore_value: no
+    initial_value: '3'
+  - id: my_forecast_desc
+    type: std::string
+    restore_value: no
+    initial_value: '"Updating ..."'
+  - id: my_forecast_icon
+    type: std::string
+    restore_value: no
+    initial_value: '""'
+  - id: my_outside_temp
+    type: std::string
+    restore_value: no
+    initial_value: '"_.__C"'
+  - id: selecting_heating_preset
+    type: std::string
+    restore_value: no
+    initial_value: '""'
+  - id: changing_heating_temp
+    type: float
+    restore_value: no
+    initial_value: '0'
+
+script:
+  - id: update_weather
+    then:
+      - globals.set:
+          id: my_boot_in_progress
+          #finally connected to Home Assistant
+          value: '0'
+      - globals.set:
+          id: my_forecast_icon
+          value: !lambda return weather_icon_map[id(forecast_desc).state.c_str()].c_str();
+      - globals.set:
+          id: my_forecast_desc
+          value: !lambda return weather_desc_map[id(forecast_desc).state.c_str()].c_str();
+  - id: update_outside_temp
+    then:
+      - globals.set:
+          id: my_outside_temp
+          value: !lambda return str_sprintf("%.1f%s", id(outside_temperature).state, id(outside_temperature_unit).state.c_str());
+  - id: a_button_click
+    then:
+      - if:
+          condition:
+            - lambda: return id(changing_heating_temp) > 0;
+          then:
+            - globals.set:
+                id: changing_heating_temp
+                value: !lambda |-
+                  if(id(changing_heating_temp) <= 15){
+                    return 15.0;
+                  } else {
+                    return id(changing_heating_temp) - 0.5;
+                  }
+          else:
+            - script.execute:
+                id: change_preset
+                preset: "frost"
+  - id: d_button_click
+    then:
+      - if:
+          condition:
+            - lambda: return id(changing_heating_temp) > 0;
+          then:
+            - globals.set:
+                id: changing_heating_temp
+                value: !lambda |-
+                  if(id(changing_heating_temp) >= 28){
+                    return 28.0;
+                  } else {
+                    return id(changing_heating_temp) + 0.5;
+                  }
+          else:
+            - script.execute:
+                id: change_preset
+                preset: "boost"
+  - id: change_preset
+    parameters:
+      preset: string
+    then:
+      - if:
+          condition:
+            and:
+              - display.is_displaying_page: page_heating
+              - lambda: return id(selecting_heating_preset) == "" && id(changing_heating_temp) <= 0;
+              - not: 
+                  text_sensor.state:
+                    id: indoor_temp_preset
+                    state: !lambda return preset;
+          then:
+            - globals.set:
+                id: selecting_heating_preset
+                value: !lambda return preset;
+            - component.update: my_display
+            - light.turn_on: my_light_forward
+            - light.turn_on: my_light_back
+  - id: accept_button_click
+    then:
+      - if:
+          condition:
+              - lambda: return id(selecting_heating_preset) == "" && id(changing_heating_temp) <= 0;
+          then:
+            - display.page.show_next: my_display
+            - component.update: my_display
+      - if:
+          condition: 
+            - lambda: return id(selecting_heating_preset) != "";
+          then:
+            - script.execute:
+                id: set_indoor_preset
+                preset: !lambda return id(selecting_heating_preset);
+            - globals.set:
+                id: selecting_heating_preset
+                value: '""'
+            - component.update: my_display
+            - light.turn_off: my_light_forward
+            - light.turn_off: my_light_back
+      - if:
+          condition:
+            - lambda: return id(changing_heating_temp) > 0;
+          then:
+            - script.execute:
+                id: change_preset_amount
+                preset: "boost"
+                set_to: !lambda return id(changing_heating_temp);
+            - globals.set:
+                id: changing_heating_temp
+                value: '0'
+            - component.update: my_display
+            - light.turn_off: my_light_forward
+            - light.turn_off: my_light_back
+            - light.turn_off: my_light_a
+            - light.turn_off: my_light_d
+  - id: cancel_button_click
+    then:
+      - if:
+          condition:
+              - lambda: return id(selecting_heating_preset) == "" && id(changing_heating_temp) <= 0;
+          then:
+            - display.page.show_previous: my_display
+            - component.update: my_display
+      - if:
+          condition:
+            - lambda: return id(selecting_heating_preset) != "";
+          then:
+            - globals.set:
+                id: selecting_heating_preset
+                value: '""'
+            - component.update: my_display
+            - light.turn_off: my_light_forward
+            - light.turn_off: my_light_back
+      - if:
+          condition:
+            - lambda: return id(changing_heating_temp) > 0;
+          then:
+            - globals.set:
+                id: changing_heating_temp
+                value: '0'
+            - component.update: my_display
+            - light.turn_off: my_light_forward
+            - light.turn_off: my_light_back
+            - light.turn_off: my_light_a
+            - light.turn_off: my_light_d
+  - id: set_indoor_preset
+    parameters:
+      preset: string
+    then:
+      - homeassistant.action:
+          action: climate.set_preset_mode
+          data:
+            entity_id: climate.${heater}
+          data_template:
+            preset_mode: !lambda return preset;
+  - id: change_preset_amount
+    parameters:
+      preset: string
+      set_to: float
+    then:
+      - if:
+          condition:
+            - lambda: return preset == "boost";
+          then: 
+            - number.set:
+                id: indoor_temp_preset_boost
+                value: !lambda return set_to;
+  - id: touch_d_long_click
+    then:
+      - if:
+          condition:
+              - lambda: return id(selecting_heating_preset) == "" && id(changing_heating_temp) <= 0;
+          then:
+              - globals.set:
+                  id: changing_heating_temp
+                  #round to 0.5
+                  value: !lambda return round(id(indoor_temp_preset_boost).state * 2.0)/2.0;
+              - light.turn_on: my_light_forward
+              - light.turn_on: my_light_back
+              - light.turn_on: my_light_a
+              - light.turn_on: my_light_d
+  - id: idle_screen_reset
+    mode: restart
+    then:
+      - if: 
+          condition:
+            number.in_range:
+              id: display_timeout
+              below: 1
+          then:
+            - light.turn_on: backlight
+          else:
+            - light.turn_on: backlight
+            - delay: !lambda return id(display_timeout).state * 1000;
+            - light.turn_off: backlight
+
+text_sensor:
+  - platform: homeassistant
+    id: outside_temperature_unit
+    entity_id: weather.forecast_home
+    attribute: temperature_unit
+    internal: true
+    on_value: 
+      then:
+        - script.execute: update_outside_temp
+        
+  - platform: homeassistant
+    id: forecast_desc
+    entity_id: weather.forecast_home
+    internal: true
+    on_value: 
+      then:
+        script.execute: update_weather
+
+  - platform: homeassistant
+    id: indoor_hvac_action
+    attribute: hvac_action
+    entity_id: climate.${heater}
+    internal: true
+  
+  - platform: homeassistant
+    id: indoor_temp_preset
+    attribute: preset_mode
+    entity_id: climate.${heater}
+    internal: true
+
+number:
+  - platform: template
+    name: Screen timeout
+    optimistic: true
+    id: display_timeout
+    unit_of_measurement: "s"
+    initial_value: 45
+    restore_value: true
+    min_value: 0
+    max_value: 7200
+    step: 5
+    mode: box
+    on_value:
+      then:
+        script.execute: idle_screen_reset
+  - platform: template
+    name: LED Brightness
+    optimistic: true
+    id: led_brightness
+    unit_of_measurement: "%"
+    initial_value: 40
+    restore_value: true
+    min_value: 0
+    max_value: 100
+    step: 5
+    icon: mdi:brightness-percent
+    on_value:
+      then:
+        - lambda: |-
+            id(touch_phat).update_all_brightness(0, id(led_brightness).state);
+  - platform: homeassistant
+    id: battery_level
+    entity_id: sensor.${car_battery_level}
+    internal: true
+  
+  - platform: homeassistant
+    id: indoor_temp_preset_boost
+    entity_id: number.${heater}_preset_boost_temp
+    internal: true
+
+sensor:
+  - platform: homeassistant
+    id: outside_temperature
+    attribute: temperature
+    entity_id: weather.forecast_home
+    internal: true
+    on_value: 
+      then:
+        script.execute: update_outside_temp
+
+  - platform: homeassistant
+    id: indoor_temperature
+    entity_id: sensor.${indoor_temp}
+    internal: true
+  
+  - platform: homeassistant
+    id: indoor_humidity
+    entity_id: sensor.${indoor_humid}
+    internal: true
+  
+  - platform: homeassistant
+    id: indoor_temp_setting
+    attribute: temperature
+    entity_id: climate.${heater}
+    internal: true
+
+time:
+  - platform: sntp
+    id: my_time
+    timezone: Europe/Dublin
+
+spi:
+  clk_pin: ${clk_pin}
+  mosi_pin: ${mosi_pin}
+
+i2c:
+  id: i2c_bus
+  sda: ${sda_pin}
+  scl: ${scl_pin}
+          
+cap1166:
+  - id: touch_phat
+    address: 0x2C
+    touch_threshold: 0x40
+    allow_multiple_touches: false
+    brightness_configs:
+      - led_behavior: DIRECT
+        max_brightness: 40%
+      - led_behavior: PULSE1
+        max_brightness: 40%
+      - led_behavior: PULSE2
+        max_brightness: 40%
+      - led_behavior: BREATHE
+        max_brightness: 40%
+
+binary_sensor:
+  - platform: cap1166
+    id: touch_back
+    channel: 0
+    on_click:
+      min_length: 50ms
+      max_length: 350ms
+      then:
+        - script.execute:
+            id: cancel_button_click
+    on_release:
+      then:
+        script.execute: idle_screen_reset
+  - platform: cap1166
+    id: touch_A
+    channel: 1
+    on_click:
+      - min_length: 50ms
+        max_length: 350ms
+        then:
+          - script.execute:
+              id: a_button_click
+    on_release:
+      then:
+        script.execute: idle_screen_reset
+  - platform: cap1166
+    id: touch_B
+    channel: 2
+    on_click:
+      min_length: 50ms
+      max_length: 350ms
+      then:
+        - script.execute:
+            id: change_preset
+            preset: "eco"
+    on_release:
+      then:
+        script.execute: idle_screen_reset
+  - platform: cap1166
+    id: touch_C
+    channel: 3
+    on_click:
+      min_length: 50ms
+      max_length: 350ms
+      then:
+        - script.execute:
+            id: change_preset
+            preset: "comfort"
+    on_release:
+      then:
+        script.execute: idle_screen_reset
+  - platform: cap1166
+    id: touch_D
+    channel: 4
+    on_click:
+      - min_length: 50ms
+        max_length: 350ms
+        then:
+          - script.execute:
+              id: d_button_click
+      - min_length: 350ms
+        max_length: 2000ms
+        then:
+          - script.execute:
+              id: touch_d_long_click
+    on_release:
+      then:
+        script.execute: idle_screen_reset
+  - platform: cap1166
+    id: touch_forward
+    channel: 5
+    on_click:
+      min_length: 50ms
+      max_length: 350ms
+      then:
+        - script.execute:
+            id: accept_button_click
+    on_release:
+      then:
+        script.execute: idle_screen_reset
+
+output:
+  - platform: ledc
+    pin: ${disp_bl_pin}
+    id: backlight_pwm
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: my_unicorn_phat
+    chipset: ws2812
+    num_leds: 1
+    rgb_order: GRB
+    name: "Notification Light"
+    pin: ${neopixel_pin}
+  - platform: monochromatic
+    output: backlight_pwm
+    name: "Display Backlight"
+    id: backlight
+    restore_mode: ALWAYS_ON
+    # if it's done through Home Assistant (manually or through automation)
+    on_turn_on:
+      then:
+        script.execute: idle_screen_reset
+  #NOTE: touch phat has them connected inversly
+  - id: my_light_forward
+    platform: cap1166
+    internal: true
+    channel: 0
+    led_behavior: PULSE2
+  - id: my_light_d
+    platform: cap1166
+    name: "Light D"
+    channel: 1
+    led_behavior: DIRECT
+  - id: my_light_c
+    name: "Light C"
+    platform: cap1166
+    channel: 2
+    led_behavior: DIRECT
+  - id: my_light_b
+    platform: cap1166
+    name: "Light B"
+    channel: 3
+    led_behavior: DIRECT
+  - id: my_light_a
+    platform: cap1166
+    name: "Light A"
+    channel: 4
+    led_behavior: DIRECT
+  - id: my_light_back
+    platform: cap1166
+    internal: true
+    channel: 5
+    led_behavior: PULSE2
+
+font:
+  - id: value_med
+    file:
+      type: gfonts
+      family: Montserrat
+    size: 20
+    bpp: 4
+  - id: value_small
+    file:
+      type: gfonts
+      family: Montserrat
+    size: 14
+    bpp: 2
+  - id: value_large
+    file:
+      type: gfonts
+      family: Montserrat
+      weight: bold
+    size: 28
+    bpp: 4
+  - id: mdi_small
+    file: assets/materialdesignicons-webfont.ttf
+    size: 32
+    bpp: 4
+    glyphs: [
+      "\U000F1A71", # snowflake-thermometer 
+      "\U000F032A", # leaf
+      "\U000F04B9", # sofa
+      "\U000F14DE", # rocket-launch
+      "\U000F0C52", # checkbox-outline
+      "\U000F0158", # close-box-outline
+      "\U000F0704", # plus-box-outline
+      "\U000F06F2", # minus-box-outline
+    ]
+  - id: mdi_med
+    file: assets/materialdesignicons-webfont.ttf
+    size: 64
+    bpp: 4
+    glyphs: [
+      "\U000F1807", # mdi-fire-circle
+      "\U000F0E1B", # mdi-car-back
+    ]
+  - id: mdi_large
+    file: assets/materialdesignicons-webfont.ttf
+    size: 96
+    bpp: 4
+    glyphs: [
+      "\U000F0594", # clear-night
+      "\U000F0590", # cloudy
+      "\U000F0F2F", # exceptional
+      "\U000F0591", # fog
+      "\U000F0592", # hail
+      "\U000F0593", # lightning
+      "\U000F067E", # lightning-rainy
+      "\U000F0595", # partlycloudy
+      "\U000F0596", # pouring
+      "\U000F0597", # rainy
+      "\U000F0598", # snowy
+      "\U000F067F", # snowy-rainy
+      "\U000F0599", # sunny
+      "\U000F059D", # windy
+      "\U000F059E", # windy-variant
+      "\U000F14E4", # sunny-off
+      
+      "\U000F1A71", # snowflake-thermometer 
+      "\U000F032A", # leaf
+      "\U000F04B9", # sofa
+      "\U000F14DE", # rocket-launch
+    ]
+
+image:
+  - id: boot_logo
+    type: BINARY
+    file: mdi:home-automation
+    resize: 80x80
+
+
+display:
+#  - platform: ssd1306_spi
+#    id: my_display
+#    model: "SH1107 128x128"
+#    cs_pin: ${disp_cs_pin}
+#    dc_pin: ${disp_dc_pin}
+#    rotation: 180
+  - platform: mipi_spi
+    id: my_display
+    model: GC9A01A
+    cs_pin: ${disp_cs_pin}
+    dc_pin: ${disp_dc_pin}
+    reset_pin: ${disp_reset_pin}
+    show_test_card: true
+    invert_colors: true
+    color_order: BGR
+    buffer_size: 25%
+    update_interval: 1s
+    rotation: 180
+    pages: 
+      - id: page_info
+        lambda: |-
+          if (id(my_boot_in_progress) > 0) {
+            if(id(my_boot_in_progress)>1)
+            {
+                it.printf(it.get_width()/2, 114, id(value_large), COLOR_ON, TextAlign::CENTER, "Starting ...");
+            }else {
+                it.printf(it.get_width()/2, 114, id(value_large), COLOR_ON, TextAlign::CENTER, "Connecting");
+            }
+            it.image(it.get_width()/2, 50, id(boot_logo), ImageAlign::CENTER);
+            return;
+          }
+
+          //print time and date
+          if (id(my_time).now().is_valid()) {
+            it.strftime(it.get_width()/2, 32, id(value_large), COLOR_ON, TextAlign::CENTER, "%I:%M %p", id(my_time).now());
+            it.strftime(it.get_width()/2, 194, id(value_med), COLOR_ON, TextAlign::CENTER, "%a, %e %b", id(my_time).now());
+          }
+
+          it.printf(24, 42, id(mdi_large), COLOR_ON, id(my_forecast_icon).c_str());
+          it.printf(160, 64, id(value_small), COLOR_ON, TextAlign::TOP_CENTER, id(my_forecast_desc).c_str());
+          it.printf(24, 144, id(value_large), COLOR_ON, id(my_outside_temp).c_str());
+
+          it.printf(180, 92, id(mdi_med), COLOR_ON, TextAlign::TOP_CENTER, "\U000F0E1B");
+          it.printf(180, 152, id(value_med), COLOR_ON, TextAlign::TOP_CENTER, "%.0f%%", id(battery_level).state);
+      
+      - id: page_heating
+        lambda: |-
+
+          if (id(my_boot_in_progress) > 0) {
+            it.printf(it.get_width()/2, 114, id(value_large), COLOR_ON, TextAlign::CENTER, "Connecting");
+            it.image(it.get_width()/2, 50, id(boot_logo), ImageAlign::CENTER);
+            return;
+          }
+
+
+          const std::string presets[] = {
+            "frost", "eco", "comfort", "boost"
+          };
+
+          const std::string icons[] = {
+            "\U000F1A71", "\U000F032A", "\U000F04B9", "\U000F14DE"
+          };
+            
+          if(id(selecting_heating_preset) == "" && id(changing_heating_temp) <= 0){
+            //print time and date
+            if (id(my_time).now().is_valid()) {
+              it.strftime(it.get_width()/2, 32, id(value_large), COLOR_ON, TextAlign::CENTER, "%I:%M %p", id(my_time).now());
+            }
+            auto heating_is_on = id(indoor_hvac_action).state == "heating";
+            auto current_temp_preset = id(indoor_temp_preset).state;
+            if(heating_is_on){
+              it.printf(24, 42, id(mdi_med), COLOR_ON, "\U000F1807");
+            }
+            it.printf(32, 104, id(value_large), COLOR_ON, "%.1f%s", id(indoor_temperature).state, id(outside_temperature_unit).state.c_str());
+            it.printf(32, 136, id(value_med), COLOR_ON, "%.0f%%", id(indoor_humidity).state);
+
+            it.printf(it.get_width() - 48, 110, id(value_med), COLOR_ON, TextAlign::CENTER, "%.1f%s", id(indoor_temp_setting).state, id(outside_temperature_unit).state.c_str());
+            it.printf(it.get_width() - 48, 80, id(value_med), COLOR_ON, TextAlign::CENTER, current_temp_preset.c_str());
+
+            //show icons
+            const int icon_size = 32;
+            auto y = it.get_height() - 2*icon_size;
+
+            for(auto i = 0; i<4; i++){
+              auto is_selected = current_temp_preset == presets[i];
+              auto x = 48 + icon_size*i + 9*i; auto invert_icon = false;
+
+              if(is_selected){
+                if(heating_is_on){
+                  invert_icon = true;
+                  it.filled_rectangle(x, y-1, icon_size+1, icon_size+1);
+                }else{
+                  it.rectangle(x, y-1, icon_size+1, icon_size+1);
+                }
+              }
+              it.printf(x, y, id(mdi_small), invert_icon ? COLOR_OFF : COLOR_ON, icons[i].c_str());
+            }
+          } else if(id(selecting_heating_preset) != ""){
+            bool is_selected = false;
+            auto y_last_line = it.get_height()/2 + 44;
+
+            for(auto i = 0; i<4; i++){
+              if(id(selecting_heating_preset) != presets[i]){
+                continue;
+              }
+              is_selected = true;
+              
+              it.printf(it.get_width()/2, it.get_height()/2, id(mdi_large), COLOR_ON, TextAlign::BOTTOM_CENTER, icons[i].c_str());
+              
+              it.printf(it.get_width()/2, it.get_height()/2 + 20, id(value_med), COLOR_ON, TextAlign::TOP_CENTER, "Set the mode to:");
+              it.printf(it.get_width()/2, y_last_line, id(value_med), COLOR_ON, TextAlign::TOP_CENTER, "%s ?", id(selecting_heating_preset).c_str());
+              break;
+            }
+
+            if(is_selected){
+              //apply
+              it.printf(32, y_last_line, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F0158");
+              //cancel
+              it.printf(it.get_width()-32, y_last_line, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0C52");
+            }
+
+            if(!is_selected){
+              id(selecting_heating_preset) = "";
+            }
+          } else if(id(changing_heating_temp) > 0){
+            
+              
+            it.printf(it.get_width()/2, it.get_height()/2, id(mdi_large), COLOR_ON, TextAlign::BOTTOM_CENTER, "\U000F14DE");
+            it.printf(it.get_width()/2, it.get_height()/2+12, id(value_large), COLOR_ON, TextAlign::TOP_CENTER, "%.1f", id(changing_heating_temp));
+            
+            auto y_last_line = it.get_height()/2 + 44;
+            //apply
+            it.printf(32, y_last_line, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F0158");
+            //cancel
+            it.printf(it.get_width()-32, y_last_line, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0C52");
+            //minus
+            it.printf(80, y_last_line, id(mdi_small), COLOR_ON, TextAlign::TOP_LEFT, "\U000F06F2");
+            //plus
+            it.printf(it.get_width() - 80, y_last_line, id(mdi_small), COLOR_ON, TextAlign::TOP_RIGHT, "\U000F0704");
+          }
