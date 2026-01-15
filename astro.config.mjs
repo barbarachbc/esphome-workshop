@@ -7,6 +7,7 @@ import rehypeExternalLinks from 'rehype-external-links';
 import partytown from '@astrojs/partytown';
 import { siteConfig } from './src/config';
 import test_pages from './src/integrations/test_pages'
+import remarkEmbedCode from './src/plugins/remark-embed-code';
 
 import sitemap from '@astrojs/sitemap';
 
@@ -15,6 +16,7 @@ export default defineConfig({
   site: siteConfig.siteUrl,
   integrations: [mdx(), partytown(), pagefind(), test_pages(), sitemap()],
   markdown: {
+    remarkPlugins: [remarkEmbedCode],
     shikiConfig: {
       theme: 'github-dark',
       langs: ['yaml', 'python', 'cpp', 'javascript'],
