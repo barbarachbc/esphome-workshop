@@ -20,6 +20,16 @@ export function extractYamlBlocks(mdText: string): string[] {
   return blocks;
 }
 
+export function extractAstroEmbedPaths(mdText: string): string[] {
+  const regex = /<!--\s*astro-embed:\s*([^\s]+)\s*-->/g;
+  const paths: string[] = [];
+  let match;
+  while ((match = regex.exec(mdText))) {
+    paths.push(match[1]);
+  }
+  return paths;
+}
+
 class CustomTag {
   type: any;
   data: any;
@@ -117,6 +127,7 @@ export function extractComponentsFromContent(): {
     const projectName = fname.replace(/\.md$/, "");
     const projectComponents: Record<string, Set<string>> = {};
 
+    // Process inline YAML blocks
     for (const block of yamlBlocks) {
       try {
 
@@ -131,6 +142,28 @@ export function extractComponentsFromContent(): {
         }
       } catch(ex) {
         console.warn(`Project error ${ex}`);
+      }
+    }
+
+    // Process astro-embed YAML files
+    const embedPaths = extractAstroEmbedPaths(mdText);
+    for (const embedPath of embedPaths) {
+      try {
+        // Convert /files/... path to public/files/...
+        const fullPath = path.join(__dirname, "..", "public", embedPath);
+        if (fs.existsSync(fullPath) && fullPath.endsWith(".yaml")) {
+          const yamlContent = fs.readFileSync(fullPath, "utf-8");
+          const yamlObj = yaml.load(yamlContent, {schema: SCHEMA});
+          if (yamlObj && typeof yamlObj === "object" && "esphome" in yamlObj) {
+            const comps = parseComponents(yamlObj);
+            for (const comp in comps) {
+              if (!projectComponents[comp]) projectComponents[comp] = new Set();
+              comps[comp].forEach(platform => projectComponents[comp].add(platform));
+            }
+          }
+        }
+      } catch(ex) {
+        console.warn(`Error processing astro-embed file ${embedPath}: ${ex}`);
       }
     }
     if (Object.keys(projectComponents).length > 0) {
