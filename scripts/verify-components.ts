@@ -18,10 +18,13 @@ interface Frontmatter {
   [key: string]: any;
 }
 
-function extractFrontmatter(mdContent: string): Frontmatter | null {
-  const frontmatterRegex = /^---\n([\s\S]*?)\n---/;
+function extractFrontmatter(mdContent: string, file: string): Frontmatter | null {
+  const frontmatterRegex = /^---\r?\n([\s\S]*?)\n---/;
   const match = mdContent.match(frontmatterRegex);
-  if (!match) return null;
+  if (!match) {
+    console.warn(`Frontmatter missing: ${file}`);
+    return null;
+  }
   
   try {
     const frontmatter = yaml.load(match[1]) as Frontmatter;
@@ -58,7 +61,7 @@ function readComponentFiles(): Map<string, string[]> {
   for (const file of files) {
     const filePath = path.join(COMPONENTS_DIR, file);
     const content = fs.readFileSync(filePath, "utf-8");
-    const frontmatter = extractFrontmatter(content);
+    const frontmatter = extractFrontmatter(content, file);
     const componentName = file.replace(/\.md$/, "");
     
     componentsMap.set(componentName, frontmatter?.relatedDevices || []);
@@ -85,7 +88,7 @@ function main() {
     const deviceName = fname.replace(/\.md$/, "");
     const filePath = path.join(DEVICES_DIR, fname);
     const content = fs.readFileSync(filePath, "utf-8");
-    const frontmatter = extractFrontmatter(content);
+    const frontmatter = extractFrontmatter(content, fname);
     
     const yamlComponents = devices[deviceName] ? flattenComponents(devices[deviceName]) : new Set<string>();
     const frontmatterComponents = new Set(frontmatter?.components || []);
@@ -95,7 +98,8 @@ function main() {
     const inFrontmatterNotInYaml = Array.from(frontmatterComponents).filter(c => !yamlComponents.has(c));
     
     if (inYamlNotInFrontmatter.length > 0 || inFrontmatterNotInYaml.length > 0) {
-      console.log(`### ${deviceName}`);
+      const status = frontmatter?.status || 'unknown';
+      console.log(`### ${deviceName} (${status})`);
       
       if (inYamlNotInFrontmatter.length > 0) {
         console.log("❌ Used in YAML but NOT in frontmatter:");
@@ -122,7 +126,7 @@ function main() {
     const projectName = fname.replace(/\.md$/, "");
     const filePath = path.join(PROJECTS_DIR, fname);
     const content = fs.readFileSync(filePath, "utf-8");
-    const frontmatter = extractFrontmatter(content);
+    const frontmatter = extractFrontmatter(content, fname);
     
     const yamlComponents = projects[projectName] ? flattenComponents(projects[projectName]) : new Set<string>();
     const frontmatterComponents = new Set(frontmatter?.components || []);
@@ -132,7 +136,8 @@ function main() {
     const inFrontmatterNotInYaml = Array.from(frontmatterComponents).filter(c => !yamlComponents.has(c));
     
     if (inYamlNotInFrontmatter.length > 0 || inFrontmatterNotInYaml.length > 0) {
-      console.log(`### ${projectName}`);
+      const status = frontmatter?.status || 'unknown';
+      console.log(`### ${projectName} (${status})`);
       
       if (inYamlNotInFrontmatter.length > 0) {
         console.log("❌ Used in YAML but NOT in frontmatter:");
@@ -206,7 +211,7 @@ function main() {
     const deviceName = fname.replace(/\.md$/, "");
     const filePath = path.join(DEVICES_DIR, fname);
     const content = fs.readFileSync(filePath, "utf-8");
-    const frontmatter = extractFrontmatter(content);
+    const frontmatter = extractFrontmatter(content, fname);
     
     const yamlComponents = devices[deviceName] ? flattenComponents(devices[deviceName]) : new Set<string>();
     const frontmatterComponents = new Set(frontmatter?.components || []);
@@ -223,7 +228,7 @@ function main() {
     const projectName = fname.replace(/\.md$/, "");
     const filePath = path.join(PROJECTS_DIR, fname);
     const content = fs.readFileSync(filePath, "utf-8");
-    const frontmatter = extractFrontmatter(content);
+    const frontmatter = extractFrontmatter(content, fname);
     
     const yamlComponents = projects[projectName] ? flattenComponents(projects[projectName]) : new Set<string>();
     const frontmatterComponents = new Set(frontmatter?.components || []);
