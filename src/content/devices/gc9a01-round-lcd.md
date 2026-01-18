@@ -6,7 +6,7 @@ manufacturer: "Generic"
 model: "GC9A01A"
 variants: ["1.28 TFT Square variant"]
 connectionTypes: ["spi"]
-components: ["spi", "display", "mipi_spi", "display_color"]
+components: [ "esp32", "spi", "display-mipi-spi", "font", "interval", "output-ledc", "light-monochromatic"]
 tags: ["display", "lcd", "tft", "rgb", "round", "gc9a01"]
 relatedDevices: ["esp32-devkit-v1"]
 productionStatus: "active"
@@ -16,7 +16,7 @@ purchaseLinks:
 status: "ready"
 dateAcquired: "May 2024"
 count: 2
-lastModified: "2025-12-13"
+lastModified: "2026-01-18"
 changelog:
   - date: "2025-12-07"
     type: "added"

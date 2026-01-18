@@ -6,8 +6,8 @@ manufacturer: "Generic"
 model: "HD44780"
 variants: ["1602A"]
 connectionTypes: ["i2c", "gpio"]
-components: ["i2c", "display", "lcd_pcf8574", "lcd_gpio", "otput-ledc", "esp8266-pwm"]
-tags: ["display", "lcd", "character", "text", "hd44780", "i2c", "pcf8574", "1602"]
+components: ["esp8266", "display-lcd-gpio", "output-ledc", "output-esp8266-pwm", "light-monochromatic"]
+tags: ["display", "lcd", "character", "text", "hd44780", "1602"]
 productionStatus: "active"
 purchaseLinks:
   - vendor: "Amazon UK"
@@ -29,7 +29,7 @@ references:
     url: "https://elm-chan.org/docs/lcd/lcd3v.html"
 status: "ready"
 image: "/images/devices/thumbnails/hd44780-1602a.jpg"
-lastModified: "2025-12-26"
+lastModified: "2026-01-18"
 ---
 
 ## Overview

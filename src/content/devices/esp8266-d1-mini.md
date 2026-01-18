@@ -6,6 +6,7 @@ manufacturer: "DiyMore"
 model: "NodeMCU"
 connectionTypes: ["gpio"]
 tags: ["wifi", "esp8266"]
+components: ["esp8266", "output-gpio", "light-binary", "interval"]
 productionStatus: "NRND"
 status: "ready"
 references:
@@ -17,7 +18,7 @@ purchaseLinks:
 dateAcquired: "Oct 2024"
 count: 3
 image: "/images/devices/thumbnails/esp8266-d1-mini.jpg"
-lastModified: "2025-12-13"
+lastModified: "2026-01-18"
 ---
 
 ## Overview

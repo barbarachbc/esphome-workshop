@@ -6,6 +6,7 @@ manufacturer: "Espressif"
 model: "esp32-c3-wroom-02"
 connectionTypes: ["gpio"]
 tags: ["wifi", "bluetooth", "esp32-c3", "risc-v"]
+components: ["esp32"]
 productionStatus: "active"
 status: "pending"
 references:
@@ -18,14 +19,16 @@ purchaseLinks:
     url: "https://www.mouser.ie/ProductDetail/356-ESP32C3WROOM02N4"
 #image: "/images/devices/"
 dateAcquired: "Dec 2024"
-lastModified: "2025-12-06"
+lastModified: "2026-01-18"
 ---
 
 ## Overview
 
-The ESP32-C3-WROOM-02 is a general-purpose WiFi and Bluetooth LE module based on the ESP32-C3 SoC. It features a 32-bit RISC-V single-core processor and is designed for low-power IoT applications.
+The ESP32-C3-WROOM-02 is a general-purpose WiFi and Bluetooth LE module based on the ESP32-C3 SoC.
+It features a 32-bit RISC-V single-core processor and is designed for low-power IoT applications.
 
 ## Test Status
+
 - [ ] How to use Hardware? 👀
 - [ ] Basic Config
 - [ ] GPIO
@@ -71,6 +74,7 @@ The ESP32-C3-WROOM-02 is a general-purpose WiFi and Bluetooth LE module based on
 ## Module Specifications
 
 The ESP32-C3-WROOM-02 is a module that integrates:
+
 - ESP32-C3 SoC
 - 4 MB SPI flash
 - PCB antenna
@@ -93,6 +97,7 @@ The ESP32-C3 provides up to 15 GPIOs with various functions:
 ### Strapping Pins
 
 The ESP32-C3 has 3 strapping pins that determine boot mode:
+
 - **GPIO2** - Boot mode strapping
 - **GPIO8** - Boot mode strapping  
 - **GPIO9** - Boot mode strapping
@@ -117,6 +122,7 @@ esp32:
 ## USB Serial/JTAG
 
 The ESP32-C3 includes a built-in USB Serial/JTAG controller on GPIO18 and GPIO19, allowing:
+
 - Programming via USB without external USB-to-UART chip
 - Serial communication over USB
 - JTAG debugging over USB
@@ -125,11 +131,13 @@ This makes development easier and reduces the need for external components.
 
 ## Important Notes
 
-⚠️ **Strapping Pins:** GPIO2, GPIO8, and GPIO9 are used during boot for mode selection. Avoid connecting devices that could interfere with boot.
+⚠️ **Strapping Pins:** GPIO2, GPIO8, and GPIO9 are used during boot for mode selection.
+Avoid connecting devices that could interfere with boot.
 
 ⚠️ **RISC-V Architecture:** The ESP32-C3 uses RISC-V architecture instead of Xtensa.
 
 ⚠️ **Module vs Development Board:** This is a module that requires a carrier board with:
+
 - 3.3V power regulation
 - USB connector (if using USB Serial/JTAG)
 - Reset and boot buttons (recommended)
@@ -137,16 +145,19 @@ This makes development easier and reduces the need for external components.
 
 ⚠️ **Single Core:** Unlike ESP32 (dual-core), the ESP32-C3 has a single core.
 
-⚠️ **Power Consumption:** While optimized for low power, peak current during WiFi/BLE transmission can reach 350mA. Ensure adequate power supply.
+⚠️ **Power Consumption:** While optimized for low power, peak current during WiFi/BLE transmission can reach 350mA.
+Ensure adequate power supply.
 
 ## Development Boards
 
 Many development boards use the ESP32-C3-WROOM-02 module, such as:
+
 - ESP32-C3-DevKitM-1
 - ESP32-C3-DevKitC-02
 - Various third-party boards
 
 These boards add:
+
 - USB-C connector
 - Voltage regulator
 - Boot and reset buttons

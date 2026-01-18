@@ -7,6 +7,7 @@ model: "esp-01s"
 variants: ["ESP-01"]
 connectionTypes: ["gpio", "uart"]
 tags: ["wifi", "esp8266"]
+components: ["esp8266", "output-gpio", "light-binary"]
 productionStatus: "NRND"
 status: "pending"
 references:
@@ -23,12 +24,13 @@ purchaseLinks:
     url: https://www.amazon.co.uk/dp/B07Y8H2C1P?th=1
 image: "/images/devices/thumbnails/esp-01s.jpg"
 dateAcquired: "Sept 2024"
-lastModified: "2025-12-08"
+lastModified: "2026-01-18"
 ---
 
 ## Overview
 
-The ESP-01S is a bare-bones ESP8266 WiFi module with minimal hardware. It's one of the smallest and cheapest ESP8266 modules available but requires external components for programming and operation.
+The ESP-01S is a bare-bones ESP8266 WiFi module with minimal hardware. It's one of the smallest and
+cheapest ESP8266 modules available but requires external components for programming and operation.
 
 ![Generic ESP-01S](./images/esp-01s/esp-01s.jpg)
 
@@ -73,10 +75,12 @@ The ESP-01S is a bare-bones ESP8266 WiFi module with minimal hardware. It's one 
 The ESP-01S has 8 pins total:
 
 ### Power Pins
+
 - **3V3** - 3.3V input (requires stable, regulated 3.3V)
 - **GND** - Ground
 
 ### GPIO Pins
+
 - **GPIO0** - General purpose I/O, boot mode selection (pulled HIGH for normal boot, LOW for programming)
 - **GPIO2** - General purpose I/O, boot mode pin (must be HIGH during boot)
 - **TX** - GPIO1, UART TX
@@ -107,53 +111,63 @@ light:
 
 ```
 
-
 ## Programming Setup
 
 The ESP-01S requires an external USB-to-UART adapter for programming:
 
 1. **Connect USB-to-UART adapter:**
+
    - Adapter TX → ESP-01S RX
    - Adapter RX → ESP-01S TX
    - Adapter 3.3V → ESP-01S 3V3 and CH_PD
    - Adapter GND → ESP-01S GND
 
 2. **Enter programming mode:**
+
    - Connect GPIO0 to GND
    - Power cycle or pull RST to GND briefly
    - GPIO0 can be disconnected after entering programming mode
 
 3. **Normal operation:**
+
    - GPIO0 should be HIGH (or floating with pull-up)
    - CH_PD must be HIGH
    - RST should be HIGH (or floating with pull-up)
 
 ## Important Notes
-⚠️ **Power Requirements:** 
+
+⚠️ **Power Requirements:**
+
 - Must use a stable 3.3V power supply
 - Can draw up to 300mA during WiFi transmission
 - Some USB-to-UART adapters cannot supply enough current - use external LDO for operation
 
-⚠️ **Boot Mode Pins:** 
+⚠️ **Boot Mode Pins:**
+
 - GPIO0 must be HIGH during normal boot, LOW for programming mode
 - GPIO2 must be HIGH during boot
 - Both should have pull-up resistors
 
-⚠️ **Limited GPIOs:** With only 2 easily accessible GPIOs (GPIO0 and GPIO2), this module is best suited for simple WiFi-to-serial applications.
+⚠️ **Limited GPIOs:** With only 2 easily accessible GPIOs (GPIO0 and GPIO2), this module is best suited
+for simple WiFi-to-serial applications.
 
-⚠️ **No Built-in Protection:** No reverse polarity protection, overvoltage protection, or current limiting. Handle with care.
+⚠️ **No Built-in Protection:** No reverse polarity protection, overvoltage protection, or current limiting.
+Handle with care.
 
-⚠️ **I2C:** I2C is implemented in software, so any GPIO can be used, but GPIO5 and GPIO4 are the default pins. They are not available on the board, so if used, SDA and SCL pins need to be specified.
+⚠️ **I2C:** I2C is implemented in software, so any GPIO can be used, but GPIO5 and GPIO4 are the default pins.
+They are not available on the board, so if used, SDA and SCL pins need to be specified.
 
 ## Use Cases
 
 The ESP-01S is ideal for:
+
 - WiFi-to-serial bridges
 - Simple WiFi sensors with minimal GPIO requirements
 - Retrofit WiFi connectivity to existing devices
 - Projects where size is critical
 
 Not recommended for:
+
 - Projects requiring many GPIO pins
 - Beginners (consider D1 Mini or ESP32 DevKit instead)
 - Applications requiring easy reprogramming
@@ -161,16 +175,19 @@ Not recommended for:
 ## Troubleshooting
 
 **Cannot enter programming mode:**
+
 - Ensure GPIO0 is connected to GND before powering on
 - Check that CH_PD is HIGH
 - Verify 3.3V power supply is stable
 
 **Module doesn't boot:**
+
 - Check that GPIO0 and GPIO2 are HIGH (or floating with pull-ups)
 - Verify CH_PD is connected to 3.3V
 - Ensure power supply can handle current spikes (300mA+)
 
 **Random resets or crashes:**
+
 - Almost always a power supply issue
 - Add 100µF capacitor near 3.3V pin
 - Use proper 3.3V regulator rated for 500mA+
@@ -183,4 +200,5 @@ Back of the module:
 With the adapter:
 ![ESP-01S with Adapter](./images/esp-01s/esp-01s-adapter.jpg)
 
-Note on this adapter - it requires GPIO0 (IO0) to be set to ground before plugging it in to enter boot mode. I got them with modules, but I have a separate programmer.
+Note on this adapter - it requires GPIO0 (IO0) to be set to ground before plugging it in to enter boot mode.
+I got them with modules, but I have a separate programmer.

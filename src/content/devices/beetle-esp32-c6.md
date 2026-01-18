@@ -6,6 +6,7 @@ manufacturer: "DFRobot"
 model: "Beetle ESP32 C6"
 connectionTypes: ["gpio"]
 tags: ["wifi", "bluetooth", "zigbee", "matter", "thread", "esp32", "esp32c6"]
+components: ["esp32", "output-gpio", "light-binary", "binary-sensor-gpio"]
 productionStatus: "active"
 #image: "/images/devices/beetle-esp32-c6.jpg"
 references:
@@ -23,7 +24,7 @@ purchaseLinks:
 dateAcquired: "Sept 2024"
 status: "ready"
 count: 2
-lastModified: "2025-12-14"
+lastModified: "2026-01-18"
 image: "/images/devices/thumbnails/beetle-esp32-c6.jpg"
 ---
 

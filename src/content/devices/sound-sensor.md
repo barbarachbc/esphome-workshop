@@ -5,7 +5,8 @@ category: "sensor"
 manufacturer: "Generic"
 model: "Sound Sensor"
 connectionTypes: ["gpio", "analog"]
-components: ["binary-sensor", "sensor-adc", "sensor", "sensor-sound-level", "microphone", "i2s-audio"]
+components: ["esp32", "sensor-adc", "sensor-sound-level", "i2s-audio", "microphone-i2s-audio", "light-binary",
+            "output-gpio", "binary-sensor-gpio"]
 tags: ["sensor", "sound", "microphone", "audio", "noise"]
 productionStatus: "active"
 purchaseLinks:
@@ -27,7 +28,7 @@ references:
 dateAcquired: "2016"
 status: "testing"
 image: "/images/devices/thumbnails/sound-sensor.jpg"
-lastModified: "2025-12-24"
+lastModified: "2026-01-18"
 changelog:
   - date: "2025-12-14"
     type: "updated"

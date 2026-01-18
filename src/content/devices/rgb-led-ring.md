@@ -5,12 +5,12 @@ category: "light"
 manufacturer: "Unknown"
 model: "Unknown"
 connectionTypes: ["gpio"]
-components: ["light", "neopixelbus"]
+components: ["light-esp32-rmt-led-strip"]
 tags: ["led", "matrix", "rgb", "display", "sk6812"]
 productionStatus: "discontinued"
 dateAcquired: "2017"
 status: "testing"
-lastModified: "2025-12-11"
+lastModified: "2026-01-18"
 ---
 
 ## Overview
@@ -18,13 +18,14 @@ lastModified: "2025-12-11"
 Salvaged LED ring with 12 individually addressable RGB LEDs (SK6812 compatible)
 
 The board features:
+
 - 12 RGB LEDs
 - SK6812 individually addressable LEDs (similar to WS2812B)
 
-
 ## Configuration Notes
 
-Supported via ESPHome's [NeoPixelBus Light component](https://esphome.io/components/light/neopixelbus/). Note that NeoPixelBus only works with the Arduino framework.
+Supported via ESPHome's [NeoPixelBus Light component](https://esphome.io/components/light/neopixelbus/). Note that NeoPixelBus
+only works with the Arduino framework.
 
 For ESP-IDF use [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip/)
 

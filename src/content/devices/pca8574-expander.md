@@ -5,7 +5,7 @@ category: "io-expander"
 manufacturer: "NXP"
 model: "PCA8574"
 connectionTypes: ["i2c"]
-components: ["i2c", "pcf8574"]
+components: ["i2c", "pcf8574", "switch-gpio", "binary-sensor-gpio"]
 tags: ["io-expander", "gpio", "i2c"]
 productionStatus: "discontinued"
 purchaseLinks:
@@ -16,13 +16,16 @@ references:
     url: "https://www.mouser.ie/datasheet/3/118/1/PCA8574_PCA8574A.pdf"
 status: "pending"
 dateAcquired: "Nov 2024"
+lastModified: "2026-01-18"
 ---
 
 ## Overview
 
-The PCA8574 is an 8-bit I/O expander that provides general-purpose remote I/O expansion via the I2C bus. It's functionally compatible with the PCF8574 and shares the same component platform in ESPHome.
+The PCA8574 is an 8-bit I/O expander that provides general-purpose remote I/O expansion via the I2C bus.
+It's functionally compatible with the PCF8574 and shares the same component platform in ESPHome.
 
 The module features:
+
 - 8 quasi-bidirectional I/O ports
 - I2C interface (up to 100kHz)
 - Low standby current consumption
