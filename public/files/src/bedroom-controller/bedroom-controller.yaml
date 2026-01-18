@@ -45,6 +45,7 @@ substitutions:
   car_battery_level: ev_battery_level   # EV battery sensor (without sensor. prefix)
   indoor_temp: bedroom_temperature      # Indoor temp sensor (without sensor. prefix)
   indoor_humid: bedroom_humidity        # Indoor humidity sensor (without sensor. prefix)
+  rain_alert: select.open_window_rain_status # status of rain alert (or any other alert)
   clk_pin: GPIO23
   mosi_pin: GPIO22
   #low power i2c
@@ -277,7 +278,41 @@ script:
           else:
             - light.turn_on: backlight
             - delay: !lambda return id(display_timeout).state * 1000;
+            # cancel any operation first then switch off the screen
+            - script.execute: cancel_button_click
+            - display.page.show: page_info
             - light.turn_off: backlight
+  - id: update_rain_alert
+    parameters:
+      status: string
+    then:
+      - if:
+          condition:
+            - lambda: return status == "ALLGOOD";
+          then:
+            - light.turn_off: my_alert_light
+      - if:
+          condition:
+            - lambda: return status == "RAINING";
+          then:
+            - light.control:
+                id: my_alert_light
+                effect: e_pulse_rain
+                state: on
+                red: 100%
+                green: 12%
+                blue: 12%
+      - if:
+          condition:
+            - lambda: return status == "RAINSOON" || status == "RAINCOMING";
+          then:
+            - light.control:
+                id: my_alert_light
+                effect: e_pulse_rain_coming
+                state: on
+                red: 100%
+                green: 12%
+                blue: 12%
 
 text_sensor:
   - platform: homeassistant
@@ -308,6 +343,16 @@ text_sensor:
     attribute: preset_mode
     entity_id: climate.${heater}
     internal: true
+  
+  - platform: homeassistant
+    id: open_window_rain_alert
+    entity_id: ${rain_alert}
+    internal: true
+    on_value: 
+      then:
+        - script.execute:
+            id: update_rain_alert
+            status: !lambda return id(open_window_rain_alert).state;
 
 number:
   - platform: template
@@ -492,12 +537,24 @@ output:
 
 light:
   - platform: esp32_rmt_led_strip
-    id: my_unicorn_phat
+    id: my_alert_light
     chipset: ws2812
     num_leds: 1
     rgb_order: GRB
     name: "Notification Light"
+    restore_mode: ALWAYS_OFF
     pin: ${neopixel_pin}
+    effects:
+      - pulse:
+          name: "e_pulse_rain"
+          transition_length: 500ms
+          update_interval: 500ms
+          max_brightness: 70%
+      - pulse:
+          name: "e_pulse_rain_coming"
+          transition_length: 500ms
+          update_interval: 2s
+          max_brightness: 70%
   - platform: monochromatic
     output: backlight_pwm
     name: "Display Backlight"

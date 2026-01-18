@@ -26,7 +26,11 @@ changelog:
     description: |-
       Added 3D files and new photos of the device.
       Added turning off screen on idle.
-lastModified: "2026-01-15"
+  - date: "2026-01-18"
+    type: "updated"
+    description: |-
+      Added LED Notification for the impeding flooding of the attic 🫣
+lastModified: "2026-01-18"
 ---
 
 ## Project Overview
@@ -63,7 +67,7 @@ The project is complete in terms of hardware. The rest are software improvements
 - [ ] Further improvements
   - ✅ Display Auto Sleep
   - [ ] Add Colors
-  - [ ] Use NeoPixel for notifications
+  - ✅ Use NeoPixel for notifications
   - [ ] Use LEDs on the touch board for quick status
 
 ### Future improvement ideas
@@ -73,8 +77,6 @@ The project is complete in terms of hardware. The rest are software improvements
 - Add Colors
   - This was ported from Mono OLED so everything is monochromatic - it looks pretty but why not add some
   colors to our lives 😉
-- Use NeoPixel for actual notifications
-  - Red flashing light if there's imminent rain and windows are open?
 - Use LEDs on the touch board for quick status
   - EV Battery level? Or something else? Just throwing out ideas
 - Adding more pages?
@@ -165,6 +167,10 @@ with your own entity IDs:
   - Example: `sensor.car_battery_level`
 - **Number Entity**: Boost preset temperature setting (if using Versatile Thermostat)
   - Example: `number.bedroom_heater_preset_boost_temp`
+- **Template Select**: To control the notification LED
+  - Example: `select.open_window_rain_status` - see [Rain Notification](#rain-notification)
+  - I could have controlled LED from Home Assistant directly I suppose when I got through all
+  the trouble configuring everything there 🙂 in the first place
 
 ### Additional Files
 
@@ -259,7 +265,7 @@ create your _New Device_. Or if you're using
 (e.g. `bedroom-controller.yaml`)
 Then use the following file as a guide (details on how to customize it are below).
 
-Download the full configuration: [bedroom-controller.yaml](/files/bedroom-controller/bedroom-controller.yaml)
+Download the full configuration: [bedroom-controller.yaml](/files/src/bedroom-controller/bedroom-controller.yaml)
 
 <!-- astro-embed: /files/src/bedroom-controller/bedroom-controller.yaml -->
 
@@ -276,6 +282,7 @@ substitutions:
   car_battery_level: ev_battery_level   # EV battery sensor (without sensor. prefix)
   indoor_temp: bedroom_temperature      # Indoor temp sensor (without sensor. prefix)
   indoor_humid: bedroom_humidity        # Indoor humidity sensor (without sensor. prefix)
+  rain_alert: select.open_window_rain_status # status of rain alert (or any other alert)
 ```
 
 ### Boot Progress Tracking
@@ -407,6 +414,74 @@ The script is executed in the following cases:
 from Home Assistant
 - when any of the touch buttons is pressed (`on_release`)
 - when the `Display Backlight` is manually (or through automation) turned on from Home Assistant
+
+### Rain Notification
+
+NeoPixel is going to be flashing red if it is raining or the rain is coming soon
+and windows are open. It will flash quickly if it's raining and windows
+are open, and it will flash slower if the rain is upcoming.
+
+I have an automation setup that runs every hour (5th minute of every hour) and checks the weather
+forecast. It gets forecast data and sets 3 variables based on the hourly forecast.
+
+- **is_raining**: The first record is current precipitation.
+- **about_to_rain**:  `batch(2) | first` splits the forecast information in lists of two and takes
+the first list (which is the forecast for the first 2 hours) and counts how many items have precipitation
+greater than 0. Essentially it is true if it is currently raining or it will rain in the next hour.
+- **rain_soon**: same as previous, it is true if it is currently raining or it will rain in next 4 hours.
+
+```javascript
+alias: Rain Soon?
+description: Setting variables that are related to checking rain
+triggers:
+  - trigger: time_pattern
+    hours: "*"
+    minutes: "5"
+conditions: []
+actions:
+  - action: weather.get_forecasts
+    target:
+      entity_id: weather.forecast_home
+    data:
+      type: hourly
+    response_variable: forecast_data
+  - variables:
+      is_raining: >-
+        {{(forecast_data['weather.forecast_home']['forecast'] |
+        first).precipitation > 0 }}
+      about_to_rain: >-
+        {{forecast_data['weather.forecast_home']['forecast'] | batch(2) | first
+        | selectattr('precipitation', '>', 0) | list | count > 0 }}
+      rain_soon: >-
+        {{forecast_data['weather.forecast_home']['forecast'] | batch(5) | first
+        | selectattr('precipitation', '>', 0) | list | count > 0 }}
+```
+
+This automation also sets or resets 3 helper toggle buttons depending on the values of the variables.
+
+I grouped a couple of binary sensors that indicate whether any of the roof windows are open and I created
+a ["template select"](https://www.home-assistant.io/integrations/template#select)
+with `select.open_window_rain_status` id and with following state:
+
+```javascript
+{% if is_state("binary_sensor.attic_window_open", "off") -%}
+ALLGOOD
+{%- elif is_state("input_boolean.rainingnow", "on") %}
+RAINING
+{%- elif is_state("input_boolean.rainimminent", "on") %}
+RAINSOON
+{%- elif is_state("input_boolean.rainexpected", "on") %}
+RAINCOMING
+{%- else %}
+ALLGOOD
+{%- endif %}
+```
+
+and available options:
+
+```javascript
+{{['ALLGOOD', 'RAINING', 'RAINSOON', 'RAINCOMING']}}
+```
 
 ## Installation Steps
 
