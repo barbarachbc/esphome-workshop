@@ -7,9 +7,10 @@ model: "Xmini-C3"
 variants: ["Xmini-C3"]
 connectionTypes: ["gpio", "i2c", "uart", "pwm", "analog"]
 components: ["esp32", "i2c", "display-ssd1306-i2c", "binary-sensor-gpio", "light-esp32-rmt-led-strip"]
-tags: ["wifi", "bluetooth", "esp32-c3", "audio", "display", "ai-voice", "es8311", "ssd1306"]
+tags: ["wifi", "bluetooth", "esp32c3", "audio", "display", "ai-voice", "es8311", "ssd1306"]
 productionStatus: "active"
 status: "testing"
+dateAcquired: "Dec 2025"
 references:
   - title: Schematic (OSHWHub)
     url: https://oshwhub.com/tenclass01/xmini_c3
@@ -35,7 +36,7 @@ changelog:
   - date: "2026-01-18"
     type: "added"
     description: "Initial documentation for Xmini-C3 development board"
-lastModified: "2026-01-18"
+lastModified: "2026-01-19"
 ---
 
 ## Overview
