@@ -36,7 +36,7 @@ changelog:
   - date: "2026-01-18"
     type: "added"
     description: "Initial documentation for Xmini-C3 development board"
-lastModified: "2026-01-19"
+lastModified: "2026-01-20"
 ---
 
 ## Overview
@@ -143,8 +143,8 @@ to Logs and there is an option to Reset Device. I just could not figure out how 
 several *platformio_options* but without success.
 
 **WARNING ⚠️**: Make sure to go through [basic configuration](#basic-configuration) and if that is working
-you have correctly setup board. Flash is connected in Dual SPI mode and I think the default configuration is Quad.
-So make sure to check that before doing anything else.
+you have correctly setup board. Flash is connected in Dual SPI mode. The default configuration is DIO (Dual I/O),
+so not specifying it will work, but I prefer to be explicit about it when I know this is how the board is wired-up.
 
 **INFO ℹ️**: There are 2 I2C pheripherals - the display and the audio codec. They use default addresses:
 0x3C and 0x18 respectively.
@@ -180,15 +180,13 @@ the RGB LED indicator, boot button and I2C bus. Things to check after using this
 ```yaml
 esphome:
   name: my-xmini-c3
-  #https://esphome.io/components/esphome/#esphome-platformio_options
-  #https://docs.platformio.org/en/latest/projectconf/sections/env/options/platform/index.html#more-options
-  platformio_options:
-    board_build.flash_mode: dio
 
 esp32:
   variant: esp32c3
   framework:
     type: esp-idf
+    sdkconfig_options:
+      CONFIG_ESPTOOLPY_FLASHMODE_DIO: y
   flash_size: 16MB
 
 logger:
@@ -250,13 +248,13 @@ It fills the whole display and shows small empty square in the middle.
 ```yaml
 esphome:
   name: my-xmini-c3
-  platformio_options:
-    board_build.flash_mode: dio
 
 esp32:
   variant: esp32c3
   framework:
     type: esp-idf
+    sdkconfig_options:
+      CONFIG_ESPTOOLPY_FLASHMODE_DIO: y
   flash_size: 16MB
 
 logger:

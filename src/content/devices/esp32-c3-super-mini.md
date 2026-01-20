@@ -17,9 +17,9 @@ purchaseLinks:
   - vendor: "AliExpress"
     url: "https://www.aliexpress.com/item/1005005967641936.html"
 dateAcquired: "Dec 2025"
-status: "testing"
+status: "ready"
 count: 2
-lastModified: "2026-01-19"
+lastModified: "2026-01-20"
 image: "/images/devices/thumbnails/esp32-c3-supermini.jpg"
 ---
 
@@ -32,7 +32,7 @@ Bluetooth 5.0 connectivity in a small form factor.
 
 ## Test Status
 
-- [ ] [Basic Config](#basic-configuration) + Internal LED & Boot Button
+- ✅ [Basic Config](#basic-configuration) + Internal LED & Boot Button
 
 ## Additonal Hardware features
 
@@ -103,10 +103,42 @@ _SPI_ make no sense to me the way they are shown on the board diagram. FSPIHD is
 for example. That's _HOLD_ signal for Quad SPI. FSPICLK is direclty routed to GPIO07, so, to me, GPIO07 would
 be more reasonable choice for SCK. I don't know 🤷‍♂️.
 
+## Configuration Notes
+
+### Reboot Needed 🚨
+
+Like for [xmini c3 board](./xmini-c3.md) it looks like the board does not reboot automatically after uploading
+new image (at least through the web interface). I still haven't figured it out, so if you're using
+[web interface](https://web.esphome.io/) make sure to go to _Log_ and then _RESET DEVICE_.
+
+### Quad SPI for Flash ℹ️
+
+By default, DIO (Dual I/O SPI mode) is used. This will work for flash that's wired up for Quad mode too, so it's a
+reasonable default. However, for integrated flash, Quad I/O mode (QIO) is
+[nearly twice as fast](https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/spi-flash-modes.html).
+
+I finally figured out how to use Quad SPI mode for the integrated flash:
+![Screenshot of the boot log showing QIO mode for reading flash](./images/esp32-c3-super-mini/boot.png)
+
+```yaml
+esp32:
+  variant: esp32c3
+  framework:
+    type: esp-idf
+    sdkconfig_options:
+      CONFIG_ESPTOOLPY_FLASHMODE_QIO: y
+```
+
+`CONFIG_ESPTOOLPY_FLASHMODE_QIO` needs to be turned on, and **be careful ⚠️** to use lower letter _y_, capital _Y_
+does not work.
+
+### Arduino by Default
+
+If you do not specify the framework, esp32c3 will use _arduino_ by default.
+
 ## Basic Configuration
 
-Basic configuration with built in button and LED. Note that if not specified, variant esp32c3 uses arduino
-framework by default.
+Basic configuration with built in button and LED.
 
 ```yaml
 esphome:
@@ -116,6 +148,8 @@ esp32:
   variant: esp32c3
   framework:
     type: esp-idf
+    sdkconfig_options:
+      CONFIG_ESPTOOLPY_FLASHMODE_QIO: y
 
 logger:
 
