@@ -26,9 +26,9 @@ references:
   - title: "AN-581 - Biasing and Decoupling Op Amps in Single Supply Applications"
     url: "https://www.analog.com/en/resources/app-notes/an-581.html"
 dateAcquired: "2016"
-status: "testing"
+status: "ready"
 image: "/images/devices/thumbnails/sound-sensor.jpg"
-lastModified: "2026-01-18"
+lastModified: "2026-01-20"
 changelog:
   - date: "2025-12-14"
     type: "updated"

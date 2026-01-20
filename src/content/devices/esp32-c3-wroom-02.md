@@ -17,15 +17,17 @@ references:
 purchaseLinks:
   - vendor: Mouser
     url: "https://www.mouser.ie/ProductDetail/356-ESP32C3WROOM02N4"
-#image: "/images/devices/"
+image: "/images/devices/thumbnails/esp32-c3-wroom-02.jpg"
 dateAcquired: "Dec 2024"
-lastModified: "2026-01-19"
+lastModified: "2026-01-20"
 ---
 
 ## Overview
 
 The ESP32-C3-WROOM-02 is a general-purpose WiFi and Bluetooth LE module based on the ESP32-C3 SoC.
 It features a 32-bit RISC-V single-core processor and is designed for low-power IoT applications.
+
+![Photo of ESP32-C3 WROOM-02 module](./images/esp32-c3-wroom-02/module.jpg)
 
 ## Test Status
 
@@ -163,3 +165,8 @@ These boards add:
 - Boot and reset buttons
 - LED indicators
 - Breadboard-friendly pinout
+
+## Other Photos
+
+Back of the module:
+![Photo of the back of ESP32-C3 WROOM-02 module](./images/esp32-c3-wroom-02/back.jpg)

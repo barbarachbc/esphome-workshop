@@ -20,11 +20,17 @@ purchaseLinks:
   - vendor: "Adafruit"
     url: "https://www.adafruit.com/product/3333"
 dateAcquired: "2018"
+image: "/images/devices/thumbnails/adafruit-circuit-playground-express.jpg"
+lastModified: "2026-01-20"
 ---
 
 ## Overview
 
-The Adafruit Circuit Playground Express is an all-in-one educational microcontroller board designed to make electronics and programming accessible to beginners while providing enough capability for advanced projects. It features numerous built-in sensors, LEDs, buttons, and a speaker, all on a single round PCB that's perfect for wearables and interactive projects.
+The Adafruit Circuit Playground Express is an all-in-one educational microcontroller board designed to make electronics
+and programming accessible to beginners while providing enough capability for advanced projects. It features numerous
+built-in sensors, LEDs, buttons, and a speaker, all on a single round PCB that's perfect for wearables and interactive projects.
+
+![Photo of Adafruit Circuit Playground Express](./images/adafruit-circuit-playground-express/board.jpg)
 
 ## Hardware Features
 
@@ -93,7 +99,7 @@ The Circuit Playground Express uses the **ATSAMD21** (ARM Cortex-M0+) microcontr
 The Circuit Playground Express has **8 main pads** around the edge, all alligator-clip friendly:
 
 | Pad | Functions | Notes |
-|-----|-----------|-------|
+| ----- | ----------- | ------- |
 | **A0** | Analog In, PWM, Capacitive Touch | Audio output capable |
 | **A1** | Analog In, PWM, Capacitive Touch | |
 | **A2** | Analog In, PWM, Capacitive Touch | |
@@ -104,6 +110,7 @@ The Circuit Playground Express has **8 main pads** around the edge, all alligato
 | **A7** | Analog In, PWM, Capacitive Touch, RX | UART RX |
 
 ### Additional Pads
+
 - **GND** (3 pads) - Ground connections
 - **3.3V** - 3.3V power output
 - **VOUT** - Battery voltage output
@@ -111,6 +118,7 @@ The Circuit Playground Express has **8 main pads** around the edge, all alligato
 ## Capacitive Touch
 
 7 of the 8 pads (A1-A7) support **capacitive touch sensing**:
+
 - Touch with finger to trigger
 - No button press needed
 - Can sense through thin materials
@@ -120,11 +128,13 @@ The Circuit Playground Express has **8 main pads** around the edge, all alligato
 ## Power Options
 
 ### USB Power
+
 - 5V from Micro-USB port
 - Most common for development
 - Can power all features
 
 ### Battery Power
+
 - LiPo battery or 3 × AAA battery pack
 - Connects to JST connector on back
 - Portable operation
@@ -132,7 +142,12 @@ The Circuit Playground Express has **8 main pads** around the edge, all alligato
 - Slide switch controls power
 
 ### Power Considerations
+
 - **Current draw with all NeoPixels on:** ~200mA
 - **Typical usage:** 20-50mA
 - **Sleep mode:** Available but varies by programming method
 
+## Other Photos
+
+Back of the board:
+![Photo of the back of the Adafruit Circuit Playground Express](./images/adafruit-circuit-playground-express/back.jpg)
