@@ -2,7 +2,8 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import DeviceCard from '../../components/DeviceCard.astro';
-import comparisonImage from '../../content/devices/images/all_displays.jpg';
+import displayComparisonImage from '../../content/devices/images/all_displays.jpg';
+import boardComparisonImage from '../../content/devices/images/all_boards.jpg';
 
 const devices = await getCollection('devices');
 const allProjects = await getCollection('projects');
@@ -147,48 +148,95 @@ const tags = [...allTags].sort();
     </div>
   </details>
 
-  <!-- Display Comparison Link -->
-  <div class="mb-8">
-    <!-- Simple link (always visible) -->
-    <a 
-      href="/devices/all-displays" 
-      id="simpleComparisonLink"
-      class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium no-underline transition-all hover:shadow-md"
-      style="background: var(--bg-secondary); color: var(--text-link); border: 1px solid var(--border-primary);"
-    >
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
-      </svg>
-      Compare Display Sizes
-    </a>
-    
-    <!-- Enhanced link with thumbnail (shown when display category is filtered) -->
-    <a 
-      href="/devices/all-displays" 
-      id="enhancedComparisonLink"
-      class="hidden p-6 rounded-lg border-2 no-underline transition-all hover:shadow-xl hover:-translate-y-1"
-      style="background: var(--accent-blue-light); border-color: var(--accent-blue); display: none;"
-    >
-      <div class="flex gap-6 items-center">
-        <img 
-          src={comparisonImage.src} 
-          alt="Display size comparison preview"
-          class="w-48 h-32 object-cover rounded-lg border"
-          style="border-color: var(--border-primary);"
-        />
-        <div class="flex-1">
-          <h3 class="text-xl font-bold m-0 mb-2" style="color: var(--accent-blue-dark);">
-            📐 Compare Display Sizes
-          </h3>
-          <p class="m-0" style="color: var(--text-primary);">
-            See an interactive comparison of all displays showing their relative sizes and specifications.
-          </p>
-        </div>
-        <svg class="w-6 h-6 shrink-0" style="color: var(--accent-blue);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+  <!-- Comparison Links -->
+  <div class="inline-flex mb-8 gap-2">
+    <!-- Display Comparison -->
+    <div>
+      <!-- Simple link (always visible) -->
+      <a 
+        href="/devices/all-displays" 
+        id="simpleDisplayComparisonLink"
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium no-underline transition-all hover:shadow-md"
+        style="background: var(--bg-secondary); color: var(--text-link); border: 1px solid var(--border-primary);"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
         </svg>
-      </div>
-    </a>
+        Compare Display Sizes
+      </a>
+      
+      <!-- Enhanced link with thumbnail (shown when display category is filtered) -->
+      <a 
+        href="/devices/all-displays" 
+        id="enhancedDisplayComparisonLink"
+        class="hidden p-6 rounded-lg border-2 no-underline transition-all hover:shadow-xl hover:-translate-y-1"
+        style="background: var(--accent-blue-light); border-color: var(--accent-blue); display: none;"
+      >
+        <div class="flex gap-6 items-center">
+          <img 
+            src={displayComparisonImage.src} 
+            alt="Display size comparison preview"
+            class="w-48 h-32 object-cover rounded-lg border"
+            style="border-color: var(--border-primary);"
+          />
+          <div class="flex-1">
+            <h3 class="text-xl font-bold m-0 mb-2" style="color: var(--accent-blue-dark);">
+              📐 Compare Display Sizes
+            </h3>
+            <p class="m-0" style="color: var(--text-primary);">
+              See an interactive comparison of all displays showing their relative sizes and specifications.
+            </p>
+          </div>
+          <svg class="w-6 h-6 shrink-0" style="color: var(--accent-blue);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </div>
+      </a>
+    </div>
+
+    <!-- Board Comparison -->
+    <div>
+      <!-- Simple link (always visible) -->
+      <a 
+        href="/devices/all-boards" 
+        id="simpleBoardComparisonLink"
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium no-underline transition-all hover:shadow-md"
+        style="background: var(--bg-secondary); color: var(--text-link); border: 1px solid var(--border-primary);"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+        </svg>
+        Compare Board Sizes
+      </a>
+      
+      <!-- Enhanced link with thumbnail (shown when board category is filtered) -->
+      <a 
+        href="/devices/all-boards" 
+        id="enhancedBoardComparisonLink"
+        class="hidden p-6 rounded-lg border-2 no-underline transition-all hover:shadow-xl hover:-translate-y-1"
+        style="background: var(--accent-emerald-light); border-color: var(--accent-emerald); display: none;"
+      >
+        <div class="flex gap-6 items-center">
+          <img 
+            src={boardComparisonImage.src} 
+            alt="Board size comparison preview"
+            class="w-48 h-32 object-cover rounded-lg border"
+            style="border-color: var(--border-primary);"
+          />
+          <div class="flex-1">
+            <h3 class="text-xl font-bold m-0 mb-2" style="color: var(--accent-emerald-dark);">
+              🔲 Compare Board Sizes
+            </h3>
+            <p class="m-0" style="color: var(--text-primary);">
+              See an interactive comparison of all development boards showing their relative sizes and specifications.
+            </p>
+          </div>
+          <svg class="w-6 h-6 shrink-0" style="color: var(--accent-emerald);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </div>
+      </a>
+    </div>
   </div>
 
   <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6" id="deviceGrid">
@@ -210,8 +258,10 @@ const tags = [...allTags].sort();
     const tagSearchInput = document.getElementById('tagSearch') as HTMLInputElement;
     const grid = document.getElementById('deviceGrid');
     const resultCount = document.getElementById('resultCount');
-    const simpleComparisonLink = document.getElementById('simpleComparisonLink') as HTMLElement;
-    const enhancedComparisonLink = document.getElementById('enhancedComparisonLink') as HTMLElement;
+    const simpleDisplayComparisonLink = document.getElementById('simpleDisplayComparisonLink') as HTMLElement;
+    const enhancedDisplayComparisonLink = document.getElementById('enhancedDisplayComparisonLink') as HTMLElement;
+    const simpleBoardComparisonLink = document.getElementById('simpleBoardComparisonLink') as HTMLElement;
+    const enhancedBoardComparisonLink = document.getElementById('enhancedBoardComparisonLink') as HTMLElement;
 
     // Initialize filter panel arrow rotation
     initFilterDetailsArrow();
@@ -228,19 +278,33 @@ const tags = [...allTags].sort();
       });
     }
     
-    function updateComparisonLink() {
+    function updateComparisonLinks() {
       // Check if 'display' category is selected
       const displayCategorySelected = Array.from(document.querySelectorAll('input[name="category"]:checked'))
         .some(cb => (cb as HTMLInputElement).value.toLowerCase() === 'display');
       
       if (displayCategorySelected) {
-        // Show enhanced link with thumbnail
-        simpleComparisonLink.style.display = 'none';
-        enhancedComparisonLink.style.display = 'flex';
+        // Show enhanced display link with thumbnail
+        simpleDisplayComparisonLink.style.display = 'none';
+        enhancedDisplayComparisonLink.style.display = 'flex';
       } else {
-        // Show simple link
-        simpleComparisonLink.style.display = 'inline-flex';
-        enhancedComparisonLink.style.display = 'none';
+        // Show simple display link
+        simpleDisplayComparisonLink.style.display = 'inline-flex';
+        enhancedDisplayComparisonLink.style.display = 'none';
+      }
+      
+      // Check if 'board' category is selected
+      const boardCategorySelected = Array.from(document.querySelectorAll('input[name="category"]:checked'))
+        .some(cb => (cb as HTMLInputElement).value.toLowerCase() === 'board');
+      
+      if (boardCategorySelected) {
+        // Show enhanced board link with thumbnail
+        simpleBoardComparisonLink.style.display = 'none';
+        enhancedBoardComparisonLink.style.display = 'flex';
+      } else {
+        // Show simple board link
+        simpleBoardComparisonLink.style.display = 'inline-flex';
+        enhancedBoardComparisonLink.style.display = 'none';
       }
     }
 
@@ -279,7 +343,7 @@ const tags = [...allTags].sort();
       }
       
       updateActivePills();
-      updateComparisonLink();
+      updateComparisonLinks();
     }
 
     function filterTagList() {

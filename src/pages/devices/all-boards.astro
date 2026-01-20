@@ -1,0 +1,177 @@
+---
+/**
+ * Board Size Comparison Page
+ * 
+ * Interactive comparison of various development boards showing their relative sizes,
+ * specifications, and capabilities. Visitors can hover (desktop) or tap (mobile)
+ * on each board to see details and navigate to the full device page.
+ */
+
+import Layout from '../../layouts/Layout.astro';
+import ImageMap from '../../components/ImageMap.astro';
+import comparisonImage from '../../content/devices/images/all_boards.jpg';
+
+const title = 'Board Size Comparison';
+const description = 'Interactive comparison of various development boards showing relative sizes, specifications, and capabilities';
+
+// Define the comparison image and hotspots
+export const boardComparison = {
+  image: comparisonImage.src,
+  alt: 'Size comparison of development boards lined up showing their relative sizes',
+  imageWidth: 1208,
+  imageHeight: 1023,
+  hotspots: [
+    {
+      deviceSlug: 'xmini-c3',
+      shape: 'rect' as const,
+      coords: { x: 114, y: 107, width: 310, height: 190 }
+    },
+    {
+      deviceSlug: 'beetle-esp32-c6',
+      shape: 'rect' as const,
+      coords: { x: 506, y: 110, width: 122, height: 147 }
+    },
+    {
+      deviceSlug: 'jc2432w328c',
+      shape: 'rect' as const,
+      coords: { x: 652, y: 462, width: 405, height: 244 }
+    },
+    
+    {
+      deviceSlug: 'esp32-c3-super-mini',
+      shape: 'rect' as const,
+      coords: { x: 658, y: 286, width: 98, height: 129 }
+    },
+    {
+      deviceSlug: 'esp32-devkit-v1',
+      shape: 'rect' as const,
+      coords: { x: 118, y: 500, width: 264, height: 148 }
+    },
+    {
+      deviceSlug: 'esp8266-d1-mini',
+      shape: 'rect' as const,
+      coords: { x: 705, y: 126, width: 128, height: 168 }
+    },
+    {
+      deviceSlug: 'esp32-c3-wroom-02',
+      shape: 'rect' as const,
+      coords: { x: 839, y: 303, width: 116, height: 112 }
+    },
+    
+    {
+      deviceSlug: 'esp-01s',
+      shape: 'rect' as const,
+      coords: { x: 865, y: 127, width: 98, height: 136 }
+    },
+    {
+      deviceSlug: 'adafruit-circuit-playground-express',
+      shape: 'circle' as const,
+      coords: { cx: 509, cy: 733, r: 130 }
+    },
+    {
+      deviceSlug: 'raspberry-pi-pico-w',
+      shape: 'rect' as const,
+      coords: { x: 486, y: 286, width: 112, height: 244 }
+    }
+  ]
+};
+---
+
+<Layout title={title}>
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Page Header -->
+    <header class="mb-8">
+      <h1 class="text-4xl font-bold mb-4" style="color: var(--text-heading)">
+        {title}
+      </h1>
+      <p class="text-lg" style="color: var(--text-secondary)">
+        {description}
+      </p>
+    </header>
+
+    <!-- Usage Instructions -->
+    <div class="mb-8 p-6 rounded-lg" style="display:none; background: var(--bg-secondary); border: 1px solid var(--border-primary)">
+      <h2 class="text-xl font-semibold mb-3" style="color: var(--text-heading)">
+        How to Use This Comparison
+      </h2>
+      
+      <!-- Desktop Instructions -->
+      <div class="desktop-only">
+        <ul class="space-y-2" style="color: var(--text-secondary)">
+          <li>🖱️ <strong>Hover</strong> over any board to see its specifications</li>
+          <li>👆 <strong>Click</strong> on a board to navigate to its detailed page</li>
+          <li>📏 All boards are shown at their relative actual sizes</li>
+          <li>🎨 Color-coded outlines appear on hover to highlight each device</li>
+          <li>🔍 Use zoom controls in the top-right to zoom in/out and pan around</li>
+        </ul>
+      </div>
+      
+      <!-- Mobile Instructions -->
+      <div class="mobile-only">
+        <ul class="space-y-2" style="color: var(--text-secondary)">
+          <li>👆 <strong>Tap</strong> on a board to see its specifications in a slide-up panel</li>
+          <li>🔘 <strong>Tap "View Details"</strong> button to navigate to the device page</li>
+          <li>✕ <strong>Close button or tap outside</strong> to dismiss the panel</li>
+          <li>📏 All boards are shown at their relative actual sizes</li>
+          <li>🔍 Pinch to zoom and drag to pan around the image</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Board Comparison -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-4" style="color: var(--text-heading)">
+        All Development Boards
+      </h2>
+      <p class="mb-6" style="color: var(--text-secondary)">
+        This comparison includes ESP32, ESP8266, RP2040, and other microcontroller development boards.
+        Hover or tap on any board to see detailed specifications and capabilities.
+      </p>
+      
+      <ImageMap {...boardComparison} />
+    </section>
+
+    <!-- Related Links -->
+    <section class="mt-8" style="display: none;">
+      <h2 class="text-xl font-semibold mb-4" style="color: var(--text-heading)">
+        Related Resources
+      </h2>
+      <div class="flex flex-wrap gap-3">
+        <a 
+          href="/devices?category=board" 
+          class="device-label-link"
+          style="padding: 0.5rem 1rem; background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 0.375rem; color: var(--text-link); text-decoration: none; transition: all 0.2s ease;"
+        >
+          View All Boards
+        </a>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .device-label-link:hover {
+    background: var(--accent-blue-light) !important;
+    border-color: var(--accent-blue) !important;
+    color: var(--accent-blue-dark) !important;
+  }
+  
+  /* Show/hide based on device type */
+  .desktop-only {
+    display: block;
+  }
+  
+  .mobile-only {
+    display: none;
+  }
+  
+  @media (hover: none) and (pointer: coarse) {
+    .desktop-only {
+      display: none;
+    }
+    
+    .mobile-only {
+      display: block;
+    }
+  }
+</style>
