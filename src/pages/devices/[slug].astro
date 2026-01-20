@@ -8,6 +8,7 @@ import {connectionTypeMap} from '../../utils/connectionType';
 
 // Import the function to get devices in the display comparison
 import { displayComparison } from './all-displays.astro';
+import { boardComparison } from './all-boards.astro';
 
 export async function getStaticPaths() {
   const devices = await getCollection('devices');
@@ -74,7 +75,7 @@ const productionStatusLabels = {
 
 // Check if this device is in the display comparison
 const isInDisplayComparison = displayComparison.hotspots.some(x => x.deviceSlug === device.slug);
-console.log(isInDisplayComparison);
+const isInBoardComparison = boardComparison.hotspots.some(x => x.deviceSlug === device.slug);
 // Automatically determine device status based on project usage
 let displayStatus: 'ready' | 'testing' | 'active' | 'deployed' | 'retired' | 'pending' | 'unsupported' = device.data.status;
 if (projectsUsingDevice.length > 0) {
@@ -215,6 +216,29 @@ if (projectsUsingDevice.length > 0) {
               href="/devices/all-displays" 
               class="px-4 py-2 rounded-lg font-semibold text-white no-underline transition-all hover:shadow-lg hover:-translate-y-0.5"
               style="background: var(--accent-blue);"
+            >
+              View Comparison 👀
+            </a>
+          </div>
+        </div>
+      )}
+
+      {isInBoardComparison && (
+        <div class="my-8 p-6 rounded-lg border-2" style="background: var(--accent-emerald-light); border-color: var(--accent-emerald);">
+          <div class="flex items-center gap-3">
+            <svg class="w-6 h-6 shrink-0" style="color: var(--accent-emerald);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+            </svg>
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold m-0 mb-1" style="color: var(--accent-emerald-dark);">🔲 See This Board in Action</h3>
+              <p class="m-0 text-sm" style="color: var(--text-primary);">
+                This board is featured in our interactive size comparison.
+              </p>
+            </div>
+            <a 
+              href="/devices/all-boards" 
+              class="px-4 py-2 rounded-lg font-semibold text-white no-underline transition-all hover:shadow-lg hover:-translate-y-0.5"
+              style="background: var(--accent-emerald);"
             >
               View Comparison 👀
             </a>
