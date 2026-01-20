@@ -70,7 +70,7 @@ everything local.
 - **Connectivity:** WiFi 802.11 b/g/n, Bluetooth LE 5.0
 - **Power:** 3.7V lithium battery support with LGS4056 charging IC
 - **USB:** TYPE-C for programming, serial communication, and 5V charging
-- **Buttons:** BOOT button for wake-up and dialogue interrupt, Reset button
+- **Buttons:** BOOT button for whatever you want (originally intended for waking up device)
 - **Antenna:** Ceramic antenna
 - **Expansion:** 6-pin interface (UART RX/TX, VSys, 3V3, GND)
 - **LED:** WS2812 RGB LED
@@ -96,7 +96,7 @@ everything local.
 ### Buttons
 
 - **Power Mode Switch:** There's a slide-switch on the side for switching between USB & Battery power supply
-- **Boot (BOOT):** Wake-up button, also used for dialogue interrupt
+- **Boot (BOOT):** Originally - wake-up button, also used for dialogue interrupt
 
 ### Expansion Interface (6-Pin)
 
@@ -312,7 +312,7 @@ display:
       it.filled_rectangle(it.get_width()/2 - 6, it.get_height()/2 - 6, 12, 12, COLOR_OFF);
 ```
 
-### Display Configuration Notes
+#### Display Configuration Notes
 
 That blue and yellow color looks beautiful 🙂. Now, the display is monochrome so you can't control the colors.
 That yellow stripe is "COLOR_ON" for that portion of the display ... 1/4 of the display so first 16 rows.
@@ -336,6 +336,351 @@ display:
       it.filled_rectangle(0, 0, it.get_width(), it.get_height(), COLOR_OFF);
       it.filled_rectangle(0, i*16, it.get_width(), 16);
       i = (i+1)%4;
+```
+
+### Audio Configuration
+
+OK, let's get crazy. In order to do anything with audio there's a number of components that need to be used:
+
+- [es8311 audio dac](https://esphome.io/components/audio_dac/es8311/)
+- [i2s audio](https://esphome.io/components/i2s_audio/)
+- [i2s speaker](https://esphome.io/components/speaker/i2s_audio/)
+- [speaker media player](https://esphome.io/components/media_player/speaker/)
+- [i2s microphone](https://esphome.io/components/microphone/i2s_audio/) - not used in this example
+
+To use this, press *boot* button and the device will play G# chord, the LED indicator will light up, and once it
+finishes playing the LED will turn off.
+
+I'll go into details below, here's the full configuration:
+
+```yaml
+esphome:
+  name: my-xmini-c3
+
+esp32:
+  variant: esp32c3
+  framework:
+    type: esp-idf
+    sdkconfig_options:
+      CONFIG_ESPTOOLPY_FLASHMODE_DIO: y
+  flash_size: 16MB
+
+#NOTE: required for media speaker (even if using only local files)
+network:
+
+logger:
+
+substitutions:
+  boot_btn_pin: GPIO09
+  i2c_sda_pin: GPIO03
+  i2c_scl_pin: GPIO04
+  neopixel_pin: GPIO02
+  i2s_ws_pin: GPIO06
+  i2s_bck_pin: GPIO08
+  i2s_mck_pin: GPIO10
+  i2s_do_pin: GPIO05
+  i2s_di_pin: GPIO07
+  mute_pin: GPIO11
+
+i2c:
+  sda: ${i2c_sda_pin}
+  scl: ${i2c_scl_pin}
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: my_indicator
+    chipset: ws2812
+    num_leds: 1
+    rgb_order: GRB
+    name: "Indicator Light"
+    restore_mode: ALWAYS_OFF
+    pin: ${neopixel_pin}
+
+
+# Boot button
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: ${boot_btn_pin}
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Boot Button"
+    id: boot_btn
+    on_click:
+      then:
+      - audio_dac.set_volume:
+          id: my_dac
+          volume: 80%
+      - light.turn_on: my_indicator
+      - light.control:
+          id: my_indicator
+          brightness: 40%
+          red: 100%
+          green: 25%
+          blue: 75%
+      - output.turn_off: mute_control
+      - media_player.speaker.play_on_device_media_file:
+          media_file: my_test_notification
+          announcement: true
+      # Wait until the alarm sound starts playing
+      - wait_until:
+          media_player.is_announcing:
+      # Wait until the alarm sound stops playing
+      - wait_until:
+          not:
+            media_player.is_announcing:
+      - output.turn_on: mute_control
+      - light.turn_off: my_indicator
+
+
+output:
+  - platform: gpio
+    pin: ${mute_pin}
+    id: mute_control
+    inverted: true
+#https://esphome.io/components/audio_dac/es8311/
+audio_dac:
+  - platform: es8311
+    id: my_dac
+    use_microphone: true
+    bits_per_sample: 16bit
+    #sample_rate: 48000
+    sample_rate: 16000
+    address: 0x18
+
+#https://esphome.io/components/i2s_audio/
+i2s_audio:
+  - id: i2s_output
+    i2s_lrclk_pin: ${i2s_ws_pin}
+    i2s_bclk_pin: ${i2s_bck_pin}
+    i2s_mclk_pin: ${i2s_mck_pin}
+
+#https://esphome.io/components/speaker/i2s_audio/
+speaker:
+  - platform: i2s_audio
+    id: my_speaker
+    dac_type: external
+    i2s_dout_pin: ${i2s_do_pin}
+    i2s_audio_id: i2s_output
+    channel: mono
+    #sample_rate: 48000
+    sample_rate: 16000
+    bits_per_channel: 16bit
+    buffer_duration: 500ms
+
+
+#https://esphome.io/components/microphone/i2s_audio/
+microphone:
+  - platform: i2s_audio
+    id: external_mic
+    adc_type: external
+    i2s_din_pin: ${i2s_di_pin}
+    i2s_audio_id: i2s_output
+
+#testing speaker
+#https://esphome.io/components/media_player/speaker/
+media_player:
+  - platform: speaker
+    id: my_media_player
+    announcement_pipeline:
+      #no transcoding
+      format: WAV
+      speaker: my_speaker
+    #only WAV for testing
+    codec_support_enabled: false
+    #default value will crash it
+    buffer_size: 51200
+    #
+    files:
+      - id: my_test_notification
+        #file: assets/g-chord-reverb-48K.wav
+        file: assets/g-chord-reverb-16K.wav
+
+#https://esphome.io/components/display/ssd1306/
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    address: 0x3C
+    lambda: |-
+      it.filled_rectangle(0, 0, it.get_width(), it.get_height());
+      it.filled_rectangle(it.get_width()/2 - 6, it.get_height()/2 - 6, 12, 12, COLOR_OFF);
+```
+
+#### Audio Configuration Notes
+
+##### Files
+
+I downloaded G# bariton guitar chord from [Freesounds.org](https://freesound.org/people/TheEndOfACycle/sounds/838383/).
+I used Audacity to mix it down from stereo to mono, shortened it, then I expored the file twice:
+
+- [g-chord-reverb-16K.wav](/files/sounds/g-chord-reverb-16K.wav) as mono, 16000 Hz sample rate, Signed 16-bit PCM
+- [g-chord-reverb-48K.wav](/files/sounds/g-chord-reverb-48K.wav) as mono, 48000 Hz sample rate, Signed 16-bit PCM
+
+I copied the files to my `/assets` folder so when I build the project they get embedded to the firmware.
+
+##### Media Player
+
+This is just so I have something to test with. I wanted to use local file so I used
+[Speaker Media Player](https://esphome.io/components/media_player/speaker/). You could connect to Home Assistant
+and play something from there, but I wanted to test simplest possible (not sure if this is simplest though 🙂).
+
+**NOTE:** `network` component is needed by the media player even though we're not connecting to it.
+
+I used announcement pipeline, and that determined which commands I'll be using to play the file. I turned off
+most of the features to keep the size of the firmware low. The main things to be careful about are:
+
+- `buffer_size` - if not specified it will crash your board because default is too big for the available memory.
+I randomly went for 50KB. I did not play too much with this, just wanted to make it work.
+- `files` - the sound file to play. It will be embedded into firmware
+
+Note that `-16K` or `-48k` are for my use so I know which sampling rate file has. The player does not use it, it reads
+everything it needs from the file.
+
+```yaml
+media_player:
+  - platform: speaker
+    id: my_media_player
+    announcement_pipeline:
+      #no transcoding
+      format: WAV
+      speaker: my_speaker
+    #only WAV for testing
+    codec_support_enabled: false
+    #default value will crash it
+    buffer_size: 51200
+    #
+    files:
+      - id: my_test_notification
+        #file: assets/g-chord-reverb-48K.wav
+        file: assets/g-chord-reverb-16K.wav
+```
+
+##### Bits and Sample Rate
+
+You can try different combinations of bits and sampling rates. I tried all possible combinations of using 16KHz
+sampling rate for DAC, but using 48KHz file, and different sampling rate for the I2S audio component. All of them
+worked. The file I played, and the speaker used are not great to ascertain the difference in audio, but all possible
+combinations I tried worked and produced the sound.
+
+Note that 16 bits per sample is the minimum that will work with the media player. I tried using 8bit but the component
+was complaining.
+
+##### Audio DAC
+
+```yaml
+#https://esphome.io/components/audio_dac/es8311/
+audio_dac:
+  - platform: es8311
+    id: my_dac
+    use_microphone: true
+    bits_per_sample: 16bit
+    #sample_rate: 48000
+    sample_rate: 16000
+    address: 0x18
+```
+
+I suppose this is self explanatory. It uses I2C bus for control.
+
+##### I2S Audio
+
+[I2S Audio Component](https://esphome.io/components/i2s_audio/) allows us to configure I2S bus.
+
+```yaml
+i2s_audio:
+  - id: i2s_output
+    i2s_lrclk_pin: ${i2s_ws_pin}
+    i2s_bclk_pin: ${i2s_bck_pin}
+    i2s_mclk_pin: ${i2s_mck_pin}
+```
+
+##### I2S Audio
+
+[I2S Speaker Component](https://esphome.io/components/speaker/i2s_audio/) allows us to configure the DAC as a speaker.
+Another option is to use [I2S Media Player](https://esphome.io/components/media_player/i2s_audio/) and in that case
+we would not need the other media player, but I didn't know how to play local file on it.
+
+The main thing is to tell it what's the pin for I2S Data Out (DOUT) signal. There's only one channel so `mono`. Keep
+buffer duration small since we only have internal RAM.
+
+```yaml
+speaker:
+  - platform: i2s_audio
+    id: my_speaker
+    dac_type: external
+    i2s_dout_pin: ${i2s_do_pin}
+    i2s_audio_id: i2s_output
+    channel: mono
+    #sample_rate: 48000
+    sample_rate: 16000
+    bits_per_channel: 16bit
+    buffer_duration: 500ms
+```
+
+##### DAC Enable/Mute Control
+
+**IMPORTANT 🚨:**
+I called this `mute_control` so I inverted it. The GPIO11 is connected to CTRL pin of the *NS4150B* amp. High on this pin
+enables output of the amp - without this you will get no sound!
+
+```yaml
+output:
+  - platform: gpio
+    pin: ${mute_pin}
+    id: mute_control
+    inverted: true
+```
+
+##### Playing Sound
+
+When the *boot* button is clicked the following happens:
+
+- DAC volume is set to 80% - change it to your liking
+- LED Indicator is turned ON
+- Mute is turned off `output.turn_off: mute_control`
+  - **IMPORTANT:** without this step you will not hear any sound!
+- Media is played. Note that the announcement pipeline is configured so `announcement: true` is set. There's waiting
+for announcement to start, then to complete
+- Mute is turned on
+- LED Indicator is turned OFF
+
+```yaml
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: ${boot_btn_pin}
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Boot Button"
+    id: boot_btn
+    on_click:
+      then:
+      - audio_dac.set_volume:
+          id: my_dac
+          volume: 80%
+      - light.turn_on: my_indicator
+      - light.control:
+          id: my_indicator
+          brightness: 40%
+          red: 100%
+          green: 25%
+          blue: 75%
+      - output.turn_off: mute_control
+      - media_player.speaker.play_on_device_media_file:
+          media_file: my_test_notification
+          announcement: true
+      # Wait until the alarm sound starts playing
+      - wait_until:
+          media_player.is_announcing:
+      # Wait until the alarm sound stops playing
+      - wait_until:
+          not:
+            media_player.is_announcing:
+      - output.turn_on: mute_control
+      - light.turn_off: my_indicator
 ```
 
 ## Troubleshooting
