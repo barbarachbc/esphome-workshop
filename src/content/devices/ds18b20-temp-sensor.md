@@ -5,7 +5,7 @@ category: "sensor"
 manufacturer: "Analog"
 model: "DS18B20+"
 connectionTypes: ["onewire"]
-components: ["esp32", "sensor-dallas-temp", "one-wire-gpio"]
+components: ["sensor-dallas-temp", "one-wire-gpio"]
 tags: ["sensor", "temperature", "ds18b20", "digital", "onewire"]
 productionStatus: "active"
 purchaseLinks:
@@ -21,7 +21,7 @@ references:
 status: "ready"
 image: "/images/devices/thumbnails/ds18b20.jpg"
 dateAcquired: "2021"
-lastModified: "2026-01-18"
+lastModified: "2026-01-22"
 ---
 
 ## Overview

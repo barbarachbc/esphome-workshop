@@ -6,7 +6,9 @@ manufacturer: "XiaGe (Tenclass)"
 model: "Xmini-C3"
 variants: ["Xmini-C3"]
 connectionTypes: ["gpio", "i2c", "uart", "pwm", "analog"]
-components: ["esp32", "i2c", "display-ssd1306-i2c", "binary-sensor-gpio", "light-esp32-rmt-led-strip"]
+components: ["i2c", "display-ssd1306-i2c", "binary-sensor-gpio", "light-esp32-rmt-led-strip",
+            "network", "output-gpio", "audio-dac-es8311", "i2s-audio", "speaker-i2s-audio",
+            "microphone-i2s-audio", "media-player-speaker"]
 tags: ["wifi", "bluetooth", "esp32c3", "audio", "display", "ai-voice", "es8311", "ssd1306"]
 productionStatus: "active"
 status: "testing"
@@ -36,7 +38,7 @@ changelog:
   - date: "2026-01-18"
     type: "added"
     description: "Initial documentation for Xmini-C3 development board"
-lastModified: "2026-01-20"
+lastModified: "2026-01-22"
 ---
 
 ## Overview

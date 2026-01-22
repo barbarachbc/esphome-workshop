@@ -6,7 +6,7 @@ manufacturer: "Espressif"
 model: "esp32-c3-wroom-02"
 connectionTypes: ["gpio"]
 tags: ["wifi", "bluetooth", "esp32c3", "risc-v"]
-components: ["esp32"]
+components: []
 productionStatus: "active"
 status: "pending"
 references:
@@ -19,7 +19,7 @@ purchaseLinks:
     url: "https://www.mouser.ie/ProductDetail/356-ESP32C3WROOM02N4"
 image: "/images/devices/thumbnails/esp32-c3-wroom-02.jpg"
 dateAcquired: "Dec 2024"
-lastModified: "2026-01-20"
+lastModified: "2026-01-22"
 ---
 
 ## Overview

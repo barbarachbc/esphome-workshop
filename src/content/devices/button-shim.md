@@ -4,7 +4,7 @@ description: '5 buttons and RGB LED using i2c I/O expander by Pimoroni'
 category: "input"
 manufacturer: "Pimoroni"
 connectionTypes: ["i2c"]
-components: ["esp32", "i2c", "tca9554", "external-components", "output-gpio", "light-binary",
+components: ["i2c", "tca9554", "external-components", "output-gpio", "light-binary",
             "light-spi-led-strip", "binary-sensor-gpio", "spi"]
 tags: ["buttons", "input", "led", "rgb", "io-expander"]
 productionStatus: "discontinued"
@@ -28,7 +28,7 @@ changelog:
   - date: "2025-12-21"
     type: "updated"
     description: "Added full example"
-lastModified: "2026-01-18"
+lastModified: "2026-01-22"
 ---
 
 ## Overview

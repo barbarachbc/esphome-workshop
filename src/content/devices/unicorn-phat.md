@@ -5,7 +5,7 @@ category: "display"
 manufacturer: "Pimoroni"
 model: "PIM168"
 connectionTypes: ["gpio"]
-components: ["light-neopixelbus", "light-esp32-rmt-led-strip", "esp8266", "display-addressable-light",
+components: ["light-neopixelbus", "light-esp32-rmt-led-strip", "display-addressable-light",
             "interval", "api", "ota-esphome", "wifi"]
 tags: ["led", "matrix", "rgb", "display", "sk6812"]
 productionStatus: "discontinued"
@@ -21,7 +21,7 @@ references:
     url: "https://github.com/adafruit/Adafruit_NeoPixel"
 dateAcquired: "2017"
 status: "ready"
-lastModified: "2026-01-18"
+lastModified: "2026-01-22"
 image: "/images/devices/thumbnails/unicorn.jpg"
 ---
 

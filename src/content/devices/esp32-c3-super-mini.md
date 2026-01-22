@@ -6,7 +6,7 @@ manufacturer: "TENSTAR ROBOT"
 model: "ESP32 C3 Super Mini"
 connectionTypes: ["gpio"]
 tags: ["wifi", "bluetooth", "esp32", "esp32c3"]
-components: ["esp32", "output-gpio", "light-binary", "binary-sensor-gpio"]
+components: ["output-gpio", "light-binary", "binary-sensor-gpio"]
 productionStatus: "active"
 references:
   - title: Pinout
@@ -19,7 +19,7 @@ purchaseLinks:
 dateAcquired: "Dec 2025"
 status: "ready"
 count: 2
-lastModified: "2026-01-20"
+lastModified: "2026-01-22"
 image: "/images/devices/thumbnails/esp32-c3-supermini.jpg"
 ---
 

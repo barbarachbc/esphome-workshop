@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const DEVICES_DIR = path.join(__dirname, "../src/content/devices");
 export const PROJECTS_DIR = path.join(__dirname, "../src/content/projects");
-export const EXCLUDE = new Set(["esphome", "logger", "substitutions"]);
+export const EXCLUDE = new Set(["esphome", "logger", "substitutions", "esp32", "esp8266"]);
 
 export function extractYamlBlocks(mdText: string): string[] {
   const regex = /```yaml([\s\S]*?)```/g;

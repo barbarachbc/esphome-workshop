@@ -4,11 +4,12 @@ description: "A compact climate controller with OLED display and capacitive touc
 difficulty: "advanced"
 devices: ["beetle-esp32-c6", "sh1107-spi-oled", "touch-phat", "adafruit-neopixel"]
 components: [
-  "api", "ota", "wifi", "captive-portal", "logger",
-  "substitutions", "globals", "script",
+  "api", "ota-esphome", "wifi", "captive-portal",
+  "globals", "script",
   "time-sntp", "number-template", "sensor-homeassistant",
-  "text-sensor-homeassistant", "binary-sensor",
-  "display-ssd1306-spi", "font", "image", "i2c", "spi", "cap1166", "external-components"
+  "text-sensor-homeassistant", "binary-sensor-cap1166",
+  "display-ssd1306-spi", "font", "image", "i2c", "spi", "cap1166", "external-components",
+  "number-homeassistant", "light-cap1166"
 ]
 tags: [
   "monitoring", "control", "heating", "weather", "temperature", "humidity",
@@ -23,7 +24,7 @@ changelog:
   - date: "2026-01-08"
     type: "updated"
     description: "Abandoned, I broke the OLED 😔."
-lastModified: "2026-01-08"
+lastModified: "2026-01-22"
 ---
 
 ## Project Overview

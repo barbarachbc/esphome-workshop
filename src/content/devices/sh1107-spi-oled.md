@@ -5,7 +5,7 @@ category: "display"
 manufacturer: "Pimoroni"
 model: "PIM473"
 connectionTypes: ["spi"]
-components: ["esp32", "spi", "display-ssd1306-spi", "interval", "font"]
+components: ["spi", "display-ssd1306-spi", "interval", "font"]
 tags: ["display", "oled", "monochrome", "sh1107"]
 productionStatus: "active"
 purchaseLinks:
@@ -14,7 +14,7 @@ purchaseLinks:
 status: "retired"
 dateAcquired: "Jan 2022"
 image: "/images/devices/thumbnails/sh1107-spi-oled.jpg"
-lastModified: "2026-01-18"
+lastModified: "2026-01-22"
 changelog:
   - date: "2026-01-08"
     type: "updated"

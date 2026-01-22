@@ -4,10 +4,10 @@ description: "Display the currently playing Spotify song on an text LCD"
 difficulty: "beginner"
 devices: ["esp8266-d1-mini", "hd44780-character-lcd"]
 components: [
-    "api", "ota", "wifi", "logger",
-    "script", "text-sensor", "substitutions", "globals",
-    "text-sensor-homeassistant", "output", "esp8266-pwm",
-    "light", "monochromatic"
+    "api", "ota-esphome", "wifi",
+    "script", "globals",
+    "text-sensor-homeassistant", "output-esp8266-pwm",
+    "light-monochromatic", "display-lcd-gpio"
     ]
 tags: ["spotify", "music", "lcd", "text-display", "1602"]
 status: "in-progress"
@@ -18,7 +18,7 @@ changelog:
   - date: "2025-12-22"
     type: "updated"
     description: "Added in-action photos"
-lastModified: "2026-01-08"
+lastModified: "2026-01-22"
 ---
 
 ## Project Overview

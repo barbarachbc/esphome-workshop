@@ -9,7 +9,7 @@ variants: ["HW-463", "HW-394"]
 #connectionTypes: ["gpio", "i2c", "spi", "uart", "pwm", "analog"]
 connectionTypes: ["gpio"]
 tags: ["wifi", "bluetooth", "esp32"]
-components: ["esp32", "output-gpio", "light-binary", "binary-sensor-gpio"]
+components: ["output-gpio", "light-binary", "binary-sensor-gpio"]
 productionStatus: "NRND"
 status: "ready"
 references:
@@ -25,7 +25,7 @@ purchaseLinks:
   - vendor: AliExpress
     url: https://www.aliexpress.com/item/1005006422498371.html
 image: "/images/devices/thumbnails/esp32-devkit-v1.jpg"
-lastModified: "2026-01-18"
+lastModified: "2026-01-22"
 ---
 
 ## Overview

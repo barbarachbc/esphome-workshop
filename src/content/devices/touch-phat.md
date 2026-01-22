@@ -5,7 +5,7 @@ category: "input"
 manufacturer: "Pimoroni"
 model: "PIM272"
 connectionTypes: ["gpio"]
-components: ["esp32", "external-components", "cap1166", "i2c", "binary-sensor-cap1166"]
+components: ["external-components", "cap1166", "i2c", "binary-sensor-cap1166"]
 tags: ["led", "touch"]
 productionStatus: "discontinued"
 purchaseLinks:
@@ -30,7 +30,7 @@ references:
     url: "https://github.com/barbarachbc/esphomecomponents"
 dateAcquired: "2017"
 status: "ready"
-lastModified: "2026-01-18"
+lastModified: "2026-01-22"
 image: "/images/devices/thumbnails/touch-phat.jpg"
 ---
 

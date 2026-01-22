@@ -7,7 +7,7 @@ model: "esp-01s"
 variants: ["ESP-01"]
 connectionTypes: ["gpio", "uart"]
 tags: ["wifi", "esp8266"]
-components: ["esp8266", "output-gpio", "light-binary"]
+components: ["output-gpio", "light-binary"]
 productionStatus: "NRND"
 status: "pending"
 references:
@@ -24,7 +24,7 @@ purchaseLinks:
     url: https://www.amazon.co.uk/dp/B07Y8H2C1P?th=1
 image: "/images/devices/thumbnails/esp-01s.jpg"
 dateAcquired: "Sept 2024"
-lastModified: "2026-01-18"
+lastModified: "2026-01-22"
 ---
 
 ## Overview

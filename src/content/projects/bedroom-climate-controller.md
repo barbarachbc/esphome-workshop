@@ -4,12 +4,13 @@ description: "A compact climate controller with round LCD display and capacitive
 difficulty: "advanced"
 devices: ["beetle-esp32-c6", "gc9a01-round-lcd", "touch-phat", "adafruit-neopixel"]
 components: [
-  "api", "ota", "wifi", "logger",
-  "substitutions", "globals", "script",
+  "api", "ota-esphome", "wifi",
+  "globals", "script",
   "time-sntp", "number-template", "number-homeassistant", "sensor-homeassistant",
-  "text-sensor-homeassistant", "binary-sensor", "output-ledc",
+  "text-sensor-homeassistant", "binary-sensor-cap1166", "output-ledc",
   "display-mipi-spi", "font", "image", "i2c", "spi", "cap1166", "external-components",
-  "light-esp32-rmt-led-strip", "light-monochromatic"
+  "light-esp32-rmt-led-strip", "light-monochromatic",
+  "light-cap1166"
 ]
 tags: [
   "monitoring", "control", "heating", "weather", "temperature", "humidity",
@@ -30,7 +31,7 @@ changelog:
     type: "updated"
     description: |-
       Added LED Notification for the impeding flooding of the attic 🫣
-lastModified: "2026-01-18"
+lastModified: "2026-01-22"
 ---
 
 ## Project Overview
