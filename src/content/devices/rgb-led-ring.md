@@ -10,7 +10,8 @@ tags: ["led", "matrix", "rgb", "display", "sk6812"]
 productionStatus: "discontinued"
 dateAcquired: "2017"
 status: "testing"
-lastModified: "2026-01-18"
+lastModified: "2026-01-23"
+image: "/images/devices/thumbnails/rgb-led-ring.jpg"
 ---
 
 ## Overview
@@ -21,6 +22,8 @@ The board features:
 
 - 12 RGB LEDs
 - SK6812 individually addressable LEDs (similar to WS2812B)
+
+![Photo of the salvaged 12 RGB LED ring](./images/rgb-led-ring/ring.jpg)
 
 ## Configuration Notes
 
@@ -42,3 +45,8 @@ light:
     id: my_ring
     pin: GPIO17
 ```
+
+## Other Images
+
+Back of the LCD Display:
+![Photo of the 12 RGB LED ring - back](./images/rgb-led-ring/back.jpg)

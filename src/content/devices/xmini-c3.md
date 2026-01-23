@@ -38,7 +38,7 @@ changelog:
   - date: "2026-01-18"
     type: "added"
     description: "Initial documentation for Xmini-C3 development board"
-lastModified: "2026-01-22"
+lastModified: "2026-01-23"
 ---
 
 ## Overview
@@ -142,7 +142,8 @@ The table below is based on the [schematic](https://oshwhub.com/tenclass01/xmini
 **WARNING ⚠️**: The board does not have reset button, and for whatever reason it does not reboot automatically
 after using USB to upload firmware. If you're using [ESPHome Web interface](https://web.esphome.io/) you'll need go
 to Logs and there is an option to Reset Device. I just could not figure out how to do it automatically, I tried
-several *platformio_options* but without success.
+several *platformio_options* but without success. (Maybe it's my machine, other devices that worked before do not
+reboot anymore ... might need to reboot ♻️ my machine).
 
 **WARNING ⚠️**: Make sure to go through [basic configuration](#basic-configuration) and if that is working
 you have correctly setup board. Flash is connected in Dual SPI mode. The default configuration is DIO (Dual I/O),

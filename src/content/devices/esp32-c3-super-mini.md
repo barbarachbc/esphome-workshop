@@ -19,7 +19,7 @@ purchaseLinks:
 dateAcquired: "Dec 2025"
 status: "ready"
 count: 2
-lastModified: "2026-01-22"
+lastModified: "2026-01-23"
 image: "/images/devices/thumbnails/esp32-c3-supermini.jpg"
 ---
 
@@ -111,6 +111,8 @@ Like for [xmini c3 board](./xmini-c3.md) it looks like the board does not reboot
 new image (at least through the web interface). I still haven't figured it out, so if you're using
 [web interface](https://web.esphome.io/) make sure to go to _Log_ and then _RESET DEVICE_.
 
+Hmmm... it might be something with my machine ... stopped rebooting other devices too.
+
 ### Quad SPI for Flash ℹ️
 
 By default, DIO (Dual I/O SPI mode) is used. This will work for flash that's wired up for Quad mode too, so it's a
@@ -131,10 +133,6 @@ esp32:
 
 `CONFIG_ESPTOOLPY_FLASHMODE_QIO` needs to be turned on, and **be careful ⚠️** to use lower letter _y_, capital _Y_
 does not work.
-
-### Arduino by Default
-
-If you do not specify the framework, esp32c3 will use _arduino_ by default.
 
 ## Basic Configuration
 
