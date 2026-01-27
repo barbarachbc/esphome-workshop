@@ -31,7 +31,12 @@ changelog:
     type: "updated"
     description: |-
       Added LED Notification for the impeding flooding of the attic 🫣
-lastModified: "2026-01-22"
+  - date: "2026-01-27"
+    type: "updated"
+    description: |-
+      Added initial brightness to be 20% because sometimes it randomly reboots
+      during the night so it does not wake up people
+lastModified: "2026-01-27"
 ---
 
 ## Project Overview
@@ -73,8 +78,8 @@ The project is complete in terms of hardware. The rest are software improvements
 
 ### Future improvement ideas
 
-- Add display auto sleep mode
-  - It's good to dim the display at night time for example 🌙😴
+- Added dimmed start-up as a quick fix for the device rebooting at night
+  - It's good to dim the display at night time for example 🌙😴 so maybe make it configurable
 - Add Colors
   - This was ported from Mono OLED so everything is monochromatic - it looks pretty but why not add some
   colors to our lives 😉
@@ -415,6 +420,9 @@ The script is executed in the following cases:
 from Home Assistant
 - when any of the touch buttons is pressed (`on_release`)
 - when the `Display Backlight` is manually (or through automation) turned on from Home Assistant
+
+On boot - the backlight is set to 20% brightness. The brightness is set to 100% only when one of the
+touch buttons is used.
 
 ### Rain Notification
 

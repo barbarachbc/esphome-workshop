@@ -6,6 +6,9 @@ esphome:
   on_boot:
     - priority: 1
       then:
+      - light.control:
+          id: backlight
+          brightness: 20%
       - delay: 5s
       - globals.set:
           id: my_boot_in_progress
@@ -313,6 +316,12 @@ script:
                 red: 100%
                 green: 12%
                 blue: 12%
+  - id: on_touch_release
+    then:
+      - light.control:
+          id: backlight
+          brightness: 100%
+      - script.execute: idle_screen_reset
 
 text_sensor:
   - platform: homeassistant
@@ -461,7 +470,7 @@ binary_sensor:
             id: cancel_button_click
     on_release:
       then:
-        script.execute: idle_screen_reset
+        script.execute: on_touch_release
   - platform: cap1166
     id: touch_A
     channel: 1
@@ -473,7 +482,7 @@ binary_sensor:
               id: a_button_click
     on_release:
       then:
-        script.execute: idle_screen_reset
+        script.execute: on_touch_release
   - platform: cap1166
     id: touch_B
     channel: 2
@@ -486,7 +495,7 @@ binary_sensor:
             preset: "eco"
     on_release:
       then:
-        script.execute: idle_screen_reset
+        script.execute: on_touch_release
   - platform: cap1166
     id: touch_C
     channel: 3
@@ -499,7 +508,7 @@ binary_sensor:
             preset: "comfort"
     on_release:
       then:
-        script.execute: idle_screen_reset
+        script.execute: on_touch_release
   - platform: cap1166
     id: touch_D
     channel: 4
@@ -516,7 +525,7 @@ binary_sensor:
               id: touch_d_long_click
     on_release:
       then:
-        script.execute: idle_screen_reset
+        script.execute: on_touch_release
   - platform: cap1166
     id: touch_forward
     channel: 5
@@ -528,7 +537,7 @@ binary_sensor:
             id: accept_button_click
     on_release:
       then:
-        script.execute: idle_screen_reset
+        script.execute: on_touch_release
 
 output:
   - platform: ledc
