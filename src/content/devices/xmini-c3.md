@@ -4,14 +4,13 @@ description: "ESP32-C3 development board with 0.96\" OLED display, audio codec, 
 category: "board"
 manufacturer: "XiaGe (Tenclass)"
 model: "Xmini-C3"
-variants: ["Xmini-C3"]
 connectionTypes: ["gpio", "i2c", "uart", "pwm", "analog"]
 components: ["i2c", "display-ssd1306-i2c", "binary-sensor-gpio", "light-esp32-rmt-led-strip",
             "network", "output-gpio", "audio-dac-es8311", "i2s-audio", "speaker-i2s-audio",
             "microphone-i2s-audio", "media-player-speaker"]
 tags: ["wifi", "bluetooth", "esp32c3", "audio", "display", "ai-voice", "es8311", "ssd1306"]
 productionStatus: "active"
-status: "testing"
+status: "ready"
 dateAcquired: "Dec 2025"
 references:
   - title: Schematic (OSHWHub)
@@ -38,7 +37,10 @@ changelog:
   - date: "2026-01-18"
     type: "added"
     description: "Initial documentation for Xmini-C3 development board"
-lastModified: "2026-01-23"
+  - date: "2026-01-28"
+    type: "updated"
+    description: "Finished full config with Audio and Mic"
+lastModified: "2026-01-29"
 ---
 
 ## Overview
@@ -59,15 +61,15 @@ everything local.
 - ✅ [Display (SSD1306)](#display)
 - ✅ Boot Button
 - ✅ LED Indicator
-- [ ] Audio (ES8311 + NS4150B)
-- [ ] Microphone (ES8311)
+- ✅ [Audio (ES8311 + NS4150B)](#audio-configuration)
+- ✅ [Microphone (ES8311)](#microphone-configuration)
 
 ## Hardware Features
 
 - **Display:** 0.96-inch SSD1306 OLED (128x64 monochrome/dual color) (I2C ADDR: 0x3C)
 - **Audio Codec:** ES8311 audio decoder (I2S & I2C) I2C Addr: 0x18
 - **Amplifier:** NS4150B power amplifier IC (connected to ES8311)
-- **Microphone:** Onboard microphone for voice input (ZTS6216 connected to ES8311)
+- **Microphone:** Onboard MEMS microphone for voice input (ZTS6216 connected to ES8311)
 - **Speaker:** 1.25mm connector for 3W-5W cavity speaker (speaker included)
 - **Connectivity:** WiFi 802.11 b/g/n, Bluetooth LE 5.0
 - **Power:** 3.7V lithium battery support with LGS4056 charging IC
@@ -165,9 +167,7 @@ The basic configuration has I2C configured so in the logs you should see somethi
 **LOOK OUT 🔍**: There's a switch on the side for battery operation. Board won't power up when connected over USB if
 the switch is in the battery mode. If you can't get the board to work, maybe the switch is in the wrong position.
 
-## ESPHome Configuration
-
-### Basic Configuration
+## Basic Configuration
 
 Basic configuration for Xmini-C3 with ESP32-C3 only covers very basic and minimal configuration.
 This does nothing spectacular but gives you an option to make sure that everything is working.
@@ -240,7 +240,7 @@ binary_sensor:
         - light.turn_off: my_indicator
 ```
 
-### Display
+## Display
 
 The display should be similar to other displays using [SSD1306 component](https://esphome.io/components/display/ssd1306/).
 I added some display test code to the basic configuration at the very bottom.
@@ -315,7 +315,7 @@ display:
       it.filled_rectangle(it.get_width()/2 - 6, it.get_height()/2 - 6, 12, 12, COLOR_OFF);
 ```
 
-#### Display Configuration Notes
+### Display Configuration Notes
 
 That blue and yellow color looks beautiful 🙂. Now, the display is monochrome so you can't control the colors.
 That yellow stripe is "COLOR_ON" for that portion of the display ... 1/4 of the display so first 16 rows.
@@ -341,7 +341,7 @@ display:
       i = (i+1)%4;
 ```
 
-### Audio Configuration
+## Audio Configuration
 
 OK, let's get crazy. In order to do anything with audio there's a number of components that need to be used:
 
@@ -447,7 +447,7 @@ output:
 audio_dac:
   - platform: es8311
     id: my_dac
-    use_microphone: true
+    use_microphone: false
     bits_per_sample: 16bit
     #sample_rate: 48000
     sample_rate: 16000
@@ -511,9 +511,9 @@ display:
       it.filled_rectangle(it.get_width()/2 - 6, it.get_height()/2 - 6, 12, 12, COLOR_OFF);
 ```
 
-#### Audio Configuration Notes
+### Audio Configuration Notes
 
-##### Files
+#### Files
 
 I downloaded G# bariton guitar chord from [Freesounds.org](https://freesound.org/people/TheEndOfACycle/sounds/838383/).
 I used Audacity to mix it down from stereo to mono, shortened it, then I expored the file twice:
@@ -523,7 +523,7 @@ I used Audacity to mix it down from stereo to mono, shortened it, then I expored
 
 I copied the files to my `/assets` folder so when I build the project they get embedded to the firmware.
 
-##### Media Player
+#### Media Player
 
 This is just so I have something to test with. I wanted to use local file so I used
 [Speaker Media Player](https://esphome.io/components/media_player/speaker/). You could connect to Home Assistant
@@ -560,7 +560,7 @@ media_player:
         file: assets/g-chord-reverb-16K.wav
 ```
 
-##### Bits and Sample Rate
+#### Bits and Sample Rate
 
 You can try different combinations of bits and sampling rates. I tried all possible combinations of using 16KHz
 sampling rate for DAC, but using 48KHz file, and different sampling rate for the I2S audio component. All of them
@@ -570,14 +570,14 @@ combinations I tried worked and produced the sound.
 Note that 16 bits per sample is the minimum that will work with the media player. I tried using 8bit but the component
 was complaining.
 
-##### Audio DAC
+#### Audio DAC
 
 ```yaml
 #https://esphome.io/components/audio_dac/es8311/
 audio_dac:
   - platform: es8311
     id: my_dac
-    use_microphone: true
+    use_microphone: false
     bits_per_sample: 16bit
     #sample_rate: 48000
     sample_rate: 16000
@@ -586,7 +586,7 @@ audio_dac:
 
 I suppose this is self explanatory. It uses I2C bus for control.
 
-##### I2S Audio
+#### I2S Audio
 
 [I2S Audio Component](https://esphome.io/components/i2s_audio/) allows us to configure I2S bus.
 
@@ -598,7 +598,7 @@ i2s_audio:
     i2s_mclk_pin: ${i2s_mck_pin}
 ```
 
-##### I2S Audio
+#### I2S Audio
 
 [I2S Speaker Component](https://esphome.io/components/speaker/i2s_audio/) allows us to configure the DAC as a speaker.
 Another option is to use [I2S Media Player](https://esphome.io/components/media_player/i2s_audio/) and in that case
@@ -621,7 +621,7 @@ speaker:
     buffer_duration: 500ms
 ```
 
-##### DAC Enable/Mute Control
+#### DAC Enable/Mute Control
 
 **IMPORTANT 🚨:**
 I called this `mute_control` so I inverted it. The GPIO11 is connected to CTRL pin of the *NS4150B* amp. High on this pin
@@ -635,7 +635,7 @@ output:
     inverted: true
 ```
 
-##### Playing Sound
+#### Playing Sound
 
 When the *boot* button is clicked the following happens:
 
@@ -684,6 +684,235 @@ binary_sensor:
             media_player.is_announcing:
       - output.turn_on: mute_control
       - light.turn_off: my_indicator
+```
+
+## Microphone Configuration
+
+OK, lets finish with microphone configuration. For this example we need:
+
+- [i2s microphone](https://esphome.io/components/microphone/i2s_audio/)
+- [microWakeWord](https://esphome.io/components/micro_wake_word/)
+
+To use this, click *boot* button and the device will wait for the wake word. Upon wake word detection, it will
+show a smiley face and then it will clear the screen after 10 seconds and you need to click *boot* button again.
+
+![Xmini-C3 board showing a smiley face when micro wake word detected](./images/xmini-c3/smiley.jpg)
+
+Here's how it looks like in logs when microWakeWord is configured, and how when it's detected:
+
+![Screenshot of log showing micro wake word is configured for the board](./images/xmini-c3/mmw-configured.png)
+
+![Screenshot of log showing micro wake word detected](./images/xmini-c3/mmw-detected.png)
+
+I'll go into details below, here's the full configuration:
+
+```yaml
+esphome:
+  name: my-xmini-c3
+
+esp32:
+  variant: esp32c3
+  framework:
+    type: esp-idf
+    sdkconfig_options:
+      CONFIG_ESPTOOLPY_FLASHMODE_DIO: y
+  flash_size: 16MB
+
+logger:
+
+substitutions:
+  boot_btn_pin: GPIO09
+  i2c_sda_pin: GPIO03
+  i2c_scl_pin: GPIO04
+  neopixel_pin: GPIO02
+  i2s_ws_pin: GPIO06
+  i2s_bck_pin: GPIO08
+  i2s_mck_pin: GPIO10
+  i2s_do_pin: GPIO05
+  i2s_di_pin: GPIO07
+  mute_pin: GPIO11
+
+i2c:
+  sda: ${i2c_sda_pin}
+  scl: ${i2c_scl_pin}
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: my_indicator
+    chipset: ws2812
+    num_leds: 1
+    rgb_order: GRB
+    name: "Indicator Light"
+    restore_mode: ALWAYS_OFF
+    pin: ${neopixel_pin}
+
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: ${boot_btn_pin}
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Boot Button"
+    id: boot_btn
+    on_click:
+      then:
+        - micro_wake_word.start:
+
+output:
+  - platform: gpio
+    pin: ${mute_pin}
+    id: mute_control
+    inverted: true
+#https://esphome.io/components/audio_dac/es8311/
+audio_dac:
+  - platform: es8311
+    id: my_dac
+    use_microphone: false
+    bits_per_sample: 16bit
+    #sample_rate: 48000
+    sample_rate: 16000
+    address: 0x18
+
+#https://esphome.io/components/i2s_audio/
+i2s_audio:
+  - id: i2s_output
+    i2s_lrclk_pin: ${i2s_ws_pin}
+    i2s_bclk_pin: ${i2s_bck_pin}
+    i2s_mclk_pin: ${i2s_mck_pin}
+
+#https://esphome.io/components/speaker/i2s_audio/
+speaker:
+  - platform: i2s_audio
+    id: my_speaker
+    dac_type: external
+    i2s_dout_pin: ${i2s_do_pin}
+    i2s_audio_id: i2s_output
+    #to be able to use it on memory restricted device (for testing)
+    channel: mono
+    #sample_rate: 48000
+    sample_rate: 16000
+    bits_per_channel: 16bit
+    buffer_duration: 500ms
+
+
+#https://esphome.io/components/microphone/i2s_audio/
+microphone:
+  - platform: i2s_audio
+    id: external_mic
+    adc_type: external
+    i2s_din_pin: ${i2s_di_pin}
+    i2s_audio_id: i2s_output
+
+image:
+  - file: mdi:emoticon
+    id: smile
+    type: binary
+    resize: 40x40
+
+#https://esphome.io/components/micro_wake_word/
+micro_wake_word:
+  microphone: external_mic
+  models:
+    - model: github://esphome/micro-wake-word-models/models/v2/okay_nabu.json
+  on_wake_word_detected:
+    then:
+      - lambda: |-
+          ESP_LOGD("display", "SMILING");
+          id(my_display).image(44, 12, id(smile));
+      - component.update: my_display
+      - delay: 10s
+      - lambda: |-
+          id(my_display).filled_rectangle(0, 0, 128, 64, COLOR_OFF);
+      - component.update: my_display
+
+#https://esphome.io/components/display/ssd1306/
+display:
+  - platform: ssd1306_i2c
+    id: my_display
+    model: "SSD1306 128x64"
+    address: 0x3C
+    # this is just for this demo since all the code is doing showing a smiley face
+    # on detecting microWakeWord
+    auto_clear_enabled: false
+```
+
+### Microphone Configuration Notes
+
+Note that I removed media player for simplicity because it's not used in the example
+
+#### Microphone
+
+In the excerpt below, ADC is configured to use MEMS microphone (ZTS6216) - but that microphone has analog output.
+For that reason `use_microphone` has to be set to `false` (which is *default* value anyway).
+
+I2S microphone is configured then with correct input pin and *adc_type* is *external*.
+
+```yaml
+#https://esphome.io/components/audio_dac/es8311/
+audio_dac:
+  - platform: es8311
+    id: my_dac
+    use_microphone: false
+    bits_per_sample: 16bit
+    #sample_rate: 48000
+    sample_rate: 16000
+    address: 0x18
+
+#https://esphome.io/components/microphone/i2s_audio/
+microphone:
+  - platform: i2s_audio
+    id: external_mic
+    adc_type: external
+    i2s_din_pin: ${i2s_di_pin}
+    i2s_audio_id: i2s_output
+```
+
+#### Micro Wake Word
+
+In the excerpt below it's a pretty basic microWakeWord setup. It uses *okay nabu* wake word and in case of
+detecting the wake word it displays an image, and then clears the screen. Very basic but proves that both microphone
+and wake word work on pretty limited device that ESP32-C3 is (single core and limited RAM).
+
+```yaml
+#https://esphome.io/components/micro_wake_word/
+micro_wake_word:
+  microphone: external_mic
+  models:
+    - model: github://esphome/micro-wake-word-models/models/v2/okay_nabu.json
+  on_wake_word_detected:
+    then:
+      - lambda: |-
+          ESP_LOGD("display", "SMILING");
+          id(my_display).image(44, 12, id(smile));
+      - component.update: my_display
+      - delay: 10s
+      - lambda: |-
+          id(my_display).filled_rectangle(0, 0, 128, 64, COLOR_OFF);
+      - component.update: my_display
+```
+
+### Other Configuration
+
+On boot button click - `micro_wake_word.start` is executed to start listening for the wake word. Once detected, by
+*default* the component will stop listening for the wake word so click again to start listening.
+
+```yaml
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: ${boot_btn_pin}
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Boot Button"
+    id: boot_btn
+    on_click:
+      then:
+        - micro_wake_word.start:
 ```
 
 ## Troubleshooting
