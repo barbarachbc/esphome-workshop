@@ -202,6 +202,18 @@ script:
             - light.turn_off: my_light_back
             - light.turn_off: my_light_a
             - light.turn_off: my_light_d
+  - id: clear_globals_and_lights
+    then:
+      - globals.set:
+          id: selecting_heating_preset
+          value: '""'
+      - globals.set:
+          id: changing_heating_temp
+          value: '0'
+      - light.turn_off: my_light_forward
+      - light.turn_off: my_light_back
+      - light.turn_off: my_light_a
+      - light.turn_off: my_light_d
   - id: cancel_button_click
     then:
       - if:
@@ -210,28 +222,9 @@ script:
           then:
             - display.page.show_previous: my_display
             - component.update: my_display
-      - if:
-          condition:
-            - lambda: return id(selecting_heating_preset) != "";
-          then:
-            - globals.set:
-                id: selecting_heating_preset
-                value: '""'
+          else:
+            - script.execute: clear_globals_and_lights
             - component.update: my_display
-            - light.turn_off: my_light_forward
-            - light.turn_off: my_light_back
-      - if:
-          condition:
-            - lambda: return id(changing_heating_temp) > 0;
-          then:
-            - globals.set:
-                id: changing_heating_temp
-                value: '0'
-            - component.update: my_display
-            - light.turn_off: my_light_forward
-            - light.turn_off: my_light_back
-            - light.turn_off: my_light_a
-            - light.turn_off: my_light_d
   - id: set_indoor_preset
     parameters:
       preset: string
@@ -282,7 +275,7 @@ script:
             - light.turn_on: backlight
             - delay: !lambda return id(display_timeout).state * 1000;
             # cancel any operation first then switch off the screen
-            - script.execute: cancel_button_click
+            - script.execute: clear_globals_and_lights
             - display.page.show: page_info
             - light.turn_off: backlight
   - id: update_rain_alert

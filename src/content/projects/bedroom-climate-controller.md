@@ -36,7 +36,7 @@ changelog:
     description: |-
       Added initial brightness to be 20% because sometimes it randomly reboots
       during the night so it does not wake up people
-lastModified: "2026-01-27"
+lastModified: "2026-02-01"
 ---
 
 ## Project Overview
@@ -121,13 +121,17 @@ The OLED display uses SPI bus, Touch breakout uses I2C and Neopixel uses GPIO.
 | RESET | GPIO04 | Display Reset Pin |
 | BL | GPIO17 | Backlight - it can be used to set brightness |
 | **I2C Touch pHAT (CAP1166)** |
-| 3 (GPIO 2) | GPIO06 (SDA) | I2C Data |
-| 5 (GPIO 3) | GPIO07 (SCL) | I2C Clock |
+| 3 (GPIO 2) | GPIO06 (SDA) | I2C Data - requires external pull-up resistor |
+| 5 (GPIO 3) | GPIO07 (SCL) | I2C Clock - requires external pull-up resistor |
 | **ESP32-C6 Built-in** |
 | LED | GPIO15 | Built-in LED - not used |
 | BOOT | GPIO09 | Boot button - not used |
 | **NeoPixel (Future)** |
 | DIN | GPIO21 | Data pin for the LED driver |
+
+**WARNING ⚠️:** I used 3.3K external pull-up resistors to 3.3V for I2C bus - on GPIO06 and GPIO07. The Touch
+Phat does not have external pull-ups and internal pull-ups on the MCU are too weak. If you don't do this
+you'll be getting weird I2C errors in the logs, phantom touches, etc.
 
 **Power Notes:**
 
