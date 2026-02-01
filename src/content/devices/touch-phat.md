@@ -30,7 +30,7 @@ references:
     url: "https://github.com/barbarachbc/esphomecomponents"
 dateAcquired: "2017"
 status: "ready"
-lastModified: "2026-01-22"
+lastModified: "2026-02-01"
 image: "/images/devices/thumbnails/touch-phat.jpg"
 ---
 
@@ -48,6 +48,19 @@ The board features:
 - Six bright white under-mounted LEDs
 - Microchip CAP1166 capacitive touch and LED driver chip
 - I2C: 0x2c
+
+## Wiring - Important 🚨
+
+Raspberry Pi has external pull-up resistors on the board for I2C. I read somewhere that they are 1.8K - this
+increases power consumption but allows faster communication. Raspberry Pi Pico does not have them.
+
+Because of this, some Raspberry Pi add-on boards (HATs) that use I2C chips, do not include external pull-up
+resistors. Without them, the I2C communication might still work, but if it works it won't work very well.
+I did not realize this immediatelly because the board worked ... kind of fine ... for testing.
+
+However, once deployed, and actually used for a while, I was having all sorts of weirdness. The device was
+detecting phantom touches and waking up in the middle of the night on 100% brightness ... not good 🤦‍♂️.
+Anyway, after adding the external pull-ups everything settled and all is working fine now. Live and learn 🙂.
 
 ## Configuration Notes
 

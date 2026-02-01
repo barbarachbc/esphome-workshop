@@ -602,6 +602,9 @@ configuration with what your desired setting is. The same goes for `frost`, `eco
 1. Reduce display buffer size if running out of memory
 1. Lower logger level to WARN or ERROR
 1. Disable unnecessary components temporarily
+1. Unplug your Electric Toothbrush charger if it uses the same USB charger ... yes ... the device was rebooting
+randomly. I used USB charger with 2 ports. While electric toothbrush charger was plugged in, it just kept on
+rebooting randomly. I unpluged the electric brush charger and reboots stopped - dead givaway! 🤦‍♂️
 
 ### Display Not Working
 
@@ -633,6 +636,7 @@ display configuration.
 1. Adjust `touch_threshold` value (generally: 0x01 is most sensitive, 0x80 is least sensitive.
 My configuration is 0x40 - Medium. Try 0x20 first and see how it goes)
 1. Look for I2C errors in ESPHome logs
+1. Make sure you have external pull-up resistors!
 
 ### LEDs Not Lighting
 
