@@ -1,12 +1,6 @@
 esphome:
   name: my-mini-voice-assistant
   friendly_name: My Mini Voice Assistant
-  on_boot:
-    - priority: 1
-      then:
-        - voice_assistant.stop:
-        - delay: 500ms
-        - micro_wake_word.start:
 
 esp32:
   variant: esp32c3
@@ -47,51 +41,12 @@ i2c:
   sda: ${i2c_sda_pin}
   scl: ${i2c_scl_pin}
 
-light:
-  - platform: esp32_rmt_led_strip
-    id: my_indicator
-    chipset: ws2812
-    num_leds: 1
-    default_transition_length: 0s
-    rgb_order: GRB
-    name: "Indicator Light"
-    restore_mode: ALWAYS_OFF
-    pin: ${neopixel_pin}
-    effects:
-      - pulse:
-          name: "Slow Pulse"
-          transition_length: 250ms
-          update_interval: 250ms
-          min_brightness: 50%
-          max_brightness: 100%
-      - pulse:
-          name: "Fast Pulse"
-          transition_length: 100ms
-          update_interval: 100ms
-          min_brightness: 50%
-          max_brightness: 100%
-
-
-binary_sensor:
-  - platform: gpio
-    pin:
-      number: ${boot_btn_pin}
-      inverted: true
-      mode:
-        input: true
-        pullup: true
-    name: "Boot Button"
-    id: boot_btn
-    on_click:
-      then:
-        - micro_wake_word.start:
-
 output:
   - platform: gpio
     pin: ${mute_pin}
     id: mute_control
     inverted: true
-#https://esphome.io/components/audio_dac/es8311/
+
 audio_dac:
   - platform: es8311
     id: my_dac
@@ -101,12 +56,23 @@ audio_dac:
     sample_rate: 16000
     address: 0x18
 
-#https://esphome.io/components/i2s_audio/
+button:
+  - platform: factory_reset
+    id: factory_reset_btn
+    name: Factory reset
+
 i2s_audio:
-  - id: i2s_output
+  - id: i2s_audio_bus
     i2s_lrclk_pin: ${i2s_ws_pin}
     i2s_bclk_pin: ${i2s_bck_pin}
     i2s_mclk_pin: ${i2s_mck_pin}
+
+microphone:
+  - platform: i2s_audio
+    id: external_mic
+    adc_type: external
+    i2s_din_pin: ${i2s_di_pin}
+
 
 #https://esphome.io/components/speaker/i2s_audio/
 speaker:
@@ -114,28 +80,10 @@ speaker:
     id: my_speaker
     dac_type: external
     i2s_dout_pin: ${i2s_do_pin}
-    i2s_audio_id: i2s_output
-    #to be able to use it on memory restricted device (for testing)
-    channel: mono
-    #sample_rate: 48000
     sample_rate: 16000
+    channel: mono
     bits_per_channel: 16bit
-    buffer_duration: 500ms
-
-
-#https://esphome.io/components/microphone/i2s_audio/
-microphone:
-  - platform: i2s_audio
-    id: external_mic
-    adc_type: external
-    i2s_din_pin: ${i2s_di_pin}
-    i2s_audio_id: i2s_output
-
-image:
-  - file: mdi:emoticon
-    id: smile
-    type: binary
-    resize: 40x40
+    buffer_duration: 100ms
 
 media_player:
   - platform: speaker
@@ -166,38 +114,6 @@ media_player:
     on_idle:
       - script.execute: start_wake_word
       - script.execute: reset_led
-
-switch:
-  - platform: template
-    id: timer_ringing
-    optimistic: true
-    restore_mode: ALWAYS_OFF
-    on_turn_off:
-      # Turn off the repeat mode and disable the pause between playlist items
-      - lambda: |-
-              id(my_media_player)
-                ->make_call()
-                .set_command(media_player::MediaPlayerCommand::MEDIA_PLAYER_COMMAND_REPEAT_OFF)
-                .set_announcement(true)
-                .perform();
-              id(my_media_player)->set_playlist_delay_ms(speaker::AudioPipelineType::ANNOUNCEMENT, 0);
-      # Stop playing the alarm
-      - media_player.stop:
-          announcement: true
-    on_turn_on:
-      # Turn on the repeat mode and pause for 1000 ms between playlist items/repeats
-      - lambda: |-
-            id(my_media_player)
-              ->make_call()
-              .set_command(media_player::MediaPlayerCommand::MEDIA_PLAYER_COMMAND_REPEAT_ONE)
-              .set_announcement(true)
-              .perform();
-            id(my_media_player)->set_playlist_delay_ms(speaker::AudioPipelineType::ANNOUNCEMENT, 1000);
-      - media_player.speaker.play_on_device_media_file:
-          media_file: timer_finished_wave_file
-          announcement: true
-      - delay: 15min
-      - switch.turn_off: timer_ringing
 
 voice_assistant:
   id: va
@@ -237,14 +153,20 @@ voice_assistant:
         condition:
           - media_player.is_announcing:
         timeout: 0.5s
-    - wait_until:
-        - and:
-            - not:
-                voice_assistant.is_running:
-            - not:
-                speaker.is_playing:
-    - lambda: id(va).set_use_wake_word(false);
-    - micro_wake_word.start:
+    # Restart only mWW if enabled; streaming wake words automatically restart
+    - if:
+        condition:
+          - lambda: |-
+              return id(wake_word_engine_location).current_option() == "On device";
+        then:
+          - wait_until:
+              - and:
+                  - not:
+                      voice_assistant.is_running:
+                  - not:
+                      speaker.is_playing:
+          - lambda: id(va).set_use_wake_word(false);
+          - micro_wake_word.start:
     - script.execute: reset_led
   on_error:
     - light.turn_on:
@@ -279,29 +201,202 @@ voice_assistant:
     - light.turn_off: my_indicator
     - switch.turn_off: timer_ringing
 
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: ${boot_btn_pin}
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: Button
+    id: boot_btn
+    disabled_by_default: true
+    entity_category: diagnostic
+    on_multi_click:
+      - timing:
+          - ON for at least 50ms
+          - OFF for at least 50ms
+        then:
+          - if:
+              condition:
+                switch.is_on: timer_ringing
+              then:
+                - switch.turn_off: timer_ringing
+              else:
+                - script.execute: start_wake_word
+      - timing:
+          - ON for at least 10s
+        then:
+          - button.press: factory_reset_btn
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: my_indicator
+    name: None
+    disabled_by_default: true
+    entity_category: config
+    pin: ${neopixel_pin}
+    default_transition_length: 0s
+    chipset: ws2812
+    num_leds: 1
+    rgb_order: GRB
+    restore_mode: ALWAYS_OFF
+    effects:
+      - pulse:
+          name: "Slow Pulse"
+          transition_length: 250ms
+          update_interval: 250ms
+          min_brightness: 50%
+          max_brightness: 100%
+      - pulse:
+          name: "Fast Pulse"
+          transition_length: 100ms
+          update_interval: 100ms
+          min_brightness: 50%
+          max_brightness: 100%
+
 script:
   - id: reset_led
     then:
-      - light.turn_on:
-          id: my_indicator
-          red: 0%
-          green: 100%
-          blue: 100%
-          brightness: 60%
-          effect: none
+      - if:
+          condition:
+            - lambda: |-
+                return id(wake_word_engine_location).current_option() == "On device";
+            - switch.is_on: use_listen_light
+          then:
+            - light.turn_on:
+                id: my_indicator
+                red: 100%
+                green: 89%
+                blue: 71%
+                brightness: 60%
+                effect: none
+          else:
+            - if:
+                condition:
+                  - lambda: |-
+                      return id(wake_word_engine_location).current_option() == "On device";
+                  - switch.is_on: use_listen_light
+                then:
+                  - light.turn_on:
+                      id: my_indicator
+                      red: 0%
+                      green: 100%
+                      blue: 100%
+                      brightness: 60%
+                      effect: none
+                else:
+                  - light.turn_off: my_indicator
   - id: start_wake_word
     then:
       - if:
           condition:
-            - not:
-                - voice_assistant.is_running:
+            and:
+              - not:
+                  - voice_assistant.is_running:
+              - lambda: |-
+                  return id(wake_word_engine_location).current_option() == "On device";
           then:
+            - lambda: id(va).set_use_wake_word(false);
             - micro_wake_word.start:
+      - if:
+          condition:
+            and:
+              - not:
+                  - voice_assistant.is_running:
+              - lambda: |-
+                  return id(wake_word_engine_location).current_option() == "In Home Assistant";
+          then:
+            - lambda: id(va).set_use_wake_word(true);
+            - voice_assistant.start_continuous:
   - id: stop_wake_word
     then:
-      - micro_wake_word.stop:
+      - if:
+          condition:
+            lambda: |-
+                  return id(wake_word_engine_location).current_option() == "In Home Assistant";
+          then:
+            - lambda: id(va).set_use_wake_word(false);
+            - voice_assistant.stop:
+      - if:
+          condition:
+            lambda: |-
+              return id(wake_word_engine_location).current_option() == "On device";
+          then:
+            - micro_wake_word.stop:
 
-#https://esphome.io/components/micro_wake_word/
+switch:
+  - platform: template
+    name: Use listen light
+    id: use_listen_light
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_ON
+    entity_category: config
+    on_turn_on:
+      - script.execute: reset_led
+    on_turn_off:
+      - script.execute: reset_led
+  - platform: template
+    id: timer_ringing
+    optimistic: true
+    restore_mode: ALWAYS_OFF
+    on_turn_off:
+      # Turn off the repeat mode and disable the pause between playlist items
+      - lambda: |-
+              id(my_media_player)
+                ->make_call()
+                .set_command(media_player::MediaPlayerCommand::MEDIA_PLAYER_COMMAND_REPEAT_OFF)
+                .set_announcement(true)
+                .perform();
+              id(my_media_player)->set_playlist_delay_ms(speaker::AudioPipelineType::ANNOUNCEMENT, 0);
+      # Stop playing the alarm
+      - media_player.stop:
+          announcement: true
+    on_turn_on:
+      # Turn on the repeat mode and pause for 1000 ms between playlist items/repeats
+      - lambda: |-
+            id(my_media_player)
+              ->make_call()
+              .set_command(media_player::MediaPlayerCommand::MEDIA_PLAYER_COMMAND_REPEAT_ONE)
+              .set_announcement(true)
+              .perform();
+            id(my_media_player)->set_playlist_delay_ms(speaker::AudioPipelineType::ANNOUNCEMENT, 1000);
+      - media_player.speaker.play_on_device_media_file:
+          media_file: timer_finished_wave_file
+          announcement: true
+      - delay: 15min
+      - switch.turn_off: timer_ringing
+
+select:
+  - platform: template
+    entity_category: config
+    name: Wake word engine location
+    id: wake_word_engine_location
+    optimistic: true
+    restore_value: true
+    options:
+      - In Home Assistant
+      - On device
+    initial_option: On device
+    on_value:
+      - if:
+          condition:
+            lambda: return x == "In Home Assistant";
+          then:
+            - micro_wake_word.stop:
+            - delay: 500ms
+            - lambda: id(va).set_use_wake_word(true);
+            - voice_assistant.start_continuous:
+      - if:
+          condition:
+            lambda: return x == "On device";
+          then:
+            - lambda: id(va).set_use_wake_word(false);
+            - voice_assistant.stop:
+            - delay: 500ms
+            - micro_wake_word.start:
+
 micro_wake_word:
   microphone: external_mic
   on_wake_word_detected:
@@ -310,13 +405,27 @@ micro_wake_word:
   vad:
   models:
     - model: okay_nabu
+    - model: hey_mycroft
+    - model: hey_jarvis
 
-#https://esphome.io/components/display/ssd1306/
+image:
+  - file: mdi:robot
+    id: va_listening
+    type: binary
+    resize: 48x48
+  - file: mdi:robot-happy
+    id: va_idle
+    resize: 48x48
+    type: binary
+
 display:
   - platform: ssd1306_i2c
     id: my_display
     model: "SSD1306 128x64"
     address: 0x3C
-    # this is just for this demo since all the code is doing showing a smiley face
-    # on detecting microWakeWord
-    auto_clear_enabled: false
+    update_interval: never
+    pages:
+      - id: idle_page
+        lambda: |-
+          it.fill(COLOR_OFF);
+          it.image((it.get_width() / 2), (it.get_height() / 2) + 8, id(va_idle), ImageAlign::CENTER);
